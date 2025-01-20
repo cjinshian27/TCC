@@ -10,16 +10,16 @@ class SplayTree{
 	private:	
 
 		//get the size of an edge
-		unsigned int size(Edge<Key> * & edge){
-			if(edge == nullptr){
+		unsigned int size(Edge<Key> * edge){
+			if(!edge){
 				return 0;
 			}
 			return edge->size;
 		}
 
 		//delete the whole splay tree
-		void stopMemoryLeak(Edge<Key> * & edge){
-			if (edge == nullptr){
+		void stopMemoryLeak(Edge<Key> * edge){
+			if (!edge){
 	    		return;
 			}
 	
@@ -30,25 +30,25 @@ class SplayTree{
 		}
 		
 		//get the maximum key from the left subtree
-		Edge<Key> * maxLeftSubtree(Edge<Key> * & edge){
+		Edge<Key> * maxLeftSubtree(Edge<Key> * edge){
 			Edge<Key> * current = edge;
-			while(current->right != nullptr){
+			while(current->right){
 				current = current->right;
 			}
 			return current;
 		}
 
 		//get the minimum key from the right subtree
-		Edge<Key> * minRightSubtree(Edge<Key> * & edge){
+		Edge<Key> * minRightSubtree(Edge<Key> * edge){
 			Edge<Key> * current = edge;
-			while(current->left != nullptr){
+			while(current->left){
 				current = current->left;
 			}
 			return current;
 		}
 		
 		//rotate left to balance the subtree
-		Edge<Key> * leftRotate(Edge<Key> * & edge){
+		Edge<Key> * leftRotate(Edge<Key> * edge){
 	 	   	Edge<Key> * nodeRight = edge->right;
 	 	   	Edge<Key> * dad = edge->parent;
 			Edge<Key> * nodeRightLeft = edge->right->left;
@@ -67,7 +67,7 @@ class SplayTree{
 		}
 
 		//rotate right to balance the subtree
-		Edge<Key> * rightRotate(Edge<Key> * & edge){
+		Edge<Key> * rightRotate(Edge<Key> * edge){
 			Edge<Key> * nodeLeft = edge->left;
 	 	   	Edge<Key> * dad = edge->parent;
 
@@ -87,7 +87,7 @@ class SplayTree{
 		}
 		
 		//print out the splay tree
-		void printTree(Edge<Key> * & edge){
+		void printTree(Edge<Key> * edge){
 			if(edge == nullptr){
 				return;
 			}
@@ -100,7 +100,7 @@ class SplayTree{
 		}
 
 		//do a splay operation on given edge 
-		void splay(Edge<Key> * & edge){
+		void splay(Edge<Key> * edge){
 			while(edge->parent != nullptr){
 				if(edge->parent->parent == nullptr){
 					if(edge == edge->parent->left){
@@ -186,7 +186,7 @@ class SplayTree{
 		}
 
 		//class parameterized constructor
-		SplayTree(Edge<Key> * & edge){
+		SplayTree(Edge<Key> * edge){
 			root = edge;
 		}
 
@@ -196,7 +196,7 @@ class SplayTree{
 		}
 
 		//return the k-th edge from edge
-		Edge<Key> * k_th(Edge<Key> * & edge, unsigned int k){
+		Edge<Key> * k_th(Edge<Key> * edge, unsigned int k){
 			unsigned int value = size(edge->left) + 1;
 			if(value == k){
 				return edge;
@@ -255,7 +255,7 @@ class SplayTree{
 		}
 
 		//balance the tree by splaying given edge
-		void balance(Edge<Key> * & edge){
+		void balance(Edge<Key> * edge){
 			if(edge == nullptr) return;
 			splay(edge);
 		}
