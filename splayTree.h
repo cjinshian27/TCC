@@ -14,9 +14,7 @@ class SplayTree{
 			if(edge == nullptr){
 				return 0;
 			}
-			else{
-				return edge->size;
-			}
+			return edge->size;
 		}
 
 		//delete the whole splay tree
