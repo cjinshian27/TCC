@@ -1,7 +1,7 @@
 template <typename Key>
 
-//node's class
 class Node{
+	
 	public:
 		Node * parent;
 		Node * right;
