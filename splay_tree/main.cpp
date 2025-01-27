@@ -28,16 +28,20 @@ void decode(){
 		std::cout << "===========" << '\n';
 		
 		switch(operation){
+			
+			// insert(r, key)
 			case 1:
 				std::cin >> key;
 				splayTree->insert(key);
 				break;
 			
+			// delete(r, key)
 			case 2:	
 				std::cin >> key;
 				splayTree->remove(key);
 				break;
 			
+			// print(search(r, key)? 1 : 0)
 			case 3:
 				std::cin >> key;
 				if(splayTree->search(key)){
@@ -48,14 +52,17 @@ void decode(){
  				}
 				break;
 			
+			//print(min(r))
 			case 4:
 				std::cout << splayTree->min() << '\n';
 				break;
 			
+			//print(r)
 			case 5:
 				splayTree->print();
 				break;
 			
+			//split(r1, r2)
 			case 6:
 				std::cin >> key;
 				pairOfSplayTrees = splayTree->split(key);
@@ -63,6 +70,7 @@ void decode(){
 				pairOfSplayTrees.second->print();
 				break;
 			
+			//join(r1, r2)
 			case 7: //this extra test case is for join
 				splayTree->join(splayTree1);
 				break;
