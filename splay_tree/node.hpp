@@ -10,11 +10,13 @@ class Node{
 
 		//key setter
 		void setKey(Key key){
+			
 			this->key = key;
 		}
 
-		//node's parameterized constructor
+		//node's constructor
 		Node(Key key){
+			
 			this->key = key;
 			parent = nullptr;
 			right = nullptr;
