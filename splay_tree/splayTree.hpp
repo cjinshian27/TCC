@@ -1,5 +1,5 @@
 
-#include "edge.hpp"
+#include "node.hpp"
 
 template <typename Key>
 
@@ -8,29 +8,29 @@ class SplayTree{
 
 	private:	
 
-		//get the size of an edge
-		unsigned int size(Edge<Key> * edge){
-			if(!edge){
+		//get the size of an node
+		unsigned int size(Node<Key> * node){
+			if(!node){
 				return 0;
 			}
-			return edge->size;
+			return node->size;
 		}
 
 		//delete the whole splay tree
-		void stopMemoryLeak(Edge<Key> * edge){
-			if (!edge){
+		void stopMemoryLeak(Node<Key> * node){
+			if (!node){
 	    		return;
 			}
 	
-			stopMemoryLeak(edge->left);
-			stopMemoryLeak(edge->right);
-			delete edge;
-			edge = nullptr;
+			stopMemoryLeak(node->left);
+			stopMemoryLeak(node->right);
+			delete node;
+			node = nullptr;
 		}
 		
 		//get the maximum key from the left subtree
-		Edge<Key> * maxLeftSubtree(Edge<Key> * edge){
-			Edge<Key> * current = edge;
+		Node<Key> * maxLeftSubtree(Node<Key> * node){
+			Node<Key> * current = node;
 			while(current->right){
 				current = current->right;
 			}
@@ -38,8 +38,8 @@ class SplayTree{
 		}
 
 		//get the minimum key from the right subtree
-		Edge<Key> * minRightSubtree(Edge<Key> * edge){
-			Edge<Key> * current = edge;
+		Node<Key> * minRightSubtree(Node<Key> * node){
+			Node<Key> * current = node;
 			while(current->left){
 				current = current->left;
 			}
@@ -47,110 +47,110 @@ class SplayTree{
 		}
 		
 		//rotate left to balance the subtree
-		Edge<Key> * leftRotate(Edge<Key> * edge){
-	 	   	Edge<Key> * nodeRight = edge->right;
-	 	   	Edge<Key> * dad = edge->parent;
-			Edge<Key> * nodeRightLeft = edge->right->left;
+		Node<Key> * leftRotate(Node<Key> * node){
+	 	   	Node<Key> * nodeRight = node->right;
+	 	   	Node<Key> * dad = node->parent;
+			Node<Key> * nodeRightLeft = node->right->left;
 
-		   	nodeRight->left = edge;
-		   	edge->parent = nodeRight;
+		   	nodeRight->left = node;
+		   	node->parent = nodeRight;
 		   	
-		 	edge->right = nodeRightLeft;
+		 	node->right = nodeRightLeft;
 		 	if(nodeRightLeft != nullptr){
-		 		nodeRightLeft->parent = edge;
+		 		nodeRightLeft->parent = node;
 		 	}
-		 	edge->setSize();
+		 	node->setSize();
 		 	nodeRight->parent = dad;
 
 		 	return nodeRight;
 		}
 
 		//rotate right to balance the subtree
-		Edge<Key> * rightRotate(Edge<Key> * edge){
-			Edge<Key> * nodeLeft = edge->left;
-	 	   	Edge<Key> * dad = edge->parent;
+		Node<Key> * rightRotate(Node<Key> * node){
+			Node<Key> * nodeLeft = node->left;
+	 	   	Node<Key> * dad = node->parent;
 
-			Edge<Key> * nodeLeftRight = edge->left->right;
+			Node<Key> * nodeLeftRight = node->left->right;
 
-			nodeLeft->right = edge;
-			edge->parent = nodeLeft;
+			nodeLeft->right = node;
+			node->parent = nodeLeft;
 
-			edge->left = nodeLeftRight;
+			node->left = nodeLeftRight;
 			if(nodeLeftRight != nullptr){
-				nodeLeftRight->parent = edge;
+				nodeLeftRight->parent = node;
 			}
-			edge->setSize();
+			node->setSize();
 			nodeLeft->parent = dad;
 
 			return nodeLeft;
 		}
 		
 		//print out the splay tree
-		void printTree(Edge<Key> * edge){
-			if(edge == nullptr){
+		void printTree(Node<Key> * node){
+			if(node == nullptr){
 				return;
 			}
 			
-			printTree(edge->left);
+			printTree(node->left);
 			
-			edge->print();
+			node->print();
 
-			printTree(edge->right);
+			printTree(node->right);
 		}
 
-		//do a splay operation on given edge 
-		void splay(Edge<Key> * edge){
-			while(edge->parent != nullptr){
-				if(edge->parent->parent == nullptr){
-					if(edge == edge->parent->left){
-						edge = rightRotate(edge->parent);
+		//do a splay operation on given node 
+		void splay(Node<Key> * node){
+			while(node->parent != nullptr){
+				if(node->parent->parent == nullptr){
+					if(node == node->parent->left){
+						node = rightRotate(node->parent);
 					}
 					else{
-						edge = leftRotate(edge->parent);						
+						node = leftRotate(node->parent);						
 					}
 				}
 				else{
-					Edge<Key> * grandGrandParent = edge->parent->parent->parent;
-					Edge<Key> * grandpa = edge->parent->parent;
-					Edge<Key> * aux;
-					if(edge == edge->parent->left && edge->parent == edge->parent->parent->left){
-						aux = rightRotate(edge->parent->parent);
-						edge = rightRotate(aux);
-						edge->parent = grandGrandParent;
+					Node<Key> * grandGrandParent = node->parent->parent->parent;
+					Node<Key> * grandpa = node->parent->parent;
+					Node<Key> * aux;
+					if(node == node->parent->left && node->parent == node->parent->parent->left){
+						aux = rightRotate(node->parent->parent);
+						node = rightRotate(aux);
+						node->parent = grandGrandParent;
 					}
-					else if(edge == edge->parent->right && edge->parent == edge->parent->parent->right){
+					else if(node == node->parent->right && node->parent == node->parent->parent->right){
 						
-						aux = leftRotate(edge->parent->parent);
-						edge = leftRotate(aux);
-						edge->parent = grandGrandParent;
+						aux = leftRotate(node->parent->parent);
+						node = leftRotate(aux);
+						node->parent = grandGrandParent;
 					}	
-					else if(edge == edge->parent->right && edge->parent == edge->parent->parent->left){						
-						aux = leftRotate(edge->parent);
+					else if(node == node->parent->right && node->parent == node->parent->parent->left){						
+						aux = leftRotate(node->parent);
 						aux->parent->left = aux;
-						edge = rightRotate(aux->parent);
-						edge->parent = grandGrandParent;
+						node = rightRotate(aux->parent);
+						node->parent = grandGrandParent;
 					}
 					else{
-						aux = rightRotate(edge->parent);
+						aux = rightRotate(node->parent);
 						aux->parent->right = aux;
-						edge = leftRotate(aux->parent);
-						edge->parent = grandGrandParent;
+						node = leftRotate(aux->parent);
+						node->parent = grandGrandParent;
 					}
 					
-					edge->setSize();
+					node->setSize();
 					
 					if(grandGrandParent != nullptr){
 						if(grandGrandParent->right == grandpa){
-							grandGrandParent->right = edge;
+							grandGrandParent->right = node;
 						}
 						else{
-							grandGrandParent->left = edge;
+							grandGrandParent->left = node;
 						}
 						grandGrandParent->setSize();
 					}
 				}
 			}
-			this->root = edge;
+			this->root = node;
 			
 			this->root->setSize();
 		}
@@ -172,8 +172,8 @@ class SplayTree{
 
 	public:
 
-		//splay tree's root edge
-		Edge<Key> * root = nullptr;
+		//splay tree's root node
+		Node<Key> * root = nullptr;
 		
 		//class' constructor
 		SplayTree(){
@@ -181,12 +181,12 @@ class SplayTree{
 
 		//class' parameterized constructor
 		SplayTree(Key u, Key v, unsigned int id){
-			root = new Edge<Key>(u, v, id);
+			root = new Node<Key>(u, v, id);
 		}
 
 		//class parameterized constructor
-		SplayTree(Edge<Key> * edge){
-			root = edge;
+		SplayTree(Node<Key> * node){
+			root = node;
 		}
 
 		//class' destructor
@@ -194,28 +194,28 @@ class SplayTree{
 			stopMemoryLeak(this->root);
 		}
 
-		//return the k-th edge from edge
-		Edge<Key> * k_th(Edge<Key> * edge, unsigned int k){
-			unsigned int value = size(edge->left) + 1;
+		//return the k-th node from node
+		Node<Key> * k_th(Node<Key> * node, unsigned int k){
+			unsigned int value = size(node->left) + 1;
 			if(value == k){
-				return edge;
+				return node;
 			}
 			else if(value > k){	
-				return k_th(edge->left, k);
+				return k_th(node->left, k);
 			}
 			else{
-				return k_th(edge->right, k - value);
+				return k_th(node->right, k - value);
 			}
 		}
 
-		//splay the edge whose key is given and print out their subtrees
+		//splay the node whose key is given and print out their subtrees
 		std::pair<SplayTree *, SplayTree *> split(unsigned int k){
 
 			if(!k){
 				return {nullptr, this};
 			}
 
-			Edge<Key> * aux = k_th(this->root, k);
+			Node<Key> * aux = k_th(this->root, k);
 			splay(aux);
 
 			aux = this->root->right;
@@ -240,8 +240,8 @@ class SplayTree{
 		//join two given trees
 		void join(SplayTree * & thatSplayTree){
 			
-			Edge<Key> * edge = maxLeftSubtree(this->root);
-			splay(edge);
+			Node<Key> * node = maxLeftSubtree(this->root);
+			splay(node);
 
 			if(thatSplayTree == nullptr){
 				this->root->right = nullptr;
@@ -253,10 +253,10 @@ class SplayTree{
 			this->root->setSize();
 		}
 
-		//balance the tree by splaying given edge
-		void balance(Edge<Key> * edge){
-			if(edge == nullptr) return;
-			splay(edge);
+		//balance the tree by splaying given node
+		void balance(Node<Key> * node){
+			if(node == nullptr) return;
+			splay(node);
 		}
 
 		//call the print function
