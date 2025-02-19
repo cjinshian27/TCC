@@ -50,6 +50,7 @@ class SplayTree{
 		Node<Key> * leftRotate(Node<Key> * node){
 	 	   	Node<Key> * nodeRight = node->right;
 	 	   	Node<Key> * dad = node->parent;
+			
 			Node<Key> * nodeRightLeft = node->right->left;
 
 		   	nodeRight->left = node;
@@ -59,7 +60,6 @@ class SplayTree{
 		 	if(nodeRightLeft != nullptr){
 		 		nodeRightLeft->parent = node;
 		 	}
-		 	node->setSize();
 		 	nodeRight->parent = dad;
 
 		 	return nodeRight;
@@ -79,7 +79,6 @@ class SplayTree{
 			if(nodeLeftRight != nullptr){
 				nodeLeftRight->parent = node;
 			}
-			node->setSize();
 			nodeLeft->parent = dad;
 
 			return nodeLeft;
@@ -136,9 +135,7 @@ class SplayTree{
 						node = leftRotate(aux->parent);
 						node->parent = grandGrandParent;
 					}
-					
-					node->setSize();
-					
+										
 					if(grandGrandParent != nullptr){
 						if(grandGrandParent->right == grandpa){
 							grandGrandParent->right = node;
@@ -152,7 +149,6 @@ class SplayTree{
 			}
 			this->root = node;
 			
-			this->root->setSize();
 		}
 		
 		//operator < overloading for splay tree comparison
@@ -193,6 +189,51 @@ class SplayTree{
 		~SplayTree(){
 			stopMemoryLeak(this->root);
 		}
+
+		//insert a node with given key into the splay tree
+		void insert(Key key){
+
+			if(this->root == nullptr){
+				this->root = new Node<Key>(key);
+				return;
+			}
+
+			Node<Key> * current = this->root;
+			
+			while(current != nullptr){
+				if(key > current->key){
+					if(current->right == nullptr){
+						Node<Key> * node = new Node<Key>(key);
+						current->right = node;
+						node->parent = current;
+						splay(node);
+						return;
+					}
+					else{
+						current = current->right;
+					}
+				}
+				else if(key < current->key){
+					if(current->left == nullptr){
+						Node<Key> * node = new Node<Key>(key);
+						current->left = node; 
+						node->parent = current;
+						splay(node);
+						return;
+					}
+					else{
+						current = current->left;
+					}
+				}
+				else{
+					splay(current);
+					return;
+				}
+			}
+
+		}
+
+
 
 		//return the k-th node from node
 		Node<Key> * k_th(Node<Key> * node, unsigned int k){
