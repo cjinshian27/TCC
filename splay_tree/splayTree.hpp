@@ -1,24 +1,16 @@
 
-#include "node.hpp"
-
 template <typename Key>
 
 //splay tree class
 class SplayTree{
 
 	private:	
-
-		//get the size of an node
-		unsigned int size(Node<Key> * node){
-			if(!node){
-				return 0;
-			}
-			return node->size;
-		}
-
+		//splay tree's root node
+		Node<Key> * root;
+		
 		//delete the whole splay tree
-		void stopMemoryLeak(Node<Key> * node){
-			if (!node){
+		void stopMemoryLeak(Node<Key> * & node){
+			if (node == nullptr){
 	    		return;
 			}
 	
@@ -29,28 +21,29 @@ class SplayTree{
 		}
 		
 		//get the maximum key from the left subtree
-		Node<Key> * maxLeftSubtree(Node<Key> * node){
+		Node<Key> * maxLeftSubtree(Node<Key> * & node){
 			Node<Key> * current = node;
-			while(current->right){
+			while(current->right != nullptr){
 				current = current->right;
 			}
 			return current;
 		}
 
 		//get the minimum key from the right subtree
-		Node<Key> * minRightSubtree(Node<Key> * node){
+		Node<Key> * minRightSubtree(Node<Key> * & node){
 			Node<Key> * current = node;
-			while(current->left){
+			while(current->left != nullptr){
 				current = current->left;
 			}
 			return current;
 		}
 		
 		//rotate left to balance the subtree
-		Node<Key> * leftRotate(Node<Key> * node){
+		Node<Key> * leftRotate(Node<Key> * & node){
+
 	 	   	Node<Key> * nodeRight = node->right;
 	 	   	Node<Key> * dad = node->parent;
-			
+
 			Node<Key> * nodeRightLeft = node->right->left;
 
 		   	nodeRight->left = node;
@@ -66,7 +59,7 @@ class SplayTree{
 		}
 
 		//rotate right to balance the subtree
-		Node<Key> * rightRotate(Node<Key> * node){
+		Node<Key> * rightRotate(Node<Key> * & node){
 			Node<Key> * nodeLeft = node->left;
 	 	   	Node<Key> * dad = node->parent;
 
@@ -83,29 +76,17 @@ class SplayTree{
 
 			return nodeLeft;
 		}
-		
-		//print out the splay tree
-		void printTree(Node<Key> * node){
-			if(node == nullptr){
-				return;
-			}
-			
-			printTree(node->left);
-			
-			node->print();
-
-			printTree(node->right);
-		}
 
 		//do a splay operation on given node 
-		void splay(Node<Key> * node){
+		void splay(Node<Key> * & node){
+
 			while(node->parent != nullptr){
 				if(node->parent->parent == nullptr){
 					if(node == node->parent->left){
 						node = rightRotate(node->parent);
 					}
 					else{
-						node = leftRotate(node->parent);						
+						node = leftRotate(node->parent);
 					}
 				}
 				else{
@@ -116,12 +97,14 @@ class SplayTree{
 						aux = rightRotate(node->parent->parent);
 						node = rightRotate(aux);
 						node->parent = grandGrandParent;
+
 					}
 					else if(node == node->parent->right && node->parent == node->parent->parent->right){
 						
 						aux = leftRotate(node->parent->parent);
 						node = leftRotate(aux);
 						node->parent = grandGrandParent;
+	
 					}	
 					else if(node == node->parent->right && node->parent == node->parent->parent->left){						
 						aux = leftRotate(node->parent);
@@ -135,7 +118,7 @@ class SplayTree{
 						node = leftRotate(aux->parent);
 						node->parent = grandGrandParent;
 					}
-										
+
 					if(grandGrandParent != nullptr){
 						if(grandGrandParent->right == grandpa){
 							grandGrandParent->right = node;
@@ -143,49 +126,40 @@ class SplayTree{
 						else{
 							grandGrandParent->left = node;
 						}
-						grandGrandParent->setSize();
 					}
+
 				}
 			}
 			this->root = node;
+		}
+
+		//print out the splay tree
+		void print(Node<Key> * node, unsigned int depth){
+			if(node == nullptr){
+				return;
+			}
 			
+			print(node->left, depth + 3);
+			
+			for(unsigned int i = 0; i < depth; i++){
+				std::cout << ' ';
+			}
+			std::cout << node->key << '\n';
+			
+			print(node->right, depth + 3);
 		}
-		
-		//operator < overloading for splay tree comparison
-		bool operator < (const SplayTree & that){
-			return this->root->id < that->root->id;
-		}
-		
-		//operator > overloading for splay tree comparison
-		bool operator > (const SplayTree & that){
-			return this->root->id > that->root->id;
-		}
-		
-		//operator = overloading for splay tree's comparison
-		bool operator = (const SplayTree & that){
-			return this->root->id == that->root->id;
-		}
-
 	public:
-
-		//splay tree's root node
-		Node<Key> * root = nullptr;
 		
 		//class' constructor
 		SplayTree(){
+			root = nullptr;
 		}
 
-		//class' parameterized constructor
-		SplayTree(Key u, Key v, unsigned int id){
-			root = new Node<Key>(u, v, id);
-		}
-
-		//class parameterized constructor
-		SplayTree(Node<Key> * node){
+		SplayTree(Node<Key> * & node){
 			root = node;
 		}
 
-		//class' destructor
+
 		~SplayTree(){
 			stopMemoryLeak(this->root);
 		}
@@ -233,75 +207,188 @@ class SplayTree{
 
 		}
 
+		//search for a node with given key on the splay tree
+		bool search(Key key){
+			Node<Key> * current = this->root;
+			Node<Key> * previous = nullptr;
 
+			while(current != nullptr){
+				previous = current;
+				if(key < current->key){
+					current = current->left;
+				}
+				else if(key > current->key){
+					current = current->right;
+				}
+				else{
+					break;
+				}
+			}
 
-		//return the k-th node from node
-		Node<Key> * k_th(Node<Key> * node, unsigned int k){
-			unsigned int value = size(node->left) + 1;
-			if(value == k){
-				return node;
+			if(current != nullptr){
+				splay(current);
+				return true;
 			}
-			else if(value > k){	
-				return k_th(node->left, k);
+			else if(previous != nullptr){
+				splay(previous);
 			}
-			else{
-				return k_th(node->right, k - value);
+			return false;
+		}
+
+		//remove a node with given key from the splay tree
+		void remove(Key key){
+			Node<Key> * current = this->root;
+			Node<Key> * previous = nullptr;
+
+			//find the node with the key first
+			while(current != nullptr){
+				previous = current;
+				if(key < current->key){
+					current = current->left;
+				}
+				else if(key > current->key){
+					current = current->right;
+				}
+				else{
+					break;
+				}
+			}
+
+			//if node is found, check their conditions
+			if(current != nullptr){
+				
+				if(current->left == nullptr && current->right == nullptr){
+					Node<Key> * parent = current->parent;
+					if(parent != nullptr){
+						if(parent->right == current){
+							delete(current);
+							parent->right = nullptr;
+						}
+						else{
+							delete(current);
+							parent->left = nullptr;
+						}
+						splay(parent);
+					}
+					else{
+						delete current;
+						current = nullptr;
+						this->root = nullptr;
+					}
+				}
+				else if(current->left != nullptr && current->right != nullptr){
+					Node<Key> * maxLS = maxLeftSubtree(current->left);
+					Node<Key> * parent = maxLS->parent;
+					current->setKey(maxLS->key);
+					
+					if(parent->right == maxLS){
+						delete parent->right;
+						parent->right = nullptr;
+					}
+					else{
+						delete parent->left;
+						parent->left = nullptr;
+					}
+
+					splay(parent);
+				}
+				else if(current->left != nullptr){
+					Node<Key> * maxLS = maxLeftSubtree(current->left);
+					Node<Key> * parent = maxLS->parent;
+					current->setKey(maxLS->key);
+					
+					if(parent->right == maxLS){
+						delete parent->right;
+						parent->right = nullptr;
+					}
+					else{
+						delete parent->left;
+						parent->left = nullptr;
+					}
+
+					splay(parent);
+				}
+				else{
+					Node<Key> * minRS = minRightSubtree(current->right);
+					Node<Key> * parent = minRS->parent;	
+					current->setKey(minRS->key);
+
+					if(parent->right == minRS){
+						delete parent->right;
+						parent->right = nullptr;
+					}
+					else{
+						delete parent->left;
+						parent->left = nullptr;
+					}
+
+					splay(parent);
+				}
+
+			}
+			//if node is not found, do a splay operation on the last visited
+			else if(previous != nullptr){
+				splay(previous);
 			}
 		}
 
+		//return the node with the smallest key 
+		Key min(){
+			Node<Key> * current = root;
+			while(current->left != nullptr){
+				current = current->left;
+			}
+			splay(current);
+			return current->key;
+		}
+
 		//splay the node whose key is given and print out their subtrees
-		std::pair<SplayTree *, SplayTree *> split(unsigned int k){
-
-			if(!k){
-				return {nullptr, this};
-			}
-
-			Node<Key> * aux = k_th(this->root, k);
-			splay(aux);
-
-			aux = this->root->right;
+		std::pair<SplayTree *, SplayTree *> split(Key key){
 			
-			if(aux != nullptr){
-				aux->parent = nullptr;
+			if(this->root == nullptr){
+				return {nullptr, nullptr};
+			}
+			
+			Node<Key> * current = this->root;
+			Node<Key> * previous = nullptr;
+
+			while(current != nullptr){
+				previous = current;
+				if(key < current->key){
+					current = current->left;
+				}
+				else if(key > current->key){
+					current = current->right;
+				}
+				else{
+					break;
+				}
 			}
 
-
+			if(current != nullptr){
+				splay(current);
+			}
+			else{
+				splay(previous);
+			}
+			Node<Key> * aux = this->root->right;
 			this->root->right = nullptr;
-			this->root->setSize();
 
-			SplayTree<Key> * splayTree1 = new SplayTree<Key>(this->root);
-			SplayTree<Key> * splayTree2 = new SplayTree<Key>(aux);
-			if(aux == nullptr){
-				return {splayTree1, nullptr};
-			}
+			SplayTree * splayTree1 = new SplayTree(this->root);
+			SplayTree * splayTree2 = new SplayTree(aux);
 
 			return {splayTree1, splayTree2};
 		}		
 
 		//join two given trees
 		void join(SplayTree * & thatSplayTree){
-			
 			Node<Key> * node = maxLeftSubtree(this->root);
 			splay(node);
-
-			if(thatSplayTree == nullptr){
-				this->root->right = nullptr;
-			}
-			else{
-				this->root->right = thatSplayTree->root;
-				this->root->right->parent = this->root;
-			}
-			this->root->setSize();
-		}
-
-		//balance the tree by splaying given node
-		void balance(Node<Key> * node){
-			if(node == nullptr) return;
-			splay(node);
+			node->right = thatSplayTree->root;
 		}
 
 		//call the print function
 		void print(){
-			printTree(this->root);
+			print(this->root, 0);
 		}
 };
