@@ -152,11 +152,11 @@ class SplayTree{
 		
 		//class' constructor
 		SplayTree(){
-			root = nullptr;
+			this->root = nullptr;
 		}
 
 		SplayTree(Node<Key> * node){
-			root = node;
+			this->root = node;
 		}
 
 
@@ -344,7 +344,7 @@ class SplayTree{
 
 		//return the node with the smallest key 
 		Key min(){
-			Node<Key> * current = root;
+			Node<Key> * current = this->root;
 			while(current->left){
 				current = current->left;
 			}
