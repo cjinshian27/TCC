@@ -160,11 +160,11 @@ class SplayTree{
 		}
 
 
-		~SplayTree(){
+		~SplayTree(){	
 			destroy(this->root);
 		}
 
-		//insert a node with given key into the splay tree
+		//insert a node with a given key into the splay tree
 		void insert(Key key){
 
 			if(!this->root){
@@ -172,37 +172,43 @@ class SplayTree{
 				return;
 			}
 
-			Node<Key> * current = this->root;
+			Node<Key> * currentNode = this->root;
 			
-			while(current != nullptr){
-				if(key > current->key){
+			while(currentNode != nullptr){
+				
+				if(key > currentNode->key){
 					
-					if(!current->right){
-						Node<Key> * node = new Node<Key>(key);
-						current->right = node;
-						node->parent = current;
-						splay(node);
+					if(!currentNode->right){
+						
+						Node<Key> * newNode = new Node<Key>(key);
+						currentNode->right = newNode;
+						newNode->parent = currentNode;
+						splay(newNode);
 						return;
 					}
 					else{
-						current = current->right;
+						
+						currentNode = currentNode->right;
 					}
 				}
-				else if(key < current->key){
+				else if(key < currentNode->key){
 					
-					if(!current->left){
-						Node<Key> * node = new Node<Key>(key);
-						current->left = node; 
-						node->parent = current;
-						splay(node);
+					if(!currentNode->left){
+						
+						Node<Key> * newNode = new Node<Key>(key);
+						currentNode->left = newNode; 
+						newNode->parent = currentNode;
+						splay(newNode);
 						return;
 					}
 					else{
-						current = current->left;
+						
+						currentNode = currentNode->left;
 					}
 				}
 				else{
-					splay(current);
+					
+					splay(currentNode);
 					return;
 				}
 			}
