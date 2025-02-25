@@ -9,13 +9,13 @@ class SplayTree{
 		Node<Key> * root;
 		
 		//delete the whole splay tree
-		void stopMemoryLeak(Node<Key> * node){
+		void destroy(Node<Key> * node){
 			if (!node){
 	    		return;
 			}
 	
-			stopMemoryLeak(node->left);
-			stopMemoryLeak(node->right);
+			destroy(node->left);
+			destroy(node->right);
 			delete node;
 			node = nullptr;
 		}
@@ -161,7 +161,7 @@ class SplayTree{
 
 
 		~SplayTree(){
-			stopMemoryLeak(this->root);
+			destroy(this->root);
 		}
 
 		//insert a node with given key into the splay tree
