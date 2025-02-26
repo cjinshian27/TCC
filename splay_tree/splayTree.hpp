@@ -236,7 +236,7 @@ class SplayTree{
 				}
 			}
 
-			if(previous){
+			if(previousNode){
 				splay(previous);
 			}
 			return false;
