@@ -217,27 +217,26 @@ class SplayTree{
 
 		//search for a node with given key on the splay tree
 		bool search(Key key){
-			Node<Key> * current = this->root;
-			Node<Key> * previous = nullptr;
+			Node<Key> * currentNode = this->root;
+			Node<Key> * previousNode = nullptr;
 
-			while(current){
-				previous = current;
-				if(key < current->key){
-					current = current->left;
+			while(currentNode){
+				
+				previousNode = currentNode;
+				
+				if(key < currentNode->key){
+					currentNode = currentNode->left;
 				}
-				else if(key > current->key){
-					current = current->right;
+				else if(key > currentNode->key){
+					currentNode = currentNode->right;
 				}
 				else{
-					break;
+					splay(currentNode);
+					return true;
 				}
 			}
 
-			if(current){
-				splay(current);
-				return true;
-			}
-			else if(previous){
+			if(previous){
 				splay(previous);
 			}
 			return false;
