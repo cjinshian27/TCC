@@ -54,25 +54,25 @@ class SplayTree{
 			  B   A        C   B
   		
 		*/
-		Node<Key> * leftRotate(Node<Key> * node){
+		Node<Key> * leftRotate(Node<Key> * y){
 
-	 	   	Node<Key> * nodeRight = node->right;
-	 	   	Node<Key> * parent = node->parent;
+	 	   	Node<Key> * x = y->right;
+	 	   	Node<Key> * parent = y->parent;
 
-			Node<Key> * nodeRightLeft = nodeRight->left;
+			Node<Key> * B = x->left;
 
-		   	nodeRight->left = node;
-		   	node->parent = nodeRight;
+		   	x->left = y;
 		   	
-		 	node->right = nodeRightLeft;
+		   	y->parent = x;
+		 	y->right = B;
 		 	
-		 	if(nodeRightLeft){
-		 		nodeRightLeft->parent = node;
+		 	if(B){
+		 		B->parent = y;
 		 	}
 		 	
-		 	nodeRight->parent = parent;
+		 	x->parent = parent;
 
-		 	return nodeRight;
+		 	return x;
 		}
 
 		/*
@@ -85,25 +85,25 @@ class SplayTree{
 			A   B                B   C
 
 		*/
-		Node<Key> * rightRotate(Node<Key> * node){
+		Node<Key> * rightRotate(Node<Key> * y){
 			
-			Node<Key> * nodeLeft = node->left;
-	 	   	Node<Key> * parent = node->parent;
+			Node<Key> * x = y->left;
+	 	   	Node<Key> * parent = y->parent;
 
-			Node<Key> * nodeLeftRight = nodeLeft->right;
+			Node<Key> * B = x->right;
 
-			nodeLeft->right = node;
-			node->parent = nodeLeft;
+			x->right = y;
+			y->parent = x;
 
-			node->left = nodeLeftRight;
+			y->left = B;
 			
-			if(nodeLeftRight){
-				nodeLeftRight->parent = node;
+			if(B){
+				B->parent = y;
 			}
 			
-			nodeLeft->parent = parent;
+			x->parent = parent;
 
-			return nodeLeft;
+			return x;
 		}
 
 		//do a splay operation on a given node 
@@ -123,14 +123,18 @@ class SplayTree{
 				else{
 					
 					Node<Key> * grandGrandParent = node->parent->parent->parent;
-					Node<Key> * grandpa = node->parent->parent;
+					Node<Key> * grandparent = node->parent->parent;
 					Node<Key> * aux;
+					
+					//right right
 					if(node == node->parent->left && node->parent == node->parent->parent->left){
 						aux = rightRotate(node->parent->parent);
 						node = rightRotate(aux);
 						node->parent = grandGrandParent;
 
 					}
+
+					//left left
 					else if(node == node->parent->right && node->parent == node->parent->parent->right){
 						
 						aux = leftRotate(node->parent->parent);
@@ -138,12 +142,16 @@ class SplayTree{
 						node->parent = grandGrandParent;
 	
 					}	
+
+					//left right
 					else if(node == node->parent->right && node->parent == node->parent->parent->left){						
 						aux = leftRotate(node->parent);
 						aux->parent->left = aux;
 						node = rightRotate(aux->parent);
 						node->parent = grandGrandParent;
 					}
+
+					//right left
 					else{
 						aux = rightRotate(node->parent);
 						aux->parent->right = aux;
@@ -151,8 +159,8 @@ class SplayTree{
 						node->parent = grandGrandParent;
 					}
 
-					if(grandGrandParent){
-						if(grandGrandParent->right == grandpa){
+					if(grandGrandParent != nullptr){
+						if(grandGrandParent->right == grandparent){
 							grandGrandParent->right = node;
 						}
 						else{
