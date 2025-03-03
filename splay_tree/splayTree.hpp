@@ -1,21 +1,21 @@
 
 template <typename Key>
 
-//splay tree class
 class SplayTree{
 
 	private:	
+
 		//splay tree's root node
 		Node<Key> * root;
 		
 		//delete the whole splay tree
 		void destroy(Node<Key> * node){
-			if (!node){
-	    		return;
-			}
+			
+			if (!node) return
 	
 			destroy(node->left);
 			destroy(node->right);
+
 			delete node;
 			node = nullptr;
 		}
@@ -43,7 +43,7 @@ class SplayTree{
 			return current;
 		}
 		
-		//rotate left to balance the subtree
+		//left rotate to balance the subtree
 		Node<Key> * leftRotate(Node<Key> * node){
 
 	 	   	Node<Key> * nodeRight = node->right;
@@ -63,7 +63,7 @@ class SplayTree{
 		 	return nodeRight;
 		}
 
-		//rotate right to balance the subtree
+		//right rotate to balance the subtree
 		Node<Key> * rightRotate(Node<Key> * node){
 			Node<Key> * nodeLeft = node->left;
 	 	   	Node<Key> * dad = node->parent;
@@ -82,7 +82,7 @@ class SplayTree{
 			return nodeLeft;
 		}
 
-		//do a splay operation on given node 
+		//do a splay operation on a given node 
 		void splay(Node<Key> * node){
 
 			while(node->parent){
@@ -167,22 +167,21 @@ class SplayTree{
 
 		//print out the splay tree
 		void print(Node<Key> * node, unsigned int depth){
-			if(!node){
-				return;
-			}
+			
+			if(!node) return;
 			
 			print(node->left, depth + 3);
 			
 			for(unsigned int i = 0; i < depth; ++i){
 				std::cout << ' ';
 			}
+
 			std::cout << node->key << '\n';
-			
 			print(node->right, depth + 3);
 		}
+
 	public:
 		
-		//class' constructor
 		SplayTree(){
 			this->root = nullptr;
 		}
@@ -246,7 +245,6 @@ class SplayTree{
 			}
 
 		}
-
 
 		/*
 		search for a node with given key on the splay, 
