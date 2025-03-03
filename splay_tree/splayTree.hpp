@@ -138,6 +138,33 @@ class SplayTree{
 			this->root = node;
 		}
 
+		/*
+		try to find a node with a given key and return 
+		a pair of nodes, where the first node is the 
+		previous one and the second is the current one. 
+		*/
+		std::pair<Node<Key> *, Node<Key> *> find(Key key){
+			Node<Key> * currentNode = this->root;
+			Node<Key> * previousNode = nullptr;
+
+			while(currentNode){
+				
+				previousNode = currentNode;
+				
+				if(key < currentNode->key){
+					currentNode = currentNode->left;
+				}
+				else if(key > currentNode->key){
+					currentNode = currentNode->right;
+				}
+				else{
+					return {currentNode, previousNode};
+				}
+			}
+
+			return {currentNode, previousNode};
+		}
+
 		//print out the splay tree
 		void print(Node<Key> * node, unsigned int depth){
 			if(!node){
@@ -220,53 +247,34 @@ class SplayTree{
 
 		}
 
-		//search for a node with given key on the splay tree
+
+		/*
+		search for a node with given key on the splay, 
+		return true if found and false otherwise.
+		*/
 		bool search(Key key){
-			Node<Key> * currentNode = this->root;
-			Node<Key> * previousNode = nullptr;
 
-			while(currentNode){
-				
-				previousNode = currentNode;
-				
-				if(key < currentNode->key){
-					currentNode = currentNode->left;
-				}
-				else if(key > currentNode->key){
-					currentNode = currentNode->right;
-				}
-				else{
-					splay(currentNode);
-					return true;
-				}
+			std::pair<Node<Key> *, Node<Key> *> pairOfNodes = find(key);
+			Node<Key> * currentNode = pairOfNodes.first;
+			Node<Key> * previousNode = pairOfNodes.second;
+
+			if(currentNode){
+				splay(currentNode);
+				return true;
 			}
-
-			if(previousNode){
+			else if(previousNode){
 				splay(previousNode);
 			}
 			return false;
+
 		}
 
 		//remove a node with given key from the splay tree
 		void remove(Key key){
-			Node<Key> * currentNode = this->root;
-			Node<Key> * previousNode = nullptr;
 
-			//find the node with the key first
-			while(currentNode){
-				
-				previousNode = currentNode;
-				
-				if(key < currentNode->key){
-					currentNode = currentNode->left;
-				}
-				else if(key > currentNode->key){
-					currentNode = currentNode->right;
-				}
-				else{
-					break;
-				}
-			}
+			std::pair<Node<Key> *, Node<Key> *> pairOfNodes = find(key);
+			Node<Key> * currentNode = pairOfNodes.first;
+			Node<Key> * previousNode = pairOfNodes.second;
 
 			//if node is found, check their conditions
 			if(currentNode){
