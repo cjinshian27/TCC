@@ -242,7 +242,7 @@ class SplayTree{
 			}
 
 			if(previousNode){
-				splay(previous);
+				splay(previousNode);
 			}
 			return false;
 		}
@@ -284,7 +284,7 @@ class SplayTree{
 						}
 						else{
 							delete(currentNode);
-							currentNode = nullptr
+							currentNode = nullptr;
 							parent->left = nullptr;
 						}
 						splay(parent);
@@ -314,7 +314,7 @@ class SplayTree{
 				}
 				else if(currentNode->left){
 					
-					Node<Key> * maxLS = leftSubtreeMaxNode(current->left);
+					Node<Key> * maxLS = leftSubtreeMaxNode(currentNode->left);
 					Node<Key> * parent = maxLS->parent;
 					currentNode->setKey(maxLS->key);
 					
@@ -333,7 +333,7 @@ class SplayTree{
 					
 					Node<Key> * minRS = rightSubtreeMinNode(currentNode->right);
 					Node<Key> * parent = minRS->parent;	
-					current->setKey(minRS->key);
+					currentNode->setKey(minRS->key);
 
 					if(parent->right == minRS){
 						delete parent->right;
@@ -350,8 +350,8 @@ class SplayTree{
 			}
 
 			//if node is not found, do a splay on the previous visited node
-			else if(previous){
-				splay(previous);
+			else if(previousNode){
+				splay(previousNode);
 			}
 		}
 
@@ -405,7 +405,7 @@ class SplayTree{
 
 		//join two given trees
 		void join(SplayTree * thatSplayTree){
-			Node<Key> * node = maxLeftSubtree(this->root);
+			Node<Key> * node = leftSubtreeMaxNode(this->root);
 			splay(node);
 			node->right = thatSplayTree->root;
 		}
