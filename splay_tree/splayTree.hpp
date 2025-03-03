@@ -34,12 +34,14 @@ class SplayTree{
 
 		//get the node with minimum key from the right subtree
 		Node<Key> * rightSubtreeMinNode(Node<Key> * node){
-			Node<Key> * current = node;
-			while(current->left){
-				current = current->left;
+			
+			Node<Key> * currentNode = node;
+			
+			while(currentNode->left){
+				currentNode = currentNode->left;
 			}
 			
-			return current;
+			return currentNode;
 		}
 		
 		/*
