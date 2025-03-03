@@ -47,9 +47,9 @@ class SplayTree{
 
 		left rotate to balance the subtree
 			
-			  x                y  
+			  y                x  
 		     / \              / \
-		    C   y    ===>    x   A
+		    C   x    ===>    y   A
 		       / \ 			/ \
 			  B   A        C   B
   		
@@ -106,7 +106,9 @@ class SplayTree{
 		void splay(Node<Key> * node){
 
 			while(node->parent){
+				
 				if(!node->parent->parent){
+					
 					if(node == node->parent->left){
 						node = rightRotate(node->parent);
 					}
@@ -115,6 +117,7 @@ class SplayTree{
 					}
 				}
 				else{
+					
 					Node<Key> * grandGrandParent = node->parent->parent->parent;
 					Node<Key> * grandpa = node->parent->parent;
 					Node<Key> * aux;
@@ -155,6 +158,7 @@ class SplayTree{
 
 				}
 			}
+
 			this->root = node;
 		}
 
