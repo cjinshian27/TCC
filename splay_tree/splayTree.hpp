@@ -35,7 +35,6 @@ class SplayTree{
 		//get the node with minimum key from the right subtree
 		Node<Key> * rightSubtreeMinNode(Node<Key> * node){
 			Node<Key> * current = node;
-			
 			while(current->left){
 				current = current->left;
 			}
@@ -130,17 +129,12 @@ class SplayTree{
 					if(node == node->parent->left && node->parent == node->parent->parent->left){
 						aux = rightRotate(node->parent->parent);
 						node = rightRotate(aux);
-						node->parent = grandGrandParent;
-
 					}
 
 					//left left
 					else if(node == node->parent->right && node->parent == node->parent->parent->right){
-						
 						aux = leftRotate(node->parent->parent);
 						node = leftRotate(aux);
-						node->parent = grandGrandParent;
-	
 					}	
 
 					//left right
@@ -148,7 +142,6 @@ class SplayTree{
 						aux = leftRotate(node->parent);
 						aux->parent->left = aux;
 						node = rightRotate(aux->parent);
-						node->parent = grandGrandParent;
 					}
 
 					//right left
@@ -156,10 +149,9 @@ class SplayTree{
 						aux = rightRotate(node->parent);
 						aux->parent->right = aux;
 						node = leftRotate(aux->parent);
-						node->parent = grandGrandParent;
 					}
 
-					if(grandGrandParent != nullptr){
+					if(grandGrandParent){
 						if(grandGrandParent->right == grandparent){
 							grandGrandParent->right = node;
 						}
@@ -206,14 +198,42 @@ class SplayTree{
 			
 			if(!node) return;
 			
-			print(node->left, depth + 3);
+			print(node->right, depth + 3);
 			
 			for(unsigned int i = 0; i < depth; ++i){
 				std::cout << ' ';
 			}
 
-			std::cout << node->key << '\n';
-			print(node->right, depth + 3);
+			std::cout << node->key << " ("; 
+
+			if(node->parent){
+				std::cout << node->parent->key;
+			} 
+			else{
+				std::cout << "null";
+			}
+
+			std::cout << ":";
+
+			if(node->left){
+				std::cout << node->left->key;
+			}
+			else{
+				std::cout << "null";
+			}
+
+			std::cout << ":";
+			
+			if(node->right){
+				std::cout << node->right->key;
+			}
+			else{
+				std::cout << "null";
+			}
+
+			std::cout << ")\n'";
+
+			print(node->left, depth + 3);
 		}
 
 	public:
@@ -312,7 +332,7 @@ class SplayTree{
 
 			//if node is found, check their conditions
 			if(currentNode){
-				
+
 				//no child
 				if(!currentNode->left && !currentNode->right){
 					
@@ -339,55 +359,26 @@ class SplayTree{
 				}
 				else if(currentNode->left && currentNode->right){
 					
-					Node<Key> * maxLS = leftSubtreeMaxNode(currentNode->left);
-					Node<Key> * parent = maxLS->parent;
-					currentNode->setKey(maxLS->key);
-					
-					if(parent->right == maxLS){
-						delete parent->right;
-						parent->right = nullptr;
-					}
-					else{
-						delete parent->left;
-						parent->left = nullptr;
-					}
+					Node<Key> * maxNode = leftSubtreeMaxNode(currentNode->left);
+					splay(maxNode);
+					maxNode->right = currentNode->right;
+					currentNode->right->parent = maxNode;
 
-					splay(parent);
 				}
 				else if(currentNode->left){
 					
 					Node<Key> * maxNode = leftSubtreeMaxNode(currentNode->left);
-					Node<Key> * parent = maxNode->parent;
-					currentNode->setKey(maxNode->key);
-					
-					if(parent->right == maxNode){
-						delete parent->right;
-						parent->right = nullptr;
-					}
-					else{
-						delete parent->left;
-						parent->left = nullptr;
-					}
-
-					splay(parent);
+					splay(maxNode);
+					this->root->right = nullptr;
 				}
 				else{
-					
 					Node<Key> * minNode = rightSubtreeMinNode(currentNode->right);
-					Node<Key> * parent = minNode->parent;	
-					currentNode->setKey(minNode->key);
-
-					if(parent->right == minNode){
-						delete parent->right;
-						parent->right = nullptr;
-					}
-					else{
-						delete parent->left;
-						parent->left = nullptr;
-					}
-
-					splay(parent);
+					splay(minNode);
+					this->root->left = nullptr;
 				}
+				
+				delete (currentNode);
+				currentNode = nullptr;
 
 			}
 
