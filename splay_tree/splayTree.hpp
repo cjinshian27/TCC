@@ -47,7 +47,7 @@ class SplayTree{
 		Node<Key> * leftRotate(Node<Key> * node){
 
 	 	   	Node<Key> * nodeRight = node->right;
-	 	   	Node<Key> * dad = node->parent;
+	 	   	Node<Key> * parent = node->parent;
 
 			Node<Key> * nodeRightLeft = node->right->left;
 
@@ -58,7 +58,7 @@ class SplayTree{
 		 	if(nodeRightLeft){
 		 		nodeRightLeft->parent = node;
 		 	}
-		 	nodeRight->parent = dad;
+		 	nodeRight->parent = parent;
 
 		 	return nodeRight;
 		}
@@ -66,7 +66,7 @@ class SplayTree{
 		//right rotate to balance the subtree
 		Node<Key> * rightRotate(Node<Key> * node){
 			Node<Key> * nodeLeft = node->left;
-	 	   	Node<Key> * dad = node->parent;
+	 	   	Node<Key> * parent = node->parent;
 
 			Node<Key> * nodeLeftRight = node->left->right;
 
@@ -77,7 +77,7 @@ class SplayTree{
 			if(nodeLeftRight){
 				nodeLeftRight->parent = node;
 			}
-			nodeLeft->parent = dad;
+			nodeLeft->parent = parent;
 
 			return nodeLeft;
 		}
