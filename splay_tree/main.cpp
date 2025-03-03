@@ -5,8 +5,8 @@
 #include "splayTree.hpp"
 
 void decode(){
-	
-	int operation, key;
+
+	int operation, key;	
 
 	/*
 	splayTree1 was created primarily for testing the test case 7. 
