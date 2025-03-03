@@ -322,11 +322,11 @@ class SplayTree{
 				}
 				else if(currentNode->left){
 					
-					Node<Key> * maxLS = leftSubtreeMaxNode(currentNode->left);
-					Node<Key> * parent = maxLS->parent;
-					currentNode->setKey(maxLS->key);
+					Node<Key> * maxNode = leftSubtreeMaxNode(currentNode->left);
+					Node<Key> * parent = maxNode->parent;
+					currentNode->setKey(maxNode->key);
 					
-					if(parent->right == maxLS){
+					if(parent->right == maxNode){
 						delete parent->right;
 						parent->right = nullptr;
 					}
@@ -339,11 +339,11 @@ class SplayTree{
 				}
 				else{
 					
-					Node<Key> * minRS = rightSubtreeMinNode(currentNode->right);
-					Node<Key> * parent = minRS->parent;	
-					currentNode->setKey(minRS->key);
+					Node<Key> * minNode = rightSubtreeMinNode(currentNode->right);
+					Node<Key> * parent = minNode->parent;	
+					currentNode->setKey(minNode->key);
 
-					if(parent->right == minRS){
+					if(parent->right == minNode){
 						delete parent->right;
 						parent->right = nullptr;
 					}
