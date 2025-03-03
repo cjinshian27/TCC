@@ -20,21 +20,26 @@ class SplayTree{
 			node = nullptr;
 		}
 		
-		//get the maximum key from the left subtree
+		//get the node with maximum key from the left subtree
 		Node<Key> * maxLeftSubtree(Node<Key> * node){
-			Node<Key> * current = node;
-			while(current->right){
-				current = current->right;
+			
+			Node<Key> * currentNode = node;
+			
+			while(currentNode->right){
+				currentNode = currentNode->right;
 			}
-			return current;
+			
+			return currentNode;
 		}
 
-		//get the minimum key from the right subtree
+		//get the node with minimum key from the right subtree
 		Node<Key> * minRightSubtree(Node<Key> * node){
 			Node<Key> * current = node;
+			
 			while(current->left){
 				current = current->left;
 			}
+			
 			return current;
 		}
 		
@@ -244,17 +249,19 @@ class SplayTree{
 
 		//remove a node with given key from the splay tree
 		void remove(Key key){
-			Node<Key> * current = this->root;
-			Node<Key> * previous = nullptr;
+			Node<Key> * currentNode = this->root;
+			Node<Key> * previousNode = nullptr;
 
 			//find the node with the key first
-			while(current){
-				previous = current;
-				if(key < current->key){
-					current = current->left;
+			while(currentNode){
+				
+				previousNode = currentNode;
+				
+				if(key < currentNode->key){
+					currentNode = currentNode->left;
 				}
-				else if(key > current->key){
-					current = current->right;
+				else if(key > currentNode->key){
+					currentNode = currentNode->right;
 				}
 				else{
 					break;
@@ -262,33 +269,37 @@ class SplayTree{
 			}
 
 			//if node is found, check their conditions
-			if(current){
+			if(currentNode){
 				
-				if(!current->left && !current->right){
+				//no child
+				if(!currentNode->left && !currentNode->right){
 					
-					Node<Key> * parent = current->parent;
+					Node<Key> * parent = currentNode->parent;
 					
 					if(parent){
-						if(parent->right == current){
-							delete(current);
+						if(parent->right == currentNode){
+							delete(currentNode);
+							currentNode = nullptr;
 							parent->right = nullptr;
 						}
 						else{
-							delete(current);
+							delete(currentNode);
+							currentNode = nullptr
 							parent->left = nullptr;
 						}
 						splay(parent);
 					}
 					else{
-						delete current;
-						current = nullptr;
+						delete currentNode;
+						currentNode = nullptr;
 						this->root = nullptr;
 					}
 				}
-				else if(current->left && current->right){
-					Node<Key> * maxLS = maxLeftSubtree(current->left);
+				else if(currentNode->left && currentNode->right){
+					
+					Node<Key> * maxLS = maxLeftSubtree(currentNode->left);
 					Node<Key> * parent = maxLS->parent;
-					current->setKey(maxLS->key);
+					currentNode->setKey(maxLS->key);
 					
 					if(parent->right == maxLS){
 						delete parent->right;
@@ -301,10 +312,11 @@ class SplayTree{
 
 					splay(parent);
 				}
-				else if(current->left){
+				else if(currentNode->left){
+					
 					Node<Key> * maxLS = maxLeftSubtree(current->left);
 					Node<Key> * parent = maxLS->parent;
-					current->setKey(maxLS->key);
+					currentNode->setKey(maxLS->key);
 					
 					if(parent->right == maxLS){
 						delete parent->right;
@@ -318,7 +330,8 @@ class SplayTree{
 					splay(parent);
 				}
 				else{
-					Node<Key> * minRS = minRightSubtree(current->right);
+					
+					Node<Key> * minRS = minRightSubtree(currentNode->right);
 					Node<Key> * parent = minRS->parent;	
 					current->setKey(minRS->key);
 
@@ -335,7 +348,8 @@ class SplayTree{
 				}
 
 			}
-			//if node is not found, do a splay operation on the last visited
+
+			//if node is not found, do a splay on the previous visited node
 			else if(previous){
 				splay(previous);
 			}
