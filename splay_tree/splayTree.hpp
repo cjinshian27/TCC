@@ -43,7 +43,17 @@ class SplayTree{
 			return current;
 		}
 		
-		//left rotate to balance the subtree
+		/*
+
+		left rotate to balance the subtree
+			
+			  x                y  
+		     / \              / \
+		    C   y    ===>    x   A
+		       / \ 			/ \
+			  B   A        C   B
+  		
+		*/
 		Node<Key> * leftRotate(Node<Key> * node){
 
 	 	   	Node<Key> * nodeRight = node->right;
@@ -63,8 +73,18 @@ class SplayTree{
 		 	return nodeRight;
 		}
 
-		//right rotate to balance the subtree
+		/*
+		right rotate to balance the subtree
+			
+				y                x
+			   / \				/ \
+			  x   C    ===>    A   y
+			 / \                  / \
+			A   B                B   C
+
+		*/
 		Node<Key> * rightRotate(Node<Key> * node){
+			
 			Node<Key> * nodeLeft = node->left;
 	 	   	Node<Key> * parent = node->parent;
 
