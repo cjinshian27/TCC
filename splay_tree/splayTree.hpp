@@ -11,7 +11,7 @@ class SplayTree{
 		//delete the whole splay tree
 		void destroy(Node<Key> * node){
 			
-			if (!node) return
+			if (!node) return;
 	
 			destroy(node->left);
 			destroy(node->right);
