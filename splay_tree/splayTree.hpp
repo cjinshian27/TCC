@@ -21,7 +21,7 @@ class SplayTree{
 		}
 		
 		//get the node with maximum key from the left subtree
-		Node<Key> * maxLeftSubtree(Node<Key> * node){
+		Node<Key> * leftSubtreeMaxNode(Node<Key> * node){
 			
 			Node<Key> * currentNode = node;
 			
@@ -33,7 +33,7 @@ class SplayTree{
 		}
 
 		//get the node with minimum key from the right subtree
-		Node<Key> * minRightSubtree(Node<Key> * node){
+		Node<Key> * rightSubtreeMinNode(Node<Key> * node){
 			Node<Key> * current = node;
 			
 			while(current->left){
@@ -297,7 +297,7 @@ class SplayTree{
 				}
 				else if(currentNode->left && currentNode->right){
 					
-					Node<Key> * maxLS = maxLeftSubtree(currentNode->left);
+					Node<Key> * maxLS = leftSubtreeMaxNode(currentNode->left);
 					Node<Key> * parent = maxLS->parent;
 					currentNode->setKey(maxLS->key);
 					
@@ -314,7 +314,7 @@ class SplayTree{
 				}
 				else if(currentNode->left){
 					
-					Node<Key> * maxLS = maxLeftSubtree(current->left);
+					Node<Key> * maxLS = leftSubtreeMaxNode(current->left);
 					Node<Key> * parent = maxLS->parent;
 					currentNode->setKey(maxLS->key);
 					
@@ -331,7 +331,7 @@ class SplayTree{
 				}
 				else{
 					
-					Node<Key> * minRS = minRightSubtree(currentNode->right);
+					Node<Key> * minRS = rightSubtreeMinNode(currentNode->right);
 					Node<Key> * parent = minRS->parent;	
 					current->setKey(minRS->key);
 
