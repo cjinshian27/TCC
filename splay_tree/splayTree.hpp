@@ -365,12 +365,15 @@ class SplayTree{
 
 		//return the node with the smallest key 
 		Key min(){
-			Node<Key> * current = this->root;
-			while(current->left){
-				current = current->left;
+			
+			Node<Key> * currentNode = this->root;
+			
+			while(currentNode->left){
+				currentNode = currentNode->left;
 			}
-			splay(current);
-			return current->key;
+			
+			splay(currentNode);
+			return currentNode->key;
 		}
 
 		//splay the node whose key is given and print out their subtrees
