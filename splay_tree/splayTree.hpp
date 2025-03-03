@@ -127,26 +127,26 @@ class SplayTree{
 					Node<Key> * grandparent = node->parent->parent;
 					Node<Key> * aux;
 					
-					//right right
+					//right right rotate
 					if(node == node->parent->left && node->parent == node->parent->parent->left){
 						aux = rightRotate(node->parent->parent);
 						node = rightRotate(aux);
 					}
 
-					//left left
+					//left left rotate
 					else if(node == node->parent->right && node->parent == node->parent->parent->right){
 						aux = leftRotate(node->parent->parent);
 						node = leftRotate(aux);
 					}	
 
-					//left right
+					//left right rotate
 					else if(node == node->parent->right && node->parent == node->parent->parent->left){						
 						aux = leftRotate(node->parent);
 						aux->parent->left = aux;
 						node = rightRotate(aux->parent);
 					}
 
-					//right left
+					//right left rotate
 					else{
 						aux = rightRotate(node->parent);
 						aux->parent->right = aux;
@@ -174,6 +174,7 @@ class SplayTree{
 		previous one and the second is the current one. 
 		*/
 		std::pair<Node<Key> *, Node<Key> *> find(Key key){
+			
 			Node<Key> * currentNode = this->root;
 			Node<Key> * previousNode = nullptr;
 
