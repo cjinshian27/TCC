@@ -59,15 +59,17 @@ class SplayTree{
 	 	   	Node<Key> * nodeRight = node->right;
 	 	   	Node<Key> * parent = node->parent;
 
-			Node<Key> * nodeRightLeft = node->right->left;
+			Node<Key> * nodeRightLeft = nodeRight->left;
 
 		   	nodeRight->left = node;
 		   	node->parent = nodeRight;
 		   	
 		 	node->right = nodeRightLeft;
+		 	
 		 	if(nodeRightLeft){
 		 		nodeRightLeft->parent = node;
 		 	}
+		 	
 		 	nodeRight->parent = parent;
 
 		 	return nodeRight;
@@ -88,15 +90,17 @@ class SplayTree{
 			Node<Key> * nodeLeft = node->left;
 	 	   	Node<Key> * parent = node->parent;
 
-			Node<Key> * nodeLeftRight = node->left->right;
+			Node<Key> * nodeLeftRight = nodeLeft->right;
 
 			nodeLeft->right = node;
 			node->parent = nodeLeft;
 
 			node->left = nodeLeftRight;
+			
 			if(nodeLeftRight){
 				nodeLeftRight->parent = node;
 			}
+			
 			nodeLeft->parent = parent;
 
 			return nodeLeft;
