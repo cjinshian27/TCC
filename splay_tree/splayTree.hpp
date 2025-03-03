@@ -383,28 +383,17 @@ class SplayTree{
 				return {nullptr, nullptr};
 			}
 			
-			Node<Key> * current = this->root;
-			Node<Key> * previous = nullptr;
+			std::pair<Node<Key> *, Node<Key> *> pairOfNodes = find(key);
+			Node<Key> * currentNode = pairOfNodes.first;
+			Node<Key> * previousNode = pairOfNodes.second;
 
-			while(current){
-				previous = current;
-				if(key < current->key){
-					current = current->left;
-				}
-				else if(key > current->key){
-					current = current->right;
-				}
-				else{
-					break;
-				}
+			if(currentNode){
+				splay(currentNode);
+			}
+			else if(previousNode){
+				splay(previousNode);
 			}
 
-			if(current){
-				splay(current);
-			}
-			else{
-				splay(previous);
-			}
 			Node<Key> * aux = this->root->right;
 			this->root->right = nullptr;
 
@@ -416,6 +405,7 @@ class SplayTree{
 
 		//join two given trees
 		void join(SplayTree * thatSplayTree){
+			
 			Node<Key> * node = leftSubtreeMaxNode(this->root);
 			splay(node);
 			node->right = thatSplayTree->root;
