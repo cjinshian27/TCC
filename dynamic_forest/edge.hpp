@@ -1,6 +1,5 @@
 template<typename Key>
 
-//edge's class
 class Edge{
 	
 	public:
@@ -12,28 +11,29 @@ class Edge{
 		Edge * right = nullptr;
 		Edge * parent = nullptr;
 
-		//class' parameterized constructor
 		Edge(Key first, Key second, unsigned int id){
+
 			this->edge.first = first;
 			this->edge.second = second;
 			this->id = id;
 		}
 
-		//print the edge in the format (u, v)
+		//print the edge in the (u, v) format
 		void print(){
 
 			std::cout << this->edge.first << " " << this->edge.second << '\n';
 		}
 
-		//set the edge's size
+		//set the edge size
 		void setSize(){
-			if(this->left != nullptr && this->right != nullptr){
+
+			if(this->left && this->right){
 				this->size = 1 + this->left->size + this->right->size;
 			}
-			else if(this->left != nullptr){
+			else if(this->left){
 				this->size = 1 + this->left->size;
 			}
-			else if(this->right != nullptr){
+			else if(this->right){
 				this->size = 1 + this->right->size;
 			}
 			else{
