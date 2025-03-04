@@ -67,7 +67,7 @@ class DynamicForest{
 		//concatenate two splay trees
 		void concatenate(SplayTree<Key> * tree1, SplayTree<Key> * tree2){
 			
-			if(tree1 == nullptr){
+			if(!tree1){
 				mapTrees[tree2->root->id] = tree2;
 				return;
 			}
