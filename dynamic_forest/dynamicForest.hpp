@@ -10,14 +10,16 @@ class DynamicForest{
 
 		//return the id of the root whose tree contains edge 
 		unsigned int find(Edge<Key> * edge){
-			if(edge == nullptr){
-				return 0;	
+			
+			if(!edge) return 0;	
+			
+			Edge<Key> * currentEdge = edge;
+			
+			while(currentEdge->parent){
+				currentEdge = currentEdge->parent;
 			}
-			Edge<Key> * aux = edge;
-			while(aux->parent != nullptr){
-				aux = aux->parent;
-			}
-			return aux->id;
+			
+			return currentEdge->id;
 		}   
 
 		//get the size of an edge
