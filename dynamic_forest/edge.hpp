@@ -6,7 +6,8 @@ class Edge{
 
 		unsigned int id;
 		std::pair<Key, Key> edge;
-		unsigned int size = 1;
+		unsigned int size;
+		
 		Edge * left = nullptr;
 		Edge * right = nullptr;
 		Edge * parent = nullptr;
@@ -16,6 +17,7 @@ class Edge{
 			this->edge.first = first;
 			this->edge.second = second;
 			this->id = id;
+			this->size = 1;
 		}
 
 		//print the edge in the (u, v) format
