@@ -9,7 +9,7 @@ class DynamicForest{
 		std::unordered_map<Key, SplayTree<Key> *> mapTrees; 
 
 		//return the id of the root whose tree contains edge 
-		unsigned int find(Edge<Key> * & edge){
+		unsigned int find(Edge<Key> * edge){
 			if(edge == nullptr){
 				return 0;	
 			}
@@ -21,7 +21,7 @@ class DynamicForest{
 		}   
 
 		//get the size of an edge
-		unsigned int size(Edge<Key> * & edge){
+		unsigned int size(Edge<Key> * edge){
 			if(edge == nullptr){
 				return 0;
 			}
@@ -85,7 +85,7 @@ class DynamicForest{
 		}
 
 		//concatenate tree1, uv, tree2, and vu
-		void concatenate(SplayTree<Key> * & tree1, Key u, SplayTree<Key> * & tree2, Key v){
+		void concatenate(SplayTree<Key> * tree1, Key u, SplayTree<Key> * tree2, Key v){
 			
 			SplayTree<Key> * uv = new SplayTree<Key>(u, v, ++id);
 			SplayTree<Key> * vu = new SplayTree<Key>(v, u, ++id);
