@@ -81,6 +81,7 @@ class SplayTree{
 		 		B->parent = y;
 		 	}
 		 	
+		 	y->setSize();
 		 	x->parent = parent;
 
 		 	return x;
@@ -112,6 +113,7 @@ class SplayTree{
 				B->parent = y;
 			}
 			
+			y->setSize();
 			x->parent = parent;
 
 			return x;
@@ -163,6 +165,8 @@ class SplayTree{
 						edge = leftRotate(aux->parent);
 					}
 
+					edge->setSize();
+
 					if(grandGrandParent){
 						if(grandGrandParent->right == grandparent){
 							grandGrandParent->right = edge;
@@ -170,12 +174,14 @@ class SplayTree{
 						else{
 							grandGrandParent->left = edge;
 						}
+						grandGrandParent->setSize();
 					}
 
 				}
 			}
 
 			this->root = edge;
+			this->root->setSize();
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
@@ -256,13 +262,29 @@ class SplayTree{
 			this->root = nullptr;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		SplayTree(Edge<Key> * edge){
-			this->root = edge;
-		}
+		SplayTree(Key u, Key v, unsigned int id){
+			this->root = new Edge<Key>(u, v, id);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		~SplayTree(){	
 			destroy(this->root);
 		}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//return the k-th edge
+		Edge<Key> * k_th(Edge<Key> * edge, unsigned int k){
+			
+			unsigned int position = size(edge->left) + 1;
+			
+			if(position == k){
+				return edge;
+			}
+			else if(position > k){	
+				return k_th(edge->left, k);
+			}
+			else{
+				return k_th(edge->right, k - position);
+			}
+		}
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//insert a edge with a given key into the splay tree
 		void insert(Key key){
