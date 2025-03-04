@@ -31,15 +31,18 @@ class DynamicForest{
 
 		//return the rank of an edge in the tree
 		unsigned int order(Edge<Key> * edge){
-			Edge<Key> * aux = edge;
-			unsigned int k = size(edge->left) + 1;
+			
+			Edge<Key> * currentEdge = edge;
+			unsigned int k = size(currentEdge->left) + 1;
 
-			while(aux->parent != nullptr){
-				if(aux->parent->right == aux){
-					k += size(aux->parent->left) + 1;
+			while(currentEdge->parent != nullptr){
+				
+				if(currentEdge->parent->right == currentEdge){
+					k += size(currentEdge->parent->left) + 1;
 				}
-				aux = aux->parent;
+				currentEdge = currentEdge->parent;
 			}
+
 			return k;	
 		}
 
