@@ -156,9 +156,8 @@ class DynamicForest{
 		//cut the edge (u, v)
 		void cut(Key u, Key v){
 
-			if(u > v){
-				std::swap(u, v);
-			}
+			if(u > v) std::swap(u, v);
+			
 			edgeSet.erase({u, v});
 
 			unsigned int uvPosition = order(mapEdges[u][v]);
@@ -168,17 +167,13 @@ class DynamicForest{
 
 			SplayTree<Key> * splayTree = mapTrees[uvID];
 
-			if(uvPosition > vuPosition){
-				std::swap(uvPosition, vuPosition);
-			}
+			if(uvPosition > vuPosition) std::swap(uvPosition, vuPosition);
 
 			mapTrees.erase(uvID);
 			
 			std::pair<SplayTree<Key> *, SplayTree<Key> *> split1 = splayTree->split(uvPosition - 1);
 			
-			if(split1.first != nullptr){
-				vuPosition -= size(split1.first->root);
-			}
+			if(split1.first) vuPosition -= size(split1.first->root);
 
 			std::pair<SplayTree<Key> *, SplayTree<Key> *> split2 = split1.second->split(1);
 			
