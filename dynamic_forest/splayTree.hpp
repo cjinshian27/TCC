@@ -265,6 +265,10 @@ class SplayTree{
 		SplayTree(Key u, Key v, unsigned int id){
 			this->root = new Edge<Key>(u, v, id);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		SplayTree(Edge<Key> * edge){
+			this->root = edge;
+		}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		~SplayTree(){	
 			destroy(this->root);
 		}
@@ -441,7 +445,18 @@ class SplayTree{
 
 			if(k < 1) return {nullptr, this};
 
+			Edge<Key> * aux = k_th(this->root, k);
+			splay(aux);
 
+			if(aux) aux->parent = nullptr;
+
+			this->root->right = nullptr;
+			this->root->setSize();
+
+			SplayTree<Key> * splayTree1 = new SplayTree<Key>(this->root);
+			SplayTree<Key> * splayTree2 = new SplayTree<Key>(aux);
+
+			return {splayTree1, splayTree2};
 		}		
 
 		//join two given trees
