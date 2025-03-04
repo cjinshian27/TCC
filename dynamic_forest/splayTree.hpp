@@ -437,30 +437,11 @@ class SplayTree{
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//splay the edge whose key is given and print out their subtrees
-		std::pair<SplayTree *, SplayTree *> split(Key key){
-			
-			if(!this->root){
-				return {nullptr, nullptr};
-			}
-			
-			std::pair<Edge<Key> *, Edge<Key> *> pairOfNodes = find(key);
-			Edge<Key> * currentNode = pairOfNodes.first;
-			Edge<Key> * previousNode = pairOfNodes.second;
+		std::pair<SplayTree *, SplayTree *> split(unsigned int k){
 
-			if(currentNode){
-				splay(currentNode);
-			}
-			else if(previousNode){
-				splay(previousNode);
-			}
+			if(k < 1) return {nullptr, this};
 
-			Edge<Key> * aux = this->root->right;
-			this->root->right = nullptr;
 
-			SplayTree * splayTree1 = new SplayTree(this->root);
-			SplayTree * splayTree2 = new SplayTree(aux);
-
-			return {splayTree1, splayTree2};
 		}		
 
 		//join two given trees
@@ -468,7 +449,15 @@ class SplayTree{
 			
 			Edge<Key> * edge = leftSubtreeMaxNode(this->root);
 			splay(edge);
-			edge->right = thatSplayTree->root;
+
+			if(!thatSplayTree){
+				this->root->right = nullptr;
+			}
+			else{
+				this->root->right = thatSplayTree->root;
+				this->root->right->parent = this->root;
+			}
+			this->root->setSize();
 		}
 
 		//call the print function
