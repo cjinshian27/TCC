@@ -130,6 +130,7 @@ class DynamicForest{
 			if(id1 == id2 && getEdge(u) != nullptr){
 				return true;
 			}
+			
 			return false;
 		}
 
