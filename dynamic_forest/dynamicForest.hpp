@@ -24,12 +24,9 @@ class DynamicForest{
 
 		//get the size of an edge
 		unsigned int size(Edge<Key> * edge){
-			if(edge == nullptr){
-				return 0;
-			}
-			else{
-				return edge->size;
-			}
+			
+			if(!edge) return 0;
+			return edge->size;
 		}
 
 		//return the rank of an edge in the tree
