@@ -52,11 +52,11 @@ class DynamicForest{
 			unsigned int index = find(getEdge(u));
 			mapTrees.erase(index);
 			
-			if(splayTree == nullptr) return nullptr;
+			if(!splayTree) return nullptr;
 			
-			unsigned int k = order(getEdge(u));
+			unsigned int position = order(getEdge(u));
 
-			std::pair<SplayTree<Key> *, SplayTree<Key> *> pairOfTrees = splayTree->split(k - 1);
+			std::pair<SplayTree<Key> *, SplayTree<Key> *> pairOfTrees = splayTree->split(position - 1);
 			
 			SplayTree<Key> * aux = pairOfTrees.second;
 			aux->join(pairOfTrees.first);
