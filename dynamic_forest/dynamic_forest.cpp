@@ -1,4 +1,3 @@
-#include "splayTree.h"
 template<typename Key>
 
 class DynamicForest{
@@ -6,7 +5,6 @@ class DynamicForest{
 	private:
 		unsigned int id = 0;
 		std::set<std::pair<Key, Key>> edgeSet;
-		//std::set<SplayTree<Key> *> forest;
 		std::unordered_map<Key, std::unordered_map<Key, Edge<Key> *>> mapEdges; 
 		std::unordered_map<Key, SplayTree<Key> *> mapTrees; 
 
