@@ -197,14 +197,14 @@ class DynamicForest{
 				
 		//print all the edges from the forest
 		void print(){
-			for(auto & edge : edgeSet){
-				std::cout << edge.first << " " << edge.second;
-				break;
-			}
+			
 			auto edge = edgeSet.begin();
+			std::cout << edge.first << " " << edge.second;
+			
 			for (std::advance(edge, 1); edge != edgeSet.end(); ++edge){
 			  	std::cout << "  " << edge->first << " " << edge->second;
 			}
+			
 			std::cout << '\n';
 		}
 };			
