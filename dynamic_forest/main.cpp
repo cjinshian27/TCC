@@ -14,7 +14,7 @@ void decode(){
 
 	int operation, n, u, v;
 
-	DynamicForest<int> * dynamicForest = new DynamicForest<int>(n);
+	DynamicForest<int> * dynamicForest;
 
 	while(std::cin >> operation){
 		
@@ -22,6 +22,7 @@ void decode(){
 			
 			case 1:
 				std::cin >> n;
+				dynamicForest = new DynamicForest<int>(n);
 				break;
 
 			case 2:
