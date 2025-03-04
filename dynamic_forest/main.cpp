@@ -5,6 +5,7 @@
 #include <string>
 #include <iterator>
 #include <set>
+#include "splayTree.hpp"
 #include "dynamicForest.hpp"
 
 //decode function
