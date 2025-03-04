@@ -130,7 +130,7 @@ class DynamicForest{
 			if(id1 == id2 && getEdge(u) != nullptr){
 				return true;
 			}
-			
+
 			return false;
 		}
 
@@ -140,9 +140,8 @@ class DynamicForest{
 
 			if(isConnected(u, v)) return;
 			
-			if(u > v){
-				std::swap(u, v);
-			}
+			if(u > v) std::swap(u, v);
+			
 			edgeSet.insert({u, v});
 
 			SplayTree<Key> * splayTree1 = mapTrees[find(getEdge(u))];
