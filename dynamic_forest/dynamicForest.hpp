@@ -4,7 +4,7 @@ class DynamicForest{
 
 	private:
 		unsigned int id = 0;
-		unsigned int size;
+		unsigned int numberOfEdges;
 
 		//keep the remaining edges in the forest 
 		std::set<std::pair<Key, Key>> edgeSet;
@@ -137,7 +137,7 @@ class DynamicForest{
 	public:	
 
 		DynamicForest(unsigned int n){
-			this->size = n;
+			this->numberOfEdges = n;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//check whether nodes u and v are connected
