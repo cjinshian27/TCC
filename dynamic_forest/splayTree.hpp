@@ -7,6 +7,16 @@ class SplayTree{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//splay tree's root edge
 		Edge<Key> * root;
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//get the size of an edge
+		unsigned int size(Edge<Key> * edge){
+
+			if(!edge) return 0;
+			return edge->size;
+		}
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
 		//delete the whole splay tree
 		void destroy(Edge<Key> * edge){
