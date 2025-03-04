@@ -426,19 +426,7 @@ class SplayTree{
 				splay(previousNode);
 			}
 		}
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		//return the edge with the smallest key 
-		Key min(){
-			
-			Edge<Key> * currentNode = this->root;
-			
-			while(currentNode->left){
-				currentNode = currentNode->left;
-			}
-			
-			splay(currentNode);
-			return currentNode->key;
-		}
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//splay the edge whose key is given and print out their subtrees
 		std::pair<SplayTree *, SplayTree *> split(unsigned int k){
