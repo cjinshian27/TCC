@@ -4,10 +4,10 @@ template <typename Key>
 class SplayTree{
 
 	private:	
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//splay tree's root edge
 		Edge<Key> * root;
-		
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
 		//delete the whole splay tree
 		void destroy(Edge<Key> * edge){
 			
@@ -19,7 +19,7 @@ class SplayTree{
 			delete edge;
 			edge = nullptr;
 		}
-		
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
 		//get the edge with maximum key from the left subtree
 		Edge<Key> * leftSubtreeMaxNode(Edge<Key> * edge){
 			
@@ -31,7 +31,7 @@ class SplayTree{
 			
 			return currentNode;
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//get the edge with minimum key from the right subtree
 		Edge<Key> * rightSubtreeMinNode(Edge<Key> * edge){
 			
@@ -43,7 +43,7 @@ class SplayTree{
 			
 			return currentNode;
 		}
-		
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
 		/*
 
 		left rotate to balance the subtree
@@ -75,7 +75,7 @@ class SplayTree{
 
 		 	return x;
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
 		right rotate to balance the subtree
 			
@@ -106,7 +106,7 @@ class SplayTree{
 
 			return x;
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//do a splay operation on a given edge 
 		void splay(Edge<Key> * edge){
 
@@ -167,7 +167,7 @@ class SplayTree{
 
 			this->root = edge;
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
 		try to find a edge with a given key and return 
 		a pair of nodes, where the first edge is the 
@@ -195,7 +195,7 @@ class SplayTree{
 
 			return {currentNode, previousNode};
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//print out the splay tree
 		void print(Edge<Key> * edge, unsigned int depth){
 			
@@ -240,20 +240,20 @@ class SplayTree{
 		}
 
 	public:
-		
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		SplayTree(){
 			this->root = nullptr;
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		SplayTree(Edge<Key> * edge){
 			this->root = edge;
 		}
-
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		~SplayTree(){	
 			destroy(this->root);
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//insert a edge with a given key into the splay tree
 		void insert(Key key){
 
@@ -304,7 +304,7 @@ class SplayTree{
 			}
 
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
 		search for a edge with given key on the splay, 
 		return true if found and false otherwise.
@@ -325,7 +325,7 @@ class SplayTree{
 			return false;
 
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//remove a edge with given key from the splay tree
 		void remove(Key key){
 
@@ -390,7 +390,7 @@ class SplayTree{
 				splay(previousNode);
 			}
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//return the edge with the smallest key 
 		Key min(){
 			
@@ -403,7 +403,7 @@ class SplayTree{
 			splay(currentNode);
 			return currentNode->key;
 		}
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//splay the edge whose key is given and print out their subtrees
 		std::pair<SplayTree *, SplayTree *> split(Key key){
 			
