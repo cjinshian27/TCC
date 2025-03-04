@@ -33,17 +33,17 @@ class DynamicForest{
 		unsigned int order(Edge<Key> * edge){
 			
 			Edge<Key> * currentEdge = edge;
-			unsigned int k = size(currentEdge->left) + 1;
+			unsigned int position = size(currentEdge->left) + 1;
 
 			while(currentEdge->parent != nullptr){
 				
 				if(currentEdge->parent->right == currentEdge){
-					k += size(currentEdge->parent->left) + 1;
+					position += size(currentEdge->parent->left) + 1;
 				}
 				currentEdge = currentEdge->parent;
 			}
 
-			return k;	
+			return position;	
 		}
 
 		//bring the edge that contains u to the front of the euler tour
