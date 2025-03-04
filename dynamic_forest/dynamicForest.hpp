@@ -116,11 +116,6 @@ class DynamicForest{
 
 	public:	
 		
-		//class' constructor
-		DynamicForest(){
-
-		}		
-
 		//check whether nodes u and v are connected
 		bool isConnected(Key u, Key v){
 
@@ -199,12 +194,12 @@ class DynamicForest{
 		void print(){
 			
 			auto edge = edgeSet.begin();
-			std::cout << edge.first << " " << edge.second;
+			std::cout << edge->first << " " << edge->second;
 			
 			for (std::advance(edge, 1); edge != edgeSet.end(); ++edge){
 			  	std::cout << "  " << edge->first << " " << edge->second;
 			}
-			
+
 			std::cout << '\n';
 		}
 };			
