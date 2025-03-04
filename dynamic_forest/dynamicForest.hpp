@@ -5,8 +5,17 @@ class DynamicForest{
 	private:
 		unsigned int id = 0;
 		unsigned int size;
+
+		//keep the remaining edges in the forest 
 		std::set<std::pair<Key, Key>> edgeSet;
+
+		//map the edges according to their two (Key) ends
 		std::unordered_map<Key, std::unordered_map<Key, Edge<Key> *>> mapEdges; 
+		
+		/*
+		map the remaining splay trees in the forest, where 
+		an id is used to identify each splay tree uniquely.
+		*/
 		std::unordered_map<Key, SplayTree<Key> *> mapTrees; 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
