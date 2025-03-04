@@ -4,9 +4,12 @@ class DynamicForest{
 
 	private:
 		unsigned int id = 0;
+		unsigned int size;
 		std::set<std::pair<Key, Key>> edgeSet;
 		std::unordered_map<Key, std::unordered_map<Key, Edge<Key> *>> mapEdges; 
 		std::unordered_map<Key, SplayTree<Key> *> mapTrees; 
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		//return the id of the root whose tree contains edge 
 		unsigned int find(Edge<Key> * edge){
@@ -22,12 +25,16 @@ class DynamicForest{
 			return currentEdge->id;
 		}   
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 		//get the size of an edge
 		unsigned int size(Edge<Key> * edge){
 			
 			if(!edge) return 0;
 			return edge->size;
 		}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		//return the rank of an edge in the tree
 		unsigned int order(Edge<Key> * edge){
@@ -46,6 +53,8 @@ class DynamicForest{
 			return position;	
 		}
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 		//bring the edge that contains u to the front of the euler tour
 		SplayTree<Key> * bringToFront(SplayTree<Key> * splayTree, Key u){
 
@@ -63,7 +72,9 @@ class DynamicForest{
 	
 			return aux;
 		}
-		
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 		//concatenate two splay trees
 		void concatenate(SplayTree<Key> * tree1, SplayTree<Key> * tree2){
 			
@@ -115,7 +126,11 @@ class DynamicForest{
 		}	
 
 	public:	
-		
+
+		DynamicForest(unsigned int n){
+			this->size = n;
+		}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//check whether nodes u and v are connected
 		bool isConnected(Key u, Key v){
 
@@ -129,7 +144,7 @@ class DynamicForest{
 			return false;
 		}
 
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//create a link between nodes u and v
 		void link(Key u, Key v){
 
@@ -147,6 +162,7 @@ class DynamicForest{
 
 			concatenate(splayTree11, u, splayTree22, v);			
 		}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		//cut the edge (u, v)
 		void cut(Key u, Key v){
@@ -189,7 +205,8 @@ class DynamicForest{
 			split2.first = nullptr;
 			split4.first = nullptr;		
 		}
-				
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		
 		//print all the edges from the forest
 		void print(){
 			
