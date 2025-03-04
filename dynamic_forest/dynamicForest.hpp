@@ -78,12 +78,13 @@ class DynamicForest{
 
 		//get the first edge that contains u 
 		Edge<Key> * getEdge(Key u){
-			Edge<Key> * aux;
+			
+			auto mapValue = mapEdges[u].begin();
 
-			for(auto & x : mapEdges[u]){
-				aux = x.second;
-				return aux;
+			if(mapValue != mapEdges[u].end()){
+				return mapValue->second;
 			}
+
 			return nullptr;
 		}
 
