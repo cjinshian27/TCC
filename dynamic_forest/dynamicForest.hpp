@@ -97,7 +97,7 @@ class DynamicForest{
 			this->mapEdges[u][v] = uv->root;
 			this->mapEdges[v][u] = vu->root;
 
-			if(tree1 != nullptr){
+			if(tree1){
 				
 				tree1->join(uv);
 				tree1->join(tree2);
