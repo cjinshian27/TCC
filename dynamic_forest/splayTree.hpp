@@ -264,6 +264,7 @@ class SplayTree{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		SplayTree(Key u, Key v, unsigned int id){
 			this->root = new Edge<Key>(u, v, id);
+		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		SplayTree(Edge<Key> * edge){
 			this->root = edge;
