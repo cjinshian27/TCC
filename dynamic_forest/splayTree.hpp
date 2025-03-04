@@ -30,25 +30,25 @@ class SplayTree{
 		//get the edge with maximum key from the left subtree
 		Edge<Key> * leftSubtreeMaxNode(Edge<Key> * edge){
 			
-			Edge<Key> * currentNode = edge;
+			Edge<Key> * currentEdge = edge;
 			
-			while(currentNode->right){
-				currentNode = currentNode->right;
+			while(currentEdge->right){
+				currentEdge = currentEdge->right;
 			}
 			
-			return currentNode;
+			return currentEdge;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//get the edge with minimum key from the right subtree
 		Edge<Key> * rightSubtreeMinNode(Edge<Key> * edge){
 			
-			Edge<Key> * currentNode = edge;
+			Edge<Key> * currentEdge = edge;
 			
-			while(currentNode->left){
-				currentNode = currentNode->left;
+			while(currentEdge->left){
+				currentEdge = currentEdge->left;
 			}
 			
-			return currentNode;
+			return currentEdge;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
 		/*
@@ -188,25 +188,25 @@ class SplayTree{
 		*/
 		std::pair<Edge<Key> *, Edge<Key> *> find(Key key){
 			
-			Edge<Key> * currentNode = this->root;
-			Edge<Key> * previousNode = nullptr;
+			Edge<Key> * currentEdge = this->root;
+			Edge<Key> * previousEdge = nullptr;
 
-			while(currentNode){
+			while(currentEdge){
 				
-				previousNode = currentNode;
+				previousEdge = currentEdge;
 				
-				if(key < currentNode->key){
-					currentNode = currentNode->left;
+				if(key < currentEdge->key){
+					currentEdge = currentEdge->left;
 				}
-				else if(key > currentNode->key){
-					currentNode = currentNode->right;
+				else if(key > currentEdge->key){
+					currentEdge = currentEdge->right;
 				}
 				else{
-					return {currentNode, previousNode};
+					return {currentEdge, previousEdge};
 				}
 			}
 
-			return {currentNode, previousNode};
+			return {currentEdge, previousEdge};
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//print out the splay tree
@@ -299,43 +299,43 @@ class SplayTree{
 				return;
 			}
 
-			Edge<Key> * currentNode = this->root;
+			Edge<Key> * currentEdge = this->root;
 			
-			while(currentNode != nullptr){
+			while(currentEdge != nullptr){
 				
-				if(key > currentNode->key){
+				if(key > currentEdge->key){
 					
-					if(!currentNode->right){
+					if(!currentEdge->right){
 						
 						Edge<Key> * newNode = new Edge<Key>(key);
-						currentNode->right = newNode;
-						newNode->parent = currentNode;
+						currentEdge->right = newNode;
+						newNode->parent = currentEdge;
 						splay(newNode);
 						return;
 					}
 					else{
 						
-						currentNode = currentNode->right;
+						currentEdge = currentEdge->right;
 					}
 				}
-				else if(key < currentNode->key){
+				else if(key < currentEdge->key){
 					
-					if(!currentNode->left){
+					if(!currentEdge->left){
 						
 						Edge<Key> * newNode = new Edge<Key>(key);
-						currentNode->left = newNode; 
-						newNode->parent = currentNode;
+						currentEdge->left = newNode; 
+						newNode->parent = currentEdge;
 						splay(newNode);
 						return;
 					}
 					else{
 						
-						currentNode = currentNode->left;
+						currentEdge = currentEdge->left;
 					}
 				}
 				else{
 					
-					splay(currentNode);
+					splay(currentEdge);
 					return;
 				}
 			}
@@ -349,15 +349,15 @@ class SplayTree{
 		bool search(Key key){
 
 			std::pair<Edge<Key> *, Edge<Key> *> pairOfNodes = find(key);
-			Edge<Key> * currentNode = pairOfNodes.first;
-			Edge<Key> * previousNode = pairOfNodes.second;
+			Edge<Key> * currentEdge = pairOfNodes.first;
+			Edge<Key> * previousEdge = pairOfNodes.second;
 
-			if(currentNode){
-				splay(currentNode);
+			if(currentEdge){
+				splay(currentEdge);
 				return true;
 			}
-			else if(previousNode){
-				splay(previousNode);
+			else if(previousEdge){
+				splay(previousEdge);
 			}
 			return false;
 
