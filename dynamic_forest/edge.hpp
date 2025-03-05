@@ -23,7 +23,7 @@ class Edge{
 		//print the edge in the (u, v) format
 		void print(){
 
-			std::cout << this->edge.first << " " << this->edge.second << '\n';
+			std::cout << "(" << this->edge.first << " " << this->edge.second << ")" << '\n';
 		}
 
 		//set the edge size
