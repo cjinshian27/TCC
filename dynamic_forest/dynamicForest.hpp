@@ -1,3 +1,6 @@
+
+#include "splayTree.hpp"
+
 template<typename Key>
 
 class DynamicForest{
@@ -119,7 +122,7 @@ class DynamicForest{
 			
 			SplayTree<Key> * uv = new SplayTree<Key>(u, v, ++id);
 			SplayTree<Key> * vu = new SplayTree<Key>(v, u, ++id);
-				
+
 			this->mapEdges[u][v] = uv->root;
 			this->mapEdges[v][u] = vu->root;
 
@@ -143,7 +146,7 @@ class DynamicForest{
 	public:	
 
 		DynamicForest(unsigned int n){
-			this->numberOfEdges = n;
+			//this->numberOfEdges = n;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//check whether nodes u and v are connected
