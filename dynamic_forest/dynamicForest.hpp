@@ -32,7 +32,7 @@ class DynamicForest{
 			}
 			
 			SplayTree<Key> * aux = mapTrees[currentEdge->id];
-			aux->splay(edge);
+			if(aux) aux->splay(edge);
 
 			return currentEdge->id;
 		}   
@@ -63,7 +63,7 @@ class DynamicForest{
 			}
 
 			SplayTree<Key> * aux = mapTrees[currentEdge->id];
-			aux->splay(edge);
+			if(aux) aux->splay(edge);
 
 			return position;	
 		}
@@ -126,7 +126,6 @@ class DynamicForest{
 			if(tree1){
 				
 				tree1->join(uv);
-				std::cout << "HELLO" << std::endl;
 				tree1->join(tree2);
 				tree1->join(vu);
 
