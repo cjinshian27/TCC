@@ -62,6 +62,9 @@ class DynamicForest{
 				currentEdge = currentEdge->parent;
 			}
 
+			SplayTree<Key> * aux = mapTrees[currentEdge->id];
+			aux->splay(edge);
+
 			return position;	
 		}
 
