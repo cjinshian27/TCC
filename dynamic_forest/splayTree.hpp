@@ -264,28 +264,6 @@ class SplayTree{
 		}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		/*
-		search for a edge with given key on the splay, 
-		return true if found and false otherwise.
-		*/
-		bool search(Key key){
-
-			std::pair<Edge<Key> *, Edge<Key> *> pairOfNodes = find(key);
-			Edge<Key> * currentEdge = pairOfNodes.first;
-			Edge<Key> * previousEdge = pairOfNodes.second;
-
-			if(currentEdge){
-				splay(currentEdge);
-				return true;
-			}
-			else if(previousEdge){
-				splay(previousEdge);
-			}
-			return false;
-
-		}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//splay the edge whose key is given and print out their subtrees
 		std::pair<SplayTree *, SplayTree *> split(unsigned int k){
 
@@ -308,7 +286,6 @@ class SplayTree{
 		//join two given trees
 		void join(SplayTree * thatSplayTree){
 			
-			this->print();
 			Edge<Key> * edge = leftSubtreeMaxNode(this->root);
 			splay(edge);
 
