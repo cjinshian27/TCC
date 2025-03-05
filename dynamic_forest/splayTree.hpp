@@ -264,57 +264,6 @@ class SplayTree{
 		}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		//insert a edge with a given key into the splay tree
-		void insert(Key key){
-
-			if(!this->root){
-				this->root = new Edge<Key>(key);
-				return;
-			}
-
-			Edge<Key> * currentEdge = this->root;
-			
-			while(currentEdge != nullptr){
-				
-				if(key > currentEdge->key){
-					
-					if(!currentEdge->right){
-						
-						Edge<Key> * newNode = new Edge<Key>(key);
-						currentEdge->right = newNode;
-						newNode->parent = currentEdge;
-						splay(newNode);
-						return;
-					}
-					else{
-						
-						currentEdge = currentEdge->right;
-					}
-				}
-				else if(key < currentEdge->key){
-					
-					if(!currentEdge->left){
-						
-						Edge<Key> * newNode = new Edge<Key>(key);
-						currentEdge->left = newNode; 
-						newNode->parent = currentEdge;
-						splay(newNode);
-						return;
-					}
-					else{
-						
-						currentEdge = currentEdge->left;
-					}
-				}
-				else{
-					
-					splay(currentEdge);
-					return;
-				}
-			}
-
-		}
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
 		search for a edge with given key on the splay, 
 		return true if found and false otherwise.
