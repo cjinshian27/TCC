@@ -116,71 +116,6 @@ class SplayTree{
 			return x;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		//do a splay operation on a given edge 
-		void splay(Edge<Key> * edge){
-
-			while(edge->parent){
-				
-				if(!edge->parent->parent){
-					
-					if(edge == edge->parent->left){
-						edge = rightRotate(edge->parent);
-					}
-					else{
-						edge = leftRotate(edge->parent);
-					}
-				}
-				else{
-					
-					Edge<Key> * grandGrandParent = edge->parent->parent->parent;
-					Edge<Key> * grandparent = edge->parent->parent;
-					Edge<Key> * aux;
-					
-					//right right rotate
-					if(edge == edge->parent->left && edge->parent == edge->parent->parent->left){
-						aux = rightRotate(edge->parent->parent);
-						edge = rightRotate(aux);
-					}
-
-					//left left rotate
-					else if(edge == edge->parent->right && edge->parent == edge->parent->parent->right){
-						aux = leftRotate(edge->parent->parent);
-						edge = leftRotate(aux);
-					}	
-
-					//left right rotate
-					else if(edge == edge->parent->right && edge->parent == edge->parent->parent->left){						
-						aux = leftRotate(edge->parent);
-						aux->parent->left = aux;
-						edge = rightRotate(aux->parent);
-					}
-
-					//right left rotate
-					else{
-						aux = rightRotate(edge->parent);
-						aux->parent->right = aux;
-						edge = leftRotate(aux->parent);
-					}
-
-					edge->setSize();
-
-					if(grandGrandParent){
-						if(grandGrandParent->right == grandparent){
-							grandGrandParent->right = edge;
-						}
-						else{
-							grandGrandParent->left = edge;
-						}
-						grandGrandParent->setSize();
-					}
-
-				}
-			}
-
-			this->root = edge;
-			this->root->setSize();
-		}
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
 		try to find a edge with a given key and return 
 		a pair of nodes, where the first edge is the 
@@ -245,6 +180,71 @@ class SplayTree{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		~SplayTree(){	
 			destroy(this->root);
+		}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//do a splay operation on a given edge 
+		void splay(Edge<Key> * edge){
+
+			while(edge->parent){
+				
+				if(!edge->parent->parent){
+					
+					if(edge == edge->parent->left){
+						edge = rightRotate(edge->parent);
+					}
+					else{
+						edge = leftRotate(edge->parent);
+					}
+				}
+				else{
+					
+					Edge<Key> * grandGrandParent = edge->parent->parent->parent;
+					Edge<Key> * grandparent = edge->parent->parent;
+					Edge<Key> * aux;
+					
+					//right right rotate
+					if(edge == edge->parent->left && edge->parent == edge->parent->parent->left){
+						aux = rightRotate(edge->parent->parent);
+						edge = rightRotate(aux);
+					}
+
+					//left left rotate
+					else if(edge == edge->parent->right && edge->parent == edge->parent->parent->right){
+						aux = leftRotate(edge->parent->parent);
+						edge = leftRotate(aux);
+					}	
+
+					//left right rotate
+					else if(edge == edge->parent->right && edge->parent == edge->parent->parent->left){						
+						aux = leftRotate(edge->parent);
+						aux->parent->left = aux;
+						edge = rightRotate(aux->parent);
+					}
+
+					//right left rotate
+					else{
+						aux = rightRotate(edge->parent);
+						aux->parent->right = aux;
+						edge = leftRotate(aux->parent);
+					}
+
+					edge->setSize();
+
+					if(grandGrandParent){
+						if(grandGrandParent->right == grandparent){
+							grandGrandParent->right = edge;
+						}
+						else{
+							grandGrandParent->left = edge;
+						}
+						grandGrandParent->setSize();
+					}
+
+				}
+			}
+
+			this->root = edge;
+			this->root->setSize();
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//return the k-th edge
@@ -359,6 +359,7 @@ class SplayTree{
 		//join two given trees
 		void join(SplayTree * thatSplayTree){
 			
+			this->print();
 			Edge<Key> * edge = leftSubtreeMaxNode(this->root);
 			splay(edge);
 
@@ -376,4 +377,5 @@ class SplayTree{
 		void print(){
 			print(this->root, 0);
 		}
+
 };
