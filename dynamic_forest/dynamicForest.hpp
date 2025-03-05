@@ -152,9 +152,7 @@ class DynamicForest{
 			unsigned int id1 = find(getEdge(u));
 			unsigned int id2 = find(getEdge(v));
 
-			if(id1 == id2 && getEdge(u) != nullptr){
-				return true;
-			}
+			if(id1 == id2 && getEdge(u) != nullptr) return true;
 
 			return false;
 		}
