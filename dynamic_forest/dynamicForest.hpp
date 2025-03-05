@@ -54,7 +54,7 @@ class DynamicForest{
 			Edge<Key> * currentEdge = edge;
 			unsigned int position = size(currentEdge->left) + 1;
 
-			while(currentEdge->parent != nullptr){
+			while(currentEdge->parent){
 				
 				if(currentEdge->parent->right == currentEdge){
 					position += size(currentEdge->parent->left) + 1;
