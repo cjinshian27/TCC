@@ -31,6 +31,9 @@ class DynamicForest{
 				currentEdge = currentEdge->parent;
 			}
 			
+			SplayTree<Key> * aux = mapTrees[currentEdge->id];
+			aux->splay(currentEdge);
+
 			return currentEdge->id;
 		}   
 
@@ -120,6 +123,7 @@ class DynamicForest{
 			if(tree1){
 				
 				tree1->join(uv);
+				std::cout << "HELLO" << std::endl;
 				tree1->join(tree2);
 				tree1->join(vu);
 
