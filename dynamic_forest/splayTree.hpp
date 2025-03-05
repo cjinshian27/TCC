@@ -220,35 +220,8 @@ class SplayTree{
 				std::cout << ' ';
 			}
 
-			std::cout << edge->key << " ("; 
-
-			if(edge->parent){
-				std::cout << edge->parent->key;
-			} 
-			else{
-				std::cout << "null";
-			}
-
-			std::cout << ":";
-
-			if(edge->left){
-				std::cout << edge->left->key;
-			}
-			else{
-				std::cout << "null";
-			}
-
-			std::cout << ":";
-			
-			if(edge->right){
-				std::cout << edge->right->key;
-			}
-			else{
-				std::cout << "null";
-			}
-
-			std::cout << ")\n'";
-
+			edge->print();
+	
 			print(edge->left, depth + 3);
 		}
 
