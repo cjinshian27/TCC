@@ -32,7 +32,7 @@ class DynamicForest{
 			}
 			
 			SplayTree<Key> * aux = mapTrees[currentEdge->id];
-			aux->splay(currentEdge);
+			aux->splay(edge);
 
 			return currentEdge->id;
 		}   
