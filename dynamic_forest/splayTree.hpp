@@ -1,4 +1,4 @@
-
+#include "edge.hpp"
 template <typename Key>
 
 class SplayTree{
@@ -164,7 +164,7 @@ class SplayTree{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//splay tree's root edge
-		Edge<Key> * root;
+		Edge<Key> * root = nullptr;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		SplayTree(){
 			this->root = nullptr;
@@ -271,6 +271,8 @@ class SplayTree{
 
 			Edge<Key> * aux = k_th(this->root, k);
 			splay(aux);
+
+			aux = this->root->right;
 
 			if(aux) aux->parent = nullptr;
 
