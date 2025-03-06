@@ -106,9 +106,9 @@ class DynamicForest{
 			
 			if(!splayTree) return nullptr;
 			
-			mapTrees.erase(splayTree->root->id);
-
 			unsigned int position = order(getEdge(u));
+			
+			mapTrees.erase(splayTree->root->id);
 
 			std::pair<SplayTree<Key> *, SplayTree<Key> *> pairOfTrees = splayTree->split(position - 1);
 			
@@ -269,6 +269,7 @@ class DynamicForest{
 
 		void printTrees(){
 
+			mapTrees.erase(0);
  			for(auto & splayTree : mapTrees){
 
 				if(splayTree.second){
