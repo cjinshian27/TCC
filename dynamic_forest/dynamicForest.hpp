@@ -9,7 +9,10 @@ class DynamicForest{
 		unsigned int id = 0;
 		unsigned int numberOfEdges;
 
-		//keep the remaining edges in the forest 
+		/*
+		keep the remaining edges in the forest in 
+		a <Key, Key> format.
+		*/
 		std::set<std::pair<Key, Key>> edgeSet;
 
 		//map the edges according to their two (Key) ends
@@ -182,7 +185,7 @@ class DynamicForest{
 			unsigned int id1 = find(getEdge(u));
 			unsigned int id2 = find(getEdge(v));
 
-			if(id1 == id2 && getEdge(u) != nullptr) return true;
+			if(id1 == id2 && getEdge(u)) return true;
 
 			return false;
 		}
