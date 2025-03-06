@@ -28,7 +28,7 @@ class SplayTree{
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
 		//get the edge with maximum key from the left subtree
-		Edge<Key> * leftSubtreeMaxNode(Edge<Key> * edge){
+		Edge<Key> * leftSubtreeMaxEdge(Edge<Key> * edge){
 			
 			Edge<Key> * currentEdge = edge;
 			
@@ -40,7 +40,7 @@ class SplayTree{
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//get the edge with minimum key from the right subtree
-		Edge<Key> * rightSubtreeMinNode(Edge<Key> * edge){
+		Edge<Key> * rightSubtreeMinEdge(Edge<Key> * edge){
 			
 			Edge<Key> * currentEdge = edge;
 			
@@ -291,7 +291,7 @@ class SplayTree{
 		//join two given trees
 		void join(SplayTree * thatSplayTree){
 			
-			Edge<Key> * edge = leftSubtreeMaxNode(this->root);
+			Edge<Key> * edge = leftSubtreeMaxEdge(this->root);
 			splay(edge);
 
 			if(!thatSplayTree){
