@@ -282,6 +282,10 @@ class SplayTree{
 			SplayTree<Key> * splayTree1 = new SplayTree<Key>(this->root);
 			SplayTree<Key> * splayTree2 = new SplayTree<Key>(aux);
 
+			if(aux == nullptr){
+				return {splayTree1, nullptr};
+			}
+
 			return {splayTree1, splayTree2};
 		}		
 
