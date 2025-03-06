@@ -17,10 +17,9 @@ class DynamicForest{
 		
 		/*
 		map the remaining splay trees in the forest, where 
-		an id is used to identify each splay tree uniquely.
+		an id is used to identify each splay tree uniquely
 		*/
 		std::unordered_map<Key, SplayTree<Key> *> mapTrees; 
-
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -39,19 +38,20 @@ class DynamicForest{
 			
 			Edge<Key> * currentEdge = edge;
 
-			SplayTree<Key> * aux = mapTrees[currentEdge->id];
-			
-			if(aux){
-				mapTrees.erase(currentEdge->id);
-				aux->splay(edge);
-				mapTrees[aux->root->id] = aux;
-			} 
 
 			while(currentEdge->parent){
 				currentEdge = currentEdge->parent;
 			}
 
-			return currentEdge->id;
+			SplayTree<Key> * aux = mapTrees[currentEdge->id];
+
+			if(aux){
+				std::swap(currentEdge->id, edge->id);
+				aux->splay(edge);
+				mapTrees[edge->id] = aux;
+			} 
+			
+			return edge->id;
 		}   
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -74,9 +74,9 @@ class DynamicForest{
 			SplayTree<Key> * aux = mapTrees[currentEdge->id];
 			
 			if(aux){
-				mapTrees.erase(currentEdge->id);
-				aux->splay(edge);	
-				mapTrees[aux->root->id] = aux;
+				std::swap(currentEdge->id, edge->id);
+				aux->splay(edge);
+				mapTrees[edge->id] = aux;
 			} 
 
 			return position;	
@@ -87,8 +87,8 @@ class DynamicForest{
 		//bring the edge that contains u to the front of the euler tour
 		SplayTree<Key> * bringToFront(SplayTree<Key> * splayTree, Key u){
 
-			//unsigned int index = find(getEdge(u));
-			//mapTrees.erase(index);
+			unsigned int index = find(getEdge(u));
+			mapTrees.erase(index);
 			
 			if(!splayTree) return nullptr;
 			
