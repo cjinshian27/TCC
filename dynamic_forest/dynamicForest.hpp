@@ -50,7 +50,6 @@ class DynamicForest{
 			
 			Edge<Key> * currentEdge = edge;
 
-
 			while(currentEdge->parent){
 				currentEdge = currentEdge->parent;
 			}
@@ -210,7 +209,7 @@ class DynamicForest{
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//cut the edge (u, v)
+		//cut the edge with u and v ends
 		void cut(Key u, Key v){
 
 			if(!isConnected(u, v)) return;
