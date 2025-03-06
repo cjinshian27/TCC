@@ -42,6 +42,10 @@ void decode(){
 			case 5:
 				dynamicForest->print();
 				break;
+
+			case 6:
+				dynamicForest->printTrees();
+				break;
 		}
 	}
 
