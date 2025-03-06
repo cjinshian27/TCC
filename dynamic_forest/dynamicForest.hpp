@@ -267,6 +267,7 @@ class DynamicForest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+		//print all splay trees based on their ID
 		void printTrees(){
 
 			mapTrees.erase(0);
