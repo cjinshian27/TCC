@@ -25,12 +25,8 @@ void decode(){
 
 			case 2:
 				std::cin >> u >> v;
-				if(dynamicForest->isConnected(u, v)){
-					std::cout << "True" << '\n';
-				}
-				else{
-					std::cout << "False" << '\n';
-				}
+				if(dynamicForest->isConnected(u, v)) std::cout << "True" << '\n';
+				else std::cout << "False" << '\n';
 				break;
 			
 			case 3:
