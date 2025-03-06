@@ -106,6 +106,8 @@ class DynamicForest{
 			
 			if(!splayTree) return nullptr;
 			
+			mapTrees.erase(splayTree->root->id);
+
 			unsigned int position = order(getEdge(u));
 
 			std::pair<SplayTree<Key> *, SplayTree<Key> *> pairOfTrees = splayTree->split(position - 1);
@@ -152,7 +154,7 @@ class DynamicForest{
 			this->mapEdges[v][u] = vu->root;
 
 			if(tree1){
-				
+
 				tree1->join(uv);
 				tree1->join(tree2);
 				tree1->join(vu);
@@ -171,7 +173,7 @@ class DynamicForest{
 	public:	
 
 		DynamicForest(unsigned int n){
-			//this->numberOfEdges = n;
+			this->numberOfEdges = n;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//check whether nodes u and v are connected
@@ -198,10 +200,10 @@ class DynamicForest{
 			SplayTree<Key> * splayTree1 = mapTrees[find(getEdge(u))];
 			SplayTree<Key> * splayTree2 = mapTrees[find(getEdge(v))];
 
-			SplayTree<Key> * splayTree11 = bringToFront(splayTree1, u);
-			SplayTree<Key> * splayTree22 = bringToFront(splayTree2, v);
+			splayTree1 = bringToFront(splayTree1, u);
+			splayTree2 = bringToFront(splayTree2, v);
 
-			concatenate(splayTree11, u, splayTree22, v);			
+			concatenate(splayTree1, u, splayTree2, v);			
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -262,4 +264,18 @@ class DynamicForest{
 
 			std::cout << '\n';
 		}
-};			
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+		void printTrees(){
+
+ 			for(auto & splayTree : mapTrees){
+
+				if(splayTree.second){
+					std::cout << "Sequence ID: " << splayTree.first << "\n";
+					splayTree.second->print();
+				}	
+			}
+		}
+
+};
