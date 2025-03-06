@@ -65,7 +65,15 @@ class DynamicForest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//return the rank of an edge in the tree
+		/*
+		return the rank of an edge in the tree
+		
+		example: splaying [2:1] node
+			
+		([1:2] id1)      (swap ids)   ([1:2] id2)     (splay)    ([2:1] id1)        
+		      \             ▶▶▶            \            ▶▶▶        /
+		  	 ([2:1] id2)                  ([2:1] id1)         ([1:2] id2)
+		*/
 		unsigned int order(Edge<Key> * edge){
 			
 			Edge<Key> * currentEdge = edge;
