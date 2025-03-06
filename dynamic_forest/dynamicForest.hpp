@@ -103,9 +103,6 @@ class DynamicForest{
 
 		//bring the edge that contains u to the front of the euler tour
 		SplayTree<Key> * bringToFront(SplayTree<Key> * splayTree, Key u){
-
-			unsigned int index = find(getEdge(u));
-			mapTrees.erase(index);
 			
 			if(!splayTree) return nullptr;
 			
