@@ -280,11 +280,10 @@ class SplayTree{
 			this->root->setSize();
 
 			SplayTree<Key> * splayTree1 = new SplayTree<Key>(this->root);
-			SplayTree<Key> * splayTree2 = new SplayTree<Key>(aux);
 
-			if(aux == nullptr){
-				return {splayTree1, nullptr};
-			}
+			if(!aux) return {splayTree1, nullptr};
+			
+			SplayTree<Key> * splayTree2 = new SplayTree<Key>(aux);
 
 			return {splayTree1, splayTree2};
 		}		
