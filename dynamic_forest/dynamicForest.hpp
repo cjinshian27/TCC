@@ -21,24 +21,6 @@ class DynamicForest{
 		*/
 		std::unordered_map<Key, SplayTree<Key> *> mapTrees; 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		//return the id of the root whose tree contains edge 
-		unsigned int find(Edge<Key> * edge){
-			
-			if(!edge) return 0;	
-			
-			Edge<Key> * currentEdge = edge;
-			
-			while(currentEdge->parent){
-				currentEdge = currentEdge->parent;
-			}
-			
-			SplayTree<Key> * aux = mapTrees[currentEdge->id];
-			if(aux) aux->splay(edge);
-
-			return currentEdge->id;
-		}   
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -48,6 +30,29 @@ class DynamicForest{
 			if(!edge) return 0;
 			return edge->size;
 		}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+		//return the id of the root whose tree contains edge 
+		unsigned int find(Edge<Key> * edge){
+			
+			if(!edge) return 0;	
+			
+			Edge<Key> * currentEdge = edge;
+
+			SplayTree<Key> * aux = mapTrees[currentEdge->id];
+			
+			if(aux){
+				mapTrees.erase(currentEdge->id);
+				aux->splay(edge);
+				mapTrees[aux->root->id] = aux;
+			} 
+
+			while(currentEdge->parent){
+				currentEdge = currentEdge->parent;
+			}
+
+			return currentEdge->id;
+		}   
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -55,6 +60,7 @@ class DynamicForest{
 		unsigned int order(Edge<Key> * edge){
 			
 			Edge<Key> * currentEdge = edge;
+
 			unsigned int position = size(currentEdge->left) + 1;
 
 			while(currentEdge->parent){
@@ -66,7 +72,12 @@ class DynamicForest{
 			}
 
 			SplayTree<Key> * aux = mapTrees[currentEdge->id];
-			if(aux) aux->splay(edge);
+			
+			if(aux){
+				mapTrees.erase(currentEdge->id);
+				aux->splay(edge);	
+				mapTrees[aux->root->id] = aux;
+			} 
 
 			return position;	
 		}
@@ -76,8 +87,8 @@ class DynamicForest{
 		//bring the edge that contains u to the front of the euler tour
 		SplayTree<Key> * bringToFront(SplayTree<Key> * splayTree, Key u){
 
-			unsigned int index = find(getEdge(u));
-			mapTrees.erase(index);
+			//unsigned int index = find(getEdge(u));
+			//mapTrees.erase(index);
 			
 			if(!splayTree) return nullptr;
 			
@@ -87,7 +98,7 @@ class DynamicForest{
 			
 			SplayTree<Key> * aux = pairOfTrees.second;
 			aux->join(pairOfTrees.first);
-	
+
 			return aux;
 		}
 
