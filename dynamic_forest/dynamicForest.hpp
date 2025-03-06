@@ -31,8 +31,17 @@ class DynamicForest{
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//return the id of the root whose tree contains edge 
-		unsigned int find(Edge<Key> * edge){
+		/*
+		return the id of the root whose tree contains edge
+		
+		example: splaying [2:1] node
+			
+		([1:2] id1)      (swap ids)   ([1:2] id2)     (splay)    ([2:1] id1)        
+		      \             ▶▶▶            \            ▶▶▶        /
+		  	 ([2:1] id2)                  ([2:1] id1)         ([1:2] id2)
+											
+		*/
+		unsigned int find(Edge<Key> * edge){	
 			
 			if(!edge) return 0;	
 			
