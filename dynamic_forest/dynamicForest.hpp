@@ -208,6 +208,8 @@ class DynamicForest{
 		//cut the edge (u, v)
 		void cut(Key u, Key v){
 
+			if(!isConnected(u, v)) return;
+			
 			if(u > v) std::swap(u, v);
 			
 			edgeSet.erase({u, v});
