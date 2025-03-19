@@ -10,6 +10,12 @@ class Edge{
 	public:
 
 		void setLevel(unsigned int level){
+			
 			this->level = level;
+		}
+
+		unsigned int getLevel(){
+			
+			return this->level;
 		}
 }
