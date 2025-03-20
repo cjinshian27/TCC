@@ -18,4 +18,9 @@ class Edge{
 			
 			return this->level;
 		}
+
+		bool isLevel(unsigned int level){
+
+			return this->level == level;
+		}
 }
