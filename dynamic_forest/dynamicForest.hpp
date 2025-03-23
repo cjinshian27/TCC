@@ -68,7 +68,7 @@ class DynamicForest{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
-		return the rank of an edge in the tree
+		return the rank/order of an edge in the tree
 		
 		example: splaying [2:1] node
 			
@@ -80,15 +80,7 @@ class DynamicForest{
 			
 			Edge<Key> * currentEdge = edge;
 
-			unsigned int position = size(currentEdge->left) + 1;
-
-			while(currentEdge->parent){
-				
-				if(currentEdge->parent->right == currentEdge){
-					position += size(currentEdge->parent->left) + 1;
-				}
-				currentEdge = currentEdge->parent;
-			}
+			while(currentEdge->parent) currentEdge = currentEdge->parent;
 
 			SplayTree<Key> * aux = mapTrees[currentEdge->id];
 			
@@ -98,7 +90,7 @@ class DynamicForest{
 				mapTrees[edge->id] = aux;
 			} 
 
-			return position;	
+			return size(edge->left) + 1;
 		}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
