@@ -15,7 +15,10 @@ class DynamicForest{
 		*/
 		std::set<std::pair<Key, Key>> edgeSet;
 
-		//map the edges according to their two (Key) ends
+		/*
+		map the edges according to their two (Key) ends. 
+		That means mapEdges[u][v] = Edge<Key>(u, v).
+		*/
 		std::unordered_map<Key, std::unordered_map<Key, Edge<Key> *>> mapEdges; 
 		
 		/*
@@ -26,7 +29,10 @@ class DynamicForest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//get the size of an edge
+		/*
+		get the size of an edge, which means the sum 
+		of its left subtree, right subtree + 1. 
+		*/
 		unsigned int size(Edge<Key> * edge){
 			
 			if(!edge) return 0;
@@ -126,7 +132,11 @@ class DynamicForest{
 			mapTrees[tree1->root->id] = tree1;
 		}
 
-		//get the first edge that contains u 
+		/*
+		get the first edge that contains u as the first end.
+			
+		example: (u, v), (u, w), and (u, x)
+		*/
 		Edge<Key> * getEdge(Key u){
 			
 			auto mapValue = mapEdges[u].begin();
@@ -170,7 +180,15 @@ class DynamicForest{
 			this->numberOfEdges = n;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		//check whether nodes u and v are connected
+		/*
+		check whether nodes u and v are connected. 
+		
+		in the if statement(), the additional getEdge() 
+		checking is for the case when id1 and id2 return 
+		0. That means there are no edges with ends u or 
+		v, so it will return a nullptr. Since a nullptr
+		indicates false, then it will not return true.
+		*/
 		bool isConnected(Key u, Key v){
 
 			unsigned int id1 = find(getEdge(u));
