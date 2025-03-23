@@ -132,6 +132,8 @@ class DynamicForest{
 			mapTrees[tree1->root->id] = tree1;
 		}
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 		/*
 		get the first edge that contains u as the first end.
 			
@@ -147,6 +149,8 @@ class DynamicForest{
 
 			return nullptr;
 		}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		//concatenate tree1, uv, tree2, and vu
 		void concatenate(SplayTree<Key> * tree1, Key u, SplayTree<Key> * tree2, Key v){
