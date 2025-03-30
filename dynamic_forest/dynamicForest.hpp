@@ -296,4 +296,9 @@ class DynamicForest{
 			}
 		}
 
+		bool hasEdge(Key u, Key v){
+			
+			if(mapEdges[u][v]) return true;
+			return false;
+		}
 };
