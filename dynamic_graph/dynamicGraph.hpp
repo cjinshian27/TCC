@@ -57,6 +57,8 @@ class DynamicGraph{
 		}
 
 		bool isConnected(Key u, Key v){
-			return true;
+			
+			Forest<Key> * forest = this->forests[level];
+			return forest->isConnected(u, v);
 		}
 }
