@@ -20,4 +20,7 @@ class Forest{
 			return this->forest->isConnected(u, v);
 		}
 
+		void add(Key u, Key v){
+			this->forest->link(u, v);
+		}
 }
