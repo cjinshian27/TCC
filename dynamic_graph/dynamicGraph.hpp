@@ -14,7 +14,8 @@ class DynamicGraph{
 		std::unordered_map<Key, std::unordered_map<Key, unsigned int>>() mapLevels;
 		
 		unsigned int level;
-	
+		
+
 	public:
 
 		DynamicGraph(unsigned int n){
@@ -31,10 +32,9 @@ class DynamicGraph{
 		}
 
 		void add(Forest<Key> * forest, Key u, Key v){
-			unsigned int level = static_cast<int>(std::ceil(std::log2(n))); 
 
-			Edge<Key, Key> * edge = new Edge<Key, Key>(u, v);
-			
+			mapLevels[u][v] = level;
+
 			AdjacencyList<Key> * adjList = this->adjacencyLists[level];
 			Forest<Key> * forest = this->forests[level];
 
