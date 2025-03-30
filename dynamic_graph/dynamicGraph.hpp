@@ -15,7 +15,6 @@ class DynamicGraph{
 		
 		unsigned int level;
 		
-
 	public:
 
 		DynamicGraph(unsigned int n){
@@ -31,20 +30,15 @@ class DynamicGraph{
 			}
 		}
 
-		void add(Forest<Key> * forest, Key u, Key v){
+		void add(Key u, Key v){
 
 			mapLevels[u][v] = level;
 
 			AdjacencyList<Key> * adjList = this->adjacencyLists[level];
 			Forest<Key> * forest = this->forests[level];
 
-			if(forest->isConnected(u, v)){
-				adjList->insert(u, v);
-			}
-			else{
-				
-			}
-
+			if(forest->isConnected(u, v)) adjList->insert(u, v);
+			else forest->add(u, v);
 		}
 
 		void remove(Key u, Key v){
