@@ -42,6 +42,18 @@ class DynamicGraph{
 		}
 
 		void remove(Key u, Key v){
+			
+			unsigned int edgeLevel = mapLevels[u][v];
+
+			AdjacencyList<Key> * adjList = this->adjacencyLists[level];
+			Forest<Key> * forest = this->forests[level];
+
+			if(!forest->hasEdge(u, v)){
+				adjList->removeEdge(u, v);
+			}
+			else{
+
+			}
 		}
 
 		bool isConnected(Key u, Key v){
