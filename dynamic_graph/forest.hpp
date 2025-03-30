@@ -24,7 +24,7 @@ class Forest{
 			this->forest->link(u, v);
 		}
 
-		bool find(Key u, Key v){
+		bool hasEdge(Key u, Key v){
 			return this->forest->hasEdge(u, v);
 		}
 }
