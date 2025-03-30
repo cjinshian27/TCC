@@ -11,12 +11,16 @@ class DynamicGraph{
 		
 		std::vector<Forest<Key> *> * forests;
 
-		unsigned int n;
+		std::unordered_map<Key, std::unordered_map<Key, unsigned int>>() mapLevels;
+		
+		unsigned int level;
 	
 	public:
 
 		DynamicGraph(unsigned int n){
 			
+			level = static_cast<int>(std::ceil(std::log2(n))); 
+
 			adjacencyLists = new std::vector<AdjacencyList<Key> *>(n + 1);
 			forests = new std::vector<Forest<Key> *>(n + 1);
 			
@@ -44,7 +48,6 @@ class DynamicGraph{
 		}
 
 		void remove(Key u, Key v){
-
 		}
 
 		bool isConnected(Key u, Key v){
