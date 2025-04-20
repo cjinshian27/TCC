@@ -11,7 +11,7 @@ class DynamicGraph{
 		
 		std::vector<Forest<Key> *> * forests;
 
-		std::unordered_map<Key, std::unordered_map<Key, unsigned int>>() mapLevels;
+		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapLevels;
 		
 		unsigned int level;
 		
