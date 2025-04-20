@@ -18,7 +18,8 @@ class DynamicGraph{
 		
 		unsigned int level;
 		
-		void replaceEdge(){
+		void replaceEdge(Key u, Key v, unsigned int edgeLevel){
+			
 			
 		}
 
@@ -56,14 +57,15 @@ class DynamicGraph{
 			unsigned int edgeLevel = mapEdgeLevels[u][v];
 			mapEdgeLevels[u].erase(v);
 
-			AdjacencyList<Key> * adjList = this->adjacencyLists[level];
-			Forest<Key> * forest = this->forests[level];
-
-			if(!forest->hasEdge(u, v)){
-				adjList->removeEdge(u, v);
+			if(this->forests[level]->hasEdge(u, v)){
+				for(int i = edgeLevel; i < level; ++i){
+					this->forests[i]->cut(u, v);
+				}
+				
+				replaceEdge(u, v, edgeLevel);
 			}
 			else{
-
+				this->adjacencyLists[level]->removeEdge(u, v);
 			}
 		}
 
