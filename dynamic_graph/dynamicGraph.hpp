@@ -7,11 +7,13 @@ class DynamicGraph{
 
 	private:
 
+		// store the adjacency lists (each adjacency list store backup edges)
 		std::vector<AdjacencyList<Key> *> * adjacencyLists;
 		
+		// store the dynamic forests 
 		std::vector<Forest<Key> *> * forests;
 
-		// map the level of the edges in O(1)
+		// map the level of the edges 
 		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapEdgeLevels;
 		
 		unsigned int level;
