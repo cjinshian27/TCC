@@ -18,6 +18,11 @@ class DynamicGraph{
 		
 		unsigned int level;
 		
+		void replaceEdge(){
+			
+		}
+
+
 	public:
 
 		// instantiate a dynamic graph in O(lg(n)) time.
@@ -49,6 +54,7 @@ class DynamicGraph{
 		void remove(Key u, Key v){
 			
 			unsigned int edgeLevel = mapEdgeLevels[u][v];
+			mapEdgeLevels[u].erase(v);
 
 			AdjacencyList<Key> * adjList = this->adjacencyLists[level];
 			Forest<Key> * forest = this->forests[level];
