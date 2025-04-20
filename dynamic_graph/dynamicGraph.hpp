@@ -17,6 +17,7 @@ class DynamicGraph{
 		
 	public:
 
+		// instantiate a dynamic graph in O(lg(n)) time.
 		DynamicGraph(unsigned int n){
 			
 			this->level = static_cast<int>(std::ceil(std::log2(n))); 
@@ -30,6 +31,7 @@ class DynamicGraph{
 			}
 		}
 
+		// add the the edge (u, v) in O(lg(n))
 		void add(Key u, Key v){
 
 			mapLevels[u][v] = level;
@@ -56,6 +58,7 @@ class DynamicGraph{
 			}
 		}
 
+		// check if u and v are connected in O(lg(n))
 		bool isConnected(Key u, Key v){
 			
 			Forest<Key> * forest = this->forests[level];
