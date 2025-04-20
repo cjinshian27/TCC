@@ -19,10 +19,10 @@ class DynamicGraph{
 
 		DynamicGraph(unsigned int n){
 			
-			level = static_cast<int>(std::ceil(std::log2(n))); 
+			this->level = static_cast<int>(std::ceil(std::log2(n))); 
 
-			adjacencyLists = new std::vector<AdjacencyList<Key> *>(level + 1);
-			forests = new std::vector<Forest<Key> *>(level + 1);
+			this->adjacencyLists = new std::vector<AdjacencyList<Key> *>(level + 1);
+			this->forests = new std::vector<Forest<Key> *>(level + 1);
 			
 			for(int i = 0; i <= level; ++i){
 				adjacencyLists[i] = new AdjacencyList<Key>();
