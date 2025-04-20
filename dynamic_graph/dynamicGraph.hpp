@@ -11,7 +11,8 @@ class DynamicGraph{
 		
 		std::vector<Forest<Key> *> * forests;
 
-		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapLevels;
+		// map the level of the edges in O(1)
+		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapEdgeLevels;
 		
 		unsigned int level;
 		
@@ -31,10 +32,10 @@ class DynamicGraph{
 			}
 		}
 
-		// add the the edge (u, v) in O(lg(n))
+		// add edge (u, v) in O(lg(n))
 		void add(Key u, Key v){
 
-			mapLevels[u][v] = level;
+			mapEdgeLevels[u][v] = level;
 
 			AdjacencyList<Key> * adjList = this->adjacencyLists[level];
 			Forest<Key> * forest = this->forests[level];
@@ -45,7 +46,7 @@ class DynamicGraph{
 
 		void remove(Key u, Key v){
 			
-			unsigned int edgeLevel = mapLevels[u][v];
+			unsigned int edgeLevel = mapEdgeLevels[u][v];
 
 			AdjacencyList<Key> * adjList = this->adjacencyLists[level];
 			Forest<Key> * forest = this->forests[level];
