@@ -309,4 +309,9 @@ class SplayTree{
 			print(this->root, 0);
 		}
 
+		// return the size of the tree
+		unsigned int size(){
+			return size(this->root);
+		}
+
 };
