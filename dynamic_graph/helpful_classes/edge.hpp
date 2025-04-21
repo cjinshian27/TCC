@@ -8,7 +8,7 @@ class Edge{
 		Key v;
 
 	public:
-	
+
 		unsigned int id;
 		std::pair<Key, Key> edge;
 		unsigned int size;
