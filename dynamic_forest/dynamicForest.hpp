@@ -304,9 +304,9 @@ class DynamicForest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		unsigned int size(Key u){
+		Edge<Key> * getRoot(Key u){
 			
 			SplayTree<Key> * splayTree = mapTrees[find(getEdge(u))];
-			return splayTree->root->size();
+			return splayTree->root;
 		}
 };
