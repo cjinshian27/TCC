@@ -1,4 +1,4 @@
-#include "../dynamic_forest/dynamic_forest.hpp"
+#include "./helpful_classes/dynamicForest.hpp"
 
 template<typename Key>
 
@@ -26,5 +26,9 @@ class Forest{
 
 		bool hasEdge(Key u, Key v){
 			return this->forest->hasEdge(u, v);
+		}
+
+		unsigned int size(Key u){
+			
 		}
 }
