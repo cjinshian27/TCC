@@ -1,3 +1,6 @@
+#include <utility>
+#include <iostream>
+
 template<typename Key>
 
 class Edge{
@@ -61,5 +64,9 @@ class Edge{
 		bool isLevel(unsigned int level){
 
 			return this->level == level;
+		}
+
+		std::pair<Key, Key> getEnds(){
+			return {this->u, this->v};
 		}
 }
