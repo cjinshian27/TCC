@@ -221,7 +221,7 @@ class DynamicForest{
 
 			concatenate(splayTree1, u, splayTree2, v);			
 		}
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++a++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		//cut the edge with u and v ends
 		void cut(Key u, Key v){
