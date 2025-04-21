@@ -304,7 +304,7 @@ class Forest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		Edge<Key> * getTreeContaining(Key u){
+		SplayTree<Key> * getTreeContaining(Key u){
 
 			return mapTrees[find(getEdge(u))];
 		}
