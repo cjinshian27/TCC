@@ -29,6 +29,6 @@ class Forest{
 		}
 
 		unsigned int size(Key u){
-			
+			return this->forest->size(this->forest->getRoot(u));
 		}
 }
