@@ -3,7 +3,7 @@
 
 template<typename Key>
 
-class DynamicForest{
+class Forest{
 
 	private:
 		unsigned int id = 0;
@@ -180,7 +180,7 @@ class DynamicForest{
 
 	public:	
 
-		DynamicForest(unsigned int n){
+		Forest(unsigned int n){
 			this->numberOfEdges = n;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
