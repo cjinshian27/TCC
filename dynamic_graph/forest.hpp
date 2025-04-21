@@ -13,7 +13,8 @@ class Forest{
 			this->forest = new DynamicForest<Key>();
 		}
 
-		~Forest(){
+		~Forest()
+			delete this->forest;
 		}
 
 		bool isConnected(Key u, Key v){
