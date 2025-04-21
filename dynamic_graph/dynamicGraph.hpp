@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cmath>
+#include "./helpful_classes/dynamicForest.hpp"
+#include "adjacencyList.hpp"
 
 template<typename Key>
 
@@ -21,7 +23,6 @@ class DynamicGraph{
 		void replaceEdge(Key u, Key v, unsigned int edgeLevel){
 			
 			for(unsigned int i = edgeLevel; i <= level; ++i){
-				
 			}
 			
 		}
