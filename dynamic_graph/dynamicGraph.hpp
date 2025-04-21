@@ -9,10 +9,10 @@ class DynamicGraph{
 
 	private:
 
-		// store the adjacency lists (each adjacency list store backup edges)
+		// store the adjacency lists (each one stores backup edges)
 		std::vector<AdjacencyList<Key> *> * adjacencyLists;
 		
-		// store the dynamic forests 
+		// store the forests 
 		std::vector<Forest<Key> *> * forests;
 
 		// map the level of the edges 
