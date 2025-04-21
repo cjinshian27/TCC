@@ -301,4 +301,12 @@ class DynamicForest{
 			if(mapEdges[u][v]) return true;
 			return false;
 		}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+		unsigned int size(Key u){
+			
+			SplayTree<Key> * splayTree = mapTrees[find(getEdge(u))];
+			return splayTree->root->size();
+		}
 };
