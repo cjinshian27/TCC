@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cmath>
 #include "./helpful_classes/dynamicForest.hpp"
+#include "./helpful_classes/splayTree.hpp"
+#include "./helpful_classes/edge.hpp"
+
 #include "adjacencyList.hpp"
 
 template<typename Key>
@@ -19,10 +22,36 @@ class DynamicGraph{
 		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapEdgeLevels;
 		
 		unsigned int level;
-		
+
+		void decreaseEdgeLevel(Edge<Key> * root, unsigned int level){
+
+			if(!edge) return;
+			
+			if(edge->isLevel(level)){
+				--edge->level;
+				
+			} 
+
+			decreaseEdgeLevel(root->left);
+			decreaseEdgeLevel(root->right);
+		}
+
 		void replaceEdge(Key u, Key v, unsigned int edgeLevel){
 			
 			for(unsigned int i = edgeLevel; i <= level; ++i){
+				
+				SplayTree<Key> * treeU = this->forests[i]->getTreeContaining(u);
+				SplayTree<Key> * treeV = this->forests[i]->getTreeContaining(v);
+
+				if(treeU->size() > treeV->size()){
+					std::swap(treeU, treeV);
+					std::swap(u, v);
+				} 
+				
+				
+				//for()
+					mapEdgeLevels[][]
+				//for()
 			}
 			
 		}
