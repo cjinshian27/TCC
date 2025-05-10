@@ -182,12 +182,15 @@ class DynamicForest{
 		DynamicForest(std::vector<Key> & vertices){
 			
 			unsigned int n = vertices.size();
+			Key v;
+			SplayTree<Key> * vv;
 
 			for(unsigned int i = 0, i < n; ++i){
-				Key vertex = vertices[i];
-				SplayTree<Key> * uu = new SplayTree<Key>(vertex, vertex, ++id);
-				this->mapEdges[vertex][vertex] = uu->root;
+				v = vertices[i];
+				vv = new SplayTree<Key>(v, v, ++id);
+				this->mapEdges[v][v] = vv->root;
 			}
+
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
