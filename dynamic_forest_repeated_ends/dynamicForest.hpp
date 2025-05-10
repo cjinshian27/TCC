@@ -1,4 +1,4 @@
-
+#include <vector>
 #include "splayTree.hpp"
 
 template<typename Key>
@@ -7,7 +7,6 @@ class DynamicForest{
 
 	private:
 		unsigned int id = 0;
-		unsigned int numberOfEdges;
 
 		/*
 		keep the remaining edges in the forest in 
@@ -180,9 +179,15 @@ class DynamicForest{
 
 	public:	
 
-		DynamicForest(unsigned int n){
+		DynamicForest(std::vector<Key> & vertices){
 			
-			this->numberOfEdges = n;
+			unsigned int n = vertices.size();
+
+			for(unsigned int i = 0, i < n; ++i){
+				Key vertex = vertices[i];
+				SplayTree<Key> * uu = new SplayTree<Key>(vertex, vertex, ++id);
+				this->mapEdges[vertex][vertex] = uu->root;
+			}
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
