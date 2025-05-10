@@ -3,7 +3,7 @@
 
 template<typename Key>
 
-class Forest{
+class DynamicForest{
 
 	private:
 		unsigned int id = 0;
@@ -157,7 +157,7 @@ class Forest{
 			
 			SplayTree<Key> * uv = new SplayTree<Key>(u, v, ++id);
 			SplayTree<Key> * vu = new SplayTree<Key>(v, u, ++id);
-			
+
 			this->mapEdges[u][v] = uv->root;
 			this->mapEdges[v][u] = vu->root;
 
@@ -180,7 +180,8 @@ class Forest{
 
 	public:	
 
-		Forest(unsigned int n){
+		DynamicForest(unsigned int n){
+			
 			this->numberOfEdges = n;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -304,8 +305,9 @@ class Forest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		SplayTree<Key> * getTreeContaining(Key u){
-
-			return mapTrees[find(getEdge(u))];
+		Edge<Key> * getRoot(Key u){
+			
+			SplayTree<Key> * splayTree = mapTrees[find(getEdge(u))];
+			return splayTree->root;
 		}
 };
