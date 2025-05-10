@@ -181,6 +181,7 @@ class DynamicForest{
 	public:	
 
 		DynamicForest(unsigned int n){
+			
 			this->numberOfEdges = n;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
