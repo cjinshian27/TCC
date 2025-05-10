@@ -249,7 +249,7 @@ class SplayTree{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//return the k-th edge
 		Edge<Key> * k_th(Edge<Key> * edge, unsigned int k){
-			
+				
 			unsigned int position = size(edge->left) + 1;
 			
 			if(position == k){

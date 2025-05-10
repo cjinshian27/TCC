@@ -157,7 +157,7 @@ class Forest{
 			
 			SplayTree<Key> * uv = new SplayTree<Key>(u, v, ++id);
 			SplayTree<Key> * vu = new SplayTree<Key>(v, u, ++id);
-
+			
 			this->mapEdges[u][v] = uv->root;
 			this->mapEdges[v][u] = vu->root;
 
