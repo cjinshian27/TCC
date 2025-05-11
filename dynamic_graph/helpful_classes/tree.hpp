@@ -1,7 +1,7 @@
 #include "edge.hpp"
 template <typename Key>
 
-class SplayTree{
+class Tree{
 
 	private:	
 
@@ -166,19 +166,19 @@ class SplayTree{
 		//splay tree's root edge
 		Edge<Key> * root = nullptr;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		SplayTree(){
+		Tree(){
 			this->root = nullptr;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		SplayTree(Key u, Key v, unsigned int id){
+		Tree(Key u, Key v, unsigned int id){
 			this->root = new Edge<Key>(u, v, id);
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		SplayTree(Edge<Key> * edge){
+		Tree(Edge<Key> * edge){
 			this->root = edge;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		~SplayTree(){	
+		~Tree(){	
 			destroy(this->root);
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -265,7 +265,7 @@ class SplayTree{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//splay the edge whose key is given and print out their subtrees
-		std::pair<SplayTree *, SplayTree *> split(unsigned int k){
+		std::pair<Tree *, Tree *> split(unsigned int k){
 
 			if(k < 1) return {nullptr, this};
 
@@ -279,26 +279,26 @@ class SplayTree{
 			this->root->right = nullptr;
 			this->root->setSize();
 
-			SplayTree<Key> * splayTree1 = new SplayTree<Key>(this->root);
+			Tree<Key> * tree1 = new Tree<Key>(this->root);
 
-			if(!aux) return {splayTree1, nullptr};
+			if(!aux) return {tree1, nullptr};
 			
-			SplayTree<Key> * splayTree2 = new SplayTree<Key>(aux);
+			Tree<Key> * tree2 = new Tree<Key>(aux);
 
-			return {splayTree1, splayTree2};
+			return {tree1, tree2};
 		}		
 
 		//join two given trees
-		void join(SplayTree * thatSplayTree){
+		void join(Tree * thatTree){
 			
 			Edge<Key> * edge = leftSubtreeMaxEdge(this->root);
 			splay(edge);
 
-			if(!thatSplayTree){
+			if(!thatTree){
 				this->root->right = nullptr;
 			}
 			else{
-				this->root->right = thatSplayTree->root;
+				this->root->right = thatTree->root;
 				this->root->right->parent = this->root;
 			}
 			this->root->setSize();
