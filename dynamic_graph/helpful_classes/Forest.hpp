@@ -2,7 +2,7 @@
 
 template<typename Key>
 
-class DynamicForest{
+class Forest{
 
 	private:
 		unsigned int id = 0;
@@ -149,7 +149,7 @@ class DynamicForest{
 		
 	public:	
 
-		DynamicForest(std::vector<Key> & vertices){
+		Forest(std::vector<Key> & vertices){
 			
 			unsigned int n = vertices.size();
 			SplayTree<Key> * vv;

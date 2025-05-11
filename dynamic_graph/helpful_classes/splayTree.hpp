@@ -302,7 +302,7 @@ class SplayTree{
 				this->root->right->parent = this->root;
 			}
 			this->root->setSize();
-		}
+		}		
 
 		//call the print function
 		void print(){
@@ -314,4 +314,5 @@ class SplayTree{
 			return size(this->root);
 		}
 
+		
 };
