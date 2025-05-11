@@ -48,14 +48,12 @@ class DynamicGraph{
 					std::swap(u, v);
 				} 
 				
-				
 				//for()
 					mapEdgeLevels[][]
 				//for()
 			}
 			
 		}
-
 
 	public:
 
@@ -81,7 +79,7 @@ class DynamicGraph{
 			AdjacencyList<Key> * adjList = this->adjacencyLists[level];
 			Forest<Key> * forest = this->forests[level];
 
-			if(forest->isConnected(u, v)) adjList->insert(u, v);
+			if(forest->isConnected(u, v)) adjList->add(u, v);
 			else forest->add(u, v);
 		}
 
