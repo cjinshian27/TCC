@@ -194,20 +194,15 @@ class DynamicForest{
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
-		check whether nodes u and v are connected. 
-		
-		in the if statement(), the additional getEdge() 
-		checking is for the case when id1 and id2 return 
-		0. That means there are no edges with ends u or 
-		v, so it will return a nullptr. Since a nullptr
-		indicates false, then it will not return true.
+		check whether nodes u and v are connected by
+		comparing their splayTree ID's
 		*/
 		bool isConnected(Key u, Key v){
 
-			unsigned int id1 = find(mapEdges[u][u]);
-			unsigned int id2 = find(mapEdges[v][v]);
+			unsigned int uSplayTree = find(mapEdges[u][u]);
+			unsigned int vSplayTree = find(mapEdges[v][v]);
 
-			if(id1 == id2 && mapEdges[u][u]) return true;
+			if(uSplayTree == vSplayTree) return true;
 
 			return false;
 		}
