@@ -125,19 +125,19 @@ class DynamicForest{
 				mapTrees[tree2->root->id] = tree2;
 				return;
 			}
-
+			
 			tree1->join(tree2);
 			mapTrees[tree1->root->id] = tree1;
 		}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+		
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		
 		//concatenate four pieces to form the forest: tree1, uv, tree2, vu
 		void concatenate(SplayTree<Key> * tree1, Key u, SplayTree<Key> * tree2, Key v){
 			
 			SplayTree<Key> * uv = new SplayTree<Key>(u, v, ++id);
 			SplayTree<Key> * vu = new SplayTree<Key>(v, u, ++id);
-
+			
 			this->mapEdges[u][v] = uv->root;
 			this->mapEdges[v][u] = vu->root;
 
@@ -146,8 +146,8 @@ class DynamicForest{
 			tree1->join(vu);
 			mapTrees[tree1->root->id] = tree1;
 		}	
-
-	public:	
+		
+		public:	
 
 		DynamicForest(std::vector<Key> & vertices){
 			
@@ -157,8 +157,8 @@ class DynamicForest{
 			for(unsigned int i = 0; i < n; ++i){
 				vv = new SplayTree<Key>(vertices[i], vertices[i], ++id);
 				this->mapEdges[vertices[i]][vertices[i]] = vv->root;
+				this->mapTrees[vv->root->id] = vv;
 			}
-
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
@@ -190,7 +190,7 @@ class DynamicForest{
 
 			splayTree1 = bringToFront(splayTree1, u);
 			splayTree2 = bringToFront(splayTree2, v);
-
+			
 			concatenate(splayTree1, u, splayTree2, v);			
 		}
 //+++++++++++++++a++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
