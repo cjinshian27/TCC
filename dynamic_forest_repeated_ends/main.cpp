@@ -7,20 +7,26 @@
 #include <set>
 #include "dynamicForest.hpp"
 
+
+DynamicForest<int> * buildDynamicForest(){
+	
+	unsigned int n;
+	
+	std::cin >> n;
+	std::vector<int> vertices(n);
+	
+	for(unsigned int i = 0; i < n; ++i){
+		std::cin >> vertices[i];
+	}
+	return new DynamicForest<int>(vertices);
+}
+
 //decode function
 void decode(){
 
 	int operation, u, v;
-	unsigned int n;
 
-	std::cin >> n;
-	std::vector<int> vertices(n);
-
-	for(unsigned int i = 1; i <= n; ++i){
-		vertices[i-1] = i;
-	}
-
-	DynamicForest<int> * dynamicForest = new DynamicForest<int>(vertices);
+	DynamicForest<int> * dynamicForest = buildDynamicForest(); 
 
 	while(std::cin >> operation){
 		
