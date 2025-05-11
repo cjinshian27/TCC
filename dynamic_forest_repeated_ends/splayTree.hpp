@@ -149,7 +149,7 @@ class SplayTree{
 			
 			if(!edge) return;
 			
-			print(edge->right, depth + 3);
+			print(edge->left, depth + 3);
 			
 			for(unsigned int i = 0; i < depth; ++i){
 				std::cout << ' ';
@@ -157,7 +157,7 @@ class SplayTree{
 
 			edge->print();
 	
-			print(edge->left, depth + 3);
+			print(edge->right, depth + 3);
 		}
 
 	public:
