@@ -1,13 +1,11 @@
-
 #include "splayTree.hpp"
 
 template<typename Key>
 
-class Forest{
+class DynamicForest{
 
 	private:
 		unsigned int id = 0;
-		unsigned int numberOfEdges;
 
 		/*
 		keep the remaining edges in the forest in 
@@ -106,7 +104,7 @@ class Forest{
 			
 			if(!splayTree) return nullptr;
 			
-			unsigned int position = order(getEdge(u));
+			unsigned int position = order(mapEdges[u][u]);
 			
 			mapTrees.erase(splayTree->root->id);
 
@@ -127,32 +125,14 @@ class Forest{
 				mapTrees[tree2->root->id] = tree2;
 				return;
 			}
-
+			
 			tree1->join(tree2);
 			mapTrees[tree1->root->id] = tree1;
 		}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		/*
-		get the first edge that contains u as the first end.
-			
-		example: (u, v), (u, w), and (u, x)
-		*/
-		Edge<Key> * getEdge(Key u){
-			
-			auto mapValue = mapEdges[u].begin();
-
-			if(mapValue != mapEdges[u].end()){
-				return mapValue->second;
-			}
-
-			return nullptr;
-		}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		//concatenate tree1, uv, tree2, and vu
+		
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		
+		//concatenate four pieces to form the forest: tree1, uv, tree2, vu
 		void concatenate(SplayTree<Key> * tree1, Key u, SplayTree<Key> * tree2, Key v){
 			
 			SplayTree<Key> * uv = new SplayTree<Key>(u, v, ++id);
@@ -161,44 +141,36 @@ class Forest{
 			this->mapEdges[u][v] = uv->root;
 			this->mapEdges[v][u] = vu->root;
 
-			if(tree1){
-
-				tree1->join(uv);
-				tree1->join(tree2);
-				tree1->join(vu);
-
-				mapTrees[tree1->root->id] = tree1;
-			}
-			else{
-
-				uv->join(tree2);
-				uv->join(vu);
-
-				mapTrees[uv->root->id] = uv;
-			}
+			tree1->join(uv);
+			tree1->join(tree2);
+			tree1->join(vu);
+			mapTrees[tree1->root->id] = tree1;
 		}	
+		
+		public:	
 
-	public:	
+		DynamicForest(std::vector<Key> & vertices){
+			
+			unsigned int n = vertices.size();
+			SplayTree<Key> * vv;
 
-		Forest(unsigned int n){
-			this->numberOfEdges = n;
+			for(unsigned int i = 0; i < n; ++i){
+				vv = new SplayTree<Key>(vertices[i], vertices[i], ++id);
+				this->mapEdges[vertices[i]][vertices[i]] = vv->root;
+				this->mapTrees[vv->root->id] = vv;
+			}
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
-		check whether nodes u and v are connected. 
-		
-		in the if statement(), the additional getEdge() 
-		checking is for the case when id1 and id2 return 
-		0. That means there are no edges with ends u or 
-		v, so it will return a nullptr. Since a nullptr
-		indicates false, then it will not return true.
+		check whether nodes u and v are connected by
+		comparing their splayTree ID's
 		*/
 		bool isConnected(Key u, Key v){
 
-			unsigned int id1 = find(getEdge(u));
-			unsigned int id2 = find(getEdge(v));
+			unsigned int uSplayTree = find(mapEdges[u][u]);
+			unsigned int vSplayTree = find(mapEdges[v][v]);
 
-			if(id1 == id2 && getEdge(u)) return true;
+			if(uSplayTree == vSplayTree) return true;
 
 			return false;
 		}
@@ -213,12 +185,12 @@ class Forest{
 			
 			edgeSet.insert({u, v});
 
-			SplayTree<Key> * splayTree1 = mapTrees[find(getEdge(u))];
-			SplayTree<Key> * splayTree2 = mapTrees[find(getEdge(v))];
+			SplayTree<Key> * splayTree1 = mapTrees[find(mapEdges[u][u])];
+			SplayTree<Key> * splayTree2 = mapTrees[find(mapEdges[v][v])];
 
 			splayTree1 = bringToFront(splayTree1, u);
 			splayTree2 = bringToFront(splayTree2, v);
-
+			
 			concatenate(splayTree1, u, splayTree2, v);			
 		}
 //+++++++++++++++a++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -304,8 +276,9 @@ class Forest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		SplayTree<Key> * getTreeContaining(Key u){
-
-			return mapTrees[find(getEdge(u))];
+		Edge<Key> * getRoot(Key u){
+			
+			SplayTree<Key> * splayTree = mapTrees[find(mapEdges[u][u])];
+			return splayTree->root;
 		}
 };
