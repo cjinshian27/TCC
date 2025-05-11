@@ -4,7 +4,7 @@ This is a final course project made in *C++*. Each folder is an independent proj
 
 # Splay Tree
 
-This is the generic splay tree class that uses a template parameter Key, which can be of any type. 
+This is a generic splay tree class that uses a template parameter Key, which can be of any type. 
 
 # Dynamic Forest with repeated ends
 
