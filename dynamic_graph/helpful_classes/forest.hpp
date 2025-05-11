@@ -1,4 +1,4 @@
-#include "splayTree.hpp"
+#include "tree.hpp"
 
 template<typename Key>
 
@@ -23,7 +23,7 @@ class Forest{
 		map the remaining splay trees in the forest, where 
 		an id is used to identify each splay tree uniquely
 		*/
-		std::unordered_map<Key, SplayTree<Key> *> mapTrees; 
+		std::unordered_map<Key, Tree<Key> *> mapTrees; 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -58,7 +58,7 @@ class Forest{
 				currentEdge = currentEdge->parent;
 			}
 
-			SplayTree<Key> * aux = mapTrees[currentEdge->id];
+			Tree<Key> * aux = mapTrees[currentEdge->id];
 
 			if(aux){
 				std::swap(currentEdge->id, edge->id);
@@ -86,7 +86,7 @@ class Forest{
 
 			while(currentEdge->parent) currentEdge = currentEdge->parent;
 
-			SplayTree<Key> * aux = mapTrees[currentEdge->id];
+			Tree<Key> * aux = mapTrees[currentEdge->id];
 			
 			if(aux){
 				std::swap(currentEdge->id, edge->id);
@@ -100,17 +100,17 @@ class Forest{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		//bring the edge that contains u to the front of the euler tour
-		SplayTree<Key> * bringToFront(SplayTree<Key> * splayTree, Key u){
+		Tree<Key> * bringToFront(Tree<Key> * tree, Key u){
 			
-			if(!splayTree) return nullptr;
+			if(!tree) return nullptr;
 			
 			unsigned int position = order(mapEdges[u][u]);
 			
-			mapTrees.erase(splayTree->root->id);
+			mapTrees.erase(tree->root->id);
 
-			std::pair<SplayTree<Key> *, SplayTree<Key> *> pairOfTrees = splayTree->split(position - 1);
+			std::pair<Tree<Key> *, Tree<Key> *> pairOfTrees = tree->split(position - 1);
 			
-			SplayTree<Key> * aux = pairOfTrees.second;
+			Tree<Key> * aux = pairOfTrees.second;
 			aux->join(pairOfTrees.first);
 
 			return aux;
@@ -119,7 +119,7 @@ class Forest{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		//concatenate two splay trees
-		void concatenate(SplayTree<Key> * tree1, SplayTree<Key> * tree2){
+		void concatenate(Tree<Key> * tree1, Tree<Key> * tree2){
 			
 			if(!tree1){
 				mapTrees[tree2->root->id] = tree2;
@@ -133,10 +133,10 @@ class Forest{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		
 		//concatenate four pieces to form the forest: tree1, uv, tree2, vu
-		void concatenate(SplayTree<Key> * tree1, Key u, SplayTree<Key> * tree2, Key v){
+		void concatenate(Tree<Key> * tree1, Key u, Tree<Key> * tree2, Key v){
 			
-			SplayTree<Key> * uv = new SplayTree<Key>(u, v, ++id);
-			SplayTree<Key> * vu = new SplayTree<Key>(v, u, ++id);
+			Tree<Key> * uv = new Tree<Key>(u, v, ++id);
+			Tree<Key> * vu = new Tree<Key>(v, u, ++id);
 			
 			this->mapEdges[u][v] = uv->root;
 			this->mapEdges[v][u] = vu->root;
@@ -152,10 +152,10 @@ class Forest{
 		Forest(std::vector<Key> & vertices){
 			
 			unsigned int n = vertices.size();
-			SplayTree<Key> * vv;
+			Tree<Key> * vv;
 
 			for(unsigned int i = 0; i < n; ++i){
-				vv = new SplayTree<Key>(vertices[i], vertices[i], ++id);
+				vv = new Tree<Key>(vertices[i], vertices[i], ++id);
 				this->mapEdges[vertices[i]][vertices[i]] = vv->root;
 				this->mapTrees[vv->root->id] = vv;
 			}
@@ -163,14 +163,14 @@ class Forest{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
 		check whether nodes u and v are connected by
-		comparing their splayTree ID's
+		comparing their tree ID's
 		*/
 		bool isConnected(Key u, Key v){
 
-			unsigned int uSplayTree = find(mapEdges[u][u]);
-			unsigned int vSplayTree = find(mapEdges[v][v]);
+			unsigned int uTree = find(mapEdges[u][u]);
+			unsigned int vTree = find(mapEdges[v][v]);
 
-			if(uSplayTree == vSplayTree) return true;
+			if(uTree == vTree) return true;
 
 			return false;
 		}
@@ -185,13 +185,13 @@ class Forest{
 			
 			edgeSet.insert({u, v});
 
-			SplayTree<Key> * splayTree1 = mapTrees[find(mapEdges[u][u])];
-			SplayTree<Key> * splayTree2 = mapTrees[find(mapEdges[v][v])];
+			Tree<Key> * tree1 = mapTrees[find(mapEdges[u][u])];
+			Tree<Key> * tree2 = mapTrees[find(mapEdges[v][v])];
 
-			splayTree1 = bringToFront(splayTree1, u);
-			splayTree2 = bringToFront(splayTree2, v);
+			tree1 = bringToFront(tree1, u);
+			tree2 = bringToFront(tree2, v);
 			
-			concatenate(splayTree1, u, splayTree2, v);			
+			concatenate(tree1, u, tree2, v);			
 		}
 //+++++++++++++++a++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -209,20 +209,20 @@ class Forest{
 
 			unsigned int uvID = find(mapEdges[u][v]);
 
-			SplayTree<Key> * splayTree = mapTrees[uvID];
+			Tree<Key> * tree = mapTrees[uvID];
 
 			if(uvPosition > vuPosition) std::swap(uvPosition, vuPosition);
 
 			mapTrees.erase(uvID);
 			
-			std::pair<SplayTree<Key> *, SplayTree<Key> *> split1 = splayTree->split(uvPosition - 1);
+			std::pair<Tree<Key> *, Tree<Key> *> split1 = tree->split(uvPosition - 1);
 			
 			if(split1.first) vuPosition -= size(split1.first->root);
 
-			std::pair<SplayTree<Key> *, SplayTree<Key> *> split2 = split1.second->split(1);
+			std::pair<Tree<Key> *, Tree<Key> *> split2 = split1.second->split(1);
 			
-			std::pair<SplayTree<Key> *, SplayTree<Key> *> split3 = split2.second->split(vuPosition - 2);
-			std::pair<SplayTree<Key> *, SplayTree<Key> *> split4 = split3.second->split(1);
+			std::pair<Tree<Key> *, Tree<Key> *> split3 = split2.second->split(vuPosition - 2);
+			std::pair<Tree<Key> *, Tree<Key> *> split4 = split3.second->split(1);
 
 			concatenate(split1.first, split4.second);
 
@@ -259,11 +259,11 @@ class Forest{
 		void printTrees(){
 
 			mapTrees.erase(0);
- 			for(auto & splayTree : mapTrees){
+ 			for(auto & tree : mapTrees){
 
-				if(splayTree.second){
-					std::cout << "Sequence ID: " << splayTree.first << "\n";
-					splayTree.second->print();
+				if(tree.second){
+					std::cout << "Sequence ID: " << tree.first << "\n";
+					tree.second->print();
 				}	
 			}
 		}
@@ -276,9 +276,9 @@ class Forest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		SplayTree<Key> * getTreeContaining(Key u){
+		Tree<Key> * getTreeContaining(Key u){
 			
-			SplayTree<Key> * splayTree = mapTrees[find(mapEdges[u][u])];
-			return splayTree;
+			Tree<Key> * tree = mapTrees[find(mapEdges[u][u])];
+			return tree;
 		}
 };
