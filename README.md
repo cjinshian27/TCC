@@ -12,8 +12,8 @@ This is a dynamic forest based on splay trees, and its vertices are edges that c
 
 # Dynamic Forest with unique ends
 
-This is a dynamic forest based on splay trees, and its vertices are edges that **DOES NOT** contain repeated ends in the *Euler Tour*. We can only have *<u, v>* vertices, where *u ≠ v*.
+This is a dynamic forest based on splay trees, and its vertices are edges that **DOES NOT** contain repeated ends in the *Euler Tour*. We can only have *<u, v>* vertices, where *u &ne; v*.
 
 # Dynamic Graph
 
-This is a dynamic graph based on dynamic forest with repeated ends. It is still under construction.
+This is a dynamic graph based on dynamic forests with repeated ends. It is still under construction.
