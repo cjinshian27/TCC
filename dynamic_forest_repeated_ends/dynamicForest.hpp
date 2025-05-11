@@ -133,24 +133,6 @@ class DynamicForest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		/*
-		get the first edge that contains u as the first end.
-			
-		example: (u, v), (u, w), and (u, x)
-		*/
-		Edge<Key> * getEdge(Key u){
-			
-			auto mapValue = mapEdges[u].begin();
-
-			if(mapValue != mapEdges[u].end()){
-				return mapValue->second;
-			}
-
-			return nullptr;
-		}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 		//concatenate tree1, uv, tree2, and vu
 		void concatenate(SplayTree<Key> * tree1, Key u, SplayTree<Key> * tree2, Key v){
 			
