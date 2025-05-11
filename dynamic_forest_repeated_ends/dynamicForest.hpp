@@ -222,8 +222,8 @@ class DynamicForest{
 			
 			edgeSet.insert({u, v});
 
-			SplayTree<Key> * splayTree1 = mapTrees[find(getEdge(u))];
-			SplayTree<Key> * splayTree2 = mapTrees[find(getEdge(v))];
+			SplayTree<Key> * splayTree1 = mapTrees[find(mapEdges[u][u])];
+			SplayTree<Key> * splayTree2 = mapTrees[find(mapEdges[v][v])];
 
 			splayTree1 = bringToFront(splayTree1, u);
 			splayTree2 = bringToFront(splayTree2, v);
