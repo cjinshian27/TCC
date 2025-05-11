@@ -1,8 +1,6 @@
 # Final Course Project
 
-This is a final course project made in *C++*. Each folder is a independent project, and they are the base for the more complex ones. Splay Tree is used 
-in both dynamic forest implementations, and dynamic graph uses the dynamic 
-forest with repeated ends.
+This is a final course project made in *C++*. Each folder is an independent project, and they are the base for the more complex ones.
 
 # Splay Tree
 
