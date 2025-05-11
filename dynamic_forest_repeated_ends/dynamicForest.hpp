@@ -133,7 +133,7 @@ class DynamicForest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//concatenate tree1, uv, tree2, and vu
+		//concatenate four pieces to form the forest: tree1, uv, tree2, vu
 		void concatenate(SplayTree<Key> * tree1, Key u, SplayTree<Key> * tree2, Key v){
 			
 			SplayTree<Key> * uv = new SplayTree<Key>(u, v, ++id);
@@ -142,21 +142,10 @@ class DynamicForest{
 			this->mapEdges[u][v] = uv->root;
 			this->mapEdges[v][u] = vu->root;
 
-			if(tree1){
-
-				tree1->join(uv);
-				tree1->join(tree2);
-				tree1->join(vu);
-
-				mapTrees[tree1->root->id] = tree1;
-			}
-			else{
-
-				uv->join(tree2);
-				uv->join(vu);
-
-				mapTrees[uv->root->id] = uv;
-			}
+			tree1->join(uv);
+			tree1->join(tree2);
+			tree1->join(vu);
+			mapTrees[tree1->root->id] = tree1;
 		}	
 
 	public:	
