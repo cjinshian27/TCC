@@ -9,14 +9,14 @@ class AdjacencyList{
 	public:
 
 		// add egde (u, v) in constant time O(1)
-		void addEdge(Key u, Key v){
+		void add(Key u, Key v){
 			
 			this->adjList[u].insert(v);
 			this->adjList[v].insert(u);
 		}
 
 		// remove edge (u, v) in constant time O(1)
-		void removeEdge(Key u, Key v){
+		void remove(Key u, Key v){
 			
 			this->adjList[u].erase(v);
         	this->adjList[v].erase(u);
