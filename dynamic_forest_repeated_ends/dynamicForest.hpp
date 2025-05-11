@@ -105,7 +105,7 @@ class DynamicForest{
 			
 			if(!splayTree) return nullptr;
 			
-			unsigned int position = order(getEdge(u));
+			unsigned int position = order(mapEdges[u][u]);
 			
 			mapTrees.erase(splayTree->root->id);
 
