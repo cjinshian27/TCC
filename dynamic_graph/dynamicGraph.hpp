@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
-#include "./helpful_classes/dynamicForest.hpp"
-#include "./helpful_classes/splayTree.hpp"
+#include "./helpful_classes/forest.hpp"
+#include "./helpful_classes/tree.hpp"
 #include "./helpful_classes/edge.hpp"
 
 #include "adjacencyList.hpp"
@@ -40,8 +40,8 @@ class DynamicGraph{
 			
 			for(unsigned int i = edgeLevel; i <= level; ++i){
 				
-				SplayTree<Key> * treeU = this->forests[i]->getTreeContaining(u);
-				SplayTree<Key> * treeV = this->forests[i]->getTreeContaining(v);
+				Tree<Key> * treeU = this->forests[i]->getTreeContaining(u);
+				Tree<Key> * treeV = this->forests[i]->getTreeContaining(v);
 
 				if(treeU->size() > treeV->size()){
 					std::swap(treeU, treeV);
@@ -58,7 +58,7 @@ class DynamicGraph{
 	public:
 
 		// instantiate a dynamic graph in O(lg(n)) time.
-		DynamicGraph(unsigned int n){
+		DynamicGraph(vector<Key> & vertices){
 			
 			this->level = static_cast<int>(std::ceil(std::log2(n))); 
 
@@ -67,7 +67,7 @@ class DynamicGraph{
 			
 			for(int i = 0; i <= level; ++i){
 				adjacencyLists[i] = new AdjacencyList<Key>();
-				forests[i] = new Forest<Key>();
+				forests[i] = new Forest<Key>(vertices);
 			}
 		}
 
