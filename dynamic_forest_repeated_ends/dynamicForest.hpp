@@ -315,7 +315,7 @@ class DynamicForest{
 
 		Edge<Key> * getRoot(Key u){
 			
-			SplayTree<Key> * splayTree = mapTrees[find(getEdge(u))];
+			SplayTree<Key> * splayTree = mapTrees[find(mapEdges[u][u])];
 			return splayTree->root;
 		}
 };
