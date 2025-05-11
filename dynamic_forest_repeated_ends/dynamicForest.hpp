@@ -204,10 +204,10 @@ class DynamicForest{
 		*/
 		bool isConnected(Key u, Key v){
 
-			unsigned int id1 = find(getEdge(u));
-			unsigned int id2 = find(getEdge(v));
+			unsigned int id1 = find(mapEdges[u][u]);
+			unsigned int id2 = find(mapEdges[v][v]);
 
-			if(id1 == id2 && getEdge(u)) return true;
+			if(id1 == id2 && mapEdges[u][u]) return true;
 
 			return false;
 		}
