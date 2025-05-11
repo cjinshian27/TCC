@@ -147,7 +147,7 @@ class DynamicForest{
 			mapTrees[tree1->root->id] = tree1;
 		}	
 		
-		public:	
+	public:	
 
 		DynamicForest(std::vector<Key> & vertices){
 			
