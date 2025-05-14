@@ -25,13 +25,30 @@ void decode(){
 
 	int operation, u, v;
 
-	DynamicGraph<int> * dynamicGraph = DynamicGraph(); 
+	DynamicGraph<int> * dynamicGraph = buildDynamicGraph(); 
 
 	while(std::cin >> operation){
 		
 		switch(operation){
 
-            // to do
+			case 1:
+				std::cin >> u >> v;
+				if(dynamicGraph->isConnected(u, v)) std::cout << "True" << '\n';
+				else std::cout << "False" << '\n';
+				break;
+		
+			case 2:
+				std::cin >> u >> v;
+				dynamicGraph->link(u, v);
+				break;
+			
+			case 3:
+				std::cin >> u >> v;
+				dynamicForest->remove(u, v);
+				break;
+
+			case 4:
+				break;
 		}
 	}
 
