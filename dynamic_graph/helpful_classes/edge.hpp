@@ -56,7 +56,7 @@ class Edge{
 			}
 			
 			if(this->isLevel(i)){
-				this->edgesAtLevel_i++;
+				this->edgesAtLevel_i = this->level;
 			}
 
 			this->edgesAtLevel_i += leftSubtreeEdgesAtLevel_i + rightSubtreeEdgesAtLevel_i;
