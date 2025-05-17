@@ -12,10 +12,10 @@ class DynamicGraph{
 	private:
 
 		// store the adjacency lists (each one stores backup edges)
-		std::vector<AdjacencyList<Key> *> * adjacencyLists;
+		std::vector<AdjacencyList<Key> *> adjacencyLists;
 		
 		// store the forests 
-		std::vector<Forest<Key> *> * forests;
+		std::vector<Forest<Key> *> forests;
 
 		// map the this->maxLevel of the edges 
 		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapEdgeLevels;
@@ -64,16 +64,17 @@ class DynamicGraph{
 
 					Edge<Key> * x = treeU->getReserveEdge(treeU->root);
 
-					for (Key y : this->adjacencyLists[i][x]){
+					for (Key y : this->adjacencyLists[i]->[x]){
 						
 						this->adjacencyLists[i]->remove(x, y);
 						
 						if(this->forests[i]->isConnected(x, y)){
 							for(unsigned int j = edgeLevel; j <= this->maxLevel; ++j){
-							this->forests[j]->link(x, y);
+								this->forests[j]->link(x, y);
+							}
+							return;
 						}
-						return;
-						}
+						
 						else{
 							updateMapEdgeLevels(x, y, level);
 							this->adjacencyLists[i - 1]->add(x, y);
@@ -90,8 +91,8 @@ class DynamicGraph{
 			
 			this->maxLevel = static_cast<int>(std::ceil(std::log2(n))); 
 
-			this->adjacencyLists = new std::vector<AdjacencyList<Key> *>(this->maxLevel + 1);
-			this->forests = new std::vector<Forest<Key> *>(this->maxLevel + 1);
+			this->adjacencyLists = std::vector<AdjacencyList<Key> *>(this->maxLevel + 1);
+			this->forests = std::vector<Forest<Key> *>(this->maxLevel + 1);
 			
 			for(int i = 0; i <= this->maxLevel; ++i){
 				adjacencyLists[i] = new AdjacencyList<Key>();
