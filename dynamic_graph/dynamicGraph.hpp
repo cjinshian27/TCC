@@ -90,7 +90,7 @@ class DynamicGraph{
 				this->adjacencyLists[this->maxLevel]->add(u, v);
 			} 
 			else{
-				forest->add(u, v);
+				this->forests[this->maxLevel]->link(u, v);
 			} 
 		}
 
