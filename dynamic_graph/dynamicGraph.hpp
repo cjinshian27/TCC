@@ -22,6 +22,10 @@ class DynamicGraph{
 		
 		unsigned int maxLevel;
 		
+		void updateMapEdgeLevels(Key u, Key v, unsigned int level){
+			this->mapEdgeLevels[u][v] = level;
+			this->mapEdgeLevels[v][u] = level;
+		}
 
 		void decreaseEdgesLevel(Forest<Key> * forest, Edge<Key> * root){
 			if(root->isLevel){
@@ -31,10 +35,10 @@ class DynamicGraph{
 				return;
 			}
 
-			if(root->left && root->left->isLevel){
+			if(root->left && root->left->edgesAtLevel > 0){
 				decreaseEdgesLevel(forest, root->left);
 			}
-			if(root->right && root->right->isLevel){
+			if(root->right && root->right->edgesAtLevel > 0){
 				decreaseEdgesLevel(forest, root->right);
 			}
 		}
@@ -57,8 +61,7 @@ class DynamicGraph{
 					
 					Key u = treeU->root.first;
 					Key v = treeU->root.second;
-					mapEdgeLevels[u][v] = i - 1;
-					mapEdgeLevels[v][u] = i - 1;
+					updateMapEdgeLevels(u, v, i - 1);
 
 					this->forests[i - 1]->link(u, v);
 				}
@@ -74,8 +77,7 @@ class DynamicGraph{
 						return;
 					}
 					else{
-						mapEdgeLevels[x][y] = i - 1;
-						mapEdgeLevels[y][x] = i - 1;
+						updateMapEdgeLevels(x, y, level);
 						this->adjacencyLists[i - 1]->add(x, y);
 					}
 				}
@@ -101,8 +103,7 @@ class DynamicGraph{
 		// add edge (u, v) in O(lg(n))
 		void add(Key u, Key v){
 
-			mapEdgeLevels[u][v] = this->maxLevel;
-			mapEdgeLevels[v][u] = this->maxLevel;
+			updateMapEdgeLevels(u, v, this->maxLevel);
 
 			if(this->forests[this->maxLevel]->isConnected(u, v)){
 				this->adjacencyLists[this->maxLevel]->add(u, v);
