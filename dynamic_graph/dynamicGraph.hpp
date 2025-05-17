@@ -34,7 +34,7 @@ class DynamicGraph{
 					std::swap(u, v);
 				} 
 				
-				while(treeU->root->countVerticesAtLevel(i) > 0){
+				while(treeU->root->edgesAtLevel > 0){
 					treeU->decreaseEdgesLevel(treeU->root);
 					
 					Key u = treeU->root.first;
