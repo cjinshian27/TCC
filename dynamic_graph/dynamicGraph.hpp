@@ -43,12 +43,15 @@ class DynamicGraph{
 					this->forests[i - 1]->link(u, v);
 				}
 				
+
+
 				while(){
 
 					this->adjacencyLists[i]->remove(x, y);
-					if(){
+					
+					if(treeV->hasEdge(y)){
 						for(unsigned int j = edgeLevel; j <= this->maxLevel; ++j){
-							this->forests->link(x, y);
+							this->forests[j]->link(x, y);
 						}
 						return;
 					}
