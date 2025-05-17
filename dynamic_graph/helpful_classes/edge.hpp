@@ -15,6 +15,7 @@ class Edge{
 		unsigned int id;
 		unsigned int size;
 		unsigned int edgesAtLevel;
+		unsigned int reserveEdgesAtLevel;
 		std::pair<Key, Key> edge;
 		
 		Edge * left = nullptr;
@@ -27,8 +28,12 @@ class Edge{
 			this->edge.second = second;
 			this->id = id;
 			this->size = 1;
-			this->edgesAtLevel = 0;
+			
 			this->isLevel = false;
+			this->edgesAtLevel = 0;
+			
+			this->isIncidentToReserveEdge = false; 
+			this->reserveEdges = 0;
 		}
 
 		//print the edge in the (u, v) format
@@ -36,6 +41,29 @@ class Edge{
 
 			std::cout << "(" << this->edge.first << " " << this->edge.second << ")" << '\n';
 		}
+
+		void setReserveEdgesCount(){
+			
+			unsigned int leftSubtreeReserveEdges = 0;
+			unsigned int rightSubtreeReserveEdges = 0;
+
+			if(this->left){
+				if(this->left->isIncidentToReserveEdge){
+					leftSubtreeReserveEdges = this->left->reserveEdges;
+				}
+			}
+
+			if(this->right){
+				if(this->right->isIncidentToReserveEdge){
+					rightSubtreeReserveEdges = this->right->reserveEdges;
+				}
+			}
+			
+			this->reserveEdges = this->isIncidentToReserveEdge ? 1 : 0;
+
+			this->reserveEdges += leftSubtreeReserveEdges + rightSubtreeReserveEdges;
+		}
+
 
 		// count the number of edges that are level i
 		void setEdgeLevelCount(){
