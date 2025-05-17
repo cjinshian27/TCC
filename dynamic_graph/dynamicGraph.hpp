@@ -42,8 +42,6 @@ class DynamicGraph{
 					mapEdgeLevels[u][v] = i - 1;
 					this->forests[i - 1]->link(u, v);
 				}
-				
-
 
 				while(){
 
@@ -83,12 +81,14 @@ class DynamicGraph{
 		void add(Key u, Key v){
 
 			mapEdgeLevels[u][v] = this->maxLevel;
+			mapEdgeLevels[v][u] = this->maxLevel;
 
-			AdjacencyList<Key> * adjList = this->adjacencyLists[this->maxLevel];
-			Forest<Key> * forest = this->forests[this->maxLevel];
-
-			if(forest->isConnected(u, v)) adjList->add(u, v);
-			else forest->add(u, v);
+			if(this->forests[this->maxLevel]->isConnected(u, v)){
+				this->adjacencyLists[this->maxLevel]->add(u, v);
+			} 
+			else{
+				forest->add(u, v);
+			} 
 		}
 
 		void remove(Key u, Key v){
