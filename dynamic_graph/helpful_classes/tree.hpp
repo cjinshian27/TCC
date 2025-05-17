@@ -332,11 +332,12 @@ class Tree{
 			}
 
 			if(root->left && root->left->edgesAtLevel > 0){
-				decreaseEdgesLevel(forest, root->left);
+				return decreaseEdgesLevel(forest, root->left);
 			}
 			if(root->right && root->right->edgesAtLevel > 0){
-				decreaseEdgesLevel(forest, root->right);
+				return decreaseEdgesLevel(forest, root->right);
 			}
 		}
 		
+		Edge<Key> * getReserveEdge()
 };
