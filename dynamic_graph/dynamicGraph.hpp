@@ -27,13 +27,13 @@ class DynamicGraph{
 			this->mapEdgeLevels[v][u] = level;
 		}
 
-		void decreaseEdgesLevel(Forest<Key> * forest, unsigned int i){
+		void decreaseEdgesLevel(Tree<Key> * treeU, unsigned int i){
 			
 			Edge<Key> * edgeToSplay = getEdgeWithIsLevelTrue(treeU->root);
 			
-			forest->splay(edgeToSplay);
-			forest->root->isLevel = 0;
-			forest->root->setEdgeLevelCount();
+			treeU->splay(edgeToSplay);
+			treeU->root->isLevel = 0;
+			treeU->root->setEdgeLevelCount();
 
 			Key u = treeU->root.first;
 			Key v = treeU->root.second;
@@ -62,17 +62,22 @@ class DynamicGraph{
 				bool edgeIsReplaced = false;
 				while(treeU->root->reserveEdges > 0 && !edgeIsReplaced){
 
-					this->adjacencyLists[i]->remove(x, y);
-					
-					if(this->forests[i]->isConnected(x, y)){
-						for(unsigned int j = edgeLevel; j <= this->maxLevel; ++j){
+					Edge<Key> * x = treeU->getReserveEdge(treeU->root);
+
+					for (Key y : this->adjacencyLists[i][x]){
+						
+						this->adjacencyLists[i]->remove(x, y);
+						
+						if(this->forests[i]->isConnected(x, y)){
+							for(unsigned int j = edgeLevel; j <= this->maxLevel; ++j){
 							this->forests[j]->link(x, y);
 						}
 						return;
-					}
-					else{
-						updateMapEdgeLevels(x, y, level);
-						this->adjacencyLists[i - 1]->add(x, y);
+						}
+						else{
+							updateMapEdgeLevels(x, y, level);
+							this->adjacencyLists[i - 1]->add(x, y);
+						}
 					}
 				}
 			}
