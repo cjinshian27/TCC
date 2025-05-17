@@ -27,11 +27,17 @@ class DynamicGraph{
 			this->mapEdgeLevels[v][u] = level;
 		}
 
-		void decreaseEdgesLevel(Forest<Key> * forest){
+		void decreaseEdgesLevel(Forest<Key> * forest, unsigned int i){
+			
 			Edge<Key> * edgeToSplay = getEdgeWithIsLevelTrue(treeU->root);
+			
 			forest->splay(edgeToSplay);
 			forest->root->isLevel = 0;
 			forest->root->setEdgeLevelCount();
+
+			Key u = treeU->root.first;
+			Key v = treeU->root.second;
+			updateMapEdgeLevels(u, v, i - 1);
 		}
 		
 		void replaceEdge(Key u, Key v, unsigned int edgeLevel){
@@ -49,10 +55,6 @@ class DynamicGraph{
 				while(treeU->root->edgesAtLevel > 0){
 					
 					decreaseEdgesLevel(treeU);
-					
-					Key u = treeU->root.first;
-					Key v = treeU->root.second;
-					updateMapEdgeLevels(u, v, i - 1);
 
 					this->forests[i - 1]->link(u, v);
 				}
