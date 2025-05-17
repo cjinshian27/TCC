@@ -21,6 +21,22 @@ class DynamicGraph{
 		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapEdgeLevels;
 		
 		unsigned int maxLevel;
+		
+
+		void decreaseEdgesLevel(Forest<Key> * forest, Edge<Key> * root){
+			if(root->isLevel){
+				forest->splay(root);
+				forest->root->isLevel = 0;
+				return;
+			}
+
+			if(root->left && root->left->isLevel){
+				decreaseEdgesLevel(forest, root->left);
+			}
+			if(root->right && root->right->isLevel){
+				decreaseEdgesLevel(forest, root->right);
+			}
+		}
 
 		void replaceEdge(Key u, Key v, unsigned int edgeLevel){
 			
@@ -35,7 +51,8 @@ class DynamicGraph{
 				} 
 				
 				while(treeU->root->edgesAtLevel > 0){
-					treeU->decreaseEdgesLevel(treeU->root);
+					
+					decreaseEdgesLevel(treeU->root);
 					
 					Key u = treeU->root.first;
 					Key v = treeU->root.second;

@@ -311,21 +311,6 @@ class Tree{
 			this->root->setEdgeLevelCount();
 		}		
 
-		void decreaseEdgesLevel(Edge<Key> * root){
-			if(root->isLevel){
-				splay(root);
-				root->isLevel = 0;
-				return;
-			}
-
-			if(root->left && root->left->isLevel){
-				decreaseEdgesLevel(root->left);
-			}
-			if(root->right && root->right->isLevel){
-				decreaseEdgesLevel(root->right);
-			}
-		}
-
 		//call the print function
 		void print(){
 			print(this->root, 0);
