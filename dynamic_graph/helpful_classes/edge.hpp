@@ -11,10 +11,10 @@ class Edge{
 		
 	public:
 	
+		bool isLevel;
 		unsigned int id;
 		unsigned int size;
-		unsigned int level;
-		unsigned int edgesAtLevel_i;
+		unsigned int edgesAtLevel;
 		std::pair<Key, Key> edge;
 		
 		Edge * left = nullptr;
@@ -27,8 +27,8 @@ class Edge{
 			this->edge.second = second;
 			this->id = id;
 			this->size = 1;
-			this->edgesAtLevel_i = 0;
-			this->level = 0;
+			this->edgesAtLevel = 0;
+			this->isLevel = false;
 		}
 
 		//print the edge in the (u, v) format
@@ -38,28 +38,26 @@ class Edge{
 		}
 
 		// count the number of edges that are level i
-		void countEdgesAtLevel(unsigned int i){
+		void setEdgeLevelCount(){
 			
-			unsigned int leftSubtreeEdgesAtLevel_i = 0;
-			unsigned int rightSubtreeEdgesAtLevel_i = 0;
+			unsigned int leftSubtreeEdgesAtLevel = 0;
+			unsigned int rightSubtreeEdgesAtLevel = 0;
 
 			if(this->left){
-				if(this->left->isLevel(i)){
-					leftSubtreeEdgesAtLevel_i = this->left->edgesAtLevel_i;
+				if(this->left->isLevel){
+					leftSubtreeEdgesAtLevel = this->left->edgesAtLevel;
 				}
 			}
 
 			if(this->right){
-				if(this->right->isLevel(i)){
-					rightSubtreeEdgesAtLevel_i = this->right->edgesAtLevel_i;
+				if(this->right->isLevel){
+					rightSubtreeEdgesAtLevel = this->right->edgesAtLevel;
 				}
 			}
 			
-			if(this->isLevel(i)){
-				this->edgesAtLevel_i = this->level;
-			}
+			this->edgesAtLevel = this->isLevel ? 1 : 0;
 
-			this->edgesAtLevel_i += leftSubtreeEdgesAtLevel_i + rightSubtreeEdgesAtLevel_i;
+			this->edgesAtLevel += leftSubtreeEdgesAtLevel + rightSubtreeEdgesAtLevel;
 		}
 
 		//set the edge size
@@ -85,10 +83,6 @@ class Edge{
 
 		unsigned int getLevel(){
 			return this->level;
-		}
-
-		bool isLevel(unsigned int level){
-			return this->level == level;
 		}
 
 		std::pair<Key, Key> getEnds(){
