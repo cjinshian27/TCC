@@ -63,6 +63,8 @@ class DynamicGraph{
 				while(treeU->root->reserveEdges > 0 && !edgeIsReplaced){
 
 					Edge<Key> * x = treeU->getReserveEdge(treeU->root);
+					x->isIncidentToReserveEdge = false;
+					x->setReserveEdgesCount();
 
 					for (Key y : this->adjacencyLists[i]->[x]){
 						
