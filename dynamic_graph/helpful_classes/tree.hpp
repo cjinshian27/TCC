@@ -321,5 +321,22 @@ class Tree{
 			return size(this->root);
 		}
 
+		Edge<Key> * getEdgeWithIsLevelTrue(Edge<Key> * root){
+			
+			if(!root){
+				return nullptr;
+			}
+
+			if(root->isLevel){
+				return root;
+			}
+
+			if(root->left && root->left->edgesAtLevel > 0){
+				decreaseEdgesLevel(forest, root->left);
+			}
+			if(root->right && root->right->edgesAtLevel > 0){
+				decreaseEdgesLevel(forest, root->right);
+			}
+		}
 		
 };
