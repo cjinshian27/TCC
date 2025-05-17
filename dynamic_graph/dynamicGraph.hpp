@@ -59,7 +59,8 @@ class DynamicGraph{
 					this->forests[i - 1]->link(u, v);
 				}
 
-				while(){
+				bool edgeIsReplaced = false;
+				while(treeU->root->reserveEdges > 0 && !edgeIsReplaced){
 
 					this->adjacencyLists[i]->remove(x, y);
 					
