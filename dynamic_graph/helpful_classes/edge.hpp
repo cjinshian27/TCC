@@ -77,14 +77,6 @@ class Edge{
 			}
 		}
 
-		void setLevel(unsigned int level){
-			this->level = level;
-		}
-
-		unsigned int getLevel(){
-			return this->level;
-		}
-
 		std::pair<Key, Key> getEnds(){
 			return {this->u, this->v};
 		}
