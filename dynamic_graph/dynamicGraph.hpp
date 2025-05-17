@@ -49,7 +49,7 @@ class DynamicGraph{
 
 					this->adjacencyLists[i]->remove(x, y);
 					
-					if(treeV->hasEdge(y)){
+					if(treeV->hasEdge(u, u)){
 						for(unsigned int j = edgeLevel; j <= this->maxLevel; ++j){
 							this->forests[j]->link(x, y);
 						}
