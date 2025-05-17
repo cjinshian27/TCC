@@ -39,18 +39,25 @@ class DynamicGraph{
 					
 					Key u = treeU->root.first;
 					Key v = treeU->root.second;
-					mapEdgeLevels[u][v]--;
+					mapEdgeLevels[u][v] = i - 1;
 					this->forests[i - 1]->link(u, v);
 				}
 				
 				while(){
-					this->adjacencyLists[i]->remove(,);
-					if()
 
+					this->adjacencyLists[i]->remove(x, y);
+					if(){
+						for(unsigned int j = edgeLevel; j <= this->maxLevel; ++j){
+							this->forests->link(x, y);
+						}
+						return;
+					}
+					else{
+						mapEdgeLevels[x][y] = i - 1;
+						this->adjacencyLists[i - 1]->add(x, y);
+					}
 				}
-
 			}
-			
 		}
 
 	public:
