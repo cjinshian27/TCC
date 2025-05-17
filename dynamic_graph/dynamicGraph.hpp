@@ -18,14 +18,14 @@ class DynamicGraph{
 		// store the forests 
 		std::vector<Forest<Key> *> * forests;
 
-		// map the level of the edges 
+		// map the this->maxLevel of the edges 
 		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapEdgeLevels;
 		
 		unsigned int maxLevel;
 
 		void replaceEdge(Key u, Key v, unsigned int edgeLevel){
 			
-			for(unsigned int i = edgeLevel; i <= level; ++i){
+			for(unsigned int i = edgeLevel; i <= this->maxLevel; ++i){
 				
 				Tree<Key> * treeU = this->forests[i]->getTreeContaining(u);
 				Tree<Key> * treeV = this->forests[i]->getTreeContaining(v);
@@ -37,7 +37,7 @@ class DynamicGraph{
 				
 				while(treeU->root->countVerticesAtLevel(i) > 0){
 					treeU->decreaseEdgesLevel(treeU->root);
-					--treeU->root->level;
+					--treeU->root->this->maxLevel;
 					mapEdgeLevels[root.first][root.right]--;
 				}
 				
@@ -58,10 +58,10 @@ class DynamicGraph{
 			
 			this->maxLevel = static_cast<int>(std::ceil(std::log2(n))); 
 
-			this->adjacencyLists = new std::vector<AdjacencyList<Key> *>(level + 1);
-			this->forests = new std::vector<Forest<Key> *>(level + 1);
+			this->adjacencyLists = new std::vector<AdjacencyList<Key> *>(this->maxLevel + 1);
+			this->forests = new std::vector<Forest<Key> *>(this->maxLevel + 1);
 			
-			for(int i = 0; i <= level; ++i){
+			for(int i = 0; i <= this->maxLevel; ++i){
 				adjacencyLists[i] = new AdjacencyList<Key>();
 				forests[i] = new Forest<Key>(vertices);
 			}
@@ -70,10 +70,10 @@ class DynamicGraph{
 		// add edge (u, v) in O(lg(n))
 		void add(Key u, Key v){
 
-			mapEdgeLevels[u][v] = level;
+			mapEdgeLevels[u][v] = this->maxLevel;
 
-			AdjacencyList<Key> * adjList = this->adjacencyLists[level];
-			Forest<Key> * forest = this->forests[level];
+			AdjacencyList<Key> * adjList = this->adjacencyLists[this->maxLevel];
+			Forest<Key> * forest = this->forests[this->maxLevel];
 
 			if(forest->isConnected(u, v)) adjList->add(u, v);
 			else forest->add(u, v);
@@ -90,14 +90,14 @@ class DynamicGraph{
 				replaceEdge(u, v, edgeLevel);
 			}
 			else{
-				this->adjacencyLists[level]->remove(u, v);
+				this->adjacencyLists[this->maxLevel]->remove(u, v);
 			}
 		}
 
 		// check if u and v are connected in O(lg(n))
 		bool isConnected(Key u, Key v){
 			
-			Forest<Key> * forest = this->forests[level];
+			Forest<Key> * forest = this->forests[this->maxLevel];
 			return forest->isConnected(u, v);
 		}
 }
