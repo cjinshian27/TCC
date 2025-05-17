@@ -27,6 +27,7 @@ class DynamicGraph{
 			if(root->isLevel){
 				forest->splay(root);
 				forest->root->isLevel = 0;
+				forest->root->setEdgeLevelCount();
 				return;
 			}
 
