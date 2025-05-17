@@ -79,6 +79,7 @@ class Tree{
 		 	}
 		 	
 		 	y->setSize();
+			y->setEdgeLevelCount();
 		 	x->parent = parent;
 
 		 	return x;
@@ -111,6 +112,7 @@ class Tree{
 			}
 			
 			y->setSize();
+			y->setEdgeLevelCount();
 			x->parent = parent;
 
 			return x;
@@ -170,7 +172,7 @@ class Tree{
 			this->root = nullptr;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		Tree(Key u, Key v, unsigned int id){
+		Tree(Key u, Key v, unsigned int id, bool isLevel){
 			this->root = new Edge<Key>(u, v, id);
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -229,6 +231,7 @@ class Tree{
 					}
 
 					edge->setSize();
+					edge->setEdgeLevelCount();
 
 					if(grandGrandParent){
 						if(grandGrandParent->right == grandparent){
@@ -238,6 +241,7 @@ class Tree{
 							grandGrandParent->left = edge;
 						}
 						grandGrandParent->setSize();
+						grandGrandParent->setEdgeLevelCount();
 					}
 
 				}
@@ -245,6 +249,7 @@ class Tree{
 
 			this->root = edge;
 			this->root->setSize();
+			this->root->setEdgeLevelCount();
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//return the k-th edge
@@ -278,6 +283,7 @@ class Tree{
 
 			this->root->right = nullptr;
 			this->root->setSize();
+			this->root->setEdgeLevelCount();
 
 			Tree<Key> * tree1 = new Tree<Key>(this->root);
 
@@ -302,6 +308,7 @@ class Tree{
 				this->root->right->parent = this->root;
 			}
 			this->root->setSize();
+			this->root->setEdgeLevelCount();
 		}		
 
 		//call the print function
