@@ -40,6 +40,8 @@ class DynamicGraph{
 					Key u = treeU->root.first;
 					Key v = treeU->root.second;
 					mapEdgeLevels[u][v] = i - 1;
+					mapEdgeLevels[v][u] = i - 1;
+
 					this->forests[i - 1]->link(u, v);
 				}
 
@@ -55,6 +57,7 @@ class DynamicGraph{
 					}
 					else{
 						mapEdgeLevels[x][y] = i - 1;
+						mapEdgeLevels[y][x] = i - 1;
 						this->adjacencyLists[i - 1]->add(x, y);
 					}
 				}
@@ -95,6 +98,7 @@ class DynamicGraph{
 			
 			unsigned int edgeLevel = mapEdgeLevels[u][v];
 			mapEdgeLevels[u].erase(v);
+			mapEdgeLevels[v].erase(u);
 
 			if(this->forests[this->maxLevel]->hasEdge(u, v)){
 				for(int i = edgeLevel; i <= this->maxLevel; ++i)
