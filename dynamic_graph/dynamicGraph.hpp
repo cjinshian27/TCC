@@ -52,7 +52,7 @@ class DynamicGraph{
 				} 
 				
 				while(treeU->root->edgesAtLevel > 0){
-					
+
 					decreaseEdgesLevel(treeU->root);
 					
 					Key u = treeU->root.first;
