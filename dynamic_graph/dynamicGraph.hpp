@@ -21,20 +21,7 @@ class DynamicGraph{
 		// map the level of the edges 
 		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapEdgeLevels;
 		
-		unsigned int level;
-
-		void decreaseEdgeLevel(Edge<Key> * root, unsigned int level){
-
-			if(!edge) return;
-			
-			if(edge->isLevel(level)){
-				--edge->level;
-				
-			} 
-
-			decreaseEdgeLevel(root->left);
-			decreaseEdgeLevel(root->right);
-		}
+		unsigned int maxLevel;
 
 		void replaceEdge(Key u, Key v, unsigned int edgeLevel){
 			
@@ -48,9 +35,18 @@ class DynamicGraph{
 					std::swap(u, v);
 				} 
 				
-				//for()
-					mapEdgeLevels[][]
-				//for()
+				while(treeU->root->countVerticesAtLevel(i) > 0){
+					treeU->decreaseEdgesLevel(treeU->root);
+					--treeU->root->level;
+					mapEdgeLevels[root.first][root.right]--;
+				}
+				
+				while(){
+					this->adjacencyLists[i]->remove(,);
+					if()
+
+				}
+
 			}
 			
 		}
@@ -60,7 +56,7 @@ class DynamicGraph{
 		// instantiate a dynamic graph in O(lg(n)) time.
 		DynamicGraph(vector<Key> & vertices){
 			
-			this->level = static_cast<int>(std::ceil(std::log2(n))); 
+			this->maxLevel = static_cast<int>(std::ceil(std::log2(n))); 
 
 			this->adjacencyLists = new std::vector<AdjacencyList<Key> *>(level + 1);
 			this->forests = new std::vector<Forest<Key> *>(level + 1);
@@ -88,8 +84,8 @@ class DynamicGraph{
 			unsigned int edgeLevel = mapEdgeLevels[u][v];
 			mapEdgeLevels[u].erase(v);
 
-			if(this->forests[this->level]->hasEdge(u, v)){
-				for(int i = edgeLevel; i <= this->level; ++i) this->forests[i]->cut(u, v);
+			if(this->forests[this->maxLevel]->hasEdge(u, v)){
+				for(int i = edgeLevel; i <= this->maxLevel; ++i) this->forests[i]->cut(u, v);
 	
 				replaceEdge(u, v, edgeLevel);
 			}
