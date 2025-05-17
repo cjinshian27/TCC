@@ -3,7 +3,6 @@
 #include "./helpful_classes/forest.hpp"
 #include "./helpful_classes/tree.hpp"
 #include "./helpful_classes/edge.hpp"
-
 #include "adjacencyList.hpp"
 
 template<typename Key>
@@ -37,8 +36,11 @@ class DynamicGraph{
 				
 				while(treeU->root->countVerticesAtLevel(i) > 0){
 					treeU->decreaseEdgesLevel(treeU->root);
-					--treeU->root->this->maxLevel;
-					mapEdgeLevels[root.first][root.right]--;
+					
+					Key u = treeU->root.first;
+					Key v = treeU->root.second;
+					mapEdgeLevels[u][v]--;
+					this->forests[i - 1]->link(u, v);
 				}
 				
 				while(){
@@ -85,7 +87,8 @@ class DynamicGraph{
 			mapEdgeLevels[u].erase(v);
 
 			if(this->forests[this->maxLevel]->hasEdge(u, v)){
-				for(int i = edgeLevel; i <= this->maxLevel; ++i) this->forests[i]->cut(u, v);
+				for(int i = edgeLevel; i <= this->maxLevel; ++i)
+					 this->forests[i]->cut(u, v);
 	
 				replaceEdge(u, v, edgeLevel);
 			}
