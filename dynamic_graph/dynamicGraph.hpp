@@ -70,15 +70,16 @@ class DynamicGraph{
 						
 						reserveEdgesToBeRemoved.push_back({x, y});	
 						
+						//y does not belong to Tv 
 						if(this->forests[i]->isConnected(x, y)){
-							for(unsigned int j = edgeLevel; j <= this->maxLevel; ++j){
+							updateMapEdgeLevels(x, y, i - 1);
+							this->adjacencyLists[i - 1]->add(x, y);
+						}
+						else{
+							for(unsigned int j = i; j <= this->maxLevel; ++j){
 								this->forests[j]->link(x, y);
 							}
 							edgeIsReplaced = true;
-						}
-						else{
-							updateMapEdgeLevels(x, y, level);
-							this->adjacencyLists[i - 1]->add(x, y);
 						}
 					}
 					
