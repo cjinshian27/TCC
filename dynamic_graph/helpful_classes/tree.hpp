@@ -80,6 +80,8 @@ class Tree{
 		 	
 		 	y->setSize();
 			y->setEdgeLevelCount();
+			y->setReserveEdgesCount();
+
 		 	x->parent = parent;
 
 		 	return x;
@@ -113,6 +115,8 @@ class Tree{
 			
 			y->setSize();
 			y->setEdgeLevelCount();
+			y->setReserveEdgesCount();
+			
 			x->parent = parent;
 
 			return x;
@@ -232,6 +236,7 @@ class Tree{
 
 					edge->setSize();
 					edge->setEdgeLevelCount();
+					edge->setReserveEdgesCount();
 
 					if(grandGrandParent){
 						if(grandGrandParent->right == grandparent){
@@ -242,6 +247,7 @@ class Tree{
 						}
 						grandGrandParent->setSize();
 						grandGrandParent->setEdgeLevelCount();
+						grandGrandParent->setReserveEdgesCount();
 					}
 
 				}
@@ -250,6 +256,7 @@ class Tree{
 			this->root = edge;
 			this->root->setSize();
 			this->root->setEdgeLevelCount();
+			this->root->setReserveEdgesCount();
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//return the k-th edge
@@ -284,6 +291,7 @@ class Tree{
 			this->root->right = nullptr;
 			this->root->setSize();
 			this->root->setEdgeLevelCount();
+			this->root->setReserveEdgesCount();
 
 			Tree<Key> * tree1 = new Tree<Key>(this->root);
 
@@ -309,6 +317,7 @@ class Tree{
 			}
 			this->root->setSize();
 			this->root->setEdgeLevelCount();
+			this->root->setReserveEdgesCount();
 		}		
 
 		//call the print function
@@ -344,7 +353,7 @@ class Tree{
 			if(root->left && root->left->reserveEdges > 0){
 				return getReserveEdge(forest, root->left);
 			}
-			
+
 			if(root->right && root->right->reserveEdges > 0){
 				return getReserveEdge(forest, root->right);
 			}
