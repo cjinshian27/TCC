@@ -168,12 +168,20 @@ class Forest{
 		*/
 		bool isConnected(Key u, Key v){
 
-			unsigned int uTree = find(mapEdges[u][u]);
-			unsigned int vTree = find(mapEdges[v][v]);
+			unsigned int uTreeID = find(mapEdges[u][u]);
+			unsigned int vTreeID = find(mapEdges[v][v]);
 
-			if(uTree == vTree){
+			if(uTreeID == vTreeID){
+
+				Tree<Key> * uTree = mapTrees[uTreeId];
+				Tree<Key> * vTree = mapTrees[vTreeID];
+
 				this->mapEdges[u][u]->isIncidentToReserveEdge = true;
-				this->mapEdges[v][v]->isIncidentToReserveEdge = true; 
+				this->mapEdges[v][v]->isIncidentToReserveEdge = true;
+
+				uTree->splay(mapEdges[u][u]);
+				vTree->splay(mapEdges[v][v]);
+
 				return true;
 			} 
 
