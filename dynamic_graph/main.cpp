@@ -35,8 +35,12 @@ void decode(){
 
 			case 1:
 				std::cin >> u >> v;
-				if(dynamicGraph->isConnected(u, v)) std::cout << "True" << '\n';
-				else std::cout << "False" << '\n';
+				if(dynamicGraph->isConnected(u, v)){
+					std::cout << u << " and " << v << " are connected!" << '\n';
+				} 
+				else{
+					std::cout << u << " and " << v << " are NOT connected!" << '\n';
+				} 
 				break;
 		
 			case 2:

@@ -3,62 +3,68 @@
 #include "./helpful_classes/forest.hpp"
 #include "adjacencyList.hpp"
 
+
+void printStylishLine(){
+	std::cout << "════════════════════════════════════════════════════════════════════════════════════\n";
+}
+
+
 template<typename Key>
 
 class DynamicGraph{
-
+	
 	private:
 
-		// store the adjacency lists (each one stores backup nodes)
-		std::vector<AdjacencyList<Key> *> adjacencyLists;
+	// store the adjacency lists (each one stores backup nodes)
+	std::vector<AdjacencyList<Key> *> adjacencyLists;
+	
+	// store the forests 
+	std::vector<Forest<Key> *> forests;
+	
+	// map the this->maxLevel of the nodes 
+	std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapNodeLevels;
+	
+	unsigned int maxLevel;
+	
+	void updateMapNodeLevels(Key u, Key v, unsigned int level){
+		this->mapNodeLevels[u][v] = level;
+		this->mapNodeLevels[v][u] = level;
+	}
+	
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	
+	void decreaseNodesLevel(Tree<Key> * uTree, unsigned int i){
 		
-		// store the forests 
-		std::vector<Forest<Key> *> forests;
-
-		// map the this->maxLevel of the nodes 
-		std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapNodeLevels;
+		Node<Key> * nodeToSplay = uTree->getNodeWithIsLevelTrue(uTree->root);
 		
-		unsigned int maxLevel;
+		uTree->splay(nodeToSplay);
+		uTree->root->isLevel = 0;
+		uTree->root->setNodeLevelCount();
 		
-		void updateMapNodeLevels(Key u, Key v, unsigned int level){
-			this->mapNodeLevels[u][v] = level;
-			this->mapNodeLevels[v][u] = level;
-		}
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		void decreaseNodesLevel(Tree<Key> * uTree, unsigned int i){
+		Key u = uTree->root->first;
+		Key v = uTree->root->second;
+		updateMapNodeLevels(u, v, i - 1);
+		this->forests[i - 1]->link(u, v);
+	}	
+	
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	
+	void replaceNode(Key u, Key v, unsigned int nodeLevel){
 			
-			Node<Key> * nodeToSplay = uTree->getNodeWithIsLevelTrue(uTree->root);
+		for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i){
 			
-			uTree->splay(nodeToSplay);
-			uTree->root->isLevel = 0;
-			uTree->root->setNodeLevelCount();
-
-			Key u = uTree->root->first;
-			Key v = uTree->root->second;
-			updateMapNodeLevels(u, v, i - 1);
-			this->forests[i - 1]->link(u, v);
-		}	
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		void replaceNode(Key u, Key v, unsigned int nodeLevel){
+			Tree<Key> * uTree = this->forests[i]->getTreeContaining(u);
+			Tree<Key> * treeV = this->forests[i]->getTreeContaining(v);
 			
-			for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i){
-				
-				Tree<Key> * uTree = this->forests[i]->getTreeContaining(u);
-				Tree<Key> * treeV = this->forests[i]->getTreeContaining(v);
-
-				if(uTree->size() > treeV->size()){
-					std::swap(uTree, treeV);
-					std::swap(u, v);
-				} 
-				
-				while(uTree->root->nodesAtLevel > 0){
-					decreaseNodesLevel(uTree, i);
+			if(uTree->size() > treeV->size()){
+				std::swap(uTree, treeV);
+				std::swap(u, v);
+			} 
+			
+			while(uTree->root->nodesAtLevel > 0){
+				decreaseNodesLevel(uTree, i);
 				}
-
+				
 				bool nodeIsReplaced = false;
 				
 				while(uTree->root->reserveNodes > 0 && !nodeIsReplaced){
@@ -70,7 +76,7 @@ class DynamicGraph{
 					Key x = xVertex->first;
 
 					for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
-
+						
 						reserveNodesToBeRemoved.push_back(y);	
 						
 						//y does not belong to Tv 
@@ -157,7 +163,7 @@ class DynamicGraph{
 		}
 
 		void print(){
-
+			printStylishLine();
 			std::cout << "FORESTS: \n\n";
 			for(unsigned int i = 0; i <= this->maxLevel; ++i){
 				std::cout << "FOREST " << i + 1 << ":\n";
@@ -173,7 +179,6 @@ class DynamicGraph{
 				this->adjacencyLists[i]->print();
 				std::cout << "**************************************************\n";
 			}
-			
-			std::cout << std::endl;
+			printStylishLine();
 		}
 };
