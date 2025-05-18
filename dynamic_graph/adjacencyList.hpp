@@ -21,4 +21,4 @@ class AdjacencyList{
 			this->adjList[u].erase(v);
         	this->adjList[v].erase(u);
 		}
-}
+};
