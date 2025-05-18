@@ -171,7 +171,11 @@ class Forest{
 			unsigned int uTree = find(mapEdges[u][u]);
 			unsigned int vTree = find(mapEdges[v][v]);
 
-			if(uTree == vTree) return true;
+			if(uTree == vTree){
+				this->mapEdges[u][u]->isIncidentToReserveEdge = true;
+				this->mapEdges[v][v]->isIncidentToReserveEdge = true; 
+				return true;
+			} 
 
 			return false;
 		}
