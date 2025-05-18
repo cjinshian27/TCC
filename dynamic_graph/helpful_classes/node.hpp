@@ -43,7 +43,7 @@ class Node{
 			std::cout << "(" << this->first << " "<< this->second 
 			          << " | " << isLevel << ":" << nodesAtLevel << " " 
 					  << isIncidentToReserveNode << ":" << reserveNodes << 
-					  ")" << '\n';
+					  " - size: " << size << ")" << '\n';
 		}
 
 		void setReserveNodesCount(){
@@ -52,20 +52,17 @@ class Node{
 			unsigned int rightSubtreeReserveNodes = 0;
 
 			if(this->left){
-				if(this->left->isIncidentToReserveNode){
-					leftSubtreeReserveNodes = this->left->reserveNodes;
-				}
+				leftSubtreeReserveNodes = this->left->reserveNodes;
 			}
 
 			if(this->right){
-				if(this->right->isIncidentToReserveNode){
-					rightSubtreeReserveNodes = this->right->reserveNodes;
-				}
+				rightSubtreeReserveNodes = this->right->reserveNodes;
 			}
 			
 			this->reserveNodes = this->isIncidentToReserveNode ? 1 : 0;
-
+			
 			this->reserveNodes += leftSubtreeReserveNodes + rightSubtreeReserveNodes;
+			
 		}
 
 
@@ -76,15 +73,11 @@ class Node{
 			unsigned int rightSubtreeNodesAtLevel = 0;
 
 			if(this->left){
-				if(this->left->isLevel){
-					leftSubtreeNodesAtLevel = this->left->nodesAtLevel;
-				}
+				leftSubtreeNodesAtLevel = this->left->nodesAtLevel;
 			}
 
 			if(this->right){
-				if(this->right->isLevel){
-					rightSubtreeNodesAtLevel = this->right->nodesAtLevel;
-				}
+				rightSubtreeNodesAtLevel = this->right->nodesAtLevel;
 			}
 			
 			this->nodesAtLevel = this->isLevel ? 1 : 0;

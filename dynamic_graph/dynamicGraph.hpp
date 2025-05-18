@@ -138,7 +138,7 @@ class DynamicGraph{
 
 				uu->isIncidentToReserveNode = true;
 				uTree->splay(uu);
-				
+
 				vv->isIncidentToReserveNode = true;
 				vTree->splay(vv);
 			} 

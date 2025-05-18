@@ -245,7 +245,7 @@ class Tree{
 			}
 
 			this->root = node;
-			this->root->updateValues();
+			this->root->updateValues();	
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//return the k-th node
