@@ -18,4 +18,17 @@ class AdjacencyList{
 			this->adjList[u].erase(v);
         	this->adjList[v].erase(u);
 		}
+
+		void print(){
+			for (const auto& pair : adjList) {
+				int vertex = pair.first;
+				const std::unordered_set<int>& neighbors = pair.second;
+				
+				std::cout << vertex << ":";
+				for (int neighbor : neighbors) {
+					std::cout << " " << neighbor;
+				}
+				std::cout << std::endl;
+			}
+		}
 };
