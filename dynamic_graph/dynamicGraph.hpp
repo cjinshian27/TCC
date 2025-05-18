@@ -58,27 +58,32 @@ class DynamicGraph{
 				}
 
 				bool edgeIsReplaced = false;
+				
 				while(treeU->root->reserveEdges > 0 && !edgeIsReplaced){
-
+					
 					Edge<Key> * x = treeU->getReserveEdge(treeU->root);
 					x->isIncidentToReserveEdge = false;
 					x->setReserveEdgesCount();
-
-					for (Key y : this->adjacencyLists[i]->[x]){
+					vector<std::pair<Key, Key>> reserveEdgesToBeRemoved;
+					
+					for (Key y : this->adjacencyLists[i]->at(x)){
 						
-						this->adjacencyLists[i]->remove(x, y);
+						reserveEdgesToBeRemoved.push_back({x, y});	
 						
 						if(this->forests[i]->isConnected(x, y)){
 							for(unsigned int j = edgeLevel; j <= this->maxLevel; ++j){
 								this->forests[j]->link(x, y);
 							}
-							return;
+							edgeIsReplaced = true;
 						}
-						
 						else{
 							updateMapEdgeLevels(x, y, level);
 							this->adjacencyLists[i - 1]->add(x, y);
 						}
+					}
+					
+					for(std::pair<Key, Key> edge : reserveEdgesToBeRemoved){
+						this->adjacencyLists[i]->remove(edge.first, edge.second);
 					}
 				}
 			}
