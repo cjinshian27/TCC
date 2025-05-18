@@ -332,7 +332,6 @@ class Tree{
 		Edge<Key> * getEdgeWithIsLevelTrue(Edge<Key> * root){
 			
 			if(!root) return nullptr;
-
 			if(root->isLevel) return root;
 
 			if(root->left && root->left->edgesAtLevel > 0){
@@ -341,21 +340,20 @@ class Tree{
 			if(root->right && root->right->edgesAtLevel > 0){
 				return getEdgeWithIsLevelTrue(root->right);
 			}
+			return nullptr;
 		}
 		
 		Edge<Key> * getReserveEdge(Edge<Key> * root){
 
 			if(!root) return nullptr;
-
 			if(root->isIncidentToReserveEdge) return root;
 			
 			if(root->left && root->left->reserveEdges > 0){
 				return getReserveEdge(root->left);
 			}
-
 			if(root->right && root->right->reserveEdges > 0){
 				return getReserveEdge(root->right);
 			}
-			
+			return nullptr;
 		}
 };

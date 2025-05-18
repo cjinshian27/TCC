@@ -296,7 +296,7 @@ class Forest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		Tree<Key> * decreaseEdgeLevelCount(Key u){
+		void decreaseEdgeLevelCount(Key u){
 			
 			Tree<Key> * tree = mapTrees[find(mapEdges[u][u])];
 			tree->splay(mapEdges[u][u]);

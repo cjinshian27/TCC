@@ -69,8 +69,8 @@ class DynamicGraph{
 					std::vector<Key> reserveEdgesToBeRemoved;
 					Key x = xVertex->edge.first;
 
-					for (Key & y : this->adjacencyLists[i][x]){
-						
+					for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
+
 						reserveEdgesToBeRemoved.push_back(y);	
 						
 						//y does not belong to Tv 
@@ -87,7 +87,7 @@ class DynamicGraph{
 						}
 					}
 					
-					for(Key & y : reserveEdgesToBeRemoved){
+					for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
 						this->adjacencyLists[i]->remove(x, y);
 						this->forests[i]->decreaseEdgeLevelCount(y);
 					}

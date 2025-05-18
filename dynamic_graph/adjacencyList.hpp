@@ -1,12 +1,9 @@
 template<typename Key>
 
 class AdjacencyList{
-
-	private:
-
-		std::unordered_map<int, std::unordered_set<int>> adjList;
-
+	
 	public:
+		std::unordered_map<int, std::unordered_set<int>> adjList;
 
 		// add egde (u, v) in constant time O(1)
 		void add(Key u, Key v){
