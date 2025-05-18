@@ -7,16 +7,16 @@ class Forest{
 		unsigned int id = 0;
 
 		/*
-		keep the remaining edges in the forest in 
+		keep the remaining nodes in the forest in 
 		a <Key, Key> format.
 		*/
-		std::set<std::pair<Key, Key>> edgeSet;
+		std::set<std::pair<Key, Key>> nodeSet;
 
 		/*
-		map the edges according to their two (Key) ends. 
-		That means mapEdges[u][v] = Edge<Key>(u, v).
+		map the nodes according to their two (Key) ends. 
+		That means mapNodes[u][v] = Node<Key>(u, v).
 		*/
-		std::unordered_map<Key, std::unordered_map<Key, Edge<Key> *>> mapEdges; 
+		std::unordered_map<Key, std::unordered_map<Key, Node<Key> *>> mapNodes; 
 		
 		/*
 		map the remaining splay trees in the forest, where 
@@ -27,18 +27,18 @@ class Forest{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
-		get the size of an edge, which means the sum 
+		get the size of an node, which means the sum 
 		of its left subtree, right subtree + 1. 
 		*/
-		unsigned int size(Edge<Key> * edge){
+		unsigned int size(Node<Key> * node){
 			
-			if(!edge) return 0;
-			return edge->size;
+			if(!node) return 0;
+			return node->size;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
-		return the id of the root whose tree contains edge
+		return the id of the root whose tree contains node
 		
 		example: splaying [2:1] node
 			
@@ -47,31 +47,31 @@ class Forest{
 		  	 ([2:1] id2)                  ([2:1] id1)         ([1:2] id2)
 											
 		*/
-		unsigned int find(Edge<Key> * edge){	
+		unsigned int find(Node<Key> * node){	
 			
-			if(!edge) return 0;	
+			if(!node) return 0;	
 			
-			Edge<Key> * currentEdge = edge;
+			Node<Key> * currentNode = node;
 
-			while(currentEdge->parent){
-				currentEdge = currentEdge->parent;
+			while(currentNode->parent){
+				currentNode = currentNode->parent;
 			}
 
-			Tree<Key> * aux = mapTrees[currentEdge->id];
+			Tree<Key> * aux = mapTrees[currentNode->id];
 
 			if(aux){
-				std::swap(currentEdge->id, edge->id);
-				aux->splay(edge);
-				mapTrees[edge->id] = aux;
+				std::swap(currentNode->id, node->id);
+				aux->splay(node);
+				mapTrees[node->id] = aux;
 			} 
 			
-			return edge->id;
+			return node->id;
 		}   
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
-		return the rank/order of an edge in the tree
+		return the rank/order of an node in the tree
 		
 		example: splaying [2:1] node
 			
@@ -79,31 +79,31 @@ class Forest{
 		      \             ▶▶▶            \            ▶▶▶        /
 		  	 ([2:1] id2)                  ([2:1] id1)         ([1:2] id2)
 		*/
-		unsigned int order(Edge<Key> * edge){
+		unsigned int order(Node<Key> * node){
 			
-			Edge<Key> * currentEdge = edge;
+			Node<Key> * currentNode = node;
 
-			while(currentEdge->parent) currentEdge = currentEdge->parent;
+			while(currentNode->parent) currentNode = currentNode->parent;
 
-			Tree<Key> * aux = mapTrees[currentEdge->id];
+			Tree<Key> * aux = mapTrees[currentNode->id];
 			
 			if(aux){
-				std::swap(currentEdge->id, edge->id);
-				aux->splay(edge);
-				mapTrees[edge->id] = aux;
+				std::swap(currentNode->id, node->id);
+				aux->splay(node);
+				mapTrees[node->id] = aux;
 			} 
 
-			return size(edge->left) + 1;
+			return size(node->left) + 1;
 		}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//bring the edge that contains u to the front of the euler tour
+		//bring the node that contains u to the front of the euler tour
 		Tree<Key> * bringToFront(Tree<Key> * tree, Key u){
 			
 			if(!tree) return nullptr;
 			
-			unsigned int position = order(mapEdges[u][u]);
+			unsigned int position = order(mapNodes[u][u]);
 			
 			mapTrees.erase(tree->root->id);
 
@@ -138,8 +138,8 @@ class Forest{
 			Tree<Key> * vu = new Tree<Key>(v, u, ++id);
 			uv->root->isLevel = true;
 
-			this->mapEdges[u][v] = uv->root;
-			this->mapEdges[v][u] = vu->root;
+			this->mapNodes[u][v] = uv->root;
+			this->mapNodes[v][u] = vu->root;
 
 			tree1->join(uv);
 			tree1->join(tree2);
@@ -156,7 +156,7 @@ class Forest{
 
 			for(unsigned int i = 0; i < n; ++i){
 				vv = new Tree<Key>(vertices[i], vertices[i], ++id);
-				this->mapEdges[vertices[i]][vertices[i]] = vv->root;
+				this->mapNodes[vertices[i]][vertices[i]] = vv->root;
 				this->mapTrees[vv->root->id] = vv;
 			}
 		}
@@ -167,19 +167,19 @@ class Forest{
 		*/
 		bool isConnected(Key u, Key v){
 
-			unsigned int uTreeID = find(mapEdges[u][u]);
-			unsigned int vTreeID = find(mapEdges[v][v]);
+			unsigned int uTreeID = find(mapNodes[u][u]);
+			unsigned int vTreeID = find(mapNodes[v][v]);
 
 			if(uTreeID == vTreeID){
 
 				Tree<Key> * uTree = mapTrees[uTreeID];
 				Tree<Key> * vTree = mapTrees[vTreeID];
 
-				this->mapEdges[u][u]->isIncidentToReserveEdge = true;
-				this->mapEdges[v][v]->isIncidentToReserveEdge = true;
+				this->mapNodes[u][u]->isIncidentToReserveNode = true;
+				this->mapNodes[v][v]->isIncidentToReserveNode = true;
 
-				uTree->splay(mapEdges[u][u]);
-				vTree->splay(mapEdges[v][v]);
+				uTree->splay(mapNodes[u][u]);
+				vTree->splay(mapNodes[v][v]);
 
 				return true;
 			} 
@@ -195,10 +195,10 @@ class Forest{
 			
 			if(u > v) std::swap(u, v);
 			
-			edgeSet.insert({u, v});
+			nodeSet.insert({u, v});
 
-			Tree<Key> * tree1 = mapTrees[find(mapEdges[u][u])];
-			Tree<Key> * tree2 = mapTrees[find(mapEdges[v][v])];
+			Tree<Key> * tree1 = mapTrees[find(mapNodes[u][u])];
+			Tree<Key> * tree2 = mapTrees[find(mapNodes[v][v])];
 
 			tree1 = bringToFront(tree1, u);
 			tree2 = bringToFront(tree2, v);
@@ -207,19 +207,19 @@ class Forest{
 		}
 //+++++++++++++++a++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//cut the edge with u and v ends
+		//cut the node with u and v ends
 		void cut(Key u, Key v){
 
 			if(!isConnected(u, v)) return;
 			
 			if(u > v) std::swap(u, v);
 			
-			edgeSet.erase({u, v});
+			nodeSet.erase({u, v});
 
-			unsigned int uvPosition = order(mapEdges[u][v]);
-			unsigned int vuPosition = order(mapEdges[v][u]);
+			unsigned int uvPosition = order(mapNodes[u][v]);
+			unsigned int vuPosition = order(mapNodes[v][u]);
 
-			unsigned int uvID = find(mapEdges[u][v]);
+			unsigned int uvID = find(mapNodes[u][v]);
 
 			Tree<Key> * tree = mapTrees[uvID];
 
@@ -242,8 +242,8 @@ class Forest{
 				mapTrees[split3.first->root->id] = split3.first;
 			}
 
-			mapEdges[u].erase(v);
-			mapEdges[v].erase(u);
+			mapNodes[u].erase(v);
+			mapNodes[v].erase(u);
 
 			delete(split2.first);
 			delete(split4.first);
@@ -252,14 +252,14 @@ class Forest{
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		
-		//print all the edges from the forest
+		//print all the nodes from the forest
 		void print(){
 			
-			auto edge = edgeSet.begin();
-			std::cout << edge->first << " " << edge->second;
+			auto node = nodeSet.begin();
+			std::cout << node->first << " " << node->second;
 			
-			for (std::advance(edge, 1); edge != edgeSet.end(); ++edge){
-			  	std::cout << "  " << edge->first << " " << edge->second;
+			for (std::advance(node, 1); node != nodeSet.end(); ++node){
+			  	std::cout << "  " << node->first << " " << node->second;
 			}
 
 			std::cout << '\n';
@@ -280,9 +280,9 @@ class Forest{
 			}
 		}
 
-		bool hasEdge(Key u, Key v){
+		bool hasNode(Key u, Key v){
 			
-			if(mapEdges[u][v]) return true;
+			if(mapNodes[u][v]) return true;
 			return false;
 		}
 
@@ -290,17 +290,17 @@ class Forest{
 
 		Tree<Key> * getTreeContaining(Key u){
 			
-			Tree<Key> * tree = mapTrees[find(mapEdges[u][u])];
+			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
 			return tree;
 		}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		void decreaseEdgeLevelCount(Key u){
+		void decreaseNodeLevelCount(Key u){
 			
-			Tree<Key> * tree = mapTrees[find(mapEdges[u][u])];
-			tree->splay(mapEdges[u][u]);
-			mapEdges[u][u]->isIncidentToReserveEdge = false;
-			mapEdges[u][u]->setReserveEdgesCount();
+			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
+			tree->splay(mapNodes[u][u]);
+			mapNodes[u][u]->isIncidentToReserveNode = false;
+			mapNodes[u][u]->setReserveNodesCount();
 		}
 };
