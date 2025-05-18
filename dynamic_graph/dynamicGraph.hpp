@@ -27,48 +27,48 @@ class DynamicGraph{
 			this->mapEdgeLevels[v][u] = level;
 		}
 
-		void decreaseEdgesLevel(Tree<Key> * treeU, unsigned int i){
+		void decreaseEdgesLevel(Tree<Key> * uTree, unsigned int i){
 			
-			Edge<Key> * edgeToSplay = getEdgeWithIsLevelTrue(treeU->root);
+			Edge<Key> * edgeToSplay = getEdgeWithIsLevelTrue(uTree->root);
 			
-			treeU->splay(edgeToSplay);
-			treeU->root->isLevel = 0;
-			treeU->root->setEdgeLevelCount();
+			uTree->splay(edgeToSplay);
+			uTree->root->isLevel = 0;
+			uTree->root->setEdgeLevelCount();
 
-			Key u = treeU->root.first;
-			Key v = treeU->root.second;
+			Key u = uTree->root.first;
+			Key v = uTree->root.second;
 			updateMapEdgeLevels(u, v, i - 1);
 			this->forests[i - 1]->link(u, v);
-		}
+		}	
 		
 		void replaceEdge(Key u, Key v, unsigned int edgeLevel){
 			
 			for(unsigned int i = edgeLevel; i <= this->maxLevel; ++i){
 				
-				Tree<Key> * treeU = this->forests[i]->getTreeContaining(u);
+				Tree<Key> * uTree = this->forests[i]->getTreeContaining(u);
 				Tree<Key> * treeV = this->forests[i]->getTreeContaining(v);
 
-				if(treeU->size() > treeV->size()){
-					std::swap(treeU, treeV);
+				if(uTree->size() > treeV->size()){
+					std::swap(uTree, treeV);
 					std::swap(u, v);
 				} 
 				
-				while(treeU->root->edgesAtLevel > 0){
-					decreaseEdgesLevel(treeU, i);
+				while(uTree->root->edgesAtLevel > 0){
+					decreaseEdgesLevel(uTree, i);
 				}
 
 				bool edgeIsReplaced = false;
 				
-				while(treeU->root->reserveEdges > 0 && !edgeIsReplaced){
+				while(uTree->root->reserveEdges > 0 && !edgeIsReplaced){
 					
-					Edge<Key> * x = treeU->getReserveEdge(treeU->root);
+					Edge<Key> * x = uTree->getReserveEdge(uTree->root);
 					x->isIncidentToReserveEdge = false;
 					x->setReserveEdgesCount();
-					vector<std::pair<Key, Key>> reserveEdgesToBeRemoved;
+					vector<Key> reserveEdgesToBeRemoved;
 					
-					for (Key y : this->adjacencyLists[i]->at(x)){
+					for (Key & y : this->adjacencyLists[i]->at(x)){
 						
-						reserveEdgesToBeRemoved.push_back({x, y});	
+						reserveEdgesToBeRemoved.push_back(y);	
 						
 						//y does not belong to Tv 
 						if(this->forests[i]->isConnected(x, y)){
@@ -80,11 +80,13 @@ class DynamicGraph{
 								this->forests[j]->link(x, y);
 							}
 							edgeIsReplaced = true;
+							break;
 						}
 					}
 					
-					for(std::pair<Key, Key> edge : reserveEdgesToBeRemoved){
-						this->adjacencyLists[i]->remove(edge.first, edge.second);
+					for(Key & y : reserveEdgesToBeRemoved){
+						this->adjacencyLists[i]->remove(x, y);
+						this->forests[i]->decreaseEdgeLevelCount(y);
 					}
 				}
 			}
