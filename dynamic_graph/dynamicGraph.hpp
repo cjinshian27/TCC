@@ -65,7 +65,7 @@ class DynamicGraph{
 					Edge<Key> * x = uTree->getReserveEdge(uTree->root);
 					x->isIncidentToReserveEdge = false;
 					x->setReserveEdgesCount();
-					vector<Key> reserveEdgesToBeRemoved;
+					std::vector<Key> reserveEdgesToBeRemoved;
 					
 					for (Key & y : this->adjacencyLists[i]->at(x)){
 						
@@ -96,9 +96,9 @@ class DynamicGraph{
 	public:
 
 		// instantiate a dynamic graph in O(lg(n)) time.
-		DynamicGraph(vector<Key> & vertices){
+		DynamicGraph(std::vector<Key> & vertices){
 			
-			this->maxLevel = static_cast<int>(std::ceil(std::log2(n))); 
+			this->maxLevel = static_cast<int>(std::ceil(std::log2(vertices.size()))); 
 
 			this->adjacencyLists = std::vector<AdjacencyList<Key> *>(this->maxLevel + 1);
 			this->forests = std::vector<Forest<Key> *>(this->maxLevel + 1);

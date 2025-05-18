@@ -4,7 +4,7 @@ class AdjacencyList{
 
 	private:
 
-		unordered_map<int, unordered_set<int>> adjList;
+		std::unordered_map<int, std::unordered_set<int>> adjList;
 
 	public:
 
