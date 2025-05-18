@@ -179,7 +179,7 @@ class DynamicGraph{
 			printStylishLine();
 			std::cout << "FORESTS: \n\n";
 			for(int i = this->maxLevel; i >= 0; --i){
-				std::cout << "FOREST LEVEL" << i + 1 << ":\n";
+				std::cout << "FOREST LEVEL " << i + 1 << ":\n";
 				this->forests[i]->printTrees();
 				std::cout << "**************************************************\n";
 			}
@@ -188,7 +188,7 @@ class DynamicGraph{
 
 			std::cout << "ADJACENCY LISTS \n\n";
 			for(int i = this->maxLevel; i >= 0; --i){
-				std::cout << "ADJACENCY LIST LEVEL" << i + 1 << ":\n";
+				std::cout << "ADJACENCY LIST LEVEL " << i + 1 << ":\n";
 				this->adjacencyLists[i]->print();
 				std::cout << "**************************************************\n";
 			}
