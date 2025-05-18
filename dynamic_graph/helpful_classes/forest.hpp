@@ -254,12 +254,16 @@ class Forest{
 		
 		//print all the nodes from the forest
 		void print(){
-			
+
+			if(nodeSet.empty()){
+				std::cout << "NO EDGES WERE CREATED YET!\n";
+				return;
+			}
 			auto node = nodeSet.begin();
 			std::cout << node->first << " " << node->second;
 			
 			for (std::advance(node, 1); node != nodeSet.end(); ++node){
-			  	std::cout << "  " << node->first << " " << node->second;
+				std::cout << "  " << node->first << " " << node->second;
 			}
 
 			std::cout << '\n';
