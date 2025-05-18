@@ -172,15 +172,6 @@ class Forest{
 
 			if(uTreeID == vTreeID){
 
-				Tree<Key> * uTree = mapTrees[uTreeID];
-				Tree<Key> * vTree = mapTrees[vTreeID];
-
-				this->mapNodes[u][u]->isIncidentToReserveNode = true;
-				this->mapNodes[v][v]->isIncidentToReserveNode = true;
-
-				uTree->splay(mapNodes[u][u]);
-				vTree->splay(mapNodes[v][v]);
-
 				return true;
 			} 
 
@@ -306,5 +297,9 @@ class Forest{
 			tree->splay(mapNodes[u][u]);
 			mapNodes[u][u]->isIncidentToReserveNode = false;
 			mapNodes[u][u]->setReserveNodesCount();
+		}
+
+		Node<Key> * getNode(Key u){
+			return this->mapNodes[u][u];
 		}
 };

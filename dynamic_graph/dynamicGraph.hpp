@@ -125,12 +125,25 @@ class DynamicGraph{
 		void add(Key u, Key v){
 
 			updateMapNodeLevels(u, v, this->maxLevel);
+			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
 
-			if(this->forests[this->maxLevel]->isConnected(u, v)){
+			if(maxLevelForest->isConnected(u, v)){
 				this->adjacencyLists[this->maxLevel]->add(u, v);
+
+				Tree<Key> * uTree = maxLevelForest->getTreeContaining(u);
+				Tree<Key> * vTree = maxLevelForest->getTreeContaining(v);
+
+				Node<Key> * uu = maxLevelForest->getNode(u);
+				Node<Key> * vv = maxLevelForest->getNode(v);
+
+				uu->isIncidentToReserveNode = true;
+				vv->isIncidentToReserveNode = true;
+				
+				uTree->splay(uu);
+				vTree->splay(vv);
 			} 
 			else{
-				this->forests[this->maxLevel]->link(u, v);
+				maxLevelForest->link(u, v);
 			} 
 		}
 

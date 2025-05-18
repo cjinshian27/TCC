@@ -40,7 +40,7 @@ class Node{
 		//print the node in the (u, v) format
 		void print(){
 
-			std::cout << "(" << this->first << " " << this->second << ")" << '\n';
+			std::cout << "(" << this->first << " " << this->second << " | " << isLevel << " " << isIncidentToReserveNode << ")" << '\n';
 		}
 
 		void setReserveNodesCount(){
