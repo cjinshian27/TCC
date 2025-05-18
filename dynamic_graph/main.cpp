@@ -50,6 +50,7 @@ void decode(){
 				break;
 
 			case 4:
+				dynamicGraph->print();
 				break;
 		}
 	}
