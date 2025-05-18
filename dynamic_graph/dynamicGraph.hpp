@@ -142,4 +142,4 @@ class DynamicGraph{
 			Forest<Key> * forest = this->forests[this->maxLevel];
 			return forest->isConnected(u, v);
 		}
-}
+};

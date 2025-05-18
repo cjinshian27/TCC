@@ -175,7 +175,7 @@ class Tree{
 			this->root = nullptr;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		Tree(Key u, Key v, unsigned int id, bool isLevel){
+		Tree(Key u, Key v, unsigned int id){
 			this->root = new Edge<Key>(u, v, id);
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
