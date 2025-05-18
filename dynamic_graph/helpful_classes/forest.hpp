@@ -294,4 +294,13 @@ class Forest{
 			Tree<Key> * tree = mapTrees[find(mapEdges[u][u])];
 			return tree;
 		}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+		Tree<Key> * decreaseEdgeLevelCount(Key u){
+			
+			Tree<Key> * tree = mapTrees[find(mapEdges[u][u])];
+			mapEdges[u][u]->isIncidentToReserveEdge = false;
+			tree->splay(mapEdges[u][u]);
+		}
 };
