@@ -336,10 +336,10 @@ class Tree{
 			if(root->isLevel) return root;
 
 			if(root->left && root->left->edgesAtLevel > 0){
-				return decreaseEdgesLevel(root->left);
+				return getEdgeWithIsLevelTrue(root->left);
 			}
 			if(root->right && root->right->edgesAtLevel > 0){
-				return decreaseEdgesLevel(root->right);
+				return getEdgeWithIsLevelTrue(root->right);
 			}
 		}
 		

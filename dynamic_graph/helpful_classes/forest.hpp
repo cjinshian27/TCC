@@ -136,7 +136,7 @@ class Forest{
 			
 			Tree<Key> * uv = new Tree<Key>(u, v, ++id);
 			Tree<Key> * vu = new Tree<Key>(v, u, ++id);
-			uv->isLevel = true;
+			uv->root->isLevel = true;
 
 			this->mapEdges[u][v] = uv->root;
 			this->mapEdges[v][u] = vu->root;

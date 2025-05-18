@@ -29,14 +29,14 @@ class DynamicGraph{
 
 		void decreaseEdgesLevel(Tree<Key> * uTree, unsigned int i){
 			
-			Edge<Key> * edgeToSplay = getEdgeWithIsLevelTrue(uTree->root);
+			Edge<Key> * edgeToSplay = uTree->getEdgeWithIsLevelTrue(uTree->root);
 			
 			uTree->splay(edgeToSplay);
 			uTree->root->isLevel = 0;
 			uTree->root->setEdgeLevelCount();
 
-			Key u = uTree->root.first;
-			Key v = uTree->root.second;
+			Key u = uTree->root->edge.first;
+			Key v = uTree->root->edge.second;
 			updateMapEdgeLevels(u, v, i - 1);
 			this->forests[i - 1]->link(u, v);
 		}	
@@ -61,14 +61,15 @@ class DynamicGraph{
 
 				bool edgeIsReplaced = false;
 				
-				while(uTree->root->reserveEdgesAtLevel > 0 && !edgeIsReplaced){
+				while(uTree->root->reserveEdges > 0 && !edgeIsReplaced){
 					
-					Edge<Key> * x = uTree->getReserveEdge(uTree->root);
-					x->isIncidentToReserveEdge = false;
-					x->setReserveEdgesCount();
+					Edge<Key> * xVertex = uTree->getReserveEdge(uTree->root);
+					xVertex->isIncidentToReserveEdge = false;
+					xVertex->setReserveEdgesCount();
 					std::vector<Key> reserveEdgesToBeRemoved;
-					
-					for (Key & y : this->adjacencyLists[i]->at(x)){
+					Key x = xVertex->edge.first;
+
+					for (Key & y : this->adjacencyLists[i][x]){
 						
 						reserveEdgesToBeRemoved.push_back(y);	
 						

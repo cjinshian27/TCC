@@ -15,7 +15,7 @@ class Edge{
 		unsigned int id;
 		unsigned int size;
 		unsigned int edgesAtLevel;
-		unsigned int reserveEdgesAtLevel;
+		unsigned int reserveEdges;
 		std::pair<Key, Key> edge;
 		
 		Edge * left = nullptr;
