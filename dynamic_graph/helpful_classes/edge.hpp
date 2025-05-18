@@ -104,5 +104,4 @@ class Edge{
 				this->size = 1;
 			}
 		}
-
-}
+};
