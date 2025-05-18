@@ -105,7 +105,4 @@ class Edge{
 			}
 		}
 
-		std::pair<Key, Key> getEnds(){
-			return {this->u, this->v};
-		}
 }
