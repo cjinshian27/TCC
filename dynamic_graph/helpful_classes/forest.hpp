@@ -173,7 +173,7 @@ class Forest{
 
 			if(uTreeID == vTreeID){
 
-				Tree<Key> * uTree = mapTrees[uTreeId];
+				Tree<Key> * uTree = mapTrees[uTreeID];
 				Tree<Key> * vTree = mapTrees[vTreeID];
 
 				this->mapEdges[u][u]->isIncidentToReserveEdge = true;
