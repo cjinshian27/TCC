@@ -351,11 +351,11 @@ class Tree{
 			if(root->isIncidentToReserveEdge) return root;
 			
 			if(root->left && root->left->reserveEdges > 0){
-				return getReserveEdge(forest, root->left);
+				return getReserveEdge(root->left);
 			}
 
 			if(root->right && root->right->reserveEdges > 0){
-				return getReserveEdge(forest, root->right);
+				return getReserveEdge(root->right);
 			}
 			
 		}
