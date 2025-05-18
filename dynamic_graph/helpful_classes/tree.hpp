@@ -77,9 +77,7 @@ class Tree{
 		 		B->parent = y;
 		 	}
 		 	
-		 	y->setSize();
-			y->setNodeLevelCount();
-			y->setReserveNodesCount();
+		 	y->updateValues();
 
 		 	x->parent = parent;
 
@@ -112,9 +110,7 @@ class Tree{
 				B->parent = y;
 			}
 			
-			y->setSize();
-			y->setNodeLevelCount();
-			y->setReserveNodesCount();
+			y->updateValues();
 			
 			x->parent = parent;
 
@@ -233,9 +229,7 @@ class Tree{
 						node = leftRotate(aux->parent);
 					}
 
-					node->setSize();
-					node->setNodeLevelCount();
-					node->setReserveNodesCount();
+					node->updateValues();
 
 					if(grandGrandParent){
 						if(grandGrandParent->right == grandparent){
@@ -244,18 +238,14 @@ class Tree{
 						else{
 							grandGrandParent->left = node;
 						}
-						grandGrandParent->setSize();
-						grandGrandParent->setNodeLevelCount();
-						grandGrandParent->setReserveNodesCount();
+						grandGrandParent->updateValues();
 					}
 
 				}
 			}
 
 			this->root = node;
-			this->root->setSize();
-			this->root->setNodeLevelCount();
-			this->root->setReserveNodesCount();
+			this->root->updateValues();
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//return the k-th node
@@ -288,9 +278,7 @@ class Tree{
 			if(aux) aux->parent = nullptr;
 
 			this->root->right = nullptr;
-			this->root->setSize();
-			this->root->setNodeLevelCount();
-			this->root->setReserveNodesCount();
+			this->root->updateValues();
 
 			Tree<Key> * tree1 = new Tree<Key>(this->root);
 
@@ -314,9 +302,7 @@ class Tree{
 				this->root->right = thatTree->root;
 				this->root->right->parent = this->root;
 			}
-			this->root->setSize();
-			this->root->setNodeLevelCount();
-			this->root->setReserveNodesCount();
+			this->root->updateValues();
 		}		
 
 		//call the print function

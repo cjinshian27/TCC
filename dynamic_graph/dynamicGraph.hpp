@@ -137,9 +137,9 @@ class DynamicGraph{
 				Node<Key> * vv = maxLevelForest->getNode(v);
 
 				uu->isIncidentToReserveNode = true;
-				vv->isIncidentToReserveNode = true;
-				
 				uTree->splay(uu);
+				
+				vv->isIncidentToReserveNode = true;
 				vTree->splay(vv);
 			} 
 			else{
