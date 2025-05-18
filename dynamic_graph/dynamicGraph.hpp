@@ -161,7 +161,7 @@ class DynamicGraph{
 			std::cout << "FORESTS: \n\n";
 			for(unsigned int i = 0; i <= this->maxLevel; ++i){
 				std::cout << "FOREST " << i + 1 << ":\n";
-				this->forests[i]->print();
+				this->forests[i]->printTrees();
 				std::cout << "**************************************************\n";
 			}
 
