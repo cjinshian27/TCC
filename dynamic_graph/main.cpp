@@ -5,9 +5,11 @@
 #include <string>
 #include <iterator>
 #include <set>
+#include <unordered_set>
+#include <cmath>
 #include "dynamicGraph.hpp"
 
-DynamicForest<int> * buildDynamicGraph(){
+DynamicGraph<int> * buildDynamicGraph(){
 	
 	unsigned int n;
 	
@@ -39,12 +41,12 @@ void decode(){
 		
 			case 2:
 				std::cin >> u >> v;
-				dynamicGraph->link(u, v);
+				dynamicGraph->add(u, v);
 				break;
 			
 			case 3:
 				std::cin >> u >> v;
-				dynamicForest->remove(u, v);
+				dynamicGraph->remove(u, v);
 				break;
 
 			case 4:

@@ -11,6 +11,7 @@ class Edge{
 	public:
 	
 		bool isLevel;
+		bool isIncidentToReserveEdge;
 		unsigned int id;
 		unsigned int size;
 		unsigned int edgesAtLevel;

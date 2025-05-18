@@ -1,6 +1,3 @@
-#include <iostream>
-#include <utility>
-#include <cmath>
 #include "./helpful_classes/edge.hpp"
 #include "./helpful_classes/tree.hpp"
 #include "./helpful_classes/forest.hpp"
@@ -60,7 +57,7 @@ class DynamicGraph{
 
 				bool edgeIsReplaced = false;
 				
-				while(uTree->root->reserveEdges > 0 && !edgeIsReplaced){
+				while(uTree->root->reserveEdgesAtLevel > 0 && !edgeIsReplaced){
 					
 					Edge<Key> * x = uTree->getReserveEdge(uTree->root);
 					x->isIncidentToReserveEdge = false;
