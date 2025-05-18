@@ -25,6 +25,8 @@ class DynamicGraph{
 			this->mapEdgeLevels[v][u] = level;
 		}
 
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 		void decreaseEdgesLevel(Tree<Key> * uTree, unsigned int i){
 			
 			Edge<Key> * edgeToSplay = getEdgeWithIsLevelTrue(uTree->root);
@@ -38,7 +40,9 @@ class DynamicGraph{
 			updateMapEdgeLevels(u, v, i - 1);
 			this->forests[i - 1]->link(u, v);
 		}	
-		
+
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 		void replaceEdge(Key u, Key v, unsigned int edgeLevel){
 			
 			for(unsigned int i = edgeLevel; i <= this->maxLevel; ++i){
@@ -92,6 +96,8 @@ class DynamicGraph{
 
 	public:
 
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 		// instantiate a dynamic graph in O(lg(n)) time.
 		DynamicGraph(std::vector<Key> & vertices){
 			
@@ -106,6 +112,8 @@ class DynamicGraph{
 			}
 		}
 
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 		// add edge (u, v) in O(lg(n))
 		void add(Key u, Key v){
 
@@ -118,6 +126,8 @@ class DynamicGraph{
 				this->forests[this->maxLevel]->link(u, v);
 			} 
 		}
+
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		void remove(Key u, Key v){
 			
@@ -135,6 +145,8 @@ class DynamicGraph{
 				this->adjacencyLists[this->maxLevel]->remove(u, v);
 			}
 		}
+
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		// check if u and v are connected in O(lg(n))
 		bool isConnected(Key u, Key v){
