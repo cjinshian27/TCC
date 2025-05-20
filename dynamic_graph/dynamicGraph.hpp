@@ -30,7 +30,21 @@ class DynamicGraph{
 		this->mapNodeLevels[u][v] = level;
 		this->mapNodeLevels[v][u] = level;
 	}
-	
+
+	void updateIncidentToReserveNodes(Forest<Key> * maxLevelForest, Key u, Key v){
+		Tree<Key> * uTree = maxLevelForest->getTreeContaining(u);
+		Tree<Key> * vTree = maxLevelForest->getTreeContaining(v);
+
+		Node<Key> * uu = maxLevelForest->getNode(u);
+		Node<Key> * vv = maxLevelForest->getNode(v);
+
+		uu->isIncidentToReserveNode = true;
+		uTree->splay(uu);
+
+		vv->isIncidentToReserveNode = true;
+		vTree->splay(vv);
+	}
+
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 	void decreaseNodesLevel(Tree<Key> * uTree, unsigned int i){
@@ -130,17 +144,7 @@ class DynamicGraph{
 			if(maxLevelForest->isConnected(u, v)){
 				this->adjacencyLists[this->maxLevel]->add(u, v);
 
-				Tree<Key> * uTree = maxLevelForest->getTreeContaining(u);
-				Tree<Key> * vTree = maxLevelForest->getTreeContaining(v);
-
-				Node<Key> * uu = maxLevelForest->getNode(u);
-				Node<Key> * vv = maxLevelForest->getNode(v);
-
-				uu->isIncidentToReserveNode = true;
-				uTree->splay(uu);
-
-				vv->isIncidentToReserveNode = true;
-				vTree->splay(vv);
+				updateIncidentToReserveNodes(maxLevelForest, u, v);
 			} 
 			else{
 				maxLevelForest->link(u, v);
