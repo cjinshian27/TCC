@@ -32,17 +32,22 @@ class DynamicGraph{
 	}
 
 	void updateIncidentToReserveNodes(Forest<Key> * maxLevelForest, Key u, Key v){
+		
 		Tree<Key> * uTree = maxLevelForest->getTreeContaining(u);
 		Tree<Key> * vTree = maxLevelForest->getTreeContaining(v);
 
 		Node<Key> * uu = maxLevelForest->getNode(u);
 		Node<Key> * vv = maxLevelForest->getNode(v);
 
-		uu->isIncidentToReserveNode = true;
-		uTree->splay(uu);
+		if(!uu->isIncidentToReserveNode){
+			uu->isIncidentToReserveNode = true;
+			uTree->splay(uu);
+		}
 
-		vv->isIncidentToReserveNode = true;
-		vTree->splay(vv);
+		if(!vv->isIncidentToReserveNode){
+			vv->isIncidentToReserveNode = true;
+			vTree->splay(vv);
+		}
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
