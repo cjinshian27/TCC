@@ -22,8 +22,8 @@ The dynamic graph accepts the following input:
 
 ```
 n
-x1
-x2
+x_1
+x_2
 .
 .
 .
