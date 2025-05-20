@@ -46,7 +46,7 @@ where:
 
 * **1 a b**: checks if the vertices a and b are connected;
 * **2 a b**: links the vertices a and b, thus creating the edge <a, b>;
-* **3 a b**: remove the edge <a, b>;
+* **3 a b**: removes the edge <a, b>;
 * **4**: prints out the forests (where each forest prints out their trees distinguished by their ID's) and the adjancency lists.
 
 ## How to test the dynamic graph
@@ -57,9 +57,10 @@ Once you have created a test file, simply run:
 make build
 ```
 
-to compile the main *cpp* file, and then run:
+to compile the main *cpp* file, then run:
 
 ```bash
 make run < t
 ```
-where *t* is the filename you have created.
+
+to see the output, where *t* is the filename you have created.
