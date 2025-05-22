@@ -299,6 +299,14 @@ class Forest{
 			mapNodes[u][u]->setReserveNodesCount();
 		}
 
+		void increaseIncidentToReserveNodeCount(Key u){
+			
+			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
+			tree->splay(mapNodes[u][u]);
+			mapNodes[u][u]->isIncidentToReserveNode = true;
+			mapNodes[u][u]->setReserveNodesCount();
+		}
+
 		Node<Key> * getNode(Key u){
 			return this->mapNodes[u][u];
 		}
