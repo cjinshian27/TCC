@@ -84,7 +84,7 @@ class DynamicGraph{
 				decreaseNodesLevel(uTree, i);
 			}
 				
-				bool nodeIsReplaced = false;
+			bool nodeIsReplaced = false;
 				
 			while(uTree->root->reserveNodes > 0 && !nodeIsReplaced){
 				
@@ -112,9 +112,13 @@ class DynamicGraph{
 					}
 				}
 				
-				for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
+				for (Key & y : reserveNodesToBeRemoved) {
 					this->adjacencyLists[i]->remove(x, y);
 					this->forests[i]->decreaseIncidentToReserveNodeCount(y);
+				}
+
+				if(this->adjacencyLists[i]->adjList[x].empty()){
+					this->forests[i]->decreaseIncidentToReserveNodeCount(x);
 				}
 			}
 		}
