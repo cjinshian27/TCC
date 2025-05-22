@@ -132,7 +132,7 @@ class DynamicGraph{
 			this->adjacencyLists = std::vector<AdjacencyList<Key> *>(this->maxLevel + 1);
 			this->forests = std::vector<Forest<Key> *>(this->maxLevel + 1);
 			
-			for(int i = 0; i <= this->maxLevel; ++i){
+			for(unsigned int i = 0; i <= this->maxLevel; ++i){
 				adjacencyLists[i] = new AdjacencyList<Key>();
 				forests[i] = new Forest<Key>(vertices);
 			}
@@ -165,7 +165,7 @@ class DynamicGraph{
 			mapNodeLevels[v].erase(u);
 
 			if(this->forests[this->maxLevel]->hasNode(u, v)){
-				for(int i = nodeLevel; i <= this->maxLevel; ++i)
+				for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i)
 					 this->forests[i]->cut(u, v);
 	
 				replaceNode(u, v, nodeLevel);
