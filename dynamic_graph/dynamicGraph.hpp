@@ -31,7 +31,7 @@ class DynamicGraph{
 		this->mapNodeLevels[v][u] = level;
 	}
 
-	void updateIncidentToReserveNodes(Forest<Key> * maxLevelForest, Key u, Key v){
+	void increaseIncidentToReserveNodes(Forest<Key> * maxLevelForest, Key u, Key v){
 		
 		Tree<Key> * uTree = maxLevelForest->getTreeContaining(u);
 		Tree<Key> * vTree = maxLevelForest->getTreeContaining(v);
@@ -46,6 +46,25 @@ class DynamicGraph{
 
 		if(!vv->isIncidentToReserveNode){
 			vv->isIncidentToReserveNode = true;
+			vTree->splay(vv);
+		}
+	}
+
+	void decreaseIncidentToReserveNodes(Forest<Key> * maxLevelForest, Key u, Key v){
+		
+		Tree<Key> * uTree = maxLevelForest->getTreeContaining(u);
+		Tree<Key> * vTree = maxLevelForest->getTreeContaining(v);
+
+		Node<Key> * uu = maxLevelForest->getNode(u);
+		Node<Key> * vv = maxLevelForest->getNode(v);
+
+		if(uu->isIncidentToReserveNode){
+			uu->isIncidentToReserveNode = false;
+			uTree->splay(uu);
+		}
+
+		if(vv->isIncidentToReserveNode){
+			vv->isIncidentToReserveNode = false;
 			vTree->splay(vv);
 		}
 	}
@@ -82,7 +101,7 @@ class DynamicGraph{
 			
 			while(uTree->root->nodesAtLevel > 0){
 				decreaseNodesLevel(uTree, i);
-				}
+			}
 				
 				bool nodeIsReplaced = false;
 				
@@ -149,7 +168,7 @@ class DynamicGraph{
 			if(maxLevelForest->isConnected(u, v)){
 				this->adjacencyLists[this->maxLevel]->add(u, v);
 
-				updateIncidentToReserveNodes(maxLevelForest, u, v);
+				increaseIncidentToReserveNodes(maxLevelForest, u, v);
 			} 
 			else{
 				maxLevelForest->link(u, v);
@@ -172,6 +191,7 @@ class DynamicGraph{
 			}
 			else{
 				this->adjacencyLists[this->maxLevel]->remove(u, v);
+				decreaseIncidentToReserveNodes(this->forests[this->maxLevel], u, v);
 			}
 		}
 
