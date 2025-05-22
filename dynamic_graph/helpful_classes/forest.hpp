@@ -291,7 +291,7 @@ class Forest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		void decreaseNodeLevelCount(Key u){
+		void decreaseIncidentToReserveNodeCount(Key u){
 			
 			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
 			tree->splay(mapNodes[u][u]);

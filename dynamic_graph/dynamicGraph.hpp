@@ -50,25 +50,6 @@ class DynamicGraph{
 		}
 	}
 
-	void decreaseIncidentToReserveNodes(Forest<Key> * maxLevelForest, Key u, Key v){
-		
-		Tree<Key> * uTree = maxLevelForest->getTreeContaining(u);
-		Tree<Key> * vTree = maxLevelForest->getTreeContaining(v);
-
-		Node<Key> * uu = maxLevelForest->getNode(u);
-		Node<Key> * vv = maxLevelForest->getNode(v);
-
-		if(uu->isIncidentToReserveNode){
-			uu->isIncidentToReserveNode = false;
-			uTree->splay(uu);
-		}
-
-		if(vv->isIncidentToReserveNode){
-			vv->isIncidentToReserveNode = false;
-			vTree->splay(vv);
-		}
-	}
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 	void decreaseNodesLevel(Tree<Key> * uTree, unsigned int i){
@@ -105,39 +86,39 @@ class DynamicGraph{
 				
 				bool nodeIsReplaced = false;
 				
-				while(uTree->root->reserveNodes > 0 && !nodeIsReplaced){
-					
-					Node<Key> * xVertex = uTree->getReserveNode(uTree->root);
-					xVertex->isIncidentToReserveNode = false;
-					xVertex->setReserveNodesCount();
-					std::vector<Key> reserveNodesToBeRemoved;
-					Key x = xVertex->first;
+			while(uTree->root->reserveNodes > 0 && !nodeIsReplaced){
+				
+				Node<Key> * xVertex = uTree->getReserveNode(uTree->root);
+				xVertex->isIncidentToReserveNode = false;
+				xVertex->setReserveNodesCount();
+				std::vector<Key> reserveNodesToBeRemoved;
+				Key x = xVertex->first;
 
-					for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
-						
-						reserveNodesToBeRemoved.push_back(y);	
-						
-						//y does not belong to Tv 
-						if(this->forests[i]->isConnected(x, y)){
-							updateMapNodeLevels(x, y, i - 1);
-							this->adjacencyLists[i - 1]->add(x, y);
-						}
-						else{
-							for(unsigned int j = i; j <= this->maxLevel; ++j){
-								this->forests[j]->link(x, y);
-							}
-							nodeIsReplaced = true;
-							break;
-						}
-					}
+				for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
 					
-					for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
-						this->adjacencyLists[i]->remove(x, y);
-						this->forests[i]->decreaseNodeLevelCount(y);
+					reserveNodesToBeRemoved.push_back(y);	
+					
+					//y does not belong to Tv 
+					if(this->forests[i]->isConnected(x, y)){
+						updateMapNodeLevels(x, y, i - 1);
+						this->adjacencyLists[i - 1]->add(x, y);
 					}
+					else{
+						for(unsigned int j = i; j <= this->maxLevel; ++j){
+							this->forests[j]->link(x, y);
+						}
+						nodeIsReplaced = true;
+						break;
+					}
+				}
+				
+				for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
+					this->adjacencyLists[i]->remove(x, y);
+					this->forests[i]->decreaseIncidentToReserveNodeCount(y);
 				}
 			}
 		}
+	}
 
 	public:
 
@@ -191,7 +172,8 @@ class DynamicGraph{
 			}
 			else{
 				this->adjacencyLists[this->maxLevel]->remove(u, v);
-				decreaseIncidentToReserveNodes(this->forests[this->maxLevel], u, v);
+				this->forests[this->maxLevel]->decreaseIncidentToReserveNodeCount(u);
+				this->forests[this->maxLevel]->decreaseIncidentToReserveNodeCount(v);
 			}
 		}
 
