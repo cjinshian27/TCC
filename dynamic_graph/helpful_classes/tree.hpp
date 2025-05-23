@@ -317,29 +317,25 @@ class Tree{
 
 		Node<Key> * getNodeWithIsLevelTrue(Node<Key> * root){
 			
-			if(!root) return nullptr;
 			if(root->isLevel) return root;
 
 			if(root->left && root->left->nodesAtLevel > 0){
 				return getNodeWithIsLevelTrue(root->left);
 			}
-			if(root->right && root->right->nodesAtLevel > 0){
+			else{
 				return getNodeWithIsLevelTrue(root->right);
 			}
-			return nullptr;
 		}
 		
 		Node<Key> * getReserveNode(Node<Key> * root){
 
-			if(!root) return nullptr;
 			if(root->isIncidentToReserveNode) return root;
 			
 			if(root->left && root->left->reserveNodes > 0){
 				return getReserveNode(root->left);
 			}
-			if(root->right && root->right->reserveNodes > 0){
+			else{
 				return getReserveNode(root->right);
 			}
-			return nullptr;
 		}
 };

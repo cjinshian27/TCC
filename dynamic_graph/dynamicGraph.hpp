@@ -50,8 +50,10 @@ class DynamicGraph{
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 	void replaceNode(Key u, Key v, unsigned int nodeLevel){
+		
+		bool nodeIsReplaced = false;
 			
-		for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i){
+		for(unsigned int i = nodeLevel; i <= this->maxLevel && !nodeIsReplaced; ++i){
 			
 			Tree<Key> * uTree = this->forests[i]->getTreeContaining(u);
 			Tree<Key> * treeV = this->forests[i]->getTreeContaining(v);
@@ -65,15 +67,13 @@ class DynamicGraph{
 				decreaseNodesLevel(uTree, i);
 			}
 				
-			bool nodeIsReplaced = false;
 				
 			while(uTree->root->reserveNodes > 0 && !nodeIsReplaced){
 				
-				Node<Key> * xVertex = uTree->getReserveNode(uTree->root);
-				xVertex->isIncidentToReserveNode = false;
-				xVertex->setReserveNodesCount();
+				Node<Key> * xxVertex = uTree->getReserveNode(uTree->root);
+				uTree->splay(xxVertex);
 				std::vector<Key> reserveNodesToBeRemoved;
-				Key x = xVertex->first;
+				Key x = xxVertex->first;
 
 				for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
 					
@@ -93,13 +93,18 @@ class DynamicGraph{
 					}
 				}
 				
+				//remove y nodes that are incident to x but not in vTree
 				for (Key & y : reserveNodesToBeRemoved) {
 					this->adjacencyLists[i]->remove(x, y);
 					this->forests[i]->decreaseIncidentToReserveNodeCount(y);
 				}
 
+				// if x is not incident to any other node of level i, then
+				// decrease the reserve node count
 				if(this->adjacencyLists[i]->adjList[x].empty()){
 					this->forests[i]->decreaseIncidentToReserveNodeCount(x);
+					xxVertex->isIncidentToReserveNode = false;
+					xxVertex->setReserveNodesCount();
 				}
 			}
 		}
@@ -171,6 +176,7 @@ class DynamicGraph{
 			return forest->isConnected(u, v);
 		}
 
+		// prints out all the dynamic graph in O(nlg(n))
 		void print(){
 			printStylishLine();
 			std::cout << "FORESTS: \n\n";
