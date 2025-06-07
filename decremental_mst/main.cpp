@@ -11,15 +11,26 @@
 
 DecrementalMST<int> * buildDecrementalMST(){
 	
-	unsigned int n;
+	unsigned int numberOfVertices;
+	unsigned int numberOfEdges;
 	
-	std::cin >> n;
-	std::vector<int> vertices(n);
+	std::cin >> numberOfVertices;
+	std::vector<int> vertices(numberOfVertices);
 	
-	for(unsigned int i = 0; i < n; ++i){
+	for(unsigned int i = 0; i < numberOfVertices; ++i){
 		std::cin >> vertices[i];
 	}
-	return new DecrementalMST<int>(vertices);
+
+	std::cin >> numberOfEdges;
+	
+	DecrementalMST<int> * decrementalMST = new DecrementalMST<int>(vertices);
+
+	unsigned int u, v, weight;
+
+	while(numberOfEdges--){
+		std::cin >> u >> v >> weight;
+		decrementalMST->link(u, v, weight);
+	}
 }
 
 //decode function
@@ -42,18 +53,13 @@ void decode(){
 					std::cout << u << " and " << v << " are NOT connected!" << '\n';
 				} 
 				break;
-		
-			case 2:
-				std::cin >> u >> v >> weight;
-				decrementalMST->add(u, v, weight);
-				break;
 			
-			case 3: 
+			case 2: 
 				std::cin >> u >> v;
 				decrementalMST->remove(u, v);
 				break;
 
-			case 4:
+			case 3:
 				decrementalMST->print();
 				break;
 		}
