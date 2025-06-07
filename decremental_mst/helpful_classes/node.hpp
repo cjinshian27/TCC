@@ -10,6 +10,7 @@ class Node{
 		
 	public:
 	
+		int weight;
 		bool isLevel;
 		bool isIncidentToReserveNode;
 		unsigned int id;
@@ -23,13 +24,14 @@ class Node{
 		Node * right = nullptr;
 		Node * parent = nullptr;
 
-		Node(Key first, Key second, unsigned int id){
+		Node(Key first, Key second, unsigned int id, int weight){
 
 			this->first = first;
 			this->second = second;
 			this->id = id;
 			this->size = 1;
-			
+			this->weight = weight;
+
 			this->isLevel = false;
 			this->nodesAtLevel = 0;
 			
