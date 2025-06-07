@@ -107,16 +107,23 @@ class DecrementalMST{
 				}
 			}
 		}
+		
+		// for m edges, sorting takes O(mlog(m)) time
+		void sortEdges(std::vector<std::tuple> & edges){
+			// sort edges by increasing weight (third element of tuple)
+			std::sort(edges.begin(), edges.end(), 
+				[](const auto& a, const auto& b) {
+					return std::get<2>(a) < std::get<2>(b);
+				});
+		}
 
 	public:
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// instantiate a dynamic graph in O(lg(n)) time.
-		DecrementalMST(unsigned int numberOfVertices, std::vector<std::tuple> & edges){
+		DecrementalMST(unsigned int numberOfVertices, std::vector<std::tuple<Key, Key, int>> & edges){
 			
 			this->maxLevel = static_cast<int>(std::ceil(std::log2(numberOfVertices))); 
-
 			this->adjacencyLists = std::vector<AdjacencyList<Key> *>(this->maxLevel + 1);
 			this->forests = std::vector<Forest<Key> *>(this->maxLevel + 1);
 			
@@ -124,12 +131,22 @@ class DecrementalMST{
 				adjacencyLists[i] = new AdjacencyList<Key>();
 				forests[i] = new Forest<Key>(numberOfVertices);
 			}
+
+			sortEdges(edges);
+			
+			for(unsigned int i = 0; i < edges.size(); ++i){
+				add(
+					std::get<0>(edges[i]),
+					std::get<1>(edges[i]),
+					std::get<2>(edges[i])
+				);
+			}
 		}
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		// add node (u, v) in O(lg(n))
-		void add(Key u, Key v){
+		void add(Key u, Key v, int weight){
 
 			updateMapNodeLevels(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
