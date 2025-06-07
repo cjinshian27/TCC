@@ -116,6 +116,24 @@ class DecrementalMST{
 				});
 		}
 
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	
+		// add node (u, v) in O(lg(n))
+		void add(Key u, Key v, int weight){
+	
+			updateMapNodeLevels(u, v, this->maxLevel);
+			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
+	
+			if(maxLevelForest->isConnected(u, v)){
+				this->adjacencyLists[this->maxLevel]->add(u, v);
+				maxLevelForest->increaseIncidentToReserveNodeCount(u);
+				maxLevelForest->increaseIncidentToReserveNodeCount(v);
+			} 
+			else{
+				maxLevelForest->link(u, v);
+			} 
+		}
+
 	public:
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -140,24 +158,6 @@ class DecrementalMST{
 					std::get<2>(edges[i])
 				);
 			}
-		}
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		// add node (u, v) in O(lg(n))
-		void add(Key u, Key v, int weight){
-
-			updateMapNodeLevels(u, v, this->maxLevel);
-			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
-
-			if(maxLevelForest->isConnected(u, v)){
-				this->adjacencyLists[this->maxLevel]->add(u, v);
-				maxLevelForest->increaseIncidentToReserveNodeCount(u);
-				maxLevelForest->increaseIncidentToReserveNodeCount(v);
-			} 
-			else{
-				maxLevelForest->link(u, v);
-			} 
 		}
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
