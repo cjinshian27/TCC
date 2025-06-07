@@ -44,43 +44,6 @@
       \field{title}{{GridFTP} Protocol Specification. {Global Grid Forum} Recommendation ({GFD}.20)}
       \field{year}{2003}
     \endentry
-    \entry{alon09:how}{article}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=a0026e806b0c3123f7fb978a2c810b66}{%
-           family={Alon},
-           familyi={A\bibinitperiod},
-           given={Uri},
-           giveni={U\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {Cell Press}%
-      }
-      \strng{namehash}{a0026e806b0c3123f7fb978a2c810b66}
-      \strng{fullhash}{a0026e806b0c3123f7fb978a2c810b66}
-      \strng{bibnamehash}{a0026e806b0c3123f7fb978a2c810b66}
-      \strng{authorbibnamehash}{a0026e806b0c3123f7fb978a2c810b66}
-      \strng{authornamehash}{a0026e806b0c3123f7fb978a2c810b66}
-      \strng{authorfullhash}{a0026e806b0c3123f7fb978a2c810b66}
-      \field{labelalpha}{Alo09}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Molecular Cell}
-      \field{month}{9}
-      \field{number}{6}
-      \field{title}{How To Choose a Good Scientific Problem}
-      \field{volume}{35}
-      \field{year}{2009}
-      \field{pages}{726\bibrangedash 728}
-      \range{pages}{3}
-      \verb{doi}
-      \verb 10.1016/j.molcel.2009.09.013
-      \endverb
-    \endentry
     \entry{alves03:simi}{inproceedings}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=206353fb8f80c4986b7ddbcab5e972b7}{%
@@ -233,81 +196,6 @@
       \field{pages}{55\bibrangedash 96}
       \range{pages}{42}
     \endentry
-    \entry{craftresearch}{book}{}
-      \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=c5299d746281e198124e7f633e77959c}{%
-           family={Booth},
-           familyi={B\bibinitperiod},
-           given={Wayne\bibnamedelima C.},
-           giveni={W\bibinitperiod\bibinitdelim C\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=533ff2e4f7d14ed202c4633bc2048376}{%
-           family={Colomb},
-           familyi={C\bibinitperiod},
-           given={Gregory\bibnamedelima G.},
-           giveni={G\bibinitperiod\bibinitdelim G\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=445a20a00e1a62a06cc6c9167b244d1c}{%
-           family={Williams},
-           familyi={W\bibinitperiod},
-           given={Joseph\bibnamedelima M.},
-           giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {The University of Chicago Press}%
-      }
-      \strng{namehash}{a402fbc81036bd429582b542edc2a85a}
-      \strng{fullhash}{9a6155c9c62bd52fea87e17099572865}
-      \strng{bibnamehash}{9a6155c9c62bd52fea87e17099572865}
-      \strng{authorbibnamehash}{9a6155c9c62bd52fea87e17099572865}
-      \strng{authornamehash}{a402fbc81036bd429582b542edc2a85a}
-      \strng{authorfullhash}{9a6155c9c62bd52fea87e17099572865}
-      \field{labelalpha}{BCW08}
-      \field{sortinit}{B}
-      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{The Craft of Research}
-      \field{year}{2008}
-    \endentry
-    \entry{carlis:09}{online}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=26f6aed8b5e56320c9d2812be813b798}{%
-           family={Carlis},
-           familyi={C\bibinitperiod},
-           given={John\bibnamedelima V.},
-           giveni={J\bibinitperiod\bibinitdelim V\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{26f6aed8b5e56320c9d2812be813b798}
-      \strng{fullhash}{26f6aed8b5e56320c9d2812be813b798}
-      \strng{bibnamehash}{26f6aed8b5e56320c9d2812be813b798}
-      \strng{authorbibnamehash}{26f6aed8b5e56320c9d2812be813b798}
-      \strng{authornamehash}{26f6aed8b5e56320c9d2812be813b798}
-      \strng{authorfullhash}{26f6aed8b5e56320c9d2812be813b798}
-      \field{labelalpha}{Car09}
-      \field{sortinit}{C}
-      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{Design: The Key to Writing (and Advising) a One-Draft {Ph.D} Dissertation}
-      \field{urlday}{10}
-      \field{urlmonth}{11}
-      \field{urlyear}{2017}
-      \field{year}{2009}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb www-users.cs.umn.edu/~carlis/one-draft.pdf
-      \endverb
-      \verb{url}
-      \verb www-users.cs.umn.edu/~carlis/one-draft.pdf
-      \endverb
-    \endentry
     \entry{natbib}{manual}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=8d668f2ff08c48a82cff87c087cdf12e}{%
@@ -345,36 +233,6 @@
       \verb{url}
       \verb mirrors.ctan.org/macros/latex/contrib/natbib/natnotes.pdf
       \endverb
-    \endentry
-    \entry{eco:09}{book}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=eeb9256075038567a106101346ca2995}{%
-           family={Eco},
-           familyi={E\bibinitperiod},
-           given={Umberto},
-           giveni={U\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {Perspectiva}%
-      }
-      \strng{namehash}{eeb9256075038567a106101346ca2995}
-      \strng{fullhash}{eeb9256075038567a106101346ca2995}
-      \strng{bibnamehash}{eeb9256075038567a106101346ca2995}
-      \strng{authorbibnamehash}{eeb9256075038567a106101346ca2995}
-      \strng{authornamehash}{eeb9256075038567a106101346ca2995}
-      \strng{authorfullhash}{eeb9256075038567a106101346ca2995}
-      \field{labelalpha}{Eco09}
-      \field{sortinit}{E}
-      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{edition}{22}
-      \field{note}{Tradução Gilson Cesar Cardoso de Souza}
-      \field{title}{Como se Faz uma Tese}
-      \field{year}{2009}
     \endentry
     \entry{fowler04:designDead}{online}{}
       \name{author}{1}{}{%
@@ -484,37 +342,6 @@
       \field{title}{Visões Progressivas de Computações Distribuídas}
       \field{type}{phdthesis}
       \field{year}{2001}
-    \endentry
-    \entry{Higham:98}{book}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=5bec9d02065c9b35d45c881a24f7a1cd}{%
-           family={Higham},
-           familyi={H\bibinitperiod},
-           given={Nicholas\bibnamedelima J.},
-           giveni={N\bibinitperiod\bibinitdelim J\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{2}{%
-        {SIAM: Society for Industrial}%
-        {Applied Mathematics}%
-      }
-      \strng{namehash}{5bec9d02065c9b35d45c881a24f7a1cd}
-      \strng{fullhash}{5bec9d02065c9b35d45c881a24f7a1cd}
-      \strng{bibnamehash}{5bec9d02065c9b35d45c881a24f7a1cd}
-      \strng{authorbibnamehash}{5bec9d02065c9b35d45c881a24f7a1cd}
-      \strng{authornamehash}{5bec9d02065c9b35d45c881a24f7a1cd}
-      \strng{authorfullhash}{5bec9d02065c9b35d45c881a24f7a1cd}
-      \field{labelalpha}{Hig98}
-      \field{sortinit}{H}
-      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{edition}{2}
-      \field{month}{8}
-      \field{title}{Handbook of Writing for the Mathematical Sciences}
-      \field{year}{1998}
     \endentry
     \entry{Knuth:96}{book}{}
       \name{author}{3}{}{%
@@ -664,38 +491,6 @@
       \verb tug.org/TUGboat/tb35-3/tb111mitt-float.pdf
       \endverb
     \endentry
-    \entry{dissertjourney}{book}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=4c1e7c813255f6d1f7d0469a0a802a04}{%
-           family={Roberts},
-           familyi={R\bibinitperiod},
-           given={Carol\bibnamedelima M.},
-           giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{location}{1}{%
-        {Thousand Oaks, CA}%
-      }
-      \list{publisher}{1}{%
-        {Corwin}%
-      }
-      \strng{namehash}{4c1e7c813255f6d1f7d0469a0a802a04}
-      \strng{fullhash}{4c1e7c813255f6d1f7d0469a0a802a04}
-      \strng{bibnamehash}{4c1e7c813255f6d1f7d0469a0a802a04}
-      \strng{authorbibnamehash}{4c1e7c813255f6d1f7d0469a0a802a04}
-      \strng{authornamehash}{4c1e7c813255f6d1f7d0469a0a802a04}
-      \strng{authorfullhash}{4c1e7c813255f6d1f7d0469a0a802a04}
-      \field{labelalpha}{Rob10}
-      \field{sortinit}{R}
-      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{edition}{2}
-      \field{title}{The Dissertation Journey}
-      \field{year}{2010}
-    \endentry
     \entry{schmidt03:MSc}{thesis}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=ddc6301cfc4f0d93eb7736e5ad506357}{%
@@ -728,134 +523,6 @@
       \field{title}{Coleta de Lixo para Protocolos de \emph{Checkpointing}}
       \field{type}{mathesis}
       \field{year}{2003}
-    \endentry
-    \entry{tufte01:visualDisplay}{book}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=9bea1db9804038380420bc5c42741810}{%
-           family={Tufte},
-           familyi={T\bibinitperiod},
-           given={Edward},
-           giveni={E\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {Graphics Press}%
-      }
-      \strng{namehash}{9bea1db9804038380420bc5c42741810}
-      \strng{fullhash}{9bea1db9804038380420bc5c42741810}
-      \strng{bibnamehash}{9bea1db9804038380420bc5c42741810}
-      \strng{authorbibnamehash}{9bea1db9804038380420bc5c42741810}
-      \strng{authornamehash}{9bea1db9804038380420bc5c42741810}
-      \strng{authorfullhash}{9bea1db9804038380420bc5c42741810}
-      \field{labelalpha}{Tuf01}
-      \field{sortinit}{T}
-      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{edition}{2}
-      \field{month}{5}
-      \field{title}{The Visual Display of Quantitative Information}
-      \field{year}{2001}
-    \endentry
-    \entry{usp:guidelines}{manual}{}
-      \name{author}{1}{}{%
-        {{hash=dc3b3df5c2258bfb682e20a6a2057d63}{%
-           family={{Universidade de São Paulo --- Sistema Integrado de Bibliotecas}},
-           familyi={U\bibinitperiod}}}%
-      }
-      \name{shortauthor}{1}{}{%
-        {{un=0,uniquepart=base,hash=b1b0048deb07d15eac19fd1fbe880d22}{%
-           family={SIBiUSP},
-           familyi={S\bibinitperiod}}}%
-      }
-      \strng{namehash}{b1b0048deb07d15eac19fd1fbe880d22}
-      \strng{fullhash}{dc3b3df5c2258bfb682e20a6a2057d63}
-      \strng{bibnamehash}{b1b0048deb07d15eac19fd1fbe880d22}
-      \strng{authorbibnamehash}{dc3b3df5c2258bfb682e20a6a2057d63}
-      \strng{authornamehash}{dc3b3df5c2258bfb682e20a6a2057d63}
-      \strng{authorfullhash}{dc3b3df5c2258bfb682e20a6a2057d63}
-      \strng{shortauthorbibnamehash}{b1b0048deb07d15eac19fd1fbe880d22}
-      \strng{shortauthornamehash}{b1b0048deb07d15eac19fd1fbe880d22}
-      \strng{shortauthorfullhash}{b1b0048deb07d15eac19fd1fbe880d22}
-      \field{labelalpha}{SIB09}
-      \field{sortinit}{U}
-      \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{shortauthor}
-      \field{labeltitlesource}{title}
-      \field{title}{Diretrizes para Apresentação de Dissertações e Teses da {USP}: Documento Eletrônico e Impresso}
-      \field{urlday}{10}
-      \field{urlmonth}{11}
-      \field{urlyear}{2017}
-      \field{year}{2009}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb www.teses.usp.br/index.php?option=com_content&view=article&id=52&Itemid=67
-      \endverb
-      \verb{url}
-      \verb www.teses.usp.br/index.php?option=com_content&view=article&id=52&Itemid=67
-      \endverb
-    \endentry
-    \entry{waz:09}{book}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=dc1af39ebd63cfce0d09d596b4e2ffd8}{%
-           family={Wazlawick},
-           familyi={W\bibinitperiod},
-           given={Raul\bibnamedelima S.},
-           giveni={R\bibinitperiod\bibinitdelim S\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {Campus}%
-      }
-      \strng{namehash}{dc1af39ebd63cfce0d09d596b4e2ffd8}
-      \strng{fullhash}{dc1af39ebd63cfce0d09d596b4e2ffd8}
-      \strng{bibnamehash}{dc1af39ebd63cfce0d09d596b4e2ffd8}
-      \strng{authorbibnamehash}{dc1af39ebd63cfce0d09d596b4e2ffd8}
-      \strng{authornamehash}{dc1af39ebd63cfce0d09d596b4e2ffd8}
-      \strng{authorfullhash}{dc1af39ebd63cfce0d09d596b4e2ffd8}
-      \field{labelalpha}{Waz09}
-      \field{sortinit}{W}
-      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{edition}{1}
-      \field{title}{Metodologia de Pesquisa em Ciência da Computação}
-      \field{year}{2009}
-    \endentry
-    \entry{zobel:04}{book}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=fec3a08fc98ee9b65f31e424408ed08f}{%
-           family={Zobel},
-           familyi={Z\bibinitperiod},
-           given={Justin},
-           giveni={J\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {Springer}%
-      }
-      \strng{namehash}{fec3a08fc98ee9b65f31e424408ed08f}
-      \strng{fullhash}{fec3a08fc98ee9b65f31e424408ed08f}
-      \strng{bibnamehash}{fec3a08fc98ee9b65f31e424408ed08f}
-      \strng{authorbibnamehash}{fec3a08fc98ee9b65f31e424408ed08f}
-      \strng{authornamehash}{fec3a08fc98ee9b65f31e424408ed08f}
-      \strng{authorfullhash}{fec3a08fc98ee9b65f31e424408ed08f}
-      \field{labelalpha}{Zob04}
-      \field{sortinit}{Z}
-      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{edition}{2}
-      \field{title}{Writing for Computer Science: The Art of Effective Communication}
-      \field{year}{2004}
     \endentry
   \enddatalist
 \endrefsection

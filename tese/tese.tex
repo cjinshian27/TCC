@@ -128,26 +128,6 @@
   data=2025-06-02, % YYYY-MM-DD
 }
 
-
-% A licença do seu trabalho. Use CC-BY, CC-BY-NC, CC-BY-ND, CC-BY-SA,
-% CC-BY-NC-SA ou CC-BY-NC-ND para escolher a licença Creative Commons
-% correspondente (o sistema insere automaticamente o texto da licença).
-% Se quiser estabelecer regras diferentes para o uso de seu trabalho,
-% converse com seu orientador e coloque o texto da licença aqui, mas
-% observe que apenas TCCs sob alguma licença Creative Commons serão
-% acrescentados ao BDTA. Se você tem alguma intenção de publicar o
-% trabalho comercialmente no futuro, sugerimos a licença CC-BY-NC-ND.
-%
-%\direitos{CC-BY-NC-ND}
-%
-%\direitos{Autorizo a reprodução e divulgação total ou parcial deste
-%          trabalho, por qualquer meio convencional ou eletrônico,
-%          para fins de estudo e pesquisa, desde que citada a fonte.}
-%
-%\direitos{I authorize the complete or partial reproduction and disclosure
-%          of this work by any conventional or electronic means for study
-%          and research purposes, provided that the source is acknowledged.}
-%
 \direitos{CC-BY}
 
 % Para gerar a ficha catalográfica, acesse https://fc.ime.usp.br/,
@@ -193,8 +173,7 @@
 
 Primeiramente gostaria de agradecer ao...
 
-\input{conteudo/resumoabstract}
-
+\input{content/resumoabstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% LISTAS DE FIGURAS ETC. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -268,71 +247,14 @@ Primeiramente gostaria de agradecer ao...
 
 % A introdução não tem número de capítulo, então os cabeçalhos também não
 \pagestyle{unnumberedchapter}
-\input{conteudo/00-exemplo-introducao}
+\input{content/introduction}
 
 \pagestyle{mainmatter}
-\input{conteudo/01-exemplo-normas-ime}
-\input{conteudo/02-exemplo-usando-o-modelo}
-\input{conteudo/03-exemplo-latex}
-\input{conteudo/04-exemplo-tutorial}
-\input{conteudo/05-exemplo-exemplos}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%% APÊNDICES E ANEXOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Um apêndice é algum conteúdo adicional de sua autoria que faz parte e
-% colabora com a ideia geral do texto mas que, por alguma razão, não precisa
-% fazer parte da sequência do discurso; por exemplo, a demonstração de um
-% teorema intermediário, as perguntas usadas em uma pesquisa qualitativa etc.
-%
-% Um anexo é um documento que não faz parte da tese (em geral, nem é de sua
-% autoria) mas é relevante para o conteúdo; por exemplo, a especificação do
-% padrão técnico ou a legislação que o trabalho discute, um artigo de jornal
-% apresentando a percepção do público sobre o tema da tese etc.
-%
-% Os comandos appendix e annex reiniciam a numeração de capítulos e passam
-% a numerá-los com letras. "annex" não faz parte de nenhuma classe padrão,
-% foi criado para este modelo. Se o trabalho não tiver apêndices ou anexos,
-% remova estas linhas.
-%
-% Diferentemente de \mainmatter, \backmatter etc., \appendix e \annex não
-% forçam o início de uma nova página. Em geral isso não é importante, pois
-% o comando seguinte costuma ser "\chapter", mas pode causar problemas com
-% a formatação dos cabeçalhos. Assim, vamos forçar uma nova página antes
-% de cada um deles.
-
-%%%% Apêndices %%%%
-
-\cleardoublepage
-
-\pagestyle{appendix}
-
-\appendix
-
-% \addappheadtotoc acrescenta a palavra "Apêndice" ao sumário; se
-% só há apêndices, sem anexos, provavelmente não é necessário.
-\addappheadtotoc
-
-\input{conteudo/apendice-exemplo-faq}
-\par
-
-%%%% Anexos %%%%
-
-\cleardoublepage
-
-\pagestyle{appendix} % repete o anterior, caso você não use apêndices
-
-\annex
-
-% \addappheadtotoc acrescenta a palavra "Anexo" ao sumário; se
-% só há anexos, sem apêndices, provavelmente não é necessário.
-\addappheadtotoc
-
-\input{conteudo/anexo-exemplo-imegoodies}
-\par
-\input{conteudo/anexo-exemplo-pseudocodigo}
-\par
-
+\input{content/chapter-1}
+\input{content/chapter-2}
+\input{content/chapter-3}
+\input{content/chapter-4}
+\input{content/chapter-5}
 
 %%%%%%%%%%%%%%% SEÇÕES FINAIS (BIBLIOGRAFIA E ÍNDICE REMISSIVO) %%%%%%%%%%%%%%%%
 
