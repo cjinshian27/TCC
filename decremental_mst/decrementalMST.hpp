@@ -95,7 +95,7 @@ class DecrementalMST{
 					for (Key & y : reserveNodesToBeRemoved) {
 						this->adjacencyLists[i]->remove(x, y);
 						this->forests[i]->decreaseIncidentToReserveNodeCount(y);
-					}
+					}	
 
 					// if x is not incident to any other node of level i, then
 					// decrease the reserve node count
