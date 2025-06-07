@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <iterator>
+#include <tuple>
 #include <set>
 #include <unordered_set>
 #include <cmath>
@@ -13,24 +14,18 @@ DecrementalMST<int> * buildDecrementalMST(){
 	
 	unsigned int numberOfVertices;
 	unsigned int numberOfEdges;
+	unsigned int u, v, weight;
 	
 	std::cin >> numberOfVertices;
-	std::vector<int> vertices(numberOfVertices);
-	
-	for(unsigned int i = 0; i < numberOfVertices; ++i){
-		std::cin >> vertices[i];
-	}
-
 	std::cin >> numberOfEdges;
+	std::vector<int> edges(numberOfEdges);
 	
-	DecrementalMST<int> * decrementalMST = new DecrementalMST<int>(vertices);
-
-	unsigned int u, v, weight;
-
-	while(numberOfEdges--){
-		std::cin >> u >> v >> weight;
-		decrementalMST->link(u, v, weight);
+	for(unsigned int i = 0; i < numberOfEdges; ++i){
+		std::cin >> u >> v >> weight; 
+		edges.push_back(std::make_tuple(u, v, weight));  // Edge from 0 to 1 with weight 5
 	}
+	
+	return new DecrementalMST<int>(numberOfVertices, edges);
 }
 
 //decode function
