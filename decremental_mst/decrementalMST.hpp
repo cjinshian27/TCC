@@ -108,9 +108,8 @@ class DecrementalMST{
 			}
 		}
 		
-		// for m edges, sorting takes O(mlog(m)) time
+		// sort m edges by increasing weight, which takes O(mlog(m)) time
 		void sortEdges(std::vector<std::tuple> & edges){
-			// sort edges by increasing weight (third element of tuple)
 			std::sort(edges.begin(), edges.end(), 
 				[](const auto& a, const auto& b) {
 					return std::get<2>(a) < std::get<2>(b);
