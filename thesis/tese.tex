@@ -66,11 +66,6 @@
 % \textbr{blah} -> o texto "blah" é em português
 \babeltags{br = brazilian, en = english}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% METADADOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % O arquivo com os dados bibliográficos para biblatex; você pode usar
 % este comando mais de uma vez para acrescentar múltiplos arquivos
 \addbibresource{bibliografia.bib}
@@ -108,7 +103,7 @@
   %Prof. Dr. Fulana de Tal (advisor) -- IME-USP [sem ponto final],
   Prof. Dr. Ciclano de Tal -- IME-USP [sem ponto final],
   \profa{} \dra{} Convidada de Tal -- IMPA [sem ponto final],
-}
+  }
 
 % A página de rosto da versão para depósito (ou seja, a versão final
 % antes da defesa) deve ser diferente da página de rosto da versão
@@ -251,10 +246,6 @@ Primeiramente gostaria de agradecer ao...
 
 \pagestyle{mainmatter}
 \input{content/chapter-1}
-\input{content/chapter-2}
-\input{content/chapter-3}
-\input{content/chapter-4}
-\input{content/chapter-5}
 
 %%%%%%%%%%%%%%% SEÇÕES FINAIS (BIBLIOGRAFIA E ÍNDICE REMISSIVO) %%%%%%%%%%%%%%%%
 
@@ -268,9 +259,10 @@ Primeiramente gostaria de agradecer ao...
 
 % A bibliografia é obrigatória
 
+\cite{*}
 \printbibliography[
-  title=\refname\label{sec:bib}, % "Referências", recomendado pela ABNT
-  %title=\bibname\label{sec:bib}, % "Bibliografia"
+  %title=\refname\label{sec:bib}, % "Referências", recomendado pela ABNT
+  title=\bibname\label{sec:bib}, % "Bibliografia"
   heading=bibintoc, % Inclui a bibliografia no sumário
 ]
 

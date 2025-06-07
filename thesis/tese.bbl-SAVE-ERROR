@@ -16,5 +16,67 @@
   {}
 \endgroup
 
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global}
+    \entry{jacob_holm}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=5ef988b66ee622a15f50641b757c54e2}{%
+           family={Holm},
+           familyi={H\bibinitperiod},
+           given={Jacob},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b3c424136e511df6cffd28b588138e40}{%
+           family={Lichtenberg},
+           familyi={L\bibinitperiod},
+           given={Kristian},
+           giveni={K\bibinitperiod},
+           givenun=0,
+           prefix={de},
+           prefixi={d\bibinitperiod},
+           prefixun=0}}%
+        {{un=0,uniquepart=base,hash=da8de8904d487b343a6b7f3a39674fb6}{%
+           family={Thorup},
+           familyi={T\bibinitperiod},
+           given={Mikkel},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {AT&T Labs—Research, Florham Park, New Jersey}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{996b60408647858a9e6eae8a9557a321}
+      \strng{fullhash}{81b2130523d7215fc5508f33dd604d1a}
+      \strng{bibnamehash}{81b2130523d7215fc5508f33dd604d1a}
+      \strng{authorbibnamehash}{81b2130523d7215fc5508f33dd604d1a}
+      \strng{authornamehash}{996b60408647858a9e6eae8a9557a321}
+      \strng{authorfullhash}{81b2130523d7215fc5508f33dd604d1a}
+      \field{labelalpha}{HLT01}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of the ACM}
+      \field{number}{4}
+      \field{title}{Poly-Logarithmic Deterministic Fully-Dynamic Algorithms for Connectivity, Minimum Spanning Tree, 2-Edge, and Biconnectivity}
+      \field{volume}{48}
+      \field{year}{2001}
+      \field{pages}{723\bibrangedash 760}
+      \range{pages}{38}
+      \verb{urlraw}
+      \verb https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=1f63499a9cb43f0f4d6a56b37de551c7e0c94971
+      \endverb
+      \verb{url}
+      \verb https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=1f63499a9cb43f0f4d6a56b37de551c7e0c94971
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
 \endinput
 
