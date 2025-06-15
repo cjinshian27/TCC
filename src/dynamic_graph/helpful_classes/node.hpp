@@ -3,19 +3,22 @@
 template<typename Key>
 
 class Node{
-
-	private:
-		Key u;
-		Key v;
-		
 	public:
 	
-		bool isLevel;
-		bool isIncidentToReserveNode;
-		unsigned int id;
-		unsigned int size;
-		unsigned int nodesAtLevel;
-		unsigned int reserveNodes;
+// if the node is (u, v), u != v, tells if (u, v) is of level i (from the forest)
+    bool isLevel; 
+    
+    // if the node is (u, u), tells if a reserve edge of level i is incident to (u, u) 
+    bool isIncidentToReserveNode;
+    
+    unsigned int id;
+    unsigned int size;
+
+    // counts the number of nodes in the subtree where isLevel = true
+    unsigned int nodesAtLevel;
+
+    // counts the number of nodes in the subtree where isIncidentToReserveNode = true
+    unsigned int reserveNodes;
 		Key first;
 		Key second;
 		
