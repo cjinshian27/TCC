@@ -5,40 +5,40 @@ template<typename Key>
 class Node{
 	public:
 	
-// if the node is (u, v), u != v, tells if (u, v) is of level i (from the forest)
-    bool isLevel; 
-    
-    // if the node is (u, u), tells if a reserve edge of level i is incident to (u, u) 
-    bool isIncidentToReserveNode;
-    
-    unsigned int id;
-    unsigned int size;
-
-    // counts the number of nodes in the subtree where isLevel = true
-    unsigned int nodesAtLevel;
-
-    // counts the number of nodes in the subtree where isIncidentToReserveNode = true
-    unsigned int reserveNodes;
-		Key first;
-		Key second;
+		// if the node is (u, v), u != v, tells if (u, v) is of level i (from the forest)
+		bool isLevel; 
 		
-		Node * left = nullptr;
-		Node * right = nullptr;
-		Node * parent = nullptr;
+		// if the node is (u, u), tells if a reserve edge of level i is incident to (u, u) 
+		bool isIncidentToReserveNode;
+		
+		unsigned int id;
+		unsigned int size;
 
-		Node(Key first, Key second, unsigned int id){
+		// counts the number of nodes in the subtree where isLevel = true
+		unsigned int nodesAtLevel;
 
-			this->first = first;
-			this->second = second;
-			this->id = id;
-			this->size = 1;
+		// counts the number of nodes in the subtree where isIncidentToReserveNode = true
+		unsigned int reserveNodes;
+			Key first;
+			Key second;
 			
-			this->isLevel = false;
-			this->nodesAtLevel = 0;
-			
-			this->isIncidentToReserveNode = false; 
-			this->reserveNodes = 0;
-		}
+			Node * left = nullptr;
+			Node * right = nullptr;
+			Node * parent = nullptr;
+
+			Node(Key first, Key second, unsigned int id){
+
+				this->first = first;
+				this->second = second;
+				this->id = id;
+				this->size = 1;
+				
+				this->isLevel = false;
+				this->nodesAtLevel = 0;
+				
+				this->isIncidentToReserveNode = false; 
+				this->reserveNodes = 0;
+			}
 
 		//print the node in the (u, v) format
 		void print(){
