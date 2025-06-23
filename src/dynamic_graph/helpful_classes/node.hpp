@@ -3,30 +3,43 @@
 template<typename Key>
 
 class Node{
-	public:
 	
+	public:
+
 		// if the node is (u, v), u != v, tells if (u, v) is of level i (from the forest)
 		bool isLevel; 
-		
+
 		// if the node is (u, u), tells if a reserve edge of level i is incident to (u, u) 
 		bool isIncidentToReserveNode;
 		
-		unsigned int id;
-		unsigned int size;
-
 		// counts the number of nodes in the subtree where isLevel = true
 		unsigned int nodesAtLevel;
-
+		
 		// counts the number of nodes in the subtree where isIncidentToReserveNode = true
 		unsigned int reserveNodes;
-			Key first;
-			Key second;
-			
-			Node * left = nullptr;
-			Node * right = nullptr;
-			Node * parent = nullptr;
 
-			Node(Key first, Key second, unsigned int id){
+		// identifies each node uniquely
+		unsigned int id;
+
+		// keeps the size in the subtree
+		unsigned int size;
+		
+		// keeps the left end of an edge
+		Key first;
+
+		// keeps the right end of an edge
+		Key second;
+		
+		// left child node
+		Node * left = nullptr;
+
+		// right child node
+		Node * right = nullptr;
+
+		// parent node
+		Node * parent = nullptr;
+
+		Node(Key first, Key second, unsigned int id){
 
 				this->first = first;
 				this->second = second;
@@ -48,7 +61,8 @@ class Node{
 					  << isIncidentToReserveNode << ":" << reserveNodes << 
 					  " - size: " << size << ")" << '\n';
 		}
-
+		
+		// updates the reserveNodes attribute count
 		void setReserveNodesCount(){
 			
 			unsigned int leftSubtreeReserveNodes = 0;
@@ -68,8 +82,7 @@ class Node{
 			
 		}
 
-
-		// count the number of nodes that are level i
+		// updates the nodesAtLevel attribute count
 		void setNodeLevelCount(){
 			
 			unsigned int leftSubtreeNodesAtLevel = 0;
@@ -88,7 +101,7 @@ class Node{
 			this->nodesAtLevel += leftSubtreeNodesAtLevel + rightSubtreeNodesAtLevel;
 		}
 
-		//set the node size
+		// updates the size attribute count
 		void setSize(){
 
 			if(this->left && this->right){
@@ -104,7 +117,7 @@ class Node{
 				this->size = 1;
 			}
 		}
-
+		
 		void updateValues(){
 			setSize();
 			setNodeLevelCount();
