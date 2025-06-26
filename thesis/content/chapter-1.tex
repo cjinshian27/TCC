@@ -6,9 +6,19 @@
 
 \section{Introdução}
 
+O problema da conexidade em florestas dinâmicas pode ser considerada uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. Visto que já existe literatura descrevendo esse problema de forma mais detalhada, como em Rodrigues \cite{arthur} no capítulo 2, aqui será feita apenas uma breve descrição de como o nosso algoritmo foi implementado. É important ressaltar que o nosso algoritmo foi baseada na solução da seção 2 do artigo de \textit{Holm, de Lichtenberg e Thorup} \cite{jacob_holm}, porém escolhendo uma estrutura de dados apropriada para representar as árvores da floresta.
 
+A nossa biblioteca contém os seguintes métodos:
 
+\begin{itemize}
+    \item \texttt{\textbf{florestaDinâmica(n)}}: constrói uma floresta dinâmica de $n$ vértices isolados;
+    \item \texttt{\textbf{conectado(u, v)}}: devolve verdadeiro se \textit{u} e \textit{v} estão na mesma componente e falso caso contrário;
+    \item \texttt{\textbf{ligue(u, v)}}: cria uma aresta \textit{uv};
+    \item \texttt{\textbf{corte(u, v)}}: remove a aresta \textit{uv};
+    \item \texttt{\textbf{imprimaArestas()}}: imprime todas as arestas da floresta na forma \textit{uv}.
+    \item \texttt{\textbf{imprimaÁrvores()}}: imprime todas as árvores da floresta, onde cada uma é identificada univocamente por um inteiro positivo.
+\end{itemize}
 
+Note que os métodos \texttt{imprimaArestas()} e \texttt{imprimaÁrvores()} não são considerados operações de modificação ou consulta, mas sim métodos auxiliares destinados à visualização do resultado da floresta após as operações realizadas, como também para a depuração do código.  
 
-
-
+As nossas árvores se baseiam em \textit{Euler Tour Trees}, proposta por \textit{Tarjan e Vishkin} \cite{tarjan} em 1985, de modo que elas guardam a trilha euleriana de uma árvore, utilizando a \textit{Euler tour technique}. Além disso, utilizamos \textit{splay trees} para garantir a complexidade de tempo amortizada $O(lg(n))$ para realizar as operações de busca dos nós nas árvores, visto que elas ficam balanceadas após uma certa quantidade de chamadas ao método \textit{splay} no nó mais profundo que acessamos na árvore durante as operações.  

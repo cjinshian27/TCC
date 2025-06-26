@@ -97,6 +97,37 @@
       \field{type}{Master's thesis}
       \field{year}{2024}
     \endentry
+    \entry{chung2025}{online}{}
+      \name{author}{1}{}{%
+        {{hash=d2b857c6c9363ebf6a15eab066127a2a}{%
+           family={Shian},
+           familyi={S\bibinitperiod},
+           given={Chung\bibnamedelima Jin},
+           giveni={C\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{d2b857c6c9363ebf6a15eab066127a2a}
+      \strng{fullhash}{d2b857c6c9363ebf6a15eab066127a2a}
+      \strng{bibnamehash}{d2b857c6c9363ebf6a15eab066127a2a}
+      \strng{authorbibnamehash}{d2b857c6c9363ebf6a15eab066127a2a}
+      \strng{authornamehash}{d2b857c6c9363ebf6a15eab066127a2a}
+      \strng{authorfullhash}{d2b857c6c9363ebf6a15eab066127a2a}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Repositório Git}
+      \field{urlday}{26}
+      \field{urlmonth}{6}
+      \field{urlyear}{2025}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://github.com/cjinshian27/TCC
+      \endverb
+      \verb{url}
+      \verb https://github.com/cjinshian27/TCC
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput
