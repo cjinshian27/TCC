@@ -18,30 +18,26 @@
 
 
 \refsection{0}
-  \datalist[entry]{nyt/global//global/global}
+  \datalist[entry]{nty/global//global/global}
     \entry{jacob_holm}{article}{}
       \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=5ef988b66ee622a15f50641b757c54e2}{%
+        {{hash=5ef988b66ee622a15f50641b757c54e2}{%
            family={Holm},
            familyi={H\bibinitperiod},
            given={Jacob},
-           giveni={J\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=b3c424136e511df6cffd28b588138e40}{%
+           giveni={J\bibinitperiod}}}%
+        {{hash=b3c424136e511df6cffd28b588138e40}{%
            family={Lichtenberg},
            familyi={L\bibinitperiod},
            given={Kristian},
            giveni={K\bibinitperiod},
-           givenun=0,
            prefix={de},
-           prefixi={d\bibinitperiod},
-           prefixun=0}}%
-        {{un=0,uniquepart=base,hash=da8de8904d487b343a6b7f3a39674fb6}{%
+           prefixi={d\bibinitperiod}}}%
+        {{hash=da8de8904d487b343a6b7f3a39674fb6}{%
            family={Thorup},
            familyi={T\bibinitperiod},
            given={Mikkel},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
+           giveni={M\bibinitperiod}}}%
       }
       \list{location}{1}{%
         {AT&T Labs—Research, Florham Park, New Jersey}%
@@ -49,17 +45,14 @@
       \list{publisher}{1}{%
         {Association for Computing Machinery}%
       }
-      \strng{namehash}{996b60408647858a9e6eae8a9557a321}
+      \strng{namehash}{81b2130523d7215fc5508f33dd604d1a}
       \strng{fullhash}{81b2130523d7215fc5508f33dd604d1a}
       \strng{bibnamehash}{81b2130523d7215fc5508f33dd604d1a}
       \strng{authorbibnamehash}{81b2130523d7215fc5508f33dd604d1a}
-      \strng{authornamehash}{996b60408647858a9e6eae8a9557a321}
+      \strng{authornamehash}{81b2130523d7215fc5508f33dd604d1a}
       \strng{authorfullhash}{81b2130523d7215fc5508f33dd604d1a}
-      \field{labelalpha}{HLT01}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the ACM}
@@ -75,6 +68,34 @@
       \verb{url}
       \verb https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=1f63499a9cb43f0f4d6a56b37de551c7e0c94971
       \endverb
+    \endentry
+    \entry{arthur}{thesis}{}
+      \name{author}{1}{}{%
+        {{hash=7a96f958eddfa1f4c75ee5fede3596e3}{%
+           family={Rodrigues},
+           familyi={R\bibinitperiod},
+           given={Arthur\bibnamedelimb Henrique\bibnamedelima Dias},
+           giveni={A\bibinitperiod\bibinitdelim H\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Universidade de São Paulo}%
+      }
+      \list{location}{1}{%
+        {São Paulo, Brazil}%
+      }
+      \strng{namehash}{7a96f958eddfa1f4c75ee5fede3596e3}
+      \strng{fullhash}{7a96f958eddfa1f4c75ee5fede3596e3}
+      \strng{bibnamehash}{7a96f958eddfa1f4c75ee5fede3596e3}
+      \strng{authorbibnamehash}{7a96f958eddfa1f4c75ee5fede3596e3}
+      \strng{authornamehash}{7a96f958eddfa1f4c75ee5fede3596e3}
+      \strng{authorfullhash}{7a96f958eddfa1f4c75ee5fede3596e3}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Algoritmos para conexidade em grafos dinâmicos}
+      \field{type}{Master's thesis}
+      \field{year}{2024}
     \endentry
   \enddatalist
 \endrefsection
