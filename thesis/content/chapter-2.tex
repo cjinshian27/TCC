@@ -6,7 +6,7 @@
 
 \enlargethispage{.8\baselineskip}
 
-\section{Definição do problema}
+\section{Definição}
 
 Como citado na Seção 1.1, o problema de conexidade dos grafos dinâmicos será o passo intermediário para a definição do próximo problema de conectividade. A nossa biblioteca contém o seguinte:
 
@@ -18,7 +18,7 @@ Como citado na Seção 1.1, o problema de conexidade dos grafos dinâmicos será
     \item \texttt{\textbf{imprima()}}: imprime todas os níveis das florestas e suas respectivas árvores.
 \end{itemize}
 
-Assim como o problema da conexidade em florestas dinâmicas, o método \texttt{imprima()} é usada apenas para visualização do resultado da floresta após as operações realizadas, como também para a depuração do código. 
+Assim como o problema da conexidade em florestas dinâmicas, o método \texttt{imprima()} é usado apenas para visualização do resultado da floresta após as operações realizadas, como também para a depuração do código. 
 
 O grafo dinâmico é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas, que utilizam a implementação mencionada na Seção 2. Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$. O nível inicial de uma aresta recém-inserida é sempre $\left\lceil \lg n \right\rceil$, e ela nunca aumenta, apenas diminui. Assim, cada aresta de nível $i$ pertence à floresta dinâmica de mesmo nível. 
 
