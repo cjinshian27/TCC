@@ -5,8 +5,10 @@ class Edge{
 	public:
 
 		unsigned int id;
-		std::pair<Key, Key> edge;
 		unsigned int size;
+
+		Key first;
+		Key second;
 		
 		Edge * left = nullptr;
 		Edge * right = nullptr;
@@ -14,8 +16,8 @@ class Edge{
 
 		Edge(Key first, Key second, unsigned int id){
 
-			this->edge.first = first;
-			this->edge.second = second;
+			this->first = first;
+			this->second = second;
 			this->id = id;
 			this->size = 1;
 		}
@@ -23,7 +25,7 @@ class Edge{
 		//print the edge in the (u, v) format
 		void print(){
 
-			std::cout << "(" << this->edge.first << " " << this->edge.second << ")" << '\n';
+			std::cout << "(" << this->first << " " << this->second << ")" << '\n';
 		}
 
 		//set the edge size
