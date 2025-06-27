@@ -64,3 +64,5 @@ make run < t
 ```
 
 to see the output, where *t* is the filename you have created.
+
+# Decremental Minimum Spanning Tree
