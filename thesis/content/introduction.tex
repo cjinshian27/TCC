@@ -103,17 +103,17 @@ Na linha 1, fica trivial que o conjunto $T$ satisfaz o invariante do laço. Nas 
 
 Note que o desafio é encontrar a aresta segura da linha 3 do algoritmo. Porém, existem dois algoritmos gulosos que resolvem este problema: o algoritmo de Kruskal e o de Prim. Cada um deles estabelece uma regra específica para determinar uma aresta segura nesta linha 3. No algoritmo de Kruskal, o conjunto $T$ é sempre uma aresta de peso mínimo no grafo que conecta duas componentes distintas. Já no algoritmo de Prim, o conjunto $T$ forma uma árvore única. A aresta segura adicionada a $T$ é sempre uma aresta de peso mínimo que conecta a árvore a um vértice não presente na árvore. Como tais algoritmos são bem descritos no Capítulo 23.2 do livro de Cormen, Leiserson, Rivest e Stein \cite{clrs}, não iremos aprofundá-los em nosso estudo. 
 
-Como se pode perceber, o algoritmo genérico resolve um problema estático em grafos, visto que todas as arestas de um grafo já foram definidas no início do problema. Dessa forma, como não precisamos nos preocupar com alterações no grafo, então ele sempre vai possuir as mesmas árvores geradoras de custo mínimo, ou até somente uma única árvore (quando os pesos das arestas são todos distintos). Em nosso estudo, estamos interessados no problema das florestas geradoras de custo mínimo em grafos dinâmicos, o que implica que a adição ou remoção de uma aresta pode alterar a estrutura dessas árvores. 
+Como se pode perceber, o algoritmo genérico resolve um problema estático em grafos, visto que todas as arestas de um grafo já foram definidas no início do problema. Dessa forma, como não precisamos nos preocupar com alterações no grafo, então ele sempre vai possuir as mesmas árvores geradoras de custo mínimo, ou até somente uma única árvore (quando os pesos das arestas são todos distintos). Em nosso estudo, estamos interessados no problema das florestas geradoras de custo mínimo (FGCM) em grafos dinâmicos, o que implica que a adição ou remoção de uma aresta pode alterar a estrutura das árvores dessas florestas.
 
-Este problema já existe uma solução proposta por \textit{Holm, de Lichtenberg e Thorup} \cite{jacob_holm}. Iremos destrinchar essa solução nos seguintes capítulos:
+Uma floresta é um grafo não-dirigido que não contém nenhum ciclo. É um grafo que pode ser decomposto em várias árvores disjuntas. Dessa forma, quando temos várias árvores disjuntas geradoras de custo mínimo que compõem um grafo, então temos uma floresta geradora de custo mínimo deste grafo. Este problema já existe uma solução proposta por \textit{Holm, de Lichtenberg e Thorup} \cite{jacob_holm}, na Seção 2 de seu artigo. Na Seção 3, os autores propõem a solução do problema da conexidade em um grafo totalmente dinâmico, sem peso nas arestas. Já na Seção 4, é abordado o problema das florestas geradoras de custo mínimo decrementais (\textit{decremental MSF}, de \textit{Minimum Spanning Forest}), onde é descrito um algoritmo eficiente que suporta somente remoções de arestas. Por fim, na Seção 5 é retratado o problema da florestas geradoras de custo mínimo totalmente dinâmicas (\textit{fully dynamic MSF}), onde o algoritmo de FGCM decrementais é transformado em um algoritmo eficiente de FGCM totalmente dinâmicas, que suporta tanto remoções quanto adições de arestas.
+
+No decorrer do nosso estudo, iremos destrinchar a solução dos autores nos seguintes capítulos:
 
 \begin{itemize}
-    \item Capítulo 2: Conexidade em florestas dinâmicas
-    \item Capítulo 3: Conexidade em grafos dinâmicos
-    \item Capítulo 4: Algoritmo decremental em grafos dinâmicos
-    \item Capítulo 5: Árvore geradora   
+    \item Capítulo 2: descreveremos brevemente o problema da conexidade em florestas dinâmicas;
+    \item Capítulo 3: descreveremos as pontos mais importantes do problema da conexidade em grafos dinâmicos;
+    \item Capítulo 4: descreveremos a nossa implementação do algoritmo para o problema das florestas geradoras de custo mínimo decrementais;
+    \item Capítulo 5: ...  
 \end{itemize}
 
-Existem diversas famílias de grafos, de modo que cada uma é adequada para resolver um tipo de problema particular. Iremos tratar inicialmente do \textbf{problema de conexidade em grafos dinâmicos}, que consiste em manter um grafo dinâmico que sofre uma sequência de inserções e remoções de arestas. Entre essas modificações, realizamos consultas para verificar se dois vértices \textit{u} e \textit{v} estão conectados por algum caminho. Para este problema, iremos usar as \textbf{florestas} (coleção de árvores) como base para a construção do algoritmo.
-
-Inicialmente, utilizaremos o \textbf{problema de conexidade em florestas dinâmicas} como base para construir o algoritmo do \textbf{problema de conexidade em grafos dinâmicos}, e, a partir este, construir o \textbf{algoritmo decremental para árvores geradoras de custo mínimo}, nas quais a nossa implementação será baseada, e usaremos \textit{C++} como linguagem do código, onde disponibilizamos no repositório do \textit{GitHub} \cite{chung2025}.
+As implementações dos nossos algoritmos da solução de \textit{Holm, de Lichtenberg e Thorup} \cite{jacob_holm} serão feitas utilizando a linguagem \textit{C++}, onde disponibilizamos o código no repositório do \textit{GitHub} \cite{chung2025}.
