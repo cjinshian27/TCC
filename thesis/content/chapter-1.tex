@@ -6,7 +6,9 @@
 
 \section{Definição}
 
-O problema da conexidade em florestas dinâmicas pode ser considerada uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. Visto que já existe literatura descrevendo o primeiro problema de forma mais detalhada, como em Rodrigues \cite{arthur} no capítulo 2, aqui será feita apenas uma breve descrição de como o nosso algoritmo foi implementado. É importante ressaltar que a nossa implementação foi baseada na solução da seção 2 do artigo de \textit{Holm, de Lichtenberg e Thorup} \cite{jacob_holm}, porém escolhendo uma estrutura de dados apropriada para representar as árvores da floresta.
+Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o seu algoritmo, da Seção 2 do artigo de Holm, de Lichtenberg e Thorup \cite{jacob_holm}. No Capítulo 2 de sua dissertação ele descreve as rotinas principais do algoritmo, baseado em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo das funções secundárias. Dada essas circunstâncias, optamos por não apresentar uma descrição detalhada desse algoritmo, explicando brevemente sobre o que as rotinas principais fazem, bem como algumas diferenças de implementação realizadas em código comparadas com a de Rodrigues.  
+
+O problema da conexidade em florestas dinâmicas pode ser considerada uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. 
 
 A nossa biblioteca contém os seguintes métodos:
 
