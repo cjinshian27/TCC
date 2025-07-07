@@ -27,6 +27,10 @@ Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chama
 
 \begin{itemize}
     \item \texttt{\textbf{listaDeAdjacências(L, n)}}: constrói e devolve um grafo $L$ contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
-    \item \texttt{\textbf{adiciona(G, u, v)}}: adiciona $u$ na lista de adjacências de v em $L$ e vice-versa;
-    \item \texttt{\textbf{remova(G, u, v)}}: remove $u$ da lista de adjacências de $v$ em $L$ e vice-versa.
+    \item \texttt{\textbf{adiciona(L, u, v)}}: adiciona $u$ na lista de adjacências de v em $L$ e vice-versa;
+    \item \texttt{\textbf{remova(L, u, v)}}: remove $u$ da lista de adjacências de $v$ em $L$ e vice-versa.
 \end{itemize} 
+
+O objetivo de guardar arestas reservas em nosso grafo é simples: suponha que temos duas componentes conexas $C_1$ e $C_2$ em nosso grafo $G$. O vértice $u$ está em $C_1$ e $v$ está em $C_2$. Se $C_1$ e $C_2$ são conectados por uma única aresta, a remoção dela acarretaria em duas componentes separadas. Então chamar \texttt{conectado(G, u, v)} após a remoção de desta aresta receberíamos falso como resposta. Agora, suponha que $C_1$ e $C_2$ estão conectados por alguma aresta $e$ diferente de $uv$. Ao chamarmos \texttt{adiciona(G, u, v)}, guardaríamos a aresta $uv$ como reserva. Se posteriormente removermos $e$, note que os componentes $C_1$ e $C_2$ não estariam conectados, e se não tivéssemos armazenado $uv$, então a consulta \texttt{conectado(G, u, v)} devolveria falso já que os componentes de $u$ e $v$ estariam separados. Dessa forma, a aresta reserva possui a função de substituir a conexão removida. 
+
+Note que não podemos simplesmente adicionar $uv$ em $G$ em vez de guardar nas listas de adjacências. Isso porque, como estamos mantendo uma floresta maximal $F$ de $G$, e por definição uma floresta não pode conter ciclos, adicionar $uv$ dada a existência da aresta $e$ acarretaria na formação de um ciclo contendo essas duas arestas, o que violaria o nosso algoritmo.
