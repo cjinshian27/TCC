@@ -213,37 +213,6 @@
       \verb https://doi.org/10.1145/3828.3835
       \endverb
     \endentry
-    \entry{tarjan}{article}{}
-      \name{author}{2}{}{%
-        {{hash=09f1ee63063ed5ad11c3baa87f800eb7}{%
-           family={Tarjan},
-           familyi={T\bibinitperiod},
-           given={Robert\bibnamedelima Endre},
-           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
-        {{hash=5ba1f33a41827bbc3c6eef5200399792}{%
-           family={Vishkin},
-           familyi={V\bibinitperiod},
-           given={Uzi},
-           giveni={U\bibinitperiod}}}%
-      }
-      \strng{namehash}{6c2ff198f7980259024bcc782cc6dcdd}
-      \strng{fullhash}{6c2ff198f7980259024bcc782cc6dcdd}
-      \strng{bibnamehash}{6c2ff198f7980259024bcc782cc6dcdd}
-      \strng{authorbibnamehash}{6c2ff198f7980259024bcc782cc6dcdd}
-      \strng{authornamehash}{6c2ff198f7980259024bcc782cc6dcdd}
-      \strng{authorfullhash}{6c2ff198f7980259024bcc782cc6dcdd}
-      \field{sortinit}{T}
-      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{SIAM Journal on Computing}
-      \field{number}{4}
-      \field{title}{An efficient parallel biconnectivity algorithm}
-      \field{volume}{14}
-      \field{year}{1985}
-      \field{pages}{862\bibrangedash 874}
-      \range{pages}{13}
-    \endentry
   \enddatalist
 \endrefsection
 \endinput

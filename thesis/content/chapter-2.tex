@@ -11,7 +11,7 @@
 Como citado no Capítulo 1, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente para a seguinte biblioteca, que contém:
 
 \begin{itemize}
-    \item \texttt{\textbf{grafoDinâmico(G, n)}}: devolve um grafo dinâmico $G$ com $n$ vértices isolados;
+    \item \texttt{\textbf{grafoDinâmico(G, n)}}: contrói e devolve um grafo dinâmico $G$ com $n$ vértices isolados;
     \item \texttt{\textbf{conectado(G, u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
     \item \texttt{\textbf{adiciona(G, u, v)}}: adiciona a aresta $uv$ no grafo $G$;
     \item \texttt{\textbf{remova(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
@@ -20,3 +20,13 @@ Como citado no Capítulo 1, o problema da conexidade em grafos dinâmicos visa c
 O algoritmo de Holm, de Lichtenberg e Thorup para este problema de conexidade é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, que utilizam o algoritmo mencionado na Seção 2. Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$. O nível inicial de uma aresta recém-inserida é sempre $\left\lceil \lg n \right\rceil$, e ele nunca aumenta, apenas diminui. Assim, cada aresta de nível $i$ pertence à floresta dinâmica de mesmo nível. 
 
 Ademais, a consulta \texttt{conectado(u, v)} aplicada ao grafo $G$ significa fazer a mesma consulta para alguma floresta maximal $F$ de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos realizando-a em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\lg n$ florestas de vértices isolados.
+
+Quando realizamos uma chamada à função \texttt{adiciona(G, u, v)}, é feito uma chamada ao \texttt{conectado(G, u, v)} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserido a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
+
+Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
+
+\begin{itemize}
+    \item \texttt{\textbf{listaDeAdjacências(L, n)}}: constrói e devolve um grafo $L$ contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
+    \item \texttt{\textbf{adiciona(G, u, v)}}: adiciona $u$ na lista de adjacências de v em $L$ e vice-versa;
+    \item \texttt{\textbf{remova(G, u, v)}}: remove $u$ da lista de adjacências de $v$ em $L$ e vice-versa.
+\end{itemize} 
