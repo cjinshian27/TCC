@@ -8,18 +8,15 @@
 
 \section{Definição}
 
-Como citado na Seção 1.1, o problema de conexidade dos grafos dinâmicos será o passo intermediário para a definição do próximo problema de conectividade. A nossa biblioteca contém o seguinte:
+Como citado no Capítulo 1, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente para a seguinte biblioteca, que contém:
 
 \begin{itemize}
-    \item \texttt{\textbf{grafoDinâmico(n)}}: constrói um grafo dinâmico de $n$ vértices isolados;
-    \item \texttt{\textbf{conectado(u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente e falso caso contrário;
-    \item \texttt{\textbf{adiciona(u, v)}}: adiciona a aresta $uv$ no grafo;
-    \item \texttt{\textbf{remova(u, v)}}: remove a aresta $uv$ do grafo;
-    \item \texttt{\textbf{imprima()}}: imprime todas os níveis das florestas e suas respectivas árvores.
-\end{itemize}
+    \item \texttt{\textbf{grafoDinâmico(G, n)}}: devolve um grafo dinâmico $G$ com $n$ vértices isolados;
+    \item \texttt{\textbf{conectado(G, u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
+    \item \texttt{\textbf{adiciona(G, u, v)}}: adiciona a aresta $uv$ no grafo $G$;
+    \item \texttt{\textbf{remova(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
+\end{itemize} 
 
-Assim como o problema da conexidade em florestas dinâmicas, o método \texttt{imprima()} é usado apenas para visualização do resultado da floresta após as operações realizadas, como também para a depuração do código. 
-
-O grafo dinâmico é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas, que utilizam a implementação mencionada na Seção 2. Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$. O nível inicial de uma aresta recém-inserida é sempre $\left\lceil \lg n \right\rceil$, e ela nunca aumenta, apenas diminui. Assim, cada aresta de nível $i$ pertence à floresta dinâmica de mesmo nível. 
+O algoritmo de Holm, de Lichtenberg e Thorup para este problema de conexidade é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, que utilizam o algoritmo mencionado na Seção 2. Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$. O nível inicial de uma aresta recém-inserida é sempre $\left\lceil \lg n \right\rceil$, e ele nunca aumenta, apenas diminui. Assim, cada aresta de nível $i$ pertence à floresta dinâmica de mesmo nível. 
 
 Ademais, a consulta \texttt{conectado(u, v)} aplicada ao grafo $G$ significa fazer a mesma consulta para alguma floresta maximal $F$ de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos realizando-a em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\lg n$ florestas de vértices isolados.
