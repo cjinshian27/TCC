@@ -1,6 +1,6 @@
 template<typename Key>
 
-class Edge{
+class Node{
 	
 	public:
 
@@ -10,11 +10,11 @@ class Edge{
 		Key first;
 		Key second;
 
-		Edge * left = nullptr;
-		Edge * right = nullptr;
-		Edge * parent = nullptr;
+		Node * left = nullptr;
+		Node * right = nullptr;
+		Node * parent = nullptr;
 
-		Edge(Key first, Key second, unsigned int id){
+		Node(Key first, Key second, unsigned int id){
 
 			this->first = first;
 			this->second = second;
