@@ -22,13 +22,13 @@ class Node{
 			this->size = 1;
 		}
 
-		//print the edge in the (u, v) format
+		//print the node in the (u, v) format
 		void print(){
 
 			std::cout << "(" << this->first << " " << this->second << ")" << '\n';
 		}
 
-		//set the edge size
+		//set the node size
 		void setSize(){
 
 			if(this->left && this->right){

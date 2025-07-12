@@ -7,19 +7,19 @@ class DynamicForest{
 
 	private:
 		unsigned int id = 0;
-		unsigned int numberOfEdges;
+		unsigned int numberOfNodes;
 
 		/*
-		keep the remaining edges in the forest in 
+		keep the remaining nodes in the forest in 
 		a <Key, Key> format.
 		*/
-		std::set<std::pair<Key, Key>> edgeSet;
+		std::set<std::pair<Key, Key>> nodeSet;
 
 		/*
-		map the edges according to their two (Key) ends. 
-		That means mapEdges[u][v] = Edge<Key>(u, v).
+		map the nodes according to their two (Key) ends. 
+		That means mapNodes[u][v] = Node<Key>(u, v).
 		*/
-		std::unordered_map<Key, std::unordered_map<Key, Edge<Key> *>> mapEdges; 
+		std::unordered_map<Key, std::unordered_map<Key, Node<Key> *>> mapNodes; 
 		
 		/*
 		map the remaining splay trees in the forest, where 
@@ -30,18 +30,18 @@ class DynamicForest{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
-		get the size of an edge, which means the sum 
+		get the size of an node, which means the sum 
 		of its left subtree, right subtree + 1. 
 		*/
-		unsigned int size(Edge<Key> * edge){
+		unsigned int size(Node<Key> * node){
 			
-			if(!edge) return 0;
-			return edge->size;
+			if(!node) return 0;
+			return node->size;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
-		return the id of the root whose tree contains edge
+		return the id of the root whose tree contains node
 		
 		example: splaying [2:1] node
 			
@@ -50,31 +50,31 @@ class DynamicForest{
 		  	 ([2:1] id2)                  ([2:1] id1)         ([1:2] id2)
 											
 		*/
-		unsigned int find(Edge<Key> * edge){	
+		unsigned int find(Node<Key> * node){	
 			
-			if(!edge) return 0;	
+			if(!node) return 0;	
 			
-			Edge<Key> * currentEdge = edge;
+			Node<Key> * currentNode = node;
 
-			while(currentEdge->parent){
-				currentEdge = currentEdge->parent;
+			while(currentNode->parent){
+				currentNode = currentNode->parent;
 			}
 
-			SplayTree<Key> * aux = mapTrees[currentEdge->id];
+			SplayTree<Key> * aux = mapTrees[currentNode->id];
 
 			if(aux){
-				std::swap(currentEdge->id, edge->id);
-				aux->splay(edge);
-				mapTrees[edge->id] = aux;
+				std::swap(currentNode->id, node->id);
+				aux->splay(node);
+				mapTrees[node->id] = aux;
 			} 
 			
-			return edge->id;
+			return node->id;
 		}   
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
-		return the rank/order of an edge in the tree
+		return the rank/order of an node in the tree
 		
 		example: splaying [2:1] node
 			
@@ -82,31 +82,31 @@ class DynamicForest{
 		      \             ▶▶▶            \            ▶▶▶        /
 		  	 ([2:1] id2)                  ([2:1] id1)         ([1:2] id2)
 		*/
-		unsigned int order(Edge<Key> * edge){
+		unsigned int order(Node<Key> * node){
 			
-			Edge<Key> * currentEdge = edge;
+			Node<Key> * currentNode = node;
 
-			while(currentEdge->parent) currentEdge = currentEdge->parent;
+			while(currentNode->parent) currentNode = currentNode->parent;
 
-			SplayTree<Key> * aux = mapTrees[currentEdge->id];
+			SplayTree<Key> * aux = mapTrees[currentNode->id];
 			
 			if(aux){
-				std::swap(currentEdge->id, edge->id);
-				aux->splay(edge);
-				mapTrees[edge->id] = aux;
+				std::swap(currentNode->id, node->id);
+				aux->splay(node);
+				mapTrees[node->id] = aux;
 			} 
 
-			return size(edge->left) + 1;
+			return size(node->left) + 1;
 		}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//bring the edge that contains u to the front of the euler tour
+		//bring the node that contains u to the front of the euler tour
 		SplayTree<Key> * bringToFront(SplayTree<Key> * splayTree, Key u){
 			
 			if(!splayTree) return nullptr;
 			
-			unsigned int position = order(getEdge(u));
+			unsigned int position = order(getNode(u));
 			
 			mapTrees.erase(splayTree->root->id);
 
@@ -135,15 +135,15 @@ class DynamicForest{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
-		get the first edge that contains u as the first end.
+		get the first node that contains u as the first end.
 			
 		example: (u, v), (u, w), and (u, x)
 		*/
-		Edge<Key> * getEdge(Key u){
+		Node<Key> * getNode(Key u){
 			
-			auto mapValue = mapEdges[u].begin();
+			auto mapValue = mapNodes[u].begin();
 
-			if(mapValue != mapEdges[u].end()){
+			if(mapValue != mapNodes[u].end()){
 				return mapValue->second;
 			}
 
@@ -158,8 +158,8 @@ class DynamicForest{
 			SplayTree<Key> * uv = new SplayTree<Key>(u, v, ++id);
 			SplayTree<Key> * vu = new SplayTree<Key>(v, u, ++id);
 
-			this->mapEdges[u][v] = uv->root;
-			this->mapEdges[v][u] = vu->root;
+			this->mapNodes[u][v] = uv->root;
+			this->mapNodes[v][u] = vu->root;
 
 			if(tree1){
 
@@ -182,24 +182,24 @@ class DynamicForest{
 
 		DynamicForest(unsigned int n){
 			
-			this->numberOfEdges = n;
+			this->numberOfNodes = n;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		/*
 		check whether nodes u and v are connected. 
 		
-		in the if statement(), the additional getEdge() 
+		in the if statement(), the additional getNode() 
 		checking is for the case when id1 and id2 return 
-		0. That means there are no edges with ends u or 
+		0. That means there are no nodes with ends u or 
 		v, so it will return a nullptr. Since a nullptr
 		indicates false, then it will not return true.
 		*/
 		bool isConnected(Key u, Key v){
 
-			unsigned int id1 = find(getEdge(u));
-			unsigned int id2 = find(getEdge(v));
+			unsigned int id1 = find(getNode(u));
+			unsigned int id2 = find(getNode(v));
 
-			if(id1 == id2 && getEdge(u)) return true;
+			if(id1 == id2 && getNode(u)) return true;
 
 			return false;
 		}
@@ -212,10 +212,10 @@ class DynamicForest{
 			
 			if(u > v) std::swap(u, v);
 			
-			edgeSet.insert({u, v});
+			nodeSet.insert({u, v});
 
-			SplayTree<Key> * splayTree1 = mapTrees[find(getEdge(u))];
-			SplayTree<Key> * splayTree2 = mapTrees[find(getEdge(v))];
+			SplayTree<Key> * splayTree1 = mapTrees[find(getNode(u))];
+			SplayTree<Key> * splayTree2 = mapTrees[find(getNode(v))];
 
 			splayTree1 = bringToFront(splayTree1, u);
 			splayTree2 = bringToFront(splayTree2, v);
@@ -224,19 +224,19 @@ class DynamicForest{
 		}
 //+++++++++++++++a++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//cut the edge with u and v ends
+		//cut the node with u and v ends
 		void cut(Key u, Key v){
 
 			if(!isConnected(u, v)) return;
 			
 			if(u > v) std::swap(u, v);
 			
-			edgeSet.erase({u, v});
+			nodeSet.erase({u, v});
 
-			unsigned int uvPosition = order(mapEdges[u][v]);
-			unsigned int vuPosition = order(mapEdges[v][u]);
+			unsigned int uvPosition = order(mapNodes[u][v]);
+			unsigned int vuPosition = order(mapNodes[v][u]);
 
-			unsigned int uvID = find(mapEdges[u][v]);
+			unsigned int uvID = find(mapNodes[u][v]);
 
 			SplayTree<Key> * splayTree = mapTrees[uvID];
 
@@ -259,8 +259,8 @@ class DynamicForest{
 				mapTrees[split3.first->root->id] = split3.first;
 			}
 
-			mapEdges[u].erase(v);
-			mapEdges[v].erase(u);
+			mapNodes[u].erase(v);
+			mapNodes[v].erase(u);
 
 			delete(split2.first);
 			delete(split4.first);
@@ -269,14 +269,14 @@ class DynamicForest{
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		
-		//print all the edges from the forest
+		//print all the nodes from the forest
 		void print(){
 			
-			auto edge = edgeSet.begin();
-			std::cout << edge->first << " " << edge->second;
+			auto node = nodeSet.begin();
+			std::cout << node->first << " " << node->second;
 			
-			for (std::advance(edge, 1); edge != edgeSet.end(); ++edge){
-			  	std::cout << "  " << edge->first << " " << edge->second;
+			for (std::advance(node, 1); node != nodeSet.end(); ++node){
+			  	std::cout << "  " << node->first << " " << node->second;
 			}
 
 			std::cout << '\n';
@@ -297,17 +297,17 @@ class DynamicForest{
 			}
 		}
 
-		bool hasEdge(Key u, Key v){
+		bool hasNode(Key u, Key v){
 			
-			if(mapEdges[u][v]) return true;
+			if(mapNodes[u][v]) return true;
 			return false;
 		}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		Edge<Key> * getRoot(Key u){
+		Node<Key> * getRoot(Key u){
 			
-			SplayTree<Key> * splayTree = mapTrees[find(getEdge(u))];
+			SplayTree<Key> * splayTree = mapTrees[find(getNode(u))];
 			return splayTree->root;
 		}
 };

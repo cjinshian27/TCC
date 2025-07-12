@@ -1,6 +1,6 @@
 template<typename Key>
 
-class Edge{
+class Node{
 	
 	public:
 
@@ -10,11 +10,11 @@ class Edge{
 		Key first;
 		Key second;
 		
-		Edge * left = nullptr;
-		Edge * right = nullptr;
-		Edge * parent = nullptr;
+		Node * left = nullptr;
+		Node * right = nullptr;
+		Node * parent = nullptr;
 
-		Edge(Key first, Key second, unsigned int id){
+		Node(Key first, Key second, unsigned int id){
 
 			this->first = first;
 			this->second = second;
@@ -22,13 +22,13 @@ class Edge{
 			this->size = 1;
 		}
 
-		//print the edge in the (u, v) format
+		//print the node in the (u, v) format
 		void print(){
 
 			std::cout << "(" << this->first << " " << this->second << ")" << '\n';
 		}
 
-		//set the edge size
+		//set the node size
 		void setSize(){
 
 			if(this->left && this->right){
