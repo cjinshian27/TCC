@@ -8,7 +8,6 @@ void printStylishLine(){
 	std::cout << "════════════════════════════════════════════════════════════════════════════════════\n";
 }
 
-
 template<typename Key>
 
 class DynamicGraph{
@@ -26,6 +25,7 @@ class DynamicGraph{
 	
 	unsigned int maxLevel;
 	
+	// update node forest level
 	void updateMapNodeLevels(Key u, Key v, unsigned int level){
 		this->mapNodeLevels[u][v] = level;
 		this->mapNodeLevels[v][u] = level;
@@ -33,6 +33,7 @@ class DynamicGraph{
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
+	// decrease the node forest level
 	void decreaseNodesLevel(Tree<Key> * uTree, unsigned int i){
 		
 		Node<Key> * nodeToSplay = uTree->getNodeWithIsLevelTrue(uTree->root);
@@ -49,37 +50,59 @@ class DynamicGraph{
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
+	/*
+	after an node (edge) is cut, find a replacement node (edge) 
+	in the adjacency list to link the two split forests again
+	*/
 	void replaceNode(Key u, Key v, unsigned int nodeLevel){
 		
 		bool nodeIsReplaced = false;
 			
 		for(unsigned int i = nodeLevel; i <= this->maxLevel && !nodeIsReplaced; ++i){
 			
-			Tree<Key> * uTree = this->forests[i]->getTreeContaining(u);
-			Tree<Key> * treeV = this->forests[i]->getTreeContaining(v);
+			Tree<Key> * treeContainingU = this->forests[i]->getTreeContaining(u);
+			Tree<Key> * treeContainingV = this->forests[i]->getTreeContaining(v);
 			
-			if(uTree->size() > treeV->size()){
-				std::swap(uTree, treeV);
+			if(treeContainingU->size() > treeContainingV->size()){
+				std::swap(treeContainingU, treeContainingV);
 				std::swap(u, v);
 			} 
 			
-			while(uTree->root->nodesAtLevel > 0){
-				decreaseNodesLevel(uTree, i);
+			/*
+			the tree that contains u has less than 2^i nodes now, 
+			1 ≤ i ≤ ⌈lg(n)⌉, so we need to decrease the node levels by 1
+			*/ 
+			while(treeContainingU->root->nodesAtLevel > 0){
+				decreaseNodesLevel(treeContainingU, i);
 			}
+			
+			/*
+			since treeContainingU has fewer nodes than treeContaningV, 
+			then we need to find a replacement node (edge) that has one 
+			end in treeContaningU and another end in treeContaningV. 
+			
+			This replacement node is called reserve node, and the nodes
+			that are not reserve are removed later on. 
+			*/
+			while(treeContainingU->root->reserveNodes > 0 && !nodeIsReplaced){
 				
-				
-			while(uTree->root->reserveNodes > 0 && !nodeIsReplaced){
-				
-				Node<Key> * xxVertex = uTree->getReserveNode(uTree->root);
-				uTree->splay(xxVertex);
+				Node<Key> * nodeXX = treeContainingU->getReserveNode(treeContainingU->root);
+				treeContainingU->splay(nodeXX);
 				std::vector<Key> reserveNodesToBeRemoved;
-				Key x = xxVertex->first;
+				Key x = nodeXX->first;
 
 				for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
 					
 					reserveNodesToBeRemoved.push_back(y);	
 					
-					//y does not belong to Tv 
+					/*
+					if the nodes x and y are connected, then we know 
+					they are in treeContaningU, because they are in 
+					the same component. So we just decrease the level 
+					of (x, y). Otherwise, we found a replacement node, 
+					and we link x and y on every forest from the current
+					level to ⌈lg(n)⌉. 
+					*/
 					if(this->forests[i]->isConnected(x, y)){
 						updateMapNodeLevels(x, y, i - 1);
 						this->adjacencyLists[i - 1]->add(x, y);
@@ -93,18 +116,23 @@ class DynamicGraph{
 					}
 				}
 				
-				//remove y nodes that are incident to x but not in vTree
+				/*
+				remove nodes that are incident to treeContaningU,
+				but not to treeContaningV 
+				*/
 				for (Key & y : reserveNodesToBeRemoved) {
 					this->adjacencyLists[i]->remove(x, y);
 					this->forests[i]->decreaseIncidentToReserveNodeCount(y);
 				}
 
-				// if x is not incident to any other node of level i, then
-				// decrease the reserve node count
+				/*
+				if x is not incident to any other node of level i, then
+				decrease the reserve node count
+				*/
 				if(this->adjacencyLists[i]->adjList[x].empty()){
 					this->forests[i]->decreaseIncidentToReserveNodeCount(x);
-					xxVertex->isIncidentToReserveNode = false;
-					xxVertex->setReserveNodesCount();
+					nodeXX->isIncidentToReserveNode = false;
+					nodeXX->setReserveNodesCount();
 				}
 			}
 		}
@@ -147,13 +175,22 @@ class DynamicGraph{
 		}
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+				
+		//remove the node (edge) <u, v> in O(lg²(n))
 		void remove(Key u, Key v){
 			
 			unsigned int nodeLevel = mapNodeLevels[u][v];
 			mapNodeLevels[u].erase(v);
 			mapNodeLevels[v].erase(u);
-
+			
+			/*
+			if the forest of level ⌈lg(n)⌉ has <u, v>, 
+			then we need to find a replacement for <u, v>
+			so the forest is not disconnected. Otherwise, 
+			<u, v> is a reserve node and the forest is 
+			still maintained, so we simply need to remove 
+			<u, v> from the adjacency list
+			*/
 			if(this->forests[this->maxLevel]->hasNode(u, v)){
 				for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i)
 					 this->forests[i]->cut(u, v);
