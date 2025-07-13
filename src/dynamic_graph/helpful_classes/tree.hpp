@@ -314,7 +314,8 @@ class Tree{
 		unsigned int size(){
 			return size(this->root);
 		}
-
+		
+		// get the node that has the isLevelTrue = true
 		Node<Key> * getNodeWithIsLevelTrue(Node<Key> * root){
 			
 			if(root->isLevel) return root;
@@ -327,6 +328,7 @@ class Tree{
 			}
 		}
 		
+		// get the reserve node
 		Node<Key> * getReserveNode(Node<Key> * root){
 
 			if(root->isIncidentToReserveNode) return root;

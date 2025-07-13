@@ -6,7 +6,7 @@ class Node{
 	
 	public:
 
-		// if the node is (u, v), u != v, tells if (u, v) is of level i (from the forest)
+		// if the node is (u, v), u != v, tells if (u, v) is of forest level i
 		bool isLevel; 
 
 		// if the node is (u, u), tells if a reserve edge of level i is incident to (u, u) 
@@ -118,6 +118,7 @@ class Node{
 			}
 		}
 		
+		// update the node attributes
 		void updateValues(){
 			setSize();
 			setNodeLevelCount();

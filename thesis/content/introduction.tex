@@ -22,14 +22,13 @@ atualização e consulta são apresentadas de forma online, sem conhecimento alg
 
 Aqui serão tratados problemas em que o grafo dinâmico possui um conjunto fixo de vértices \textit{V}, e estabelecemos $n = |\textit{V}\ |$. Além disso, pode-se definir $m$ como o número de arestas existentes. Na maior parte das vezes, a complexidade de tempo das operações será amortizada, o que implica que elas são calculadas como a média sobre todas as operações realizadas. 
 
-
-Um grafo dinâmico de ordem n é uma sequência de grafos ($G_0$, $G_1$, $\cdots$, $G_T$), onde $G_0$ é o grafo inicial com \textit{n} vértices e cada $G_t$ para $1 \leq t \leq T$ é obtido a partir de $G_{t-1}$ pela adição ou remoção de uma aresta. Assim, podemos escrever $E(G_{t}) := E(G_{t - 1}) \setminus \{uv\}$, para alguma aresta $uv \in E(G_{t-1})$. Chamamos de \textbf{alterações}, \textbf{modificações} ou \textbf{atualizações} quando ocorre alguma operação de adição e/ou remoção de arestas no grafo dinâmico.
+Um grafo dinâmico de ordem n é uma sequência de grafos ($G_0$, $G_1$, $\ldots$, $G_T$), onde $G_0$ é o grafo inicial com \textit{n} vértices e cada $G_t$ para $1 \leq t \leq T$ é obtido a partir de $G_{t-1}$ pela adição ou remoção de uma aresta. Assim, podemos escrever $E(G_{t}) := E(G_{t - 1}) \setminus \{uv\}$, para alguma aresta $uv \in E(G_{t-1})$. Chamamos de \textbf{alterações}, \textbf{modificações} ou \textbf{atualizações} quando ocorre alguma operação de adição e/ou remoção de arestas no grafo dinâmico.
 
 Um problema em grafos dinâmicos consiste em verificar se o grafo atual \textit{G} satisfaz alguma propriedade, e cada operação que realiza essa verificação é denominada \textbf{consulta}. A solução do problema depende da criação de um algoritmo que utiliza uma estrutura de dados capaz de realizar estas consultas e as alterações de forma eficiente. 
 
 Iremos tratar inicialmente do \textbf{problema de conexidade em grafos dinâmicos}, que consiste em manter um grafo dinâmico que sofre uma sequência de inserções e remoções de arestas. Entre essas modificações, realizamos consultas para verificar se dois vértices \textit{u} e \textit{v} estão conectados por algum caminho. Porém, antes de entrarmos em detalhes, iremos apresentar alguns conceitos importantes que constituirão a base do nosso problema. 
 
-Um problema clássico em grafos é o problema da árvore geradora de custo mínimo (MST, de \textit{Minimum Spanning Tree}). Para defini-lo, iremos introduzir alguns conceitos em grafos. Seja um grafo conexo não dirigido $G = (V, E)$. onde $V$ é o conjunto de vértices e $E$ o conjunto de arestas. Um grafo não-dirigido significa que para qualquer aresta $uv \in E$, podemos ir de $u$ a $v$ e vice-versa, ou seja, a aresta não possui direção. Para cada aresta $uv \in E$, temos um peso $w(uv)$ associado. Então queremos encontrar um subconjunto acíclico $T \subseteq G$ que conecte todos os vértices e que o peso total 
+Um problema clássico em grafos é o problema da árvore geradora de custo mínimo (MST, de \textit{Minimum Spanning Tree}). Para defini-lo, iremos introduzir alguns conceitos em grafos. Seja $G = (V, E)$ um grafo conexo não dirigido. onde $V$ é o conjunto de vértices e $E$ o conjunto de arestas. Um grafo não-dirigido significa que para qualquer aresta $uv \in E$, podemos ir de $u$ a $v$ e vice-versa, ou seja, a aresta não possui direção. Para cada aresta $uv \in E$, temos um peso $w(uv)$ associado. Então queremos encontrar um subconjunto acíclico $T \subseteq G$ que conecte todos os vértices e que o peso total 
 
 $$
 w(T) = \sum_{e \,\in\, E(T)} w(e)
@@ -91,17 +90,17 @@ Para desenvolver uma árvore geradora mínima, podemos definir uma abordagem gul
         T = $\emptyset$
         (*@\textbf{enquanto}@*) T não formar uma árvore geradora
             encontre uma aresta $uv$ que seja segura à T
-            T = A $\cup$ $\{uv\}$
+            T = T $\cup$ $\{uv\}$
         (*@\textbf{retorne}@*) T
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O método acima administra um conjunto de arestas A, mantendo o seguinte invariante: antes de cada iteração, $T$ é um subconjunto de alguma árvore geradora mínima. Em cada etapa, determinamos uma aresta $uv$ que pode ser adicionada a $T$ sem violar tal invariante, de modo que $T \cup \{uv\}$ também é um subconjunto de uma árvore geradora mínima. Chamamos $uv$ de \textbf{aresta segura} para $T$, visto que ela pode ser adicionada a $T$ e ainda manter o invariante. 
+O método acima administra um conjunto de arestas T, mantendo o seguinte invariante: antes de cada iteração, $T$ é um subconjunto de alguma árvore geradora mínima. Em cada etapa, determinamos uma aresta $uv$ que pode ser adicionada a $T$ sem violar tal invariante, de modo que $T \cup \{uv\}$ também é um subconjunto de uma árvore geradora mínima. Chamamos $uv$ de \textbf{aresta segura} para $T$, visto que ela pode ser adicionada a $T$ e ainda manter o invariante. 
 
 Na linha 1, fica trivial que o conjunto $T$ satisfaz o invariante do laço. Nas linhas 2-4 o invariante é mantido pois estamos adicionando somente arestas seguras. Na linha 5, como $T$ está contido em uma árvore geradora e em uma árvore geradora mínima, então o conjunto $T$ retornado nesta linha deve ser uma árvore geradora mínima. 
 
-Note que o desafio é encontrar a aresta segura da linha 3 do algoritmo. Porém, existem dois algoritmos gulosos que resolvem este problema: o algoritmo de Kruskal e o de Prim. Cada um deles estabelece uma regra específica para determinar uma aresta segura nesta linha 3. No algoritmo de Kruskal, o conjunto $T$ é sempre uma aresta de peso mínimo no grafo que conecta duas componentes distintas. Já no algoritmo de Prim, o conjunto $T$ forma uma árvore única. A aresta segura adicionada a $T$ é sempre uma aresta de peso mínimo que conecta a árvore a um vértice não presente na árvore. Como tais algoritmos são bem descritos no Capítulo 23.2 do livro de Cormen, Leiserson, Rivest e Stein \cite{clrs}, não iremos aprofundá-los em nosso estudo. 
+Note que o desafio é encontrar a aresta segura da linha 3 do algoritmo. Porém, existem dois algoritmos gulosos que resolvem este problema: o algoritmo de Kruskal e o de Prim. Cada um deles estabelece uma regra específica para determinar uma aresta segura nesta linha 3. No algoritmo de Kruskal, o conjunto $T$ é sempre uma árvore de peso mínimo no grafo que conecta duas componentes distintas. Já no algoritmo de Prim, o conjunto $T$ forma uma árvore única. A aresta segura adicionada a $T$ é sempre uma aresta de peso mínimo que conecta a árvore a um vértice não presente na árvore. Como tais algoritmos são bem descritos no Capítulo 23.2 do livro de Cormen, Leiserson, Rivest e Stein \cite{clrs}, não iremos aprofundá-los em nosso estudo. 
 
 Como se pode perceber, o algoritmo genérico resolve um problema estático em grafos, visto que todas as arestas de um grafo já foram definidas no início do problema. Dessa forma, como não precisamos nos preocupar com alterações no grafo, então ele sempre vai possuir as mesmas árvores geradoras de custo mínimo, ou até somente uma única árvore (quando os pesos das arestas são todos distintos). Em nosso estudo, estamos interessados no problema das florestas geradoras de custo mínimo (FGCM) em grafos dinâmicos, o que implica que a adição ou remoção de uma aresta ponderada pode modificar as árvores geradoras de custo mínimo dessas florestas.
 
