@@ -7,7 +7,7 @@
 void printStylishLine(){
 	std::cout << "════════════════════════════════════════════════════════════════════════════════════\n";
 }
-
+https://www.youtube.com/watch?v=Kod7OPmhRT4&pp=ygUOdmVuZGVyIHBhw6dvY2E%3D
 template<typename Key>
 
 class DynamicGraph{
