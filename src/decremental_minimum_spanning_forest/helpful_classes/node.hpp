@@ -3,41 +3,55 @@
 template<typename Key>
 
 class Node{
-
-	private:
-		Key u;
-		Key v;
-		
-	public:
 	
-		int weight;
-		bool isLevel;
+	public:
+
+		// if the node is (u, v), u != v, tells if (u, v) is of forest level i
+		bool isLevel; 
+
+		// if the node is (u, u), tells if a reserve edge of level i is incident to (u, u) 
 		bool isIncidentToReserveNode;
-		unsigned int id;
-		unsigned int size;
+		
+		// counts the number of nodes in the subtree where isLevel = true
 		unsigned int nodesAtLevel;
+		
+		// counts the number of nodes in the subtree where isIncidentToReserveNode = true
 		unsigned int reserveNodes;
+
+		// identifies each node uniquely
+		unsigned int id;
+
+		// keeps the size in the subtree
+		unsigned int size;
+		
+		// keeps the left end of an edge
 		Key first;
+
+		// keeps the right end of an edge
 		Key second;
 		
+		// left child node
 		Node * left = nullptr;
+
+		// right child node
 		Node * right = nullptr;
+
+		// parent node
 		Node * parent = nullptr;
 
-		Node(Key first, Key second, unsigned int id, int weight){
+		Node(Key first, Key second, unsigned int id){
 
-			this->first = first;
-			this->second = second;
-			this->id = id;
-			this->size = 1;
-			this->weight = weight;
-
-			this->isLevel = false;
-			this->nodesAtLevel = 0;
-			
-			this->isIncidentToReserveNode = false; 
-			this->reserveNodes = 0;
-		}
+				this->first = first;
+				this->second = second;
+				this->id = id;
+				this->size = 1;
+				
+				this->isLevel = false;
+				this->nodesAtLevel = 0;
+				
+				this->isIncidentToReserveNode = false; 
+				this->reserveNodes = 0;
+			}
 
 		//print the node in the (u, v) format
 		void print(){
@@ -47,7 +61,8 @@ class Node{
 					  << isIncidentToReserveNode << ":" << reserveNodes << 
 					  " - size: " << size << ")" << '\n';
 		}
-
+		
+		// updates the reserveNodes attribute count
 		void setReserveNodesCount(){
 			
 			unsigned int leftSubtreeReserveNodes = 0;
@@ -67,8 +82,7 @@ class Node{
 			
 		}
 
-
-		// count the number of nodes that are level i
+		// updates the nodesAtLevel attribute count
 		void setNodeLevelCount(){
 			
 			unsigned int leftSubtreeNodesAtLevel = 0;
@@ -87,7 +101,7 @@ class Node{
 			this->nodesAtLevel += leftSubtreeNodesAtLevel + rightSubtreeNodesAtLevel;
 		}
 
-		//set the node size
+		// updates the size attribute count
 		void setSize(){
 
 			if(this->left && this->right){
@@ -103,7 +117,8 @@ class Node{
 				this->size = 1;
 			}
 		}
-
+		
+		// update the node attributes
 		void updateValues(){
 			setSize();
 			setNodeLevelCount();

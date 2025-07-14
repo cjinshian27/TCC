@@ -196,7 +196,7 @@ class Forest{
 			
 			concatenate(tree1, u, tree2, v);			
 		}
-//+++++++++++++++a++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		//cut the node with u and v ends
 		void cut(Key u, Key v){
@@ -291,6 +291,7 @@ class Forest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+		// decrease the reserveNodes count
 		void decreaseIncidentToReserveNodeCount(Key u){
 			
 			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
@@ -298,7 +299,8 @@ class Forest{
 			mapNodes[u][u]->isIncidentToReserveNode = false;
 			mapNodes[u][u]->setReserveNodesCount();
 		}
-
+		
+		// increase the reserveNodes count
 		void increaseIncidentToReserveNodeCount(Key u){
 			
 			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
@@ -306,7 +308,8 @@ class Forest{
 			mapNodes[u][u]->isIncidentToReserveNode = true;
 			mapNodes[u][u]->setReserveNodesCount();
 		}
-
+		
+		// return the node uu
 		Node<Key> * getNode(Key u){
 			return this->mapNodes[u][u];
 		}
