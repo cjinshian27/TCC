@@ -13,7 +13,7 @@ class DynamicGraph{
 	
 	private:
 
-	// store the adjacency lists (each one stores backup nodes)
+	// store the adjacency lists (each one stores reserve nodes)
 	std::vector<AdjacencyList<Key> *> adjacencyLists;
 	
 	// store the forests 

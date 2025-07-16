@@ -9,7 +9,7 @@ void printStylishLine(){
 }
 template<typename Key>
 
-class DynamicGraph{
+class DecrementalMSF{
 	
 	private:
 
@@ -142,7 +142,7 @@ class DynamicGraph{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		// instantiate a dynamic graph in O(lg(n)) time.
-		DynamicGraph(std::vector<Key> & vertices){
+		DecrementalMSF(std::vector<Key> & vertices){
 			
 			this->maxLevel = static_cast<int>(std::ceil(std::log2(vertices.size()))); 
 

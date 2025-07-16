@@ -8,9 +8,9 @@
 #include <set>
 #include <unordered_set>
 #include <cmath>
-#include "decrementalMST.hpp"
+#include "decrementalMSF.hpp"
 
-DecrementalMST<int> * buildDecrementalMST(){
+DecrementalMSF<int> * buildDecrementalMSF(){
 	
 	unsigned int numberOfVertices;
 	unsigned int numberOfEdges;
@@ -25,7 +25,7 @@ DecrementalMST<int> * buildDecrementalMST(){
 		edges.push_back(std::make_tuple(u, v, weight));  // Edge from 0 to 1 with weight 5
 	}
 	
-	return new DecrementalMST<int>(numberOfVertices, edges);
+	return new DecrementalMSF<int>(numberOfVertices, edges);
 }
 
 //decode function
@@ -33,7 +33,7 @@ void decode(){
 
 	int operation, u, v, weight;
 
-	DecrementalMST<int> *  = buildDynamicGraph(); 
+	DecrementalMSF<int> *  = buildDynamicGraph(); 
 
 	while(std::cin >> operation){
 		
@@ -41,7 +41,7 @@ void decode(){
 
 			case 1:
 				std::cin >> u >> v;
-				if(decrementalMST->isConnected(u, v)){
+				if(decrementalMSF->isConnected(u, v)){
 					std::cout << u << " and " << v << " are connected!" << '\n';
 				} 
 				else{
@@ -51,11 +51,11 @@ void decode(){
 			
 			case 2: 
 				std::cin >> u >> v;
-				decrementalMST->remove(u, v);
+				decrementalMSF->remove(u, v);
 				break;
 
 			case 3:
-				decrementalMST->print();
+				decrementalMSF->print();
 				break;
 		}
 	}
