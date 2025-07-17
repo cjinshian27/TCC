@@ -33,7 +33,7 @@ void decode(){
 
 	int operation, u, v, weight;
 
-	DecrementalMSF<int> *  = buildDynamicGraph(); 
+	DecrementalMSF<int> * decrementalMSF = buildDynamicGraph(); 
 
 	while(std::cin >> operation){
 		

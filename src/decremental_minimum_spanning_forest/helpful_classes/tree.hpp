@@ -171,8 +171,8 @@ class Tree{
 			this->root = nullptr;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		Tree(Key u, Key v, unsigned int id){
-			this->root = new Node<Key>(u, v, id);
+		Tree(Key u, Key v, unsigned int id, int weight){
+			this->root = new Node<Key>(u, v, id, weight);
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		Tree(Node<Key> * node){
@@ -317,7 +317,7 @@ class Tree{
 		
 		// get the node that has the isLevelTrue = true
 		Node<Key> * getNodeWithIsLevelTrue(Node<Key> * root){
-			
+			if(!root) return nullptr;
 			if(root->isLevel) return root;
 
 			if(root->left && root->left->nodesAtLevel > 0){
@@ -330,7 +330,7 @@ class Tree{
 		
 		// get the reserve node
 		Node<Key> * getReserveNode(Node<Key> * root){
-
+			if(!root) return nullptr;
 			if(root->isIncidentToReserveNode) return root;
 			
 			if(root->left && root->left->reserveNodes > 0){
@@ -340,4 +340,28 @@ class Tree{
 				return getReserveNode(root->right);
 			}
 		}
-};
+
+		// get the node with the smallest weight
+		Node<Key>* getLightestNode(Node<Key>* root) {
+			if (!root) return nullptr;
+
+			int currentMinWeight = root->adjacencyList->empty() ? 
+							INT_MAX : root->adjacencyList->getMin().second;
+			
+			/*
+			If the current node's adjacency list has the minimum weight and it matches the node's minWeight, we found our target
+			*/ 
+			if (currentMinWeight == root->minWeight && currentMinWeight != INT_MAX) {
+				return root;
+			}
+			
+			if (root->left && root->left->minWeight == root->minWeight) {
+				return findNodeWithMinimumEdge(root->left);
+			} 
+			else if (root->right && root->right->minWeight == root->minWeight){
+				return findNodeWithMinimumEdge(root->right);
+			}
+			
+			return nullptr;
+		}
+	};

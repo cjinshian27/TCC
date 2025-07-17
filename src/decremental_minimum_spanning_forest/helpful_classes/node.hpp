@@ -1,3 +1,4 @@
+#include <climits>
 #include <utility>
 #include "minHeap.hpp"
 
@@ -6,6 +7,9 @@ template<typename Key>
 class Node{
 	
 	public:
+
+		// node's weight
+		int weight;
 
 		/*
 		keeps track of the node (u, v) with the smallest weight 
@@ -50,20 +54,21 @@ class Node{
 		// parent node
 		Node * parent = nullptr;
 
-		Node(Key first, Key second, unsigned int id){
+		Node(Key first, Key second, unsigned int id, int weight){
 
-				this->first = first;
-				this->second = second;
-				this->id = id;
-				this->size = 1;
-				
-				this->isLevel = false;
-				this->nodesAtLevel = 0;
-				
-				this->isIncidentToReserveNode = false; 
-				this->reserveNodes = 0;
-				this->adjacencyList = new MinHeap<Key>();
-			}
+			this->first = first;
+			this->second = second;
+			this->id = id;
+			this->size = 1;
+			
+			this->isLevel = false;
+			this->nodesAtLevel = 0;
+			
+			this->isIncidentToReserveNode = false; 
+			this->reserveNodes = 0;
+			this->adjacencyList = new MinHeap<Key>();
+			this->weight = weight;
+		}
 
 		//prints the node in the (u, v) format
 		void print(){
@@ -90,8 +95,7 @@ class Node{
 			
 			this->reserveNodes = this->isIncidentToReserveNode ? 1 : 0;
 			
-			this->keep track of the node (u, v) with the smallest weightreserveNodes += leftSubtreeReserveNodes + rightSubtreeReserveNodes;
-			
+			this->reserveNodes += leftSubtreeReserveNodes + rightSubtreeReserveNodes;
 		}
 
 		// updates the nodesAtLevel attribute count
@@ -150,6 +154,14 @@ class Node{
 			}
 
 			this->minWeight = currentMinWeight;
+		}
+
+		void addNeighbor(Key neighbor, int weight){
+			this->adjacencyList->insert(neighbor, weight);
+		}
+
+		void removeNeighbor(Key neighbor, int weight){
+			this->adjacencyList->remove(neighbor, weight);
 		}
 
 		// updates the node attributes
