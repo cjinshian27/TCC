@@ -132,10 +132,10 @@ class Forest{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		
 		//concatenate four pieces to form the forest: tree1, uv, tree2, vu
-		void concatenate(Tree<Key> * tree1, Key u, Tree<Key> * tree2, Key v){
+		void concatenate(Tree<Key> * tree1, Key u, Tree<Key> * tree2, Key v, int weight){
 			
-			Tree<Key> * uv = new Tree<Key>(u, v, ++id);
-			Tree<Key> * vu = new Tree<Key>(v, u, ++id);
+			Tree<Key> * uv = new Tree<Key>(u, v, ++id, weight);
+			Tree<Key> * vu = new Tree<Key>(v, u, ++id, weight);
 			uv->root->isLevel = true;
 
 			this->mapNodes[u][v] = uv->root;
@@ -180,7 +180,7 @@ class Forest{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		//create a link between nodes u and v
-		void link(Key u, Key v){
+		void link(Key u, Key v, int weight){
 
 			if(isConnected(u, v)) return;
 			
@@ -194,7 +194,7 @@ class Forest{
 			tree1 = bringToFront(tree1, u);
 			tree2 = bringToFront(tree2, v);
 			
-			concatenate(tree1, u, tree2, v);			
+			concatenate(tree1, u, tree2, v, weight);			
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

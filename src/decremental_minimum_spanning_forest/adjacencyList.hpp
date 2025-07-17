@@ -8,19 +8,18 @@ class AdjacencyList{
         std::unordered_map<int, std::unordered_set<int>> adjList;
 
 		// adds egde (u, v) in O(lg(n)) time
-		void add(Forest<Key> * forest, Key u, Key v){
-			Node<Key> * nodeVV = forest->getNode(u);
-			Node<Key> * nodeUU = forest->getNode(v);
-			
-			int weight = forest->getNode(u, v);
+		void add(Forest<Key> * forest, Key u, Key v, int weight){
+			Node<Key> * nodeUU = forest->getNode(u, u);
+			Node<Key> * nodeVV = forest->getNode(v, v);
+
 			nodeUU->addNeighbor(nodeVV->first, weight);
             nodeVV->addNeighbor(nodeUU->first, weight);
 		}
 
 		// removes edge (u, v) in constant time O(1)
 		void remove(Forest<Key> * forest, Key u, Key v){	
-			Node<Key> * nodeVV = forest->getNode(u);
-			Node<Key> * nodeUU = forest->getNode(v);
+			Node<Key> * nodeUU = forest->getNode(u, u);
+			Node<Key> * nodeVV = forest->getNode(v, v);
 			
 			nodeUU->removeNeighbor(nodeVV->first);
             nodeVV->removeNeighbor(nodeUU->first);

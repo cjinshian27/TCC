@@ -156,14 +156,14 @@ class DecrementalMSF{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// add node (u, v) in O(lg(n))
-		void add(Key u, Key v){
+		// add node <u, v, weight> in O(lg(n))
+		void add(Key u, Key v, int weight){
 
 			updateMapNodeLevels(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
 
 			if(maxLevelForest->isConnected(u, v)){
-				this->adjacencyLists[this->maxLevel]->add(maxLevelForest, u, v);
+				this->adjacencyLists[this->maxLevel]->add(maxLevelForest, u, v, weight);
 				maxLevelForest->increaseIncidentToReserveNodeCount(u);
 				maxLevelForest->increaseIncidentToReserveNodeCount(v);
 			} 
@@ -174,7 +174,7 @@ class DecrementalMSF{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				
-		//remove the node (edge) <u, v> in O(lg²(n))
+		//remove the node (edge) <u, v, weight> in O(lg²(n))
 		void remove(Key u, Key v){
 			
 			unsigned int nodeLevel = mapNodeLevels[u][v];
@@ -182,11 +182,11 @@ class DecrementalMSF{
 			mapNodeLevels[v].erase(u);
 			
 			/*
-			if the forest of level ⌈lg(n)⌉ has <u, v>, 
-			then we need to find a replacement for <u, v>
+			if the forest of level ⌈lg(n)⌉ has <u, v, weight>, 
+			then we need to find a replacement for <u, v, weight>
 			so the forest is not disconnected. Otherwise, 
-			<u, v> is a reserve node and the forest is 
-			still maintained, so we simply need to remove 
+			<u, v, weight> is a reserve node and the forest 
+			is still maintained, so we simply need to remove 
 			<u, v> from the adjacency list
 			*/
 
@@ -206,7 +206,7 @@ class DecrementalMSF{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// check if u and v are connected in O(lg(n))
+		// checks if u and v are connected in O(lg(n))
 		bool isConnected(Key u, Key v){
 			
 			Forest<Key> * forest = this->forests[this->maxLevel];
