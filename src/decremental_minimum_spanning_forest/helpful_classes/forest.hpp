@@ -310,7 +310,7 @@ class Forest{
 		}
 		
 		// return the node uu
-		Node<Key> * getNode(Key u){
-			return this->mapNodes[u][u];
+		Node<Key> * getNode(Key u, Key v){
+			return this->mapNodes[u][v];
 		}
 };

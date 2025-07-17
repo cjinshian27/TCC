@@ -103,7 +103,7 @@ class DecrementalMSF{
 					*/
 					if(this->forests[i]->isConnected(x, y)){
 						updateMapNodeLevels(x, y, i - 1);
-						this->adjacencyLists[i - 1]->add(x, y);
+						this->adjacencyLists[i - 1]->add(this->forests[i], x, y);
 					}
 					else{
 						for(unsigned int j = i; j <= this->maxLevel; ++j){
@@ -119,7 +119,7 @@ class DecrementalMSF{
 				but not to treeContaningV 
 				*/
 				for (Key & y : reserveNodesToBeRemoved) {
-					this->adjacencyLists[i]->remove(x, y);
+					this->adjacencyLists[i]->remove(this->forests[i], x, y);
 					this->forests[i]->decreaseIncidentToReserveNodeCount(y);
 				}
 
