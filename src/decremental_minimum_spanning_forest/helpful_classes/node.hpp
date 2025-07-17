@@ -1,10 +1,21 @@
 #include <utility>
+#include "minHeap.hpp"
 
 template<typename Key>
 
 class Node{
 	
 	public:
+
+		/*
+		keeps track of the node (u, v) with the smallest weight 
+		from the entire forest, since we want to build a minimum 
+		spanning forest
+		*/ 
+		int minWeight;
+
+		// stores a list of neighbors with its respective weights
+		MinHeap<Key> * adjacencyList;
 
 		// if the node is (u, v), u != v, tells if (u, v) is of forest level i
 		bool isLevel; 
@@ -24,10 +35,10 @@ class Node{
 		// keeps the size in the subtree
 		unsigned int size;
 		
-		// keeps the left end of an edge
+		// keeps the left end of a node
 		Key first;
 
-		// keeps the right end of an edge
+		// keeps the right end of a node
 		Key second;
 		
 		// left child node
@@ -51,9 +62,10 @@ class Node{
 				
 				this->isIncidentToReserveNode = false; 
 				this->reserveNodes = 0;
+				this->adjacencyList = new MinHeap<Key>();
 			}
 
-		//print the node in the (u, v) format
+		//prints the node in the (u, v) format
 		void print(){
 
 			std::cout << "(" << this->first << " "<< this->second 
@@ -78,7 +90,7 @@ class Node{
 			
 			this->reserveNodes = this->isIncidentToReserveNode ? 1 : 0;
 			
-			this->reserveNodes += leftSubtreeReserveNodes + rightSubtreeReserveNodes;
+			this->keep track of the node (u, v) with the smallest weightreserveNodes += leftSubtreeReserveNodes + rightSubtreeReserveNodes;
 			
 		}
 
@@ -118,9 +130,32 @@ class Node{
 			}
 		}
 		
-		// update the node attributes
+		// updates the minWeight attribute
+		void setMinWeight(){
+			int currentMinWeight = INT_MAX;
+
+			if(this->left && this->left->minWeight < currentMinWeight){
+				currentMinWeight = this->left->minWeight;
+			}
+
+			if(this->right && this->right->minWeight < currentMinWeight){
+				currentMinWeight = this->right->minWeight;
+			}
+			
+			if(!this->adjacencyList->empty()){
+				std::pair<Key, int> neighbor = this->adjacencyList->getMin();
+				if(neighbor.second < currentMinWeight){	
+					currentMinWeight = neighbor.second;
+				}  
+			}
+
+			this->minWeight = currentMinWeight;
+		}
+
+		// updates the node attributes
 		void updateValues(){
 			setSize();
+			setMinWeight();
 			setNodeLevelCount();
 			setReserveNodesCount();
 		}

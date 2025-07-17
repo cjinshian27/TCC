@@ -24,10 +24,10 @@ class Node{
 		// keeps the size in the subtree
 		unsigned int size;
 		
-		// keeps the left end of an edge
+		// keeps the left end of a node
 		Key first;
 
-		// keeps the right end of an edge
+		// keeps the right end of a node
 		Key second;
 		
 		// left child node
@@ -53,7 +53,7 @@ class Node{
 				this->reserveNodes = 0;
 			}
 
-		//print the node in the (u, v) format
+		//prints the node in the (u, v) format
 		void print(){
 
 			std::cout << "(" << this->first << " "<< this->second 
@@ -118,7 +118,7 @@ class Node{
 			}
 		}
 		
-		// update the node attributes
+		// updates the node attributes
 		void updateValues(){
 			setSize();
 			setNodeLevelCount();
