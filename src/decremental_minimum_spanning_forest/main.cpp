@@ -17,12 +17,18 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 	unsigned int u, v, weight;
 	
 	std::cin >> numberOfVertices;
+	std::vector<int> vertices;
+
+	for(unsigned int i = 0; i < numberOfVertices; ++i){
+		std::cin >> vertices[i];
+	}
+
 	std::cin >> numberOfEdges;
-	DecrementalMSF<Key> * decrementalMSF = new DecrementalMSF<int>(numberOfVertices);
+	DecrementalMSF<int> * decrementalMSF = new DecrementalMSF<int>(vertices);
 	
 	for(unsigned int i = 0; i < numberOfEdges; ++i){
 		std::cin >> u >> v >> weight; 
-		decrementalMSF.add(u, v, weight);
+		decrementalMSF->add(u, v, weight);
 	}
 	
 	return decrementalMSF;

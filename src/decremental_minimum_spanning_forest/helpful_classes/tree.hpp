@@ -171,7 +171,7 @@ class Tree{
 			this->root = nullptr;
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		Tree(Key u, Key v, unsigned int id, int weight){
+		Tree(Key u, Key v, unsigned int id, int weight = 0){
 			this->root = new Node<Key>(u, v, id, weight);
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

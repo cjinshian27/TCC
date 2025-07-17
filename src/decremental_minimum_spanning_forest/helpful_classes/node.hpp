@@ -54,7 +54,7 @@ class Node{
 		// parent node
 		Node * parent = nullptr;
 
-		Node(Key first, Key second, unsigned int id, int weight){
+		Node(Key first, Key second, unsigned int id, int weight = 0){
 
 			this->first = first;
 			this->second = second;

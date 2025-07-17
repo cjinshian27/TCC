@@ -103,7 +103,8 @@ class DecrementalMSF{
 					*/
 					if(this->forests[i]->isConnected(x, y)){
 						updateMapNodeLevels(x, y, i - 1);
-						this->adjacencyLists[i - 1]->add(this->forests[i], x, y);
+						Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
+						this->adjacencyLists[i - 1]->add(this->forests[i], x, y, nodeXY->weight);
 					}
 					else{
 						for(unsigned int j = i; j <= this->maxLevel; ++j){
