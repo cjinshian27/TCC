@@ -50,17 +50,17 @@ class MinHeap {
 
     public:
 
-        // check if heap is empty in O(1) time
+        // checks if heap is empty in O(1) time
         bool empty() const {
             return heap.empty();
         }
         
-        // get the minimum from heap in O(1) time
+        // gets the minimum from heap in O(1) time
         std::pair<Key, int> getMin() {
             return heap[0];
         }
         
-        // insert a (v, weight) into heap in O(lg(n)) time
+        // inserts a (v, weight) neighbor into heap in O(lg(n)) time
         void insert(Key v, int weight) {
             if (position.count(v)) {
                 return;
@@ -71,7 +71,7 @@ class MinHeap {
             heapifyUp(index);
         }
         
-        // remove a neighbor in O(lg(n)) time
+        // removes a neighbor v in O(lg(n)) time
         void remove(Key v) {
             if (!position.count(v)) return;
             
@@ -90,7 +90,7 @@ class MinHeap {
             heapifyUp(index);
         }
 
-        // print in O(n) time (for debugging purposes)
+        // prints in O(n) time (for debugging purposes)
         void print() {
             for (auto [v, w] : heap)
                 std::cout << "(" << v << ", weight=" << w << ") ";
