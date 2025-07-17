@@ -43,7 +43,10 @@ class DecrementalMSF{
 		Key u = uTree->root->first;
 		Key v = uTree->root->second;
 		updateMapNodeLevels(u, v, i - 1);
-		this->forests[i - 1]->link(u, v);
+								
+		Node<Key> * nodeXY = this->forests[i]->getNode(u, v);
+
+		this->forests[i - 1]->link(u, v, nodeXY->weight);
 	}	
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -106,9 +109,11 @@ class DecrementalMSF{
 						Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
 						this->adjacencyLists[i - 1]->add(this->forests[i], x, y, nodeXY->weight);
 					}
-					else{
+					else{													
+						Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
+
 						for(unsigned int j = i; j <= this->maxLevel; ++j){
-							this->forests[j]->link(x, y);
+							this->forests[j]->link(x, y, nodeXY->weight);
 						}
 						nodeIsReplaced = true;
 						break;
@@ -169,7 +174,7 @@ class DecrementalMSF{
 				maxLevelForest->increaseIncidentToReserveNodeCount(v);
 			} 
 			else{
-				maxLevelForest->link(u, v);
+				maxLevelForest->link(u, v, weight);
 			} 
 		}
 
