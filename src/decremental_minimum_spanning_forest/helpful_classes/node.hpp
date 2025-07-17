@@ -160,8 +160,8 @@ class Node{
 			this->adjacencyList->insert(neighbor, weight);
 		}
 
-		void removeNeighbor(Key neighbor, int weight){
-			this->adjacencyList->remove(neighbor, weight);
+		void removeNeighbor(Key neighbor){
+			this->adjacencyList->remove(neighbor);
 		}
 
 		// updates the node attributes
