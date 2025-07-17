@@ -1,11 +1,11 @@
-#include "./helpful_classes/node.hpp"
-#include "./helpful_classes/forest.hpp"
+#include <unordered_set>
 
 template<typename Key>
 
 class AdjacencyList{
-	
-	public:
+    
+	public: 
+        std::unordered_map<int, std::unordered_set<int>> adjList;
 
 		// adds egde (u, v) in O(lg(n)) time
 		void add(Forest<Key> * forest, Key u, Key v, int weight){

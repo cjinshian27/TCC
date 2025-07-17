@@ -1,6 +1,7 @@
 #include "./helpful_classes/node.hpp"
 #include "./helpful_classes/tree.hpp"
 #include "./helpful_classes/forest.hpp"
+#include "adjacencyList.hpp"
 
 void printStylishLine(){
 	std::cout << "════════════════════════════════════════════════════════════════════════════════════\n";
@@ -162,7 +163,7 @@ class DecrementalMSF{
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
 
 			if(maxLevelForest->isConnected(u, v)){
-				this->adjacencyLists[this->maxLevel]->add(u, v);
+				this->adjacencyLists[this->maxLevel]->add(maxLevelForest, u, v);
 				maxLevelForest->increaseIncidentToReserveNodeCount(u);
 				maxLevelForest->increaseIncidentToReserveNodeCount(v);
 			} 
@@ -188,16 +189,18 @@ class DecrementalMSF{
 			still maintained, so we simply need to remove 
 			<u, v> from the adjacency list
 			*/
-			if(this->forests[this->maxLevel]->hasNode(u, v)){
+
+			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
+			if(maxLevelForest->hasNode(u, v)){
 				for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i)
 					 this->forests[i]->cut(u, v);
 	
 				replaceNode(u, v, nodeLevel);
 			}
 			else{
-				this->adjacencyLists[this->maxLevel]->remove(u, v);
-				this->forests[this->maxLevel]->decreaseIncidentToReserveNodeCount(u);
-				this->forests[this->maxLevel]->decreaseIncidentToReserveNodeCount(v);
+				this->adjacencyLists[this->maxLevel]->remove(maxLevelForest, u, v);
+				maxLevelForest->decreaseIncidentToReserveNodeCount(u);
+				maxLevelForest->decreaseIncidentToReserveNodeCount(v);
 			}
 		}
 
