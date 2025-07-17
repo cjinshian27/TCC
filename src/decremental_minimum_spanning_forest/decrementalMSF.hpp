@@ -107,7 +107,7 @@ class DecrementalMSF{
 					if(this->forests[i]->isConnected(x, y)){
 						updateMapNodeLevels(x, y, i - 1);
 						Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
-						this->adjacencyLists[i - 1]->add(this->forests[i], x, y, nodeXY->weight);
+						this->adjacencyLists[i - 1]->add(this->forests[i - 1], x, y, nodeXY->weight);
 					}
 					else{													
 						Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
