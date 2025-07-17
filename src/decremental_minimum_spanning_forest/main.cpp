@@ -18,14 +18,14 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 	
 	std::cin >> numberOfVertices;
 	std::cin >> numberOfEdges;
-	std::vector<int> edges(numberOfEdges);
+	DecrementalMSF<Key> * decrementalMSF = new DecrementalMSF<int>(numberOfVertices);
 	
 	for(unsigned int i = 0; i < numberOfEdges; ++i){
 		std::cin >> u >> v >> weight; 
-		edges.push_back(std::make_tuple(u, v, weight));  // Edge from 0 to 1 with weight 5
+		decrementalMSF.add(u, v, weight);
 	}
 	
-	return new DecrementalMSF<int>(numberOfVertices, edges);
+	return decrementalMSF;
 }
 
 //decode function
@@ -33,7 +33,7 @@ void decode(){
 
 	int operation, u, v, weight;
 
-	DecrementalMSF<int> * decrementalMSF = buildDynamicGraph(); 
+	DecrementalMSF<int> * decrementalMSF = buildDecrementalMSF(); 
 
 	while(std::cin >> operation){
 		
