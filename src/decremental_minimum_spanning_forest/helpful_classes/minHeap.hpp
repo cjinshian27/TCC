@@ -90,6 +90,10 @@ class MinHeap {
             heapifyUp(index);
         }
 
+        void extractMin(){
+            remove(heap[0]);
+        }
+
         // prints in O(n) time (for debugging purposes)
         void print() {
             for (auto [v, w] : heap)

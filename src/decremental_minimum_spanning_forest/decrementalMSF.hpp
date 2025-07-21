@@ -43,10 +43,8 @@ class DecrementalMSF{
 		Key u = uTree->root->first;
 		Key v = uTree->root->second;
 		updateMapNodeLevels(u, v, i - 1);
-								
-		Node<Key> * nodeXY = this->forests[i]->getNode(u, v);
-
-		this->forests[i - 1]->link(u, v, nodeXY->weight);
+		
+		this->forests[i - 1]->link(u, v, nodeToSplay->weight);
 	}	
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -92,6 +90,7 @@ class DecrementalMSF{
 				std::vector<Key> reserveNodesToBeRemoved;
 				Key x = nodeXX->first;
 
+				// no lugar do for y recebe removeMinHeap()
 				for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
 					
 					reserveNodesToBeRemoved.push_back(y);	
@@ -106,7 +105,7 @@ class DecrementalMSF{
 					*/
 					if(this->forests[i]->isConnected(x, y)){
 						updateMapNodeLevels(x, y, i - 1);
-						Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
+						Node<Key> * nodeXY = this->forests[i]->getNode(x, y); // acertar isso
 						this->adjacencyLists[i - 1]->add(this->forests[i - 1], x, y, nodeXY->weight);
 					}
 					else{													
@@ -124,7 +123,7 @@ class DecrementalMSF{
 				remove nodes that are incident to treeContaningU,
 				but not to treeContaningV 
 				*/
-				for (Key & y : reserveNodesToBeRemoved) {
+				for (Key & y : reserveNodesToBeRemoved) { // acertar isso
 					this->adjacencyLists[i]->remove(this->forests[i], x, y);
 					this->forests[i]->decreaseIncidentToReserveNodeCount(y);
 				}
@@ -204,6 +203,8 @@ class DecrementalMSF{
 				replaceNode(u, v, nodeLevel);
 			}
 			else{
+				// Forest<Key> * nodeLevelForest = this->forests[nodelevel];
+				// this->adjacencyLists[nodeLevel]->remove(nodeLevelForest, u, v);
 				this->adjacencyLists[this->maxLevel]->remove(maxLevelForest, u, v);
 				maxLevelForest->decreaseIncidentToReserveNodeCount(u);
 				maxLevelForest->decreaseIncidentToReserveNodeCount(v);
