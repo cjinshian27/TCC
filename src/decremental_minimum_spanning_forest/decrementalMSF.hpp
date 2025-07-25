@@ -203,11 +203,10 @@ class DecrementalMSF{
 				replaceNode(u, v, nodeLevel);
 			}
 			else{
-				// Forest<Key> * nodeLevelForest = this->forests[nodelevel];
-				// this->adjacencyLists[nodeLevel]->remove(nodeLevelForest, u, v);
-				this->adjacencyLists[this->maxLevel]->remove(maxLevelForest, u, v);
-				maxLevelForest->decreaseIncidentToReserveNodeCount(u);
-				maxLevelForest->decreaseIncidentToReserveNodeCount(v);
+				Forest<Key> * nodeLevelForest = this->forests[nodeLevel];
+				this->adjacencyLists[nodeLevel]->remove(nodeLevelForest, u, v);
+				nodeLevelForest->decreaseIncidentToReserveNodeCount(u);
+				nodeLevelForest->decreaseIncidentToReserveNodeCount(v);
 			}
 		}
 
