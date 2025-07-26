@@ -105,6 +105,8 @@ class DynamicGraph{
 					if(this->forests[i]->isConnected(x, y)){
 						updateMapNodeLevels(x, y, i - 1);
 						this->adjacencyLists[i - 1]->add(x, y);
+						this->forests[i - 1]->increaseIncidentToReserveNodeCount(x);
+						this->forests[i - 1]->increaseIncidentToReserveNodeCount(y);
 					}
 					else{
 						for(unsigned int j = i; j <= this->maxLevel; ++j){
