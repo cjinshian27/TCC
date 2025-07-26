@@ -102,7 +102,7 @@ class DecrementalMSF{
 					updateMapNodeLevels(x, y, i - 1);
 					this->adjacencyLists[i - 1]->add(this->forests[i - 1], x, y, nodeXY->weight);
 					this->forests[i - 1]->increaseIncidentToReserveNodeCount(x);
-					this->forests[i - 1]->increaseIncidentToReserveNodeCount(y)
+					this->forests[i - 1]->increaseIncidentToReserveNodeCount(y);
 				}
 				else{													
 					Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
