@@ -195,11 +195,11 @@ class DynamicGraph{
 					 this->forests[i]->cut(u, v);
 	
 				replaceNode(u, v, nodeLevel);
-			}
+			}	
 			else{
-				this->adjacencyLists[this->maxLevel]->remove(u, v);
-				this->forests[this->maxLevel]->decreaseIncidentToReserveNodeCount(u);
-				this->forests[this->maxLevel]->decreaseIncidentToReserveNodeCount(v);
+				this->adjacencyLists[nodeLevel]->remove(u, v);
+				this->forests[nodeLevel]->decreaseIncidentToReserveNodeCount(u);
+				this->forests[nodeLevel]->decreaseIncidentToReserveNodeCount(v);
 			}
 		}
 
