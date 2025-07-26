@@ -85,48 +85,41 @@ class DecrementalMSF{
 			*/
 			while(treeContainingU->root->reserveNodes > 0 && !nodeIsReplaced){
 				
-				Node<Key> * nodeXX = treeContainingU->getReserveNode(treeContainingU->root);
-				treeContainingU->splay(nodeXX);
-				std::vector<Key> reserveNodesToBeRemoved;
-				Key x = nodeXX->first;
-
-				// no lugar do for y recebe removeMinHeap()
-				for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
-					
-					reserveNodesToBeRemoved.push_back(y);	
-					
-					/*
-					if the nodes x and y are connected, then we know 
-					they are in treeContaningU, because they are in 
-					the same component. So we just decrease the level 
-					of (x, y). Otherwise, we found a replacement node, 
-					and we link x and y on every forest from the current
-					level to ⌈lg(n)⌉. 
-					*/
-					if(this->forests[i]->isConnected(x, y)){
-						updateMapNodeLevels(x, y, i - 1);
-						Node<Key> * nodeXY = this->forests[i]->getNode(x, y); // acertar isso
-						this->adjacencyLists[i - 1]->add(this->forests[i - 1], x, y, nodeXY->weight);
-					}
-					else{													
-						Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
-
-						for(unsigned int j = i; j <= this->maxLevel; ++j){
-							this->forests[j]->link(x, y, nodeXY->weight);
-						}
-						nodeIsReplaced = true;
-						break;
-					}
-				}
-				
+				Node<Key> * nodeXY = treeContainingU->getLightestNode(treeContainingU->root);
+				treeContainingU->splay(nodeXY);
+				Key x = nodeXY->first;
+				Key y = nodeXY->second;
+								
 				/*
-				remove nodes that are incident to treeContaningU,
-				but not to treeContaningV 
+				if the nodes x and y are connected, then we know 
+				they are in treeContaningU, because they are in 
+				the same component. So we just decrease the level 
+				of (x, y). Otherwise, we found a replacement node, 
+				and we link x and y on every forest from the current
+				level to ⌈lg(n)⌉. 
 				*/
-				for (Key & y : reserveNodesToBeRemoved) { // acertar isso
-					this->adjacencyLists[i]->remove(this->forests[i], x, y);
-					this->forests[i]->decreaseIncidentToReserveNodeCount(y);
+				if(this->forests[i]->isConnected(x, y)){
+					updateMapNodeLevels(x, y, i - 1);
+					this->adjacencyLists[i - 1]->add(this->forests[i - 1], x, y, nodeXY->weight);
+					this->forests[i - 1]->increaseIncidentToReserveNodeCount(x);
+					this->forests[i - 1]->increaseIncidentToReserveNodeCount(y)
 				}
+				else{													
+					Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
+
+					for(unsigned int j = i; j <= this->maxLevel; ++j){
+						this->forests[j]->link(x, y, nodeXY->weight);
+					}
+					nodeIsReplaced = true;
+					break;
+				}
+		
+				/*
+				remove nodes that are incident to treeContainingU, but not 
+				to treeContainingV 
+				*/
+				this->adjacencyLists[i]->remove(this->forests[i], x, y);
+				this->forests[i]->decreaseIncidentToReserveNodeCount(y);
 
 				/*
 				if x is not incident to any other node of level i, then
@@ -134,8 +127,6 @@ class DecrementalMSF{
 				*/
 				if(this->adjacencyLists[i]->adjList[x].empty()){
 					this->forests[i]->decreaseIncidentToReserveNodeCount(x);
-					nodeXX->isIncidentToReserveNode = false;
-					nodeXX->setReserveNodesCount();
 				}
 			}
 		}
