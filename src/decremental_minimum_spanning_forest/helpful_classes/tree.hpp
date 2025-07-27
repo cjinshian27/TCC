@@ -1,3 +1,7 @@
+#pragma once
+
+#include "node.hpp"
+
 template <typename Key>
 
 class Tree{
@@ -345,7 +349,7 @@ class Tree{
 			if (root->left && root->left->minWeight == root->minWeight) {
 				return getLightestNode(root->left);
 			} 
-			else if (root->right && root->right->minWeight == root->minWeight){
+			if (root->right && root->right->minWeight == root->minWeight){
 				return getLightestNode(root->right);
 			}
 			

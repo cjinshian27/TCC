@@ -1,3 +1,6 @@
+#pragma once
+#include "node.hpp"
+
 template<typename Key>
 
 class AdjacencyList{
@@ -6,22 +9,16 @@ class AdjacencyList{
 		std::unordered_map<Key, Node<Key> *> nodes;
 
 		// adds egde (u, v) in O(lg(n)) time
-		void add(Forest<Key> * forest, Key u, Key v, int weight){
-			Node<Key> * nodeUU = forest->getNode(u, u);
-			Node<Key> * nodeVV = forest->getNode(v, v);
-			
-			nodes[u] = nodeUU;
-			nodes[v] = nodeVV;
+		void add(Node<Key> * nodeUU, Node<Key> * nodeVV, int weight){
+			nodes[nodeUU->first] = nodeUU;
+			nodes[nodeVV->first] = nodeVV;
 			
 			nodeUU->addNeighbor(nodeVV->first, weight);
             nodeVV->addNeighbor(nodeUU->first, weight);
 		}
 
 		// removes edge (u, v) in constant time O(1)
-		void remove(Forest<Key> * forest, Key u, Key v){	
-			Node<Key> * nodeUU = forest->getNode(u, u);
-			Node<Key> * nodeVV = forest->getNode(v, v);
-			
+		void remove(Node<Key> * nodeUU, Node<Key> * nodeVV){
 			nodeUU->removeNeighbor(nodeVV->first);
             nodeVV->removeNeighbor(nodeUU->first);
 		}

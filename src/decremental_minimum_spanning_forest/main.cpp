@@ -1,13 +1,5 @@
 #include <iostream>
-#include <utility>
-#include <unordered_map>
 #include <vector>
-#include <string>
-#include <iterator>
-#include <tuple>
-#include <set>
-#include <unordered_set>
-#include <cmath>
 #include "decrementalMSF.hpp"
 
 DecrementalMSF<int> * buildDecrementalMSF(){

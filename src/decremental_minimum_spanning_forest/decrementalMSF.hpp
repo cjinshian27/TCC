@@ -1,9 +1,13 @@
+#pragma once
+
 #include "./helpful_classes/node.hpp"
 #include "./helpful_classes/tree.hpp"
 #include "./helpful_classes/forest.hpp"
-#include "adjacencyList.hpp"
+#include "./helpful_classes/adjacencyList.hpp"
 
-void printStylishLine(){
+#include <cmath>
+
+inline void printStylishLine(){
 	std::cout << "════════════════════════════════════════════════════════════════════════════════════\n";
 }
 template<typename Key>
@@ -100,9 +104,12 @@ class DecrementalMSF{
 				*/
 				if(this->forests[i]->isConnected(x, y)){
 					updateMapNodeLevels(x, y, i - 1);
-					this->adjacencyLists[i - 1]->add(this->forests[i - 1], x, y, nodeXY->weight);
-					this->forests[i - 1]->increaseIncidentToReserveNodeCount(x);
-					this->forests[i - 1]->increaseIncidentToReserveNodeCount(y);
+					Node<Key> * nodeXX = this->forests[i - 1]->getNode(x, x);
+					Node<Key> * nodeYY = this->forests[i - 1]->getNode(y, y);
+
+					this->adjacencyLists[i - 1]->add(nodeXX, nodeYY, nodeXY->weight);
+					this->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeXX);
+					this->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeYY);
 				}
 				else{													
 					for(unsigned int j = i; j <= this->maxLevel; ++j){
@@ -116,15 +123,18 @@ class DecrementalMSF{
 				remove nodes that are incident to treeContainingU, but not 
 				to treeContainingV 
 				*/
-				this->adjacencyLists[i]->remove(this->forests[i], x, y);
-				this->forests[i]->decreaseIncidentToReserveNodeCount(y);
+				Node<Key> * nodeXX = this->forests[i]->getNode(x, x);
+				Node<Key> * nodeYY = this->forests[i]->getNode(y, y);
+
+				this->adjacencyLists[i]->remove(nodeXX, nodeYY);
+				this->forests[i]->decreaseIncidentToReserveNodeCount(nodeYY);
 
 				/*
 				if x is not incident to any other node of level i, then
 				decrease its reserve node count
 				*/
-				if(this->adjacencyLists[i]->nodes[x]->neighbors->isEmpty()){
-					this->forests[i]->decreaseIncidentToReserveNodeCount(x);
+				if(nodeXX->neighbors->isEmpty()){
+					this->forests[i]->decreaseIncidentToReserveNodeCount(nodeXX);
 				}
 			}
 		}
@@ -157,9 +167,12 @@ class DecrementalMSF{
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
 
 			if(maxLevelForest->isConnected(u, v)){
-				this->adjacencyLists[this->maxLevel]->add(maxLevelForest, u, v, weight);
-				maxLevelForest->increaseIncidentToReserveNodeCount(u);
-				maxLevelForest->increaseIncidentToReserveNodeCount(v);
+				Node<Key> * nodeUU = maxLevelForest->getNode(u,u);
+				Node<Key> * nodeVV = maxLevelForest->getNode(v,v);
+
+				this->adjacencyLists[this->maxLevel]->add(nodeUU, nodeVV, weight);
+				maxLevelForest->increaseIncidentToReserveNodeCount(nodeUU);
+				maxLevelForest->increaseIncidentToReserveNodeCount(nodeVV);
 			} 
 			else{
 				maxLevelForest->link(u, v, weight);
@@ -193,9 +206,12 @@ class DecrementalMSF{
 			}
 			else{
 				Forest<Key> * nodeLevelForest = this->forests[nodeLevel];
-				this->adjacencyLists[nodeLevel]->remove(nodeLevelForest, u, v);
-				nodeLevelForest->decreaseIncidentToReserveNodeCount(u);
-				nodeLevelForest->decreaseIncidentToReserveNodeCount(v);
+				Node<Key> * nodeUU = nodeLevelForest->getNode(u, u);
+				Node<Key> * nodeVV = nodeLevelForest->getNode(v, v);
+
+				this->adjacencyLists[nodeLevel]->remove(nodeUU, nodeVV);
+				nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeUU);
+				nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeVV);
 			}
 		}
 

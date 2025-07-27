@@ -1,3 +1,10 @@
+#pragma once
+
+#include <set>
+#include <unordered_map>
+
+#include "node.hpp"
+#include "tree.hpp"
 
 template<typename Key>
 
@@ -292,21 +299,21 @@ class Forest{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		// decrease the reserveNodes count
-		void decreaseIncidentToReserveNodeCount(Key u){
+		void decreaseIncidentToReserveNodeCount(Node<Key> * node){
 			
-			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
-			tree->splay(mapNodes[u][u]);
-			mapNodes[u][u]->isIncidentToReserveNode = false;
-			mapNodes[u][u]->setReserveNodesCount();
+			Tree<Key> * tree = mapTrees[node->id];
+			tree->splay(node);
+			node->isIncidentToReserveNode = false;
+			node->setReserveNodesCount();
 		}
 		
 		// increase the reserveNodes count
-		void increaseIncidentToReserveNodeCount(Key u){
+		void increaseIncidentToReserveNodeCount(Node<Key> * node){
 			
-			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
-			tree->splay(mapNodes[u][u]);
-			mapNodes[u][u]->isIncidentToReserveNode = true;
-			mapNodes[u][u]->setReserveNodesCount();
+			Tree<Key> * tree = mapTrees[node->id];
+			tree->splay(node);
+			node->isIncidentToReserveNode = true;
+			node->setReserveNodesCount();
 		}
 		
 		// return the node uu
