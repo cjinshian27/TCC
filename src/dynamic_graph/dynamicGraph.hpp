@@ -7,7 +7,7 @@
 #include "./helpful_classes/forest.hpp"
 #include "./helpful_classes/adjacencyList.hpp"
 
-void printStylishLine(){
+inline void printStylishLine(){
 	std::cout << "════════════════════════════════════════════════════════════════════════════════════\n";
 }
 template<typename Key>
