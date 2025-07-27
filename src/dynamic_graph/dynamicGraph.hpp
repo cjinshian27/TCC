@@ -67,7 +67,6 @@ class DynamicGraph{
 			
 			if(treeContainingU->size() > treeContainingV->size()){
 				std::swap(treeContainingU, treeContainingV);
-				std::swap(u, v);
 			} 
 			
 			/*
@@ -200,7 +199,6 @@ class DynamicGraph{
 			if(this->forests[this->maxLevel]->hasNode(u, v)){
 				for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i)
 					 this->forests[i]->cut(u, v);
-	
 				replaceNode(u, v, nodeLevel);
 			}	
 			else{

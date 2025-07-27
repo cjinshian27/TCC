@@ -68,7 +68,6 @@ class DecrementalMSF{
 			
 			if(treeContainingU->size() > treeContainingV->size()){
 				std::swap(treeContainingU, treeContainingV);
-				std::swap(u, v);
 			} 
 			
 			/*
