@@ -1,12 +1,5 @@
 #include <iostream>
-#include <utility>
-#include <unordered_map>
 #include <vector>
-#include <string>
-#include <iterator>
-#include <set>
-#include <unordered_set>
-#include <cmath>
 #include "dynamicGraph.hpp"
 
 DynamicGraph<int> * buildDynamicGraph(){

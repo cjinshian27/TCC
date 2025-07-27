@@ -1,8 +1,11 @@
+#pragma once
+
+#include <cmath>
+
 #include "./helpful_classes/node.hpp"
 #include "./helpful_classes/tree.hpp"
 #include "./helpful_classes/forest.hpp"
-#include "adjacencyList.hpp"
-
+#include "./helpful_classes/adjacencyList.hpp"
 
 void printStylishLine(){
 	std::cout << "════════════════════════════════════════════════════════════════════════════════════\n";

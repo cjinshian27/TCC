@@ -1,3 +1,7 @@
+#pragma once
+
+#include "node.hpp"
+
 template <typename Key>
 
 class Tree{
