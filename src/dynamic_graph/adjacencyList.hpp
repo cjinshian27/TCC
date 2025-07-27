@@ -3,7 +3,7 @@ template<typename Key>
 class AdjacencyList{
 	
 	public:
-		std::unordered_map<int, std::unordered_set<int>> adjList;
+		std::unordered_map<Key, std::unordered_set<Key>> adjList;
 
 		// add egde (u, v) in constant time O(1)
 		void add(Key u, Key v){
