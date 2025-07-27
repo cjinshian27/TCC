@@ -105,8 +105,6 @@ class DecrementalMSF{
 					this->forests[i - 1]->increaseIncidentToReserveNodeCount(y);
 				}
 				else{													
-					Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
-
 					for(unsigned int j = i; j <= this->maxLevel; ++j){
 						this->forests[j]->link(x, y, nodeXY->weight);
 					}
@@ -123,9 +121,9 @@ class DecrementalMSF{
 
 				/*
 				if x is not incident to any other node of level i, then
-				decrease the reserve node count
+				decrease its reserve node count
 				*/
-				if(this->adjacencyLists[i]->adjList[x].empty()){
+				if(this->adjacencyLists[i]->nodes[x]->neighbors->isEmpty()){
 					this->forests[i]->decreaseIncidentToReserveNodeCount(x);
 				}
 			}

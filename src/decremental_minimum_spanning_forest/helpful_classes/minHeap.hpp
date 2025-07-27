@@ -51,7 +51,7 @@ class MinHeap {
     public:
 
         // checks if heap is empty in O(1) time
-        bool empty() const {
+        bool isEmpty() const {
             return heap.empty();
         }
         

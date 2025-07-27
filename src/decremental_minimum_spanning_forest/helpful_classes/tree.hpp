@@ -345,8 +345,8 @@ class Tree{
 		Node<Key>* getLightestNode(Node<Key>* root) {
 			if (!root) return nullptr;
 
-			int currentMinWeight = root->adjacencyList->empty() ? 
-							INT_MAX : root->adjacencyList->getMin().second;
+			int currentMinWeight = root->neighbors->isEmpty() ? 
+							INT_MAX : root->neighbors->getMin().second;
 			
 			/*
 			If the current node's adjacency list has the minimum weight and it matches the node's minWeight, we found our target

@@ -19,7 +19,7 @@ class Node{
 		int minWeight;
 
 		// stores a list of neighbors with its respective weights
-		MinHeap<Key> * adjacencyList;
+		MinHeap<Key> * neighbors;
 
 		// if the node is (u, v), u != v, tells if (u, v) is of forest level i
 		bool isLevel; 
@@ -66,7 +66,7 @@ class Node{
 			
 			this->isIncidentToReserveNode = false; 
 			this->reserveNodes = 0;
-			this->adjacencyList = new MinHeap<Key>();
+			this->neighbors = new MinHeap<Key>();
 			this->weight = weight;
 		}
 
@@ -146,8 +146,8 @@ class Node{
 				currentMinWeight = this->right->minWeight;
 			}
 			
-			if(!this->adjacencyList->empty()){
-				std::pair<Key, int> neighbor = this->adjacencyList->getMin();
+			if(!this->neighbors->isEmpty()){
+				std::pair<Key, int> neighbor = this->neighbors->getMin();
 				if(neighbor.second < currentMinWeight){	
 					currentMinWeight = neighbor.second;
 				}  
@@ -157,11 +157,11 @@ class Node{
 		}
 
 		void addNeighbor(Key neighbor, int weight){
-			this->adjacencyList->insert(neighbor, weight);
+			this->neighbors->insert(neighbor, weight);
 		}
 
 		void removeNeighbor(Key neighbor){
-			this->adjacencyList->remove(neighbor);
+			this->neighbors->remove(neighbor);
 		}
 
 		// updates the node attributes

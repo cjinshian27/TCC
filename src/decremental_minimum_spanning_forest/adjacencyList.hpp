@@ -1,17 +1,18 @@
-#include <unordered_set>
-
 template<typename Key>
 
 class AdjacencyList{
     
 	public: 
-        std::unordered_map<int, std::unordered_set<int>> adjList;
+		std::unordered_map<Key, Node<Key> *> nodes;
 
 		// adds egde (u, v) in O(lg(n)) time
 		void add(Forest<Key> * forest, Key u, Key v, int weight){
 			Node<Key> * nodeUU = forest->getNode(u, u);
 			Node<Key> * nodeVV = forest->getNode(v, v);
-
+			
+			nodes[u] = nodeUU;
+			nodes[v] = nodeVV;
+			
 			nodeUU->addNeighbor(nodeVV->first, weight);
             nodeVV->addNeighbor(nodeUU->first, weight);
 		}
@@ -25,17 +26,14 @@ class AdjacencyList{
             nodeVV->removeNeighbor(nodeUU->first);
 		}
 		
-		// print the adjancecy list from each node
+		// print the adjacency list from each node
 		void print(){
-			for (const auto& pair : adjList) {
-				int vertex = pair.first;
-				const std::unordered_set<int>& neighbors = pair.second;
+			for (const auto& pair : nodes) {
+				Key key = pair.first;
+				Node<Key> * node = pair.second;
 				
-				std::cout << vertex << ":";
-				for (int neighbor : neighbors) {
-					std::cout << " " << neighbor;
-				}
-				std::cout << std::endl;
+				std::cout << "Key: " << key;
+				node->neighbors->print();
 			}
 		}
 };
