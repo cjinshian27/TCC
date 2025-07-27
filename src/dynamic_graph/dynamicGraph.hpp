@@ -81,7 +81,7 @@ class DynamicGraph{
 			/*
 			since treeContainingU has fewer nodes than treeContaningV, 
 			then we need to find a replacement node (edge) that has one 
-			end in treeContaningU and another end in treeContaningV. 
+			end in treeContainingU and another end in treeContainingV. 
 			
 			This replacement node is called reserve node, and the nodes
 			that are not reserve are removed later on. 
@@ -105,6 +105,8 @@ class DynamicGraph{
 					and we link x and y on every forest from the current
 					level to ⌈lg(n)⌉. 
 					*/
+
+
 					if(this->forests[i]->isConnected(x, y)){
 						updateMapNodeLevels(x, y, i - 1);
 						this->adjacencyLists[i - 1]->add(x, y);
@@ -122,7 +124,7 @@ class DynamicGraph{
 				
 				/*
 				remove nodes that are incident to treeContaningU,
-				but not to treeContaningV 
+				but not to treeContainingV 
 				*/
 				for (Key & y : reserveNodesToBeRemoved) {
 					this->adjacencyLists[i]->remove(x, y);

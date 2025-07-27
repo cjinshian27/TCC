@@ -60,8 +60,7 @@ class Node{
 
 			std::cout << "(" << this->first << " "<< this->second 
 			          << " | " << isLevel << ":" << nodesAtLevel << " " 
-					  << isIncidentToReserveNode << ":" << reserveNodes << 
-					  " - size: " << size << ")" << '\n';
+					  << isIncidentToReserveNode << ":" << reserveNodes << ")" << '\n';
 		}
 		
 		// updates the reserveNodes attribute count
