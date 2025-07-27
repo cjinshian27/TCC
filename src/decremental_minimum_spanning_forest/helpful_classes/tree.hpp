@@ -327,19 +327,6 @@ class Tree{
 				return getNodeWithIsLevelTrue(root->right);
 			}
 		}
-		
-		// get the reserve node
-		Node<Key> * getReserveNode(Node<Key> * root){
-			if(!root) return nullptr;
-			if(root->isIncidentToReserveNode) return root;
-			
-			if(root->left && root->left->reserveNodes > 0){
-				return getReserveNode(root->left);
-			}
-			else{
-				return getReserveNode(root->right);
-			}
-		}
 
 		// get the node with the smallest weight
 		Node<Key>* getLightestNode(Node<Key>* root) {
