@@ -58,9 +58,9 @@ class Forest{
 			}
 
 			Tree<Key> * aux = mapTrees[currentNode->id];
-			mapTrees.erase(currentNode->id);
-
+			
 			if(aux){
+				mapTrees.erase(currentNode->id);
 				std::swap(currentNode->id, node->id);
 				aux->splay(node);
 				mapTrees[node->id] = aux;
