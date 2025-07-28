@@ -29,7 +29,7 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 //decode function
 void decode(){
 
-	int operation, u, v, weight;
+	int operation, u, v;
 
 	DecrementalMSF<int> * decrementalMSF = buildDecrementalMSF(); 
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <set>
 #include <vector>
 #include <iostream>
 #include <unordered_map>
@@ -15,12 +14,6 @@ class Forest{
 
 	private:
 		unsigned int id = 0;
-
-		/*
-		keep the remaining nodes in the forest in 
-		a <Key, Key> format.
-		*/
-		std::set<std::pair<Key, Key>> nodeSet;
 
 		/*
 		map the nodes according to their two (Key) ends. 
@@ -68,6 +61,7 @@ class Forest{
 			}
 
 			Tree<Key> * aux = mapTrees[currentNode->id];
+			mapTrees.erase(currentNode->id);
 
 			if(aux){
 				std::swap(currentNode->id, node->id);
@@ -162,12 +156,12 @@ class Forest{
 		Forest(std::vector<Key> & vertices){
 			
 			unsigned int n = vertices.size();
-			Tree<Key> * vv;
+			Tree<Key> * tree;
 
 			for(unsigned int i = 0; i < n; ++i){
-				vv = new Tree<Key>(vertices[i], vertices[i], ++id);
-				this->mapNodes[vertices[i]][vertices[i]] = vv->root;
-				this->mapTrees[vv->root->id] = vv;
+				tree = new Tree<Key>(vertices[i], vertices[i], ++id);
+				this->mapNodes[vertices[i]][vertices[i]] = tree->root;
+				this->mapTrees[tree->root->id] = tree;
 			}
 		}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -181,7 +175,6 @@ class Forest{
 			unsigned int vTreeID = find(mapNodes[v][v]);
 
 			if(uTreeID == vTreeID){
-
 				return true;
 			} 
 
@@ -196,8 +189,6 @@ class Forest{
 			
 			if(u > v) std::swap(u, v);
 			
-			nodeSet.insert({u, v});
-
 			Tree<Key> * tree1 = mapTrees[find(mapNodes[u][u])];
 			Tree<Key> * tree2 = mapTrees[find(mapNodes[v][v])];
 
@@ -215,8 +206,6 @@ class Forest{
 			
 			if(u > v) std::swap(u, v);
 			
-			nodeSet.erase({u, v});
-
 			unsigned int uvPosition = order(mapNodes[u][v]);
 			unsigned int vuPosition = order(mapNodes[v][u]);
 
@@ -251,24 +240,6 @@ class Forest{
 			split2.first = nullptr;
 			split4.first = nullptr;		
 		}
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		
-		//print all the nodes from the forest
-		void print(){
-
-			if(nodeSet.empty()){
-				std::cout << "NO EDGES WERE CREATED YET!\n";
-				return;
-			}
-			auto node = nodeSet.begin();
-			std::cout << node->first << " " << node->second;
-			
-			for (std::advance(node, 1); node != nodeSet.end(); ++node){
-				std::cout << "  " << node->first << " " << node->second;
-			}
-
-			std::cout << '\n';
-		}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -279,7 +250,7 @@ class Forest{
  			for(auto & tree : mapTrees){
 
 				if(tree.second){
-					std::cout << "Sequence ID: " << tree.first << "\n";
+					std::cout << "Tree ID: " << tree.first << "\n";
 					tree.second->print();
 				}	
 			}
@@ -304,23 +275,36 @@ class Forest{
 		// decrease the reserveNodes count
 		void decreaseIncidentToReserveNodeCount(Key u){
 			
-			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
-			tree->splay(mapNodes[u][u]);
-			mapNodes[u][u]->isIncidentToReserveNode = false;
-			mapNodes[u][u]->setReserveNodesCount();
+			Node<Key> * nodeUU = mapNodes[u][u];
+			
+			// find() alread splays the given node
+			find(nodeUU);
+
+			nodeUU->isIncidentToReserveNode = false;
+			nodeUU->setReserveNodesCount();
 		}
 		
 		// increase the reserveNodes count
 		void increaseIncidentToReserveNodeCount(Key u){
 			
-			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
-			tree->splay(mapNodes[u][u]);
-			mapNodes[u][u]->isIncidentToReserveNode = true;
-			mapNodes[u][u]->setReserveNodesCount();
+			Node<Key> * nodeUU = mapNodes[u][u];
+
+			// find() alread splays the given node
+			find(nodeUU);
+
+			nodeUU->isIncidentToReserveNode = true;
+			nodeUU->setReserveNodesCount();
 		}
 		
 		// return the node uu
 		Node<Key> * getNode(Key u){
 			return this->mapNodes[u][u];
+		}
+
+		// splay a given node
+		void splayNode(Tree<Key> * tree, Node<Key> * node){		
+			mapTrees.erase(tree->root->id);
+			tree->splay(node);
+			mapTrees[node->id] = tree;
 		}
 };

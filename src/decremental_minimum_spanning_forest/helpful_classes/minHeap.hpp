@@ -68,7 +68,7 @@ class MinHeap {
                 return;
             }
             heap.push_back({v, weight});
-            int index = heap.size() - 1;
+            long unsigned int index = heap.size() - 1;
             position[v] = index;
             heapifyUp(index);
         }
@@ -77,7 +77,7 @@ class MinHeap {
         void remove(Key v) {
             if (!position.count(v)) return;
             
-            int index = position[v];
+            long unsigned int index = position[v];
             position.erase(v);
             
             if (index == heap.size() - 1) {

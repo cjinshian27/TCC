@@ -36,16 +36,17 @@ class DynamicGraph{
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 	// decrease the node forest level
-	void decreaseNodesLevel(Tree<Key> * uTree, unsigned int i){
+	void decreaseNodesLevel(Tree<Key> * treeContainingU, unsigned int i){
 		
-		Node<Key> * nodeToSplay = uTree->getNodeWithIsLevelTrue(uTree->root);
+		Node<Key> * nodeToSplay = treeContainingU->getNodeWithIsLevelTrue(treeContainingU->root);
 		
-		uTree->splay(nodeToSplay);
-		uTree->root->isLevel = 0;
-		uTree->root->setNodeLevelCount();
+		this->forests[i]->splayNode(treeContainingU, nodeToSplay);
+
+		nodeToSplay->isLevel = 0;
+		nodeToSplay->setNodeLevelCount();
 		
-		Key u = uTree->root->first;
-		Key v = uTree->root->second;
+		Key u = treeContainingU->root->first;
+		Key v = treeContainingU->root->second;
 		updateMapNodeLevels(u, v, i - 1);
 		this->forests[i - 1]->link(u, v);
 	}	
@@ -68,7 +69,7 @@ class DynamicGraph{
 			if(treeContainingU->size() > treeContainingV->size()){
 				std::swap(treeContainingU, treeContainingV);
 			} 
-			
+
 			/*
 			the tree that contains u has less than 2^i nodes now, 
 			1 ≤ i ≤ ⌈lg(n)⌉, so we need to decrease the node levels by 1
@@ -86,12 +87,13 @@ class DynamicGraph{
 			that are not reserve are removed later on. 
 			*/
 			while(treeContainingU->root->reserveNodes > 0 && !nodeIsReplaced){
-				
+
 				Node<Key> * nodeXX = treeContainingU->getReserveNode(treeContainingU->root);
-				treeContainingU->splay(nodeXX);
+				forests[i]->splayNode(treeContainingU, nodeXX);
+
 				std::vector<Key> reserveNodesToBeRemoved;
 				Key x = nodeXX->first;
-
+				
 				for (const Key & y : this->adjacencyLists[i]->adjList[x]) {
 					
 					reserveNodesToBeRemoved.push_back(y);	
@@ -104,8 +106,6 @@ class DynamicGraph{
 					and we link x and y on every forest from the current
 					level to ⌈lg(n)⌉. 
 					*/
-
-
 					if(this->forests[i]->isConnected(x, y)){
 						updateMapNodeLevels(x, y, i - 1);
 						this->adjacencyLists[i - 1]->add(x, y);

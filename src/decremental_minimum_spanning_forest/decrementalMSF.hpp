@@ -36,16 +36,17 @@ class DecrementalMSF{
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 	// decrease the node forest level
-	void decreaseNodesLevel(Tree<Key> * uTree, unsigned int i){
+	void decreaseNodesLevel(Tree<Key> * treeContainingU, unsigned int i){
 		
-		Node<Key> * nodeToSplay = uTree->getNodeWithIsLevelTrue(uTree->root);
+		Node<Key> * nodeToSplay = treeContainingU->getNodeWithIsLevelTrue(treeContainingU->root);
 		
-		uTree->splay(nodeToSplay);
-		uTree->root->isLevel = 0;
-		uTree->root->setNodeLevelCount();
+		this->forests[i]->splayNode(treeContainingU, nodeToSplay);
+
+		treeContainingU->root->isLevel = 0;
+		treeContainingU->root->setNodeLevelCount();
 		
-		Key u = uTree->root->first;
-		Key v = uTree->root->second;
+		Key u = treeContainingU->root->first;
+		Key v = treeContainingU->root->second;
 		updateMapNodeLevels(u, v, i - 1);
 		
 		this->forests[i - 1]->link(u, v, nodeToSplay->weight);
@@ -89,7 +90,8 @@ class DecrementalMSF{
 			while(treeContainingU->root->reserveNodes > 0 && !nodeIsReplaced){
 				
 				Node<Key> * nodeXY = treeContainingU->getLightestNode(treeContainingU->root);
-				treeContainingU->splay(nodeXY);
+				forests[i]->splayNode(treeContainingU, nodeXY);
+
 				Key x = nodeXY->first;
 				Key y = nodeXY->second;
 								
