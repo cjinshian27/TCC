@@ -59,7 +59,7 @@ class Node{
 		void print(){
 
 			std::cout << "(" << this->first << " "<< this->second 
-			          << " | " << isLevel << ":" << nodesAtLevel << " " 
+			          << " | iL-" << isLevel << ":" << nodesAtLevel << " rN-" 
 					  << isIncidentToReserveNode << ":" << reserveNodes << ")" << '\n';
 		}
 		
