@@ -32,7 +32,7 @@ x_n
 
 where *n* is the number of vertices and x<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries. Since it is a generic type, you can build a graph of comparable types like integers, floats, strings, chars etc.
 
-*Note*: if you want to create a graph of non comparable classes, then you have to build *Overload Comparison Operators* for your class, in order to have the API working properly. 
+*Note*: if you want to create a graph of your own custom classes, then you have to build *Overload Comparison Operators* for your class, in order to have the API working properly. 
 
 Then you follow with the operations like:
 ```
