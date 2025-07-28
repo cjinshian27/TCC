@@ -57,7 +57,7 @@ class MinHeap {
             return heap.empty();
         }
         
-        // gets the minimum from heap in O(1) time
+        // gets the pair <v, weight> from heap in O(1) time
         std::pair<Key, int> getMin() {
             return heap[0];
         }

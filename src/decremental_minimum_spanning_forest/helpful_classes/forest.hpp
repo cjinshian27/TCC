@@ -1,5 +1,6 @@
 #pragma once
 
+#include <climits>
 #include <unordered_map>
 
 #include "node.hpp"
@@ -136,7 +137,7 @@ class Forest{
 		void concatenate(Tree<Key> * tree1, Key u, Tree<Key> * tree2, Key v, int weight){
 			
 			Tree<Key> * uv = new Tree<Key>(u, v, ++id, weight);
-			Tree<Key> * vu = new Tree<Key>(v, u, ++id, weight);
+			Tree<Key> * vu = new Tree<Key>(v, u, ++id, INT_MAX);
 			uv->root->isLevel = true;
 
 			this->mapNodes[u][v] = uv->root;
@@ -156,7 +157,7 @@ class Forest{
 			Tree<Key> * tree;
 
 			for(unsigned int i = 0; i < n; ++i){
-				tree = new Tree<Key>(vertices[i], vertices[i], ++id);
+				tree = new Tree<Key>(vertices[i], vertices[i], ++id, INT_MAX);
 				this->mapNodes[vertices[i]][vertices[i]] = tree->root;
 				this->mapTrees[tree->root->id] = tree;
 			}

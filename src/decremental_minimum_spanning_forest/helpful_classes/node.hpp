@@ -18,7 +18,7 @@ class Node{
 		from the entire forest, since we want to build a minimum 
 		spanning forest
 		*/ 
-		int minWeight;
+		int minWeight = INT_MAX;
 
 		// stores a list of neighbors with its respective weights
 		MinHeap<Key> * neighbors;
@@ -56,7 +56,7 @@ class Node{
 		// parent node
 		Node * parent = nullptr;
 
-		Node(Key first, Key second, unsigned int id, int weight = 0){
+		Node(Key first, Key second, unsigned int id, int weight){
 
 			this->first = first;
 			this->second = second;
@@ -76,9 +76,8 @@ class Node{
 		void print(){
 
 			std::cout << "(" << this->first << " "<< this->second 
-			          << " | " << isLevel << ":" << nodesAtLevel << " " 
-					  << isIncidentToReserveNode << ":" << reserveNodes << 
-					  " - size: " << size << ")" << '\n';
+			          <<  " | iL-" << isLevel << ":" << nodesAtLevel << " rN-" 
+					  << isIncidentToReserveNode << ":" << reserveNodes << " w-" << (weight == INT_MAX ? "ထ " : std::to_string(weight)) << ":" << (minWeight == INT_MAX ? "ထ " :  std::to_string(minWeight))  <<  ")" << '\n';
 		}
 		
 		// updates the reserveNodes attribute count
@@ -140,12 +139,12 @@ class Node{
 		void setMinWeight(){
 			int currentMinWeight = INT_MAX;
 
-			if(this->left && this->left->minWeight < currentMinWeight){
-				currentMinWeight = this->left->minWeight;
+			if(this->left && this->left->weight < currentMinWeight){
+				currentMinWeight = this->left->weight;
 			}
 
-			if(this->right && this->right->minWeight < currentMinWeight){
-				currentMinWeight = this->right->minWeight;
+			if(this->right && this->right->weight < currentMinWeight){
+				currentMinWeight = this->right->weight;
 			}
 			
 			if(!this->neighbors->isEmpty()){
