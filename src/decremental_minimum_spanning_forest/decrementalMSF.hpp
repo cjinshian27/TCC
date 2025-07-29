@@ -106,7 +106,7 @@ class DecrementalMSF{
 				and we link x and y on every forest from the current
 				level to ⌈lg(n)⌉. 
 				*/
-				if(this->forests[i]->isConnected(x, y)){
+				if(this->forests[i]->areConnected(x, y)){
 					updateMapNodeLevels(x, y, i - 1);
 					Node<Key> * nodeXX = this->forests[i - 1]->getNode(x, x);
 					Node<Key> * nodeYY = this->forests[i - 1]->getNode(y, y);
@@ -168,7 +168,7 @@ class DecrementalMSF{
 			updateMapNodeLevels(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
 
-			if(maxLevelForest->isConnected(u, v)){
+			if(maxLevelForest->areConnected(u, v)){
 				Node<Key> * nodeUU = maxLevelForest->getNode(u,u);
 				Node<Key> * nodeVV = maxLevelForest->getNode(v,v);
 
@@ -186,7 +186,7 @@ class DecrementalMSF{
 		//remove the node (edge) <u, v, weight> in O(lg²(n))
 		void remove(Key u, Key v){
 			
-			if(!isConnected(u, v)) return;
+			if(!areConnected(u, v)) return;
 
 			unsigned int nodeLevel = mapNodeLevels[u][v];
 			mapNodeLevels[u].erase(v);
@@ -221,10 +221,10 @@ class DecrementalMSF{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		// checks if u and v are connected in O(lg(n))
-		bool isConnected(Key u, Key v){
+		bool areConnected(Key u, Key v){
 			
 			Forest<Key> * forest = this->forests[this->maxLevel];
-			return forest->isConnected(u, v);
+			return forest->areConnected(u, v);
 		}
 
 		// prints out all the dynamic graph in O(nlg(n))

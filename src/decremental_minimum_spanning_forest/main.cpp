@@ -39,7 +39,7 @@ void decode(){
 
 			case 1:
 				std::cin >> u >> v;
-				if(decrementalMSF->isConnected(u, v)){
+				if(decrementalMSF->areConnected(u, v)){
 					std::cout << u << " and " << v << " are connected!" << '\n';
 				} 
 				else{
