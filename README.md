@@ -53,19 +53,17 @@ where:
 
 ## How to test the dynamic graph
 
-Once you have created a test file, simply run:
+Once you have created a test file *t*, simply run:
 
 ```bash
 make build
 ```
 
-to compile the main *cpp* file, then run:
+to compile the main *cpp* file, then run the following to see the output:
 
 ```bash
 make run < t
 ```
-
-to see the output, where *t* is the filename you have created.
 
 # Decremental Minimum Spanning Forest
 
@@ -115,17 +113,16 @@ where:
 
 ## How to test the decremental MSF
 
-Once you have created a test file, simply run:
+Once you have created a test file *t*, simply run:
 
 ```bash
 make build
 ```
 
-to compile the main *cpp* file, then run:
+to compile the main *cpp* file, then run the following to see the output:
 
 ```bash
 make run < t
 ```
 
-to see the output, where *t* is the filename you have created.
 
