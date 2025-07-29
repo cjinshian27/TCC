@@ -1,12 +1,6 @@
 #include <iostream>
-#include <utility>
-#include <unordered_map>
 #include <vector>
-#include <string>
-#include <iterator>
-#include <set>
 #include "dynamicForest.hpp"
-
 
 DynamicForest<int> * buildDynamicForest(){
 	
