@@ -97,8 +97,6 @@ class DecrementalMSF{
 				Key x = nodeXX->first;
 				Key y = neighbor.first;
 				int nodeXYWeight = neighbor.second;
-
-				std::cout << "<" << x << ":"  << y << ">" << std::endl;
 			
 				/*
 				if the nodes x and y are connected, then we know 
