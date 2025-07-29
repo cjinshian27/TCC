@@ -186,6 +186,8 @@ class DecrementalMSF{
 		//remove the node (edge) <u, v, weight> in O(lg²(n))
 		void remove(Key u, Key v){
 			
+			if(!isConnected(u, v)) return;
+
 			unsigned int nodeLevel = mapNodeLevels[u][v];
 			mapNodeLevels[u].erase(v);
 			mapNodeLevels[v].erase(u);
@@ -199,8 +201,7 @@ class DecrementalMSF{
 			<u, v> from the adjacency list
 			*/
 
-			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
-			if(maxLevelForest->hasNode(u, v)){
+			if(this->forests[this->maxLevel]->hasNode(u, v)){
 				for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i)
 					 this->forests[i]->cut(u, v);
 
