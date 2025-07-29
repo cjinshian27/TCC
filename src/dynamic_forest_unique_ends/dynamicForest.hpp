@@ -194,7 +194,7 @@ class DynamicForest{
 		v, so it will return a nullptr. Since a nullptr
 		indicates false, then it will not return true.
 		*/
-		bool isConnected(Key u, Key v){
+		bool areConnected(Key u, Key v){
 
 			unsigned int id1 = find(getNode(u));
 			unsigned int id2 = find(getNode(v));
@@ -208,7 +208,7 @@ class DynamicForest{
 		//create a link between nodes u and v
 		void link(Key u, Key v){
 
-			if(isConnected(u, v)) return;
+			if(areConnected(u, v)) return;
 			
 			if(u > v) std::swap(u, v);
 			
@@ -227,7 +227,7 @@ class DynamicForest{
 		//cut the node with u and v ends
 		void cut(Key u, Key v){
 
-			if(!isConnected(u, v)) return;
+			if(!areConnected(u, v)) return;
 			
 			if(u > v) std::swap(u, v);
 			

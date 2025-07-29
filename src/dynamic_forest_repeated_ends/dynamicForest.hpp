@@ -165,7 +165,7 @@ class DynamicForest{
 		check whether nodes u and v are connected by
 		comparing their splayTree ID's
 		*/
-		bool isConnected(Key u, Key v){
+		bool areConnected(Key u, Key v){
 
 			unsigned int uSplayTree = find(mapNodes[u][u]);
 			unsigned int vSplayTree = find(mapNodes[v][v]);
@@ -179,7 +179,7 @@ class DynamicForest{
 		//create a link between nodes u and v
 		void link(Key u, Key v){
 
-			if(isConnected(u, v)) return;
+			if(areConnected(u, v)) return;
 			
 			if(u > v) std::swap(u, v);
 			
@@ -198,7 +198,7 @@ class DynamicForest{
 		//cut the node with u and v ends
 		void cut(Key u, Key v){
 
-			if(!isConnected(u, v)) return;
+			if(!areConnected(u, v)) return;
 			
 			if(u > v) std::swap(u, v);
 			
