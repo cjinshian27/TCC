@@ -61,7 +61,7 @@ class DecrementalMSF{
 	void replaceNode(Key u, Key v, unsigned int nodeLevel){
 		
 		bool nodeIsReplaced = false;
-			
+
 		for(unsigned int i = nodeLevel; i <= this->maxLevel && !nodeIsReplaced; ++i){
 			
 			Tree<Key> * treeContainingU = this->forests[i]->getTreeContaining(u);
@@ -89,12 +89,17 @@ class DecrementalMSF{
 			*/
 			while(treeContainingU->root->reserveNodes > 0 && !nodeIsReplaced){
 				
-				Node<Key> * nodeXY = treeContainingU->getLightestNode(treeContainingU->root);
-				forests[i]->splayNode(treeContainingU, nodeXY);
+				Node<Key> * nodeXX = treeContainingU->getNodeWithTheLightestIncidentEdge(treeContainingU->root);
+				forests[i]->splayNode(treeContainingU, nodeXX);
 
-				Key x = nodeXY->first;
-				Key y = nodeXY->second;
-								
+				std::pair<Key, int> neighbor = nodeXX->neighbors->extractMin();
+				
+				Key x = nodeXX->first;
+				Key y = neighbor.first;
+				int nodeXYWeight = neighbor.second;
+
+				std::cout << "<" << x << ":"  << y << ">" << std::endl;
+			
 				/*
 				if the nodes x and y are connected, then we know 
 				they are in treeContaningU, because they are in 
@@ -108,13 +113,13 @@ class DecrementalMSF{
 					Node<Key> * nodeXX = this->forests[i - 1]->getNode(x, x);
 					Node<Key> * nodeYY = this->forests[i - 1]->getNode(y, y);
 
-					this->adjacencyLists[i - 1]->add(nodeXX, nodeYY, nodeXY->weight);
+					this->adjacencyLists[i - 1]->add(nodeXX, nodeYY, nodeXYWeight);
 					this->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeXX);
 					this->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeYY);
 				}
 				else{													
 					for(unsigned int j = i; j <= this->maxLevel; ++j){
-						this->forests[j]->link(x, y, nodeXY->weight);
+						this->forests[j]->link(x, y, nodeXYWeight);
 					}
 					nodeIsReplaced = true;
 					break;
@@ -124,7 +129,6 @@ class DecrementalMSF{
 				remove nodes that are incident to treeContainingU, but not 
 				to treeContainingV 
 				*/
-				Node<Key> * nodeXX = this->forests[i]->getNode(x, x);
 				Node<Key> * nodeYY = this->forests[i]->getNode(y, y);
 
 				this->adjacencyLists[i]->remove(nodeXX, nodeYY);
@@ -202,7 +206,7 @@ class DecrementalMSF{
 			if(maxLevelForest->hasNode(u, v)){
 				for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i)
 					 this->forests[i]->cut(u, v);
-	
+
 				replaceNode(u, v, nodeLevel);
 			}
 			else{

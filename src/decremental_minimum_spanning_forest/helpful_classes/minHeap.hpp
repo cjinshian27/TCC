@@ -92,14 +92,16 @@ class MinHeap {
             heapifyUp(index);
         }
 
-        void extractMin(){
-            remove(heap[0]);
+        std::pair<Key, int> extractMin(){
+            std::pair<Key, int> extractedNeighbor = heap[0];
+            remove(heap[0].first);
+            return extractedNeighbor;
         }
 
         // prints in O(n) time (for debugging purposes)
         void print() {
             for (auto [v, w] : heap)
-                std::cout << "(" << v << ", weight=" << w << ") ";
+                std::cout << " (" << v << ", w=" << w << ")";
             std::cout << "\n";
         }
 };

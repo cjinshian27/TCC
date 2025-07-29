@@ -333,7 +333,7 @@ class Tree{
 		}
 
 		// get the node with the smallest weight
-		Node<Key>* getLightestNode(Node<Key>* root) {
+		Node<Key>* getNodeWithTheLightestIncidentEdge(Node<Key>* root) {
 			if (!root) return nullptr;
 
 			int currentMinWeight = root->neighbors->isEmpty() ? 
@@ -342,15 +342,15 @@ class Tree{
 			/*
 			If the current node's adjacency list has the minimum weight and it matches the node's minWeight, we found our target
 			*/ 
-			if (currentMinWeight == root->minWeight && currentMinWeight != INT_MAX) {
+			if (currentMinWeight == root->minWeight && currentMinWeight != INT_MAX && root->isIncidentToReserveNode) {
 				return root;
 			}
 			
 			if (root->left && root->left->minWeight == root->minWeight) {
-				return getLightestNode(root->left);
+				return getNodeWithTheLightestIncidentEdge(root->left);
 			} 
 			if (root->right && root->right->minWeight == root->minWeight){
-				return getLightestNode(root->right);
+				return getNodeWithTheLightestIncidentEdge(root->right);
 			}
 			
 			return nullptr;

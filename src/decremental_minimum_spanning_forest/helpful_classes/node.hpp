@@ -139,12 +139,12 @@ class Node{
 		void setMinWeight(){
 			int currentMinWeight = INT_MAX;
 
-			if(this->left && this->left->weight < currentMinWeight){
-				currentMinWeight = this->left->weight;
+			if(this->left && this->left->minWeight < currentMinWeight){
+				currentMinWeight = this->left->minWeight;
 			}
 
-			if(this->right && this->right->weight < currentMinWeight){
-				currentMinWeight = this->right->weight;
+			if(this->right && this->right->minWeight < currentMinWeight){
+				currentMinWeight = this->right->minWeight;
 			}
 			
 			if(!this->neighbors->isEmpty()){
