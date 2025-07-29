@@ -1,7 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
-#include "node.hpp"
 #include "splayTree.hpp"
 
 void decode(){
