@@ -122,7 +122,6 @@ class DecrementalMSF{
 						this->forests[j]->link(x, y, nodeXYWeight);
 					}
 					nodeIsReplaced = true;
-					break;
 				}
 		
 				/*
