@@ -1,4 +1,8 @@
+#pragma once
+
 #include "node.hpp"
+#include <iostream>
+
 template <typename Key>
 
 class SplayTree{

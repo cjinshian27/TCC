@@ -1,3 +1,7 @@
+#pragma once
+
+#include <iostream>
+
 template<typename Key>
 
 class Node{
