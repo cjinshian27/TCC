@@ -2,6 +2,12 @@
 
 This is a final course project made in *C++*. Each folder is an independent project, and they are the base for the more complex ones. My main page can be accessed [here](https://linux.ime.usp.br/~cjinshian/).
 
+# Contents
+
+This project contains generic tree-related algorithms. Since they were implemented as generic types, you can build each of them where their nodes hold comparable types like integers, floats, strings, chars etc.
+
+*Note*: if you want to create a graph of your own custom classes, then you must implement comparison operators for your class, to ensure the API functions correctly. 
+
 # Splay Tree
 
 This is a generic splay tree class that uses a template parameter Key, which can be of any type. 
@@ -16,9 +22,7 @@ This is a dynamic forest based on splay trees, and its vertices are edges that *
 
 # Dynamic Graph
 
-This is a dynamic graph based on dynamic forests with repeated ends. It is still under construction, so you may encounter bugs or segmentation faults if you test it now.
-
-The dynamic graph accepts the following input:
+This is a dynamic graph based on dynamic forests with repeated ends. The dynamic graph accepts the following input:
 
 ```
 n
@@ -30,9 +34,7 @@ x_2
 x_n
 ```
 
-where *n* is the number of vertices and x<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries. Since it is a generic type, you can build a graph of comparable types like integers, floats, strings, chars etc.
-
-*Note*: if you want to create a graph of your own custom classes, then you have to build *Overload Comparison Operators* for your class, in order to have the API working properly. 
+where *n* is the number of vertices and x<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries. 
 
 Then you follow with the operations like:
 ```
@@ -65,4 +67,65 @@ make run < t
 
 to see the output, where *t* is the filename you have created.
 
-# Decremental Minimum Spanning Tree
+# Decremental Minimum Spanning Forest
+
+This is a partially dynamic graph that maintains Minimum Spanning Forests (MSFs), which means that the total weight of all edges that form an MSF is minimized compared to all other possible spanning forests. It is called partially because it only accepts connectivity and removal queries, which means that any edge addition query will be computed beforehand.  
+
+The decremental MSF accepts the following input:
+
+```
+n
+x_1
+x_2
+.
+.
+.
+x_n
+
+m
+e_1
+e_2
+.
+.
+.
+e_m
+```
+
+where *n* is the number of vertices, such that x<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries, and *m* is the number of edges of the form 
+
+```
+x_i x_j w
+```
+
+where i &ne; j, and *w* is the weight of the edge that connects x<sub>i</sub> and x<sub>j</sub> vertices.
+
+After the input, you can follow with the operations like:
+
+```
+1 a b
+2 a b
+3
+```
+
+where: 
+
+* **1 a b**: checks if the vertices a and b are connected;
+* **2 a b**: removes the edge <a, b>;
+* **3**: prints out the forests (where each forest prints out their trees distinguished by their ID's) and the adjancency lists.
+
+## How to test the decremental MSF
+
+Once you have created a test file, simply run:
+
+```bash
+make build
+```
+
+to compile the main *cpp* file, then run:
+
+```bash
+make run < t
+```
+
+to see the output, where *t* is the filename you have created.
+
