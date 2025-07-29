@@ -89,7 +89,7 @@ e_2
 e_m
 ```
 
-where *n* is the number of vertices, such that x<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries, and *m* is the number of edges of the form 
+where *n* is the number of vertices, such that x<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries, and *m* is the number of edges e<sub>j</sub> (1 ≤ j ≤ m) of the form 
 
 ```
 x_i x_j w
