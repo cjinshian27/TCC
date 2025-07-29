@@ -27,7 +27,7 @@ class DynamicGraph{
 	
 	unsigned int maxLevel;
 	
-	// update node forest level
+	// update node forest level in O(1) time
 	void updateMapNodeLevels(Key u, Key v, unsigned int level){
 		this->mapNodeLevels[u][v] = level;
 		this->mapNodeLevels[v][u] = level;
@@ -35,7 +35,7 @@ class DynamicGraph{
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
-	// decrease the node forest level
+	// decrease the node forest level in O(lg(n)) time
 	void decreaseNodesLevel(Tree<Key> * treeContainingU, unsigned int i){
 		
 		Node<Key> * nodeToSplay = treeContainingU->getNodeWithIsLevelTrue(treeContainingU->root);
@@ -55,7 +55,8 @@ class DynamicGraph{
 	
 	/*
 	after an node (edge) is cut, find a replacement node (edge) 
-	in the adjacency list to link the two split forests again
+	in the adjacency list to link the two split forests again.
+	Runs in O(lg²(n)) time
 	*/
 	void replaceNode(Key u, Key v, unsigned int nodeLevel){
 		
@@ -147,7 +148,7 @@ class DynamicGraph{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// instantiate a dynamic graph in O(lg(n)) time.
+		// instantiate a dynamic graph in O(nlg(n)) time
 		DynamicGraph(std::vector<Key> & vertices){
 			
 			this->maxLevel = static_cast<int>(std::ceil(std::log2(vertices.size()))); 
