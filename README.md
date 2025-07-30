@@ -35,7 +35,7 @@ v_n
 ```
 
 where *n* is the number of vertices and v<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries. 
-    
+
 Then you follow with the operations like:
 ```
 1 a b
@@ -92,10 +92,10 @@ e_m
 where *n* is the number of vertices, such that v<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries, and *m* is the number of edges e<sub>j</sub> (1 ≤ j ≤ m) of the form 
 
 ```
-v_i v_j w
+v_1 v_2 w
 ```
-
-where i &ne; j, and *w* is the weight of the edge that connects v<sub>i</sub> and v<sub>j</sub> vertices.
+    
+where *w* is the weight of the edge that connects v<sub>1</sub> and v<sub>2</sub> vertices.
 
 After the input, you can follow with the operations like:
 
