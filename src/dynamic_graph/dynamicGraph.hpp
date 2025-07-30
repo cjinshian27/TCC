@@ -185,7 +185,7 @@ class DynamicGraph{
 		//remove the node (edge) <u, v> in O(lg²(n))
 		void remove(Key u, Key v){
 			
-			if(!areConnected(u, v)) return;
+			if(!mapNodeLevels[u][v]) return;
 
 			unsigned int nodeLevel = mapNodeLevels[u][v];
 			mapNodeLevels[u].erase(v);
