@@ -82,10 +82,10 @@ class DynamicGraph{
 			/*
 			since treeContainingU has fewer nodes than treeContaningV, 
 			then we need to find a replacement node (edge) that has one 
-			end in treeContainingU and another end in treeContainingV. 
+			end in treeContainingU and another end in treeContainingV 
 			
 			This replacement node is called reserve node, and the nodes
-			that are not reserve are removed later on. 
+			that are not reserve are removed later on
 			*/
 			while(treeContainingU->root->reserveNodes > 0 && !nodeIsReplaced){
 
@@ -105,7 +105,7 @@ class DynamicGraph{
 					the same component. So we just decrease the level 
 					of (x, y). Otherwise, we found a replacement node, 
 					and we link x and y on every forest from the current
-					level to ⌈lg(n)⌉. 
+					level to ⌈lg(n)⌉
 					*/
 					if(this->forests[i]->areConnected(x, y)){
 						updateMapNodeLevels(x, y, i - 1);
@@ -164,8 +164,10 @@ class DynamicGraph{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// add node (u, v) in O(lg(n))
+		// add node (u, v) in O(lg(n)) expected time
 		void add(Key u, Key v){
+
+			if(mapNodeLevels[u][v]) return;
 
 			updateMapNodeLevels(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
@@ -213,14 +215,14 @@ class DynamicGraph{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// check if u and v are connected in O(lg(n))
+		// check if u and v are connected in O(lg(n)) time
 		bool areConnected(Key u, Key v){
 			
 			Forest<Key> * forest = this->forests[this->maxLevel];
 			return forest->areConnected(u, v);
 		}
 
-		// prints out all the dynamic graph in O(nlg(n))
+		// prints out all the dynamic graph in O(nlg(n)) time
 		void print(){
 			printStylishLine();
 			std::cout << "FORESTS: \n\n";

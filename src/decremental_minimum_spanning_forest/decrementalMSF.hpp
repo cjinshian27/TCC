@@ -82,10 +82,10 @@ class DecrementalMSF{
 			/*
 			since treeContainingU has fewer nodes than treeContaningV, 
 			then we need to find a replacement node (edge) that has one 
-			end in treeContaningU and another end in treeContaningV. 
+			end in treeContaningU and another end in treeContaningV 
 			
 			This replacement node is called reserve node, and the nodes
-			that are not reserve are removed later on. 
+			that are not reserve are removed later on
 			*/
 			while(treeContainingU->root->reserveNodes > 0 && !nodeIsReplaced){
 				
@@ -104,7 +104,7 @@ class DecrementalMSF{
 				the same component. So we just decrease the level 
 				of (x, y). Otherwise, we found a replacement node, 
 				and we link x and y on every forest from the current
-				level to ⌈lg(n)⌉. 
+				level to ⌈lg(n)⌉
 				*/
 				if(this->forests[i]->areConnected(x, y)){
 					updateMapNodeLevels(x, y, i - 1);
@@ -146,7 +146,7 @@ class DecrementalMSF{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// instantiate a dynamic graph in O(lg(n)) time.
+		// instantiate a dynamic graph in O(lg(n)) time
 		DecrementalMSF(std::vector<Key> & vertices){
 			
 			this->maxLevel = static_cast<int>(std::ceil(std::log2(vertices.size()))); 
@@ -162,8 +162,10 @@ class DecrementalMSF{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// add node <u, v, weight> in O(lg(n))
+		// add node <u, v, weight> in O(lg(n)) expected time
 		void add(Key u, Key v, int weight){
+
+			if(mapNodeLevels[u][v]) return;
 
 			updateMapNodeLevels(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
@@ -220,14 +222,14 @@ class DecrementalMSF{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// checks if u and v are connected in O(lg(n))
+		// checks if u and v are connected in O(lg(n)) time
 		bool areConnected(Key u, Key v){
 			
 			Forest<Key> * forest = this->forests[this->maxLevel];
 			return forest->areConnected(u, v);
 		}
 
-		// prints out all the dynamic graph in O(nlg(n))
+		// prints out all the dynamic graph in O(nlg(n)) time
 		void print(){
 			printStylishLine();
 			std::cout << "FORESTS: \n\n";
