@@ -1,6 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "decrementalMSF.hpp"
+
+/*
+runs in O(mlg(m)) time, since we are sorting 
+the edges in increasing weight
+*/ 
 
 DecrementalMSF<int> * buildDecrementalMSF(){
 	
@@ -16,12 +22,25 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 	}
 
 	std::cin >> numberOfEdges;
-	DecrementalMSF<int> * decrementalMSF = new DecrementalMSF<int>(vertices);
+	std::vector<std::tuple<int, int, int>> edges(numberOfEdges);
+
+	// sort the edges by increasing weight
+    std::sort(edges.begin(), edges.end(), 
+              [](const auto& a, const auto& b) {
+                  return std::get<2>(a) < std::get<2>(b);
+              });
 	
 	for(unsigned int i = 0; i < numberOfEdges; ++i){
 		std::cin >> u >> v >> weight; 
-		decrementalMSF->add(u, v, weight);
+		edges.emplace_back(u, v, weight);
 	}
+	
+	DecrementalMSF<int> * decrementalMSF = new DecrementalMSF<int>(vertices);
+	
+	// add the edges beforehand (user is not allowed to add more later)
+	for (const auto& [u, v, weight] : edges) {
+		decrementalMSF->add(u, v, weight);
+    }
 	
 	return decrementalMSF;
 }
