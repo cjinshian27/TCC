@@ -94,8 +94,8 @@ where *n* is the number of vertices, such that v<sub>i</sub> (1 ≤ i ≤ n) is 
 ```
 v_1 v_2 w
 ```
-    
-where *w* is the weight of the edge that connects v<sub>1</sub> and v<sub>2</sub> vertices.
+
+where *w* is the weight of the edge that connects the vertices v<sub>1</sub> and v<sub>2</sub>.
 
 After the input, you can follow with the operations like:
 
