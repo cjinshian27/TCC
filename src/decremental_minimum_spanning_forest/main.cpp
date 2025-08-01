@@ -32,7 +32,7 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 	
 	for(unsigned int i = 0; i < numberOfEdges; ++i){
 		std::cin >> u >> v >> weight; 
-		edges.emplace_back(u, v, weight);
+		edges[i] = {u, v, weight};
 	}
 	
 	DecrementalMSF<int> * decrementalMSF = new DecrementalMSF<int>(vertices);
