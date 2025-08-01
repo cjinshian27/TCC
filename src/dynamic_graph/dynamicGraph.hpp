@@ -28,7 +28,7 @@ class DynamicGraph{
 	unsigned int maxLevel;
 	
 	// update node forest level in O(1) time
-	void updateMapNodeLevels(Key u, Key v, unsigned int level){
+	void updateNodeLevels(Key u, Key v, unsigned int level){
 		this->mapNodeLevels[u][v] = level;
 		this->mapNodeLevels[v][u] = level;
 	}
@@ -47,7 +47,7 @@ class DynamicGraph{
 		
 		Key u = treeContainingU->root->first;
 		Key v = treeContainingU->root->second;
-		updateMapNodeLevels(u, v, i - 1);
+		updateNodeLevels(u, v, i - 1);
 		this->forests[i - 1]->link(u, v);
 	}	
 	
@@ -108,7 +108,7 @@ class DynamicGraph{
 					level to ⌈lg(n)⌉
 					*/
 					if(this->forests[i]->areConnected(x, y)){
-						updateMapNodeLevels(x, y, i - 1);
+						updateNodeLevels(x, y, i - 1);
 						this->adjacencyLists[i - 1]->add(x, y);
 						this->forests[i - 1]->increaseIncidentToReserveNodeCount(x);
 						this->forests[i - 1]->increaseIncidentToReserveNodeCount(y);
@@ -169,7 +169,7 @@ class DynamicGraph{
 
 			if(mapNodeLevels[u][v]) return;
 
-			updateMapNodeLevels(u, v, this->maxLevel);
+			updateNodeLevels(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
 
 			if(maxLevelForest->areConnected(u, v)){

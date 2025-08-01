@@ -28,7 +28,7 @@ class DecrementalMSF{
 	unsigned int maxLevel;
 	
 	// update node forest level
-	void updateMapNodeLevels(Key u, Key v, unsigned int level){
+	void updateNodeLevels(Key u, Key v, unsigned int level){
 		this->mapNodeLevels[u][v] = level;
 		this->mapNodeLevels[v][u] = level;
 	}
@@ -47,7 +47,7 @@ class DecrementalMSF{
 		
 		Key u = treeContainingU->root->first;
 		Key v = treeContainingU->root->second;
-		updateMapNodeLevels(u, v, i - 1);
+		updateNodeLevels(u, v, i - 1);
 		
 		this->forests[i - 1]->link(u, v, nodeToSplay->weight);
 	}	
@@ -107,7 +107,7 @@ class DecrementalMSF{
 				level to ⌈lg(n)⌉
 				*/
 				if(this->forests[i]->areConnected(x, y)){
-					updateMapNodeLevels(x, y, i - 1);
+					updateNodeLevels(x, y, i - 1);
 					Node<Key> * nodeXX = this->forests[i - 1]->getNode(x, x);
 					Node<Key> * nodeYY = this->forests[i - 1]->getNode(y, y);
 
@@ -167,7 +167,7 @@ class DecrementalMSF{
 
 			if(mapNodeLevels[u][v]) return;
 
-			updateMapNodeLevels(u, v, this->maxLevel);
+			updateNodeLevels(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
 
 			if(maxLevelForest->areConnected(u, v)){
