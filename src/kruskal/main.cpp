@@ -15,7 +15,7 @@ Graph buildGraph() {
     std::cin >> numberOfEdges;
 
     // add edges (u, v, weight)
-	for(unsigned int i = 0; i < numberOfEdges; ++i){
+	for(unsigned int i = 1; i <= numberOfEdges; ++i){
         std::cin >> u >> v >> weight;
         g.addEdge(u, v, weight);
     }
