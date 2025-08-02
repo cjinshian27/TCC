@@ -17,7 +17,7 @@ class AdjacencyList{
             nodeVV->addNeighbor(nodeUU->first, weight);
 		}
 
-		// removes edge (u, v) in constant time O(1)
+		// removes edge (u, v) in constant time O(lg(n))
 		void remove(Node<Key> * nodeUU, Node<Key> * nodeVV){
 			nodeUU->removeNeighbor(nodeVV->first);
             nodeVV->removeNeighbor(nodeUU->first);

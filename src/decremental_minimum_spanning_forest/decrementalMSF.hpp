@@ -35,8 +35,8 @@ class DecrementalMSF{
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
-	// decrease the node forest level
-	void decreaseNodesLevel(Tree<Key> * treeContainingU, unsigned int i){
+	// decrease the level of one edge in the tree containing u from i to i - 1
+	void decreaseNodeLevel(Tree<Key> * treeContainingU, unsigned int i){
 		
 		Node<Key> * nodeToSplay = treeContainingU->getNodeWithIsLevelTrue(treeContainingU->root);
 		
@@ -61,7 +61,7 @@ class DecrementalMSF{
 	void replaceNode(Key u, Key v, unsigned int nodeLevel){
 		
 		bool nodeIsReplaced = false;
-
+		std::cout << "nodeLevel: " << nodeLevel << "\n";
 		for(unsigned int i = nodeLevel; i <= this->maxLevel && !nodeIsReplaced; ++i){
 			
 			Tree<Key> * treeContainingU = this->forests[i]->getTreeContaining(u);
@@ -76,7 +76,7 @@ class DecrementalMSF{
 			1 ≤ i ≤ ⌈lg(n)⌉, so we need to decrease the node levels by 1
 			*/ 
 			while(treeContainingU->root->nodesAtLevel > 0){
-				decreaseNodesLevel(treeContainingU, i);
+				decreaseNodeLevel(treeContainingU, i);
 			}
 			
 			/*
@@ -90,14 +90,18 @@ class DecrementalMSF{
 			while(treeContainingU->root->reserveNodes > 0 && !nodeIsReplaced){
 				
 				Node<Key> * nodeXX = treeContainingU->getNodeWithTheLightestIncidentEdge(treeContainingU->root);
+				
 				forests[i]->splayNode(treeContainingU, nodeXX);
 
 				std::pair<Key, int> neighbor = nodeXX->neighbors->extractMin();
 				
 				Key x = nodeXX->first;
 				Key y = neighbor.first;
+
+				
+				
 				int nodeXYWeight = neighbor.second;
-			
+				
 				/*
 				if the nodes x and y are connected, then we know 
 				they are in treeContaningU, because they are in 
@@ -106,14 +110,15 @@ class DecrementalMSF{
 				and we link x and y on every forest from the current
 				level to ⌈lg(n)⌉
 				*/
+				
 				if(this->forests[i]->areConnected(x, y)){
 					updateNodeLevels(x, y, i - 1);
 					Node<Key> * nodeXX = this->forests[i - 1]->getNode(x, x);
 					Node<Key> * nodeYY = this->forests[i - 1]->getNode(y, y);
-
+					
 					this->adjacencyLists[i - 1]->add(nodeXX, nodeYY, nodeXYWeight);
 					this->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeXX);
-					this->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeYY);
+					this	->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeYY);
 				}
 				else{													
 					for(unsigned int j = i; j <= this->maxLevel; ++j){
@@ -123,14 +128,15 @@ class DecrementalMSF{
 				}
 		
 				/*
-				remove nodes that are incident to treeContainingU, but not 
-				to treeContainingV 
+				remove the edge <x, y> from the adjacency list of level i
 				*/
 				Node<Key> * nodeYY = this->forests[i]->getNode(y, y);
-
+				
 				this->adjacencyLists[i]->remove(nodeXX, nodeYY);
-				this->forests[i]->decreaseIncidentToReserveNodeCount(nodeYY);
-
+				if(nodeYY->neighbors->isEmpty()){
+					this->forests[i]->decreaseIncidentToReserveNodeCount(nodeYY);
+				}
+			
 				/*
 				if x is not incident to any other node of level i, then
 				decrease its reserve node count
@@ -138,6 +144,8 @@ class DecrementalMSF{
 				if(nodeXX->neighbors->isEmpty()){
 					this->forests[i]->decreaseIncidentToReserveNodeCount(nodeXX);
 				}
+				nodeXX->setMinWeight();
+				nodeYY->setMinWeight();
 			}
 		}
 	}
@@ -194,6 +202,7 @@ class DecrementalMSF{
 			mapNodeLevels[u].erase(v);
 			mapNodeLevels[v].erase(u);
 			
+			std::cout << "remove nodeLevel: " << nodeLevel << "\n";
 			/*
 			if the forest of level ⌈lg(n)⌉ has <u, v, weight>, 
 			then we need to find a replacement for <u, v, weight>
@@ -234,7 +243,7 @@ class DecrementalMSF{
 			printStylishLine();
 			std::cout << "FORESTS: \n\n";
 			for(int i = this->maxLevel; i >= 0; --i){
-				std::cout << "FOREST LEVEL " << i + 1 << ":\n";
+				std::cout << "FOREST LEVEL " << i << ":\n";
 				this->forests[i]->printTrees();
 				std::cout << "**************************************************\n";
 			}
@@ -243,7 +252,7 @@ class DecrementalMSF{
 
 			std::cout << "ADJACENCY LISTS \n\n";
 			for(int i = this->maxLevel; i >= 0; --i){
-				std::cout << "ADJACENCY LIST LEVEL " << i + 1 << ":\n";
+				std::cout << "ADJACENCY LIST LEVEL " << i << ":\n";
 				this->adjacencyLists[i]->print();
 				std::cout << "**************************************************\n";
 			}
