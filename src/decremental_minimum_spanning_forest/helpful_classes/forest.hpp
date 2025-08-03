@@ -27,7 +27,7 @@ class Forest{
 		*/
 		std::unordered_map<Key, Tree<Key> *> mapTrees; 
 
-		int totalWeight = 0;
+		long long totalWeight = 0;
 		std::unordered_set<Edge<int>, EdgeHash<int>> edges;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
