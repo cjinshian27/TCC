@@ -123,12 +123,18 @@ class DynamicGraph{
 				}
 				
 				/*
-				remove nodes that are incident to treeContaningU,
-				but not to treeContainingV 
+				remove x from the adjacency list of y, and vice-versa
+
+				if y is not incident to any other node of level i, then
+				decrease its reserve node count. Otherwise, we splay y
+				to update their min weight. 
 				*/
 				for (Key & y : reserveNodesToBeRemoved) {
 					this->adjacencyLists[i]->remove(x, y);
-					this->forests[i]->decreaseIncidentToReserveNodeCount(y);
+					
+					if(this->adjacencyLists[i]->adjList[y].empty()){
+						this->forests[i]->decreaseIncidentToReserveNodeCount(y);
+					}
 				}
 
 				/*
@@ -137,8 +143,6 @@ class DynamicGraph{
 				*/
 				if(this->adjacencyLists[i]->adjList[x].empty()){
 					this->forests[i]->decreaseIncidentToReserveNodeCount(x);
-					nodeXX->isIncidentToReserveNode = false;
-					nodeXX->setReserveNodesCount();
 				}
 			}
 		}
