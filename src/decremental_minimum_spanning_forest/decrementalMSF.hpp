@@ -244,6 +244,14 @@ class DecrementalMSF{
 			return forest->areConnected(u, v);
 		}
 
+		void printTotalWeight(){
+			this->forests[this->maxLevel]->printTotalWeight();
+		}
+		
+		void printWeightedEdges(){
+			this->forests[this->maxLevel]->printEdges();
+		}
+
 		// prints out all the forests in O((n + m)lg(n)) time
 		void printForests(){
 			printStylishLine();

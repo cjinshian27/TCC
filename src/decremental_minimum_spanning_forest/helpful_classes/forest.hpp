@@ -2,9 +2,11 @@
 
 #include <climits>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "node.hpp"
 #include "tree.hpp"
+#include "edgeHash.hpp"
 
 template<typename Key>
 
@@ -25,6 +27,8 @@ class Forest{
 		*/
 		std::unordered_map<Key, Tree<Key> *> mapTrees; 
 
+		int totalWeight = 0;
+		std::unordered_set<Edge<int>, EdgeHash<int>> edges;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
@@ -184,8 +188,10 @@ class Forest{
 
 			if(areConnected(u, v)) return;
 			
-			if(u > v) std::swap(u, v);
-			
+			if(u > v) std::swap(u, v);	
+			edges.insert({u, v, weight});
+			totalWeight += weight;
+
 			Tree<Key> * tree1 = mapTrees[find(mapNodes[u][u])];
 			Tree<Key> * tree2 = mapTrees[find(mapNodes[v][v])];
 
@@ -202,11 +208,17 @@ class Forest{
 			if(!areConnected(u, v)) return;
 			
 			if(u > v) std::swap(u, v);
-			
-			unsigned int uvPosition = order(mapNodes[u][v]);
-			unsigned int vuPosition = order(mapNodes[v][u]);
 
-			unsigned int uvID = find(mapNodes[u][v]);
+			Node<Key> * nodeUV = mapNodes[u][v];
+			Node<Key> * nodeVU = mapNodes[v][u];
+
+			edges.erase({u, v, nodeUV->weight});
+			totalWeight -= nodeUV->weight;
+			
+			unsigned int uvPosition = order(nodeUV);
+			unsigned int vuPosition = order(nodeVU);
+
+			unsigned int uvID = find(nodeUV);
 
 			Tree<Key> * tree = mapTrees[uvID];
 
@@ -251,6 +263,16 @@ class Forest{
 					tree.second->print();
 				}	
 			}
+		}
+
+		void printEdges(){
+			for (const auto& [u, v, weight] : edges) {
+   				 std::cout << "(" << u << ", " << v << ", weight = " << weight << ")\n";
+			}		
+		}
+
+		void printTotalWeight(){
+			std::cout << "total weight is: " << totalWeight << '\n';
 		}
 
 		bool hasNode(Key u, Key v){
