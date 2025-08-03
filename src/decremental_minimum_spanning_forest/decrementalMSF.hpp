@@ -244,7 +244,7 @@ class DecrementalMSF{
 			return forest->areConnected(u, v);
 		}
 
-		// prints out all the dynamic graph in O(nlg(n)) time
+		// prints out all the forests in O((n + m)lg(n)) time
 		void printForests(){
 			printStylishLine();
 			std::cout << "FORESTS: \n\n";
@@ -254,9 +254,9 @@ class DecrementalMSF{
 				std::cout << "**************************************************\n";
 			}
 			printStylishLine();
-			
 		}
 
+		// prints out all the forests in O((n + m)lg(n)) time
 		void printAdjancencyLists(){
 			printStylishLine();
 			std::cout << "ADJACENCY LISTS \n\n";
