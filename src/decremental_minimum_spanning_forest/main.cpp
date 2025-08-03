@@ -72,7 +72,11 @@ void decode(){
 				break;
 
 			case 3:
-				decrementalMSF->print();
+				decrementalMSF->printForests();
+				break;
+
+			case 4: 
+				decrementalMSF->printAdjancencyLists();
 				break;
 		}
 	}

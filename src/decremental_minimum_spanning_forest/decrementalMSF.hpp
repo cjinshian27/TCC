@@ -245,7 +245,7 @@ class DecrementalMSF{
 		}
 
 		// prints out all the dynamic graph in O(nlg(n)) time
-		void print(){
+		void printForests(){
 			printStylishLine();
 			std::cout << "FORESTS: \n\n";
 			for(int i = this->maxLevel; i >= 0; --i){
@@ -253,9 +253,12 @@ class DecrementalMSF{
 				this->forests[i]->printTrees();
 				std::cout << "**************************************************\n";
 			}
+			printStylishLine();
+			
+		}
 
-			std::cout << "\n\n\n\n"; 
-
+		void printAdjancencyLists(){
+			printStylishLine();
 			std::cout << "ADJACENCY LISTS \n\n";
 			for(int i = this->maxLevel; i >= 0; --i){
 				std::cout << "ADJACENCY LIST LEVEL " << i << ":\n";
@@ -264,4 +267,6 @@ class DecrementalMSF{
 			}
 			printStylishLine();
 		}
+
+
 };
