@@ -103,13 +103,17 @@ After the input, you can follow with the operations like:
 1 a b
 2 a b
 3
+4
 ```
 
 where: 
 
 * **1 a b**: checks if the vertices a and b are connected;
 * **2 a b**: removes the edge <a, b>;
-* **3**: prints out the forests (where each forest prints out their trees distinguished by their ID's) and the adjancency lists.
+* **3**: prints out the total weight of the minimum spanning forest;
+* **4**: prints out the weighted edges of the minimum spanning forest;
+* **5**: prints out the forests, where each forest prints out their trees distinguished by their ID's;
+* **6**: prints out the adjancency lists.
 
 ## How to test the decremental MSF
 
