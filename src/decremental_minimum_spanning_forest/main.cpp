@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -31,9 +32,9 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 	
 	// sort the edges by increasing weight
 	std::sort(edges.begin(), edges.end(), 
-			  [](const auto& a, const auto& b) {
-				  return std::get<2>(a) < std::get<2>(b);
-			  });
+	[](const auto& a, const auto& b) {
+		return std::get<2>(a) < std::get<2>(b);
+	});
 	
 	DecrementalMSF<int> * decrementalMSF = new DecrementalMSF<int>(vertices);
 
@@ -52,6 +53,10 @@ void decode(){
 
 	DecrementalMSF<int> * decrementalMSF = buildDecrementalMSF(); 
 
+	if(!decrementalMSF){
+		return;
+	} 
+		
 	while(std::cin >> operation){
 		
 		switch(operation){

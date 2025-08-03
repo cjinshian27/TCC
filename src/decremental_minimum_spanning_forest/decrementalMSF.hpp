@@ -4,6 +4,7 @@
 #include "./helpful_classes/tree.hpp"
 #include "./helpful_classes/forest.hpp"
 #include "./helpful_classes/adjacencyList.hpp"
+#include "helpful_classes/edgeHash.hpp"
 
 #include <cmath>
 
@@ -23,14 +24,14 @@ class DecrementalMSF{
 	std::vector<Forest<Key> *> forests;
 	
 	// map the this->maxLevel of the nodes 
-	std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapNodeLevels;
+	std::unordered_map<std::pair<Key, Key>, unsigned int, PairHash<Key>> mapNodeLevels;
 	
 	unsigned int maxLevel;
 	
 	// update node forest level
 	void updateNodeLevels(Key u, Key v, unsigned int level){
-		this->mapNodeLevels[u][v] = level;
-		this->mapNodeLevels[v][u] = level;
+		this->mapNodeLevels[{u, v}] = level;
+		this->mapNodeLevels[{v, u}] = level;
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -181,7 +182,7 @@ class DecrementalMSF{
 		// add node <u, v, weight> in O(lg(n)) expected time
 		void add(Key u, Key v, int weight){
 
-			if(mapNodeLevels[u][v]) return;
+			if(mapNodeLevels[{u, v}]) return;
 
 			updateNodeLevels(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
@@ -204,11 +205,11 @@ class DecrementalMSF{
 		//remove the node (edge) <u, v, weight> in O(lg²(n))
 		void remove(Key u, Key v){
 			
-			if(!mapNodeLevels[u][v]) return;
+			if(!mapNodeLevels[{u, v}]) return;
 
-			unsigned int nodeLevel = mapNodeLevels[u][v];
-			mapNodeLevels[u].erase(v);
-			mapNodeLevels[v].erase(u);
+			unsigned int nodeLevel = mapNodeLevels[{u, v}];
+			mapNodeLevels.erase({u, v});
+			mapNodeLevels.erase({v, u});
 			
 			/*
 			if the forest of level ⌈lg(n)⌉ has <u, v, weight>, 
