@@ -73,7 +73,7 @@ The decremental MSF accepts the following input:
 
 ```
 n
-v_1
+v₁
 v_2
 .
 .
@@ -81,7 +81,7 @@ v_2
 v_n
 
 m
-e_1
+e₁
 e_2
 .
 .
