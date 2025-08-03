@@ -26,12 +26,12 @@ This is a dynamic graph based on dynamic forests with repeated ends. The dynamic
 
 ```
 n
-v_1
-v_2
+v₁
+v₂
 .
 .
 .
-v_n
+vₙ
 ```
 
 where *n* is the number of vertices and v<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries. 
@@ -74,25 +74,25 @@ The decremental MSF accepts the following input:
 ```
 n
 v₁
-v_2
+v₂
 .
 .
 .
-v_n
+vₙ
 
 m
 e₁
-e_2
+e₂
 .
 .
 .
-e_m
+eₘ
 ```
 
 where *n* is the number of vertices, such that v<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries, and *m* is the number of edges e<sub>j</sub> (1 ≤ j ≤ m) of the form 
 
 ```
-v_1 v_2 w
+v₁ v₂ w
 ```
 
 where *w* is the weight of the edge that connects the vertices v<sub>1</sub> and v<sub>2</sub>.
