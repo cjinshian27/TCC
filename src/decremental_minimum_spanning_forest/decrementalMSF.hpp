@@ -40,7 +40,7 @@ class DecrementalMSF{
 		
 		Node<Key> * nodeToSplay = treeContainingU->getNodeWithIsLevelTrue(treeContainingU->root);
 		
-		this->forests[i]->splayNode(treeContainingU, nodeToSplay);
+		this->forests[i]->splayNode(nodeToSplay);
 
 		treeContainingU->root->isLevel = 0;
 		treeContainingU->root->setNodeLevelCount();
@@ -61,7 +61,6 @@ class DecrementalMSF{
 	void replaceNode(Key u, Key v, unsigned int nodeLevel){
 		
 		bool nodeIsReplaced = false;
-		std::cout << "nodeLevel: " << nodeLevel << "\n";
 		for(unsigned int i = nodeLevel; i <= this->maxLevel && !nodeIsReplaced; ++i){
 			
 			Tree<Key> * treeContainingU = this->forests[i]->getTreeContaining(u);
@@ -90,16 +89,13 @@ class DecrementalMSF{
 			while(treeContainingU->root->reserveNodes > 0 && !nodeIsReplaced){
 				
 				Node<Key> * nodeXX = treeContainingU->getNodeWithTheLightestIncidentEdge(treeContainingU->root);
-				
-				forests[i]->splayNode(treeContainingU, nodeXX);
+
+				forests[i]->splayNode(nodeXX);
 
 				std::pair<Key, int> neighbor = nodeXX->neighbors->extractMin();
 				
 				Key x = nodeXX->first;
 				Key y = neighbor.first;
-
-				
-				
 				int nodeXYWeight = neighbor.second;
 				
 				/*
@@ -118,7 +114,7 @@ class DecrementalMSF{
 					
 					this->adjacencyLists[i - 1]->add(nodeXX, nodeYY, nodeXYWeight);
 					this->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeXX);
-					this	->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeYY);
+					this->forests[i - 1]->increaseIncidentToReserveNodeCount(nodeYY);
 				}
 				else{													
 					for(unsigned int j = i; j <= this->maxLevel; ++j){
@@ -127,25 +123,37 @@ class DecrementalMSF{
 					nodeIsReplaced = true;
 				}
 		
-				/*
-				remove the edge <x, y> from the adjacency list of level i
-				*/
+				
+				
 				Node<Key> * nodeYY = this->forests[i]->getNode(y, y);
 				
+				//remove the edge <x, y> from the adjacency list of level i
 				this->adjacencyLists[i]->remove(nodeXX, nodeYY);
+
+				/*
+				if y is not incident to any other node of level i, then
+				decrease its reserve node count. Otherwise, we splay y
+				to update their min weight. 
+				*/
 				if(nodeYY->neighbors->isEmpty()){
 					this->forests[i]->decreaseIncidentToReserveNodeCount(nodeYY);
 				}
-			
+				else{
+					this->forests[i]->splayNode(nodeYY);
+				}
+				
 				/*
 				if x is not incident to any other node of level i, then
-				decrease its reserve node count
+				decrease its reserve node count. Otherwise, we splay x 
+				to update their min weight count. 
 				*/
 				if(nodeXX->neighbors->isEmpty()){
 					this->forests[i]->decreaseIncidentToReserveNodeCount(nodeXX);
 				}
-				nodeXX->setMinWeight();
-				nodeYY->setMinWeight();
+				else{
+					this->forests[i]->splayNode(nodeXX);
+				}
+				
 			}
 		}
 	}
@@ -202,7 +210,6 @@ class DecrementalMSF{
 			mapNodeLevels[u].erase(v);
 			mapNodeLevels[v].erase(u);
 			
-			std::cout << "remove nodeLevel: " << nodeLevel << "\n";
 			/*
 			if the forest of level ⌈lg(n)⌉ has <u, v, weight>, 
 			then we need to find a replacement for <u, v, weight>
@@ -215,7 +222,6 @@ class DecrementalMSF{
 			if(this->forests[this->maxLevel]->hasNode(u, v)){
 				for(unsigned int i = nodeLevel; i <= this->maxLevel; ++i)
 					 this->forests[i]->cut(u, v);
-
 				replaceNode(u, v, nodeLevel);
 			}
 			else{

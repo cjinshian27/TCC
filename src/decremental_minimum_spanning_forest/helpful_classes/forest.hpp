@@ -295,7 +295,8 @@ class Forest{
 		}
 
 		// splay a given node
-		void splayNode(Tree<Key> * tree, Node<Key> * node){		
+		void splayNode(Node<Key> * node){		
+			Tree<Key> * tree = getTreeContaining(node->first);
 			mapTrees.erase(tree->root->id);
 			tree->splay(node);
 			mapTrees[node->id] = tree;
