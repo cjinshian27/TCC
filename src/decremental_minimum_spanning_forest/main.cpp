@@ -70,12 +70,20 @@ void decode(){
 				std::cin >> u >> v;
 				decrementalMSF->remove(u, v);
 				break;
-
+			
 			case 3:
+				decrementalMSF->printTotalWeight();
+				break;
+
+			case 4:
+				decrementalMSF->printWeightedEdges();
+				break;
+
+			case 5:
 				decrementalMSF->printForests();
 				break;
 
-			case 4: 
+			case 6: 
 				decrementalMSF->printAdjancencyLists();
 				break;
 		}
