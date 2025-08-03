@@ -105,26 +105,24 @@ public:
         return uf->connected(u, v);
     }
     
-    // get MST weight
-    long long getMSTWeight() {
-        if (!mst_built) buildMST();
-        return mst_weight;
-    }
-    
     // get number of components
     int getNumComponents() {
         if (!mst_built) buildMST();
         return uf->getNumComponents();
     }
     
-    // print MST edges
-    void printMST() {
+    // print MST total weight
+    void printTotalWeight(){
+	    std::cout << "total weight is: " << mst_weight << '\n';
+    }
+
+    // print MST weighted edges
+    void printWeightedEdges() {
         if (!mst_built) buildMST();
 
         for (const auto& edge : mst_edges) {
-            std::cout << "(" << edge.u << ", " << edge.v << ") weight: " << edge.weight << std::endl;
+            std::cout << "(" << edge.u << ", " << edge.v << ", weight: " << edge.weight  << ")\n";
         }
-        std::cout << "total MST weight: " << mst_weight << std::endl;
     }
 
 };

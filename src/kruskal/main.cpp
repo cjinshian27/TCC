@@ -50,7 +50,11 @@ void decode(){
 				break;
 
 			case 3:
-				graph.printMST();
+				graph.printTotalWeight();
+				break;
+
+			case 4:
+				graph.printWeightedEdges();
 				break;
 		}
 	}
