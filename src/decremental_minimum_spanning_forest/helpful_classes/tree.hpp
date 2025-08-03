@@ -321,7 +321,6 @@ class Tree{
 		
 		// get the node that has the isLevelTrue = true
 		Node<Key> * getNodeWithIsLevelTrue(Node<Key> * root){
-			if(!root) return nullptr;
 			if(root->isLevel) return root;
 
 			if(root->left && root->left->nodesAtLevel > 0){
@@ -340,7 +339,6 @@ class Tree{
 
 		*/
 		Node<Key>* getNodeWithTheLightestIncidentEdge(Node<Key>* root) {
-			if (!root) return nullptr;
 
 			int currentMinWeight = root->neighbors->isEmpty() ? 
 							INT_MAX : root->neighbors->getMin().second;
