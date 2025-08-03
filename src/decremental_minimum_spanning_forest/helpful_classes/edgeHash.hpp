@@ -2,7 +2,6 @@
 
 #include <tuple>
 #include <functional>
-#include <unordered_set>
 
 template<typename Key>
 using Edge = std::tuple<Key, Key, int>;
