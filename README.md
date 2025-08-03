@@ -104,6 +104,8 @@ After the input, you can follow with the operations like:
 2 a b
 3
 4
+5
+6
 ```
 
 where: 
