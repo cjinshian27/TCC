@@ -17,8 +17,8 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 	std::cin >> numberOfVertices;
 	std::vector<int> vertices(numberOfVertices);
 
-	for(unsigned int i = 0; i < numberOfVertices; ++i){
-		std::cin >> vertices[i];
+	for(unsigned int i = 1; i <= numberOfVertices; ++i){
+		vertices[i] = i;
 	}
 
 	std::cin >> numberOfEdges;
