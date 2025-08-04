@@ -38,8 +38,6 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 	
 	DecrementalMSF<int> * decrementalMSF = new DecrementalMSF<int>(vertices);
 
-	std::cout << "END" << std::endl;
-	return nullptr;
 	// add the edges beforehand (user is not allowed to add more later)
 	for (const auto& [u, v, weight] : edges) {
 		decrementalMSF->add(u, v, weight);

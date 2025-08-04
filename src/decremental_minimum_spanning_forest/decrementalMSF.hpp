@@ -4,7 +4,6 @@
 #include "./helpful_classes/tree.hpp"
 #include "./helpful_classes/forest.hpp"
 #include "./helpful_classes/adjacencyList.hpp"
-#include "helpful_classes/edgeHash.hpp"
 
 #include <cmath>
 
