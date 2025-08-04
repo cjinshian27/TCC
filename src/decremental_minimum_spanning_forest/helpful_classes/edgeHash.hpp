@@ -15,13 +15,3 @@ struct EdgeHash {
         return h1 ^ (h2 << 1) ^ (h3 << 2);
     }
 };
-
-template<typename Key>
-
-struct PairHash {
-    std::size_t operator()(const std::pair<Key, Key>& pair) const {
-        auto h1 = std::hash<Key>{}(pair.first);
-        auto h2 = std::hash<Key>{}(pair.second);
-        return h1 ^ (h2 + 0x9e3779b9 + (h1 << 6) + (h1 >> 2));
-    }
-};

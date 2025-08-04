@@ -23,15 +23,15 @@ class DecrementalMSF{
 	// store the forests 
 	std::vector<Forest<Key> *> forests;
 	
-	// map the this->maxLevel of the nodes 
-	std::unordered_map<std::pair<Key, Key>, unsigned int, PairHash<Key>> mapNodeLevels;
+	// map the nodes' level 
+	std::unordered_map<Key, std::unordered_map<Key, unsigned int>> mapNodeLevels; 
 	
 	unsigned int maxLevel;
 	
 	// update node forest level
 	void updateNodeLevels(Key u, Key v, unsigned int level){
-		this->mapNodeLevels[{u, v}] = level;
-		this->mapNodeLevels[{v, u}] = level;
+		this->mapNodeLevels[u][v] = level;
+		this->mapNodeLevels[v][u] = level;
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -167,7 +167,7 @@ class DecrementalMSF{
 		DecrementalMSF(std::vector<Key> & vertices){
 			
 			this->maxLevel = static_cast<int>(std::ceil(std::log2(vertices.size()))); 
-
+			this->mapNodeLevels.reserve(vertices.size() * 3);
 			this->adjacencyLists = std::vector<AdjacencyList<Key> *>(this->maxLevel + 1);
 			this->forests = std::vector<Forest<Key> *>(this->maxLevel + 1);
 			
@@ -182,7 +182,7 @@ class DecrementalMSF{
 		// add node <u, v, weight> in O(lg(n)) expected time
 		void add(Key u, Key v, int weight){
 
-			if(mapNodeLevels[{u, v}]) return;
+			if(mapNodeLevels[u][v]) return;
 
 			updateNodeLevels(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
@@ -205,11 +205,11 @@ class DecrementalMSF{
 		//remove the node (edge) <u, v, weight> in O(lg²(n))
 		void remove(Key u, Key v){
 			
-			if(!mapNodeLevels[{u, v}]) return;
+			if(!mapNodeLevels[u][v]) return;
 
-			unsigned int nodeLevel = mapNodeLevels[{u, v}];
-			mapNodeLevels.erase({u, v});
-			mapNodeLevels.erase({v, u});
+			unsigned int nodeLevel = mapNodeLevels[u][v];
+			mapNodeLevels[u].erase(v);
+			mapNodeLevels[v].erase(u);
 			
 			/*
 			if the forest of level ⌈lg(n)⌉ has <u, v, weight>, 

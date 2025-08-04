@@ -2,7 +2,7 @@
 
 #include <climits>
 #include <unordered_map>
-
+#include <unordered_set>
 #include "node.hpp"
 #include "tree.hpp"
 
@@ -17,10 +17,10 @@ class Forest{
 
 		/*
 		map the nodes according to their two (Key) ends. 
-		That means mapNodes[{u, v}] = Node<Key>(u, v).
+		That means mapNodes[u][v] = Node<Key>(u, v).
 		*/
-		std::unordered_map<std::pair<Key, Key>, Node<Key> *, PairHash<Key>> mapNodes; 
-		
+		std::unordered_map<Key, std::unordered_map <Key, Node<Key> *> > mapNodes; 
+
 		/*
 		map the remaining splay trees in the forest, where 
 		an id is used to identify each splay tree uniquely
@@ -28,7 +28,7 @@ class Forest{
 		std::unordered_map<Key, Tree<Key> *> mapTrees; 
 
 		long long totalWeight = 0;
-		//std::unordered_set<Edge<int>, EdgeHash<int>> edges;
+		std::unordered_set<Edge<int>, EdgeHash<int>> edges;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/*
@@ -108,7 +108,7 @@ class Forest{
 			
 			if(!tree) return nullptr;
 			
-			unsigned int position = order(mapNodes[{u, u}]);
+			unsigned int position = order(mapNodes[u][u]);
 			
 			mapTrees.erase(tree->root->id);
 
@@ -143,8 +143,8 @@ class Forest{
 			Tree<Key> * vu = new Tree<Key>(v, u, ++id, INT_MAX);
 			uv->root->isLevel = true;
 
-			this->mapNodes[{u, v}] = uv->root;
-			this->mapNodes[{v, u}] = vu->root;
+			this->mapNodes[u][v] = uv->root;
+			this->mapNodes[v][u] = vu->root;
 
 			tree1->join(uv);
 			tree1->join(tree2);
@@ -158,10 +158,11 @@ class Forest{
 			
 			unsigned int n = vertices.size();
 			Tree<Key> * tree;
+			mapNodes.reserve(3 * n);
 
 			for(unsigned int i = 0; i < n; ++i){
 				tree = new Tree<Key>(vertices[i], vertices[i], ++id, INT_MAX);
-				mapNodes.emplace(std::make_pair(vertices[i], vertices[i]), tree->root);
+				mapNodes[vertices[i]][vertices[i]] = tree->root;
 				this->mapTrees[tree->root->id] = tree;
 			}
 		}
@@ -172,8 +173,8 @@ class Forest{
 		*/
 		bool areConnected(Key u, Key v){
 
-			unsigned int uTreeID = find(mapNodes[{u, u}]);
-			unsigned int vTreeID = find(mapNodes[{v, v}]);
+			unsigned int uTreeID = find(mapNodes[u][u]);
+			unsigned int vTreeID = find(mapNodes[v][v]);
 
 			if(uTreeID == vTreeID){
 				return true;
@@ -189,11 +190,11 @@ class Forest{
 			if(areConnected(u, v)) return;
 			
 			if(u > v) std::swap(u, v);	
-			//edges.insert({u, v, weight});
+			edges.insert({u, v, weight});
 			totalWeight += weight;
 
-			Tree<Key> * tree1 = mapTrees[find(mapNodes[{u, u}])];
-			Tree<Key> * tree2 = mapTrees[find(mapNodes[{v, v}])];
+			Tree<Key> * tree1 = mapTrees[find(mapNodes[u][u])];
+			Tree<Key> * tree2 = mapTrees[find(mapNodes[v][v])];
 
 			tree1 = bringToFront(tree1, u);
 			tree2 = bringToFront(tree2, v);
@@ -209,10 +210,10 @@ class Forest{
 			
 			if(u > v) std::swap(u, v);
 
-			Node<Key> * nodeUV = mapNodes[{u, v}];
-			Node<Key> * nodeVU = mapNodes[{v, u}];
+			Node<Key> * nodeUV = mapNodes[u][v];
+			Node<Key> * nodeVU = mapNodes[v][u];
 
-			//edges.erase({u, v, nodeUV->weight});
+			edges.erase({u, v, nodeUV->weight});
 			totalWeight -= nodeUV->weight;
 			
 			unsigned int uvPosition = order(nodeUV);
@@ -241,8 +242,8 @@ class Forest{
 				mapTrees[split3.first->root->id] = split3.first;
 			}
 
-			mapNodes.erase({u, v});
-			mapNodes.erase({v, u});
+			mapNodes[u].erase(v);
+			mapNodes[v].erase(u);
 
 			delete(split2.first);
 			delete(split4.first);
@@ -266,10 +267,9 @@ class Forest{
 		}
 
 		void printEdges(){
-			for (const auto& [edgeKey, node] : mapNodes) {
-				if(edgeKey.first < edgeKey.second){
-					std::cout << "(" <<  edgeKey.first << ", " << edgeKey.second << ", weight = " << node->weight << ")\n";
-				}
+			for (const auto& [u, v, weight] : edges) {
+				std::cout << "(" <<  u << ", " << v << ", weight = " << weight << ")\n";
+				
 			}	
 		}
 
@@ -279,7 +279,7 @@ class Forest{
 
 		bool hasNode(Key u, Key v){
 			
-			if(mapNodes[{u, v}]) return true;
+			if(mapNodes[u][v]) return true;
 			return false;
 		}
 
@@ -287,7 +287,7 @@ class Forest{
 
 		Tree<Key> * getTreeContaining(Key u){
 			
-			Tree<Key> * tree = mapTrees[find(mapNodes[{u, u}])];
+			Tree<Key> * tree = mapTrees[find(mapNodes[u][u])];
 			return tree;
 		}
 
@@ -315,7 +315,7 @@ class Forest{
 		
 		// return the node uu
 		Node<Key> * getNode(Key u, Key v){
-			return this->mapNodes[{u, v}];
+			return this->mapNodes[u][v];
 		}
 
 		// splay a given node
