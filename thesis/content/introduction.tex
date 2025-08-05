@@ -22,18 +22,21 @@ atualização e consulta são apresentadas de forma online, sem conhecimento alg
 
 Aqui serão tratados problemas em que o grafo dinâmico possui um conjunto fixo de vértices \textit{V}, e estabelecemos $n = |\textit{V}\ |$. Além disso, pode-se definir $m$ como o número de arestas existentes. Na maior parte das vezes, a complexidade de tempo das operações será amortizada, o que implica que elas são calculadas como a média sobre todas as operações realizadas. 
 
-Um grafo dinâmico de ordem n é uma sequência de grafos ($G_0$, $G_1$, $\ldots$, $G_T$), onde $G_0$ é o grafo inicial com \textit{n} vértices e cada $G_t$ para $1 \leq t \leq T$ é obtido a partir de $G_{t-1}$ pela adição ou remoção de uma aresta. Assim, podemos escrever $E(G_{t}) := E(G_{t - 1}) \setminus \{uv\}$, para alguma aresta $uv \in E(G_{t-1})$. Chamamos de \textbf{alterações}, \textbf{modificações} ou \textbf{atualizações} quando ocorre alguma operação de adição e/ou remoção de arestas no grafo dinâmico.
+Um grafo dinâmico de ordem $n$ é uma sequência de grafos ($G_0$, $G_1$, $\ldots$, $G_T$), onde $G_0$ é o grafo inicial com \textit{n} vértices e cada $G_t$ para $1 \leq t \leq T$ é obtido a partir de $G_{t-1}$ pela adição ou remoção de alguma aresta. Chamamos de \textbf{alteração}, \textbf{modificação} ou \textbf{atualização} quando ocorre alguma operação de adição e/ou remoção de arestas no grafo dinâmico.
 
 Um problema em grafos dinâmicos consiste em verificar se o grafo atual \textit{G} satisfaz alguma propriedade, e cada operação que realiza essa verificação é denominada \textbf{consulta}. A solução do problema depende da criação de um algoritmo que utiliza uma estrutura de dados capaz de realizar estas consultas e as alterações de forma eficiente. 
 
+
 Iremos tratar inicialmente do \textbf{problema de conexidade em grafos dinâmicos}, que consiste em manter um grafo dinâmico que sofre uma sequência de inserções e remoções de arestas. Entre essas modificações, realizamos consultas para verificar se dois vértices \textit{u} e \textit{v} estão conectados por algum caminho. Porém, antes de entrarmos em detalhes, iremos apresentar alguns conceitos importantes que constituirão a base do nosso problema. 
 
-Um problema clássico em grafos é o problema da árvore geradora de custo mínimo (MST, de \textit{Minimum Spanning Tree}). Para defini-lo, iremos introduzir alguns conceitos em grafos. Seja $G = (V, E)$ um grafo conexo não dirigido. onde $V$ é o conjunto de vértices e $E$ o conjunto de arestas. Um grafo não-dirigido significa que para qualquer aresta $uv \in E$, podemos ir de $u$ a $v$ e vice-versa, ou seja, a aresta não possui direção. Para cada aresta $uv \in E$, temos um peso $w(uv)$ associado. Então queremos encontrar um subconjunto acíclico $T \subseteq G$ que conecte todos os vértices e que o peso total 
+Uma \textbf{floresta} em um grafo $G$ é um subgrafo acíclico de $G$. Uma \textbf{árvore} é uma floresta conexa, ou seja, uma floresta pode conter várias árvores desconexas. Um subgrafo $F$ de $G$ é gerador se contém todos os vértices de $G$.
+
+Um problema clássico em grafos é o problema da árvore geradora de custo mínimo (MST, de \textit{Minimum Spanning Tree}). Seja um grafo conexo $G = (V, E)$, onde $V$ é o conjunto de vértices e $E$ o conjunto de arestas. Para cada aresta $uv \in E$, temos um peso $w(uv)$ associado. Assim, o objetivo do problema é encontrar uma árvore geradora cujo peso total 
 
 $$
 w(T) = \sum_{e \,\in\, E(T)} w(e)
 $$
-seja minimizado. Como $T$ é acíclico e conecta todos os vértices, então temos uma árvore, o qual denominaremos \textbf{árvore geradora de custo mínimo}, visto que é uma árvore que ''gera'' o grafo e estamos interessados em conectar todos os vértices de modo que o peso das arestas utilizadas tenham a menor soma possível. O problema de determinar a árvore $T$ se chama problema da árvore geradora de custo mínimo. A Figura 1.1 mostra um exemplo de grafo conexo e uma árvore geradora mínima de peso 17.
+seja mínimo. A Figura 1.1 mostra um exemplo de grafo conexo com pesos nas arestas e uma árvore geradora mínima de peso 17.
 
 \begin{figure}
     \centering
@@ -57,7 +60,7 @@ seja minimizado. Como $T$ é acíclico e conecta todos os vértices, então temo
         \draw[edge] (C) -- (D) node[midway, right] {6};
         \draw[edge] (A) -- (G) node[midway, above] {6};
         \draw[edge] (E) -- (G) node[midway, right] {7};
-        \draw[edge] (F) -- (E) node[midway, left] {3};
+        \draw[edge] (F) -- (E) node[midway, left] {5};
         
         % MST edges (highlighted in red)
         \draw[mst] (A) -- (F) node[midway, left] {2};
