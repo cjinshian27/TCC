@@ -72,45 +72,12 @@ seja mínimo. A Figura 1.1 mostra um exemplo de grafo conexo com pesos nas arest
     \label{fig:mst_example}
 \end{figure}
 
-Para encontrar uma árvore geradora mínima, podemos utilizar uma abordagem gulosa para o problema. Em um algoritmo guloso, precisamos, em cada etapa, fazer a melhor escolha dentre várias possíveis. O programa $1.1$ ilustra um algoritmo que devolve uma MST de um grafo $G$. 
+Para encontrar uma árvore geradora mínima, podemos utilizar uma abordagem gulosa para o problema. Existem dois algoritmos gulosos clássicos que resolvem este problema eficientemente, quando o grafo não é dinâmico: o algoritmo de Kruskal e o de Prim. Cada um deles estabelece uma regra específica para determinar uma aresta segura.
 
-\begin{programruledcaption}{Função que devolve uma MST de um grafo G.\label{prog:busca}}
-    \noindent\textbf{Entrada}: Recebe um grafo conexo $G$ com peso $w$ nas arestas.\\
-    \textbf{Saída}: Devolve a árvore geradora de custo mínimo de $G$.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    (*@\bfseries\scshape{Função}@*) constrói_MST(G, w)
-        T $\leftarrow$ $\emptyset$
-        (*@\textbf{enquanto}@*) T não formar uma árvore geradora
-            encontre uma aresta $uv$ que seja segura à T
-            T $\leftarrow$ T $\cup$ $\{uv\}$
-        (*@\textbf{retorne}@*) T
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
+Se um grafo $G$ tem $n$ vértices e $m$ arestas, o algoritmo de Kruskal consome O($m$lg$m$), que é a complexidade de tempo para ordenar as arestas em ordem crescente de peso. Já o algoritmo de Prim pode ser implementado de modo a consumir O($m$ + $n$lg$n$), usando Fibonacci heaps. Tais algoritmos e suas implementações estão bem descritos no Capítulo 23.2 do livro de Cormen, Leiserson, Rivest e Stein \cite{clrs}, não iremos aprofundá-los em nosso estudo. 
 
-O método acima administra um conjunto de arestas $T$, mantendo o seguinte invariante: antes de cada iteração, $T$ é um subconjunto de alguma árvore geradora mínima. Em cada etapa, determinamos uma aresta $uv$ que pode ser adicionada a $T$ sem violar tal invariante, de modo que $T \cup \{uv\}$ também é um subconjunto de uma árvore geradora mínima. Chamamos $uv$ de \textbf{aresta segura} para $T$, visto que ela pode ser adicionada a $T$ e ainda manter o invariante. 
+No nosso estudo, estamos interessados em grafos dinâmicos, que podem sofrer inserções e remoções de arestas, e por isso abrimos mão de exigir que o grafo seja conexo. Queremos manter uma floresta geradora maximal (MSF) de custo mínimo do grafo. Este problema já existe uma solução proposta por Holm, de Lichtenberg e Thorup \cite{jacob_holm} na Seção 5 do seu artigo. Essa solução se baseia num algoritmo para o problema de conexidade em grafos dinâmicos, descrito na Seção 3 de seu artigo. 
 
-Na linha 1, fica trivial que o conjunto $T$ satisfaz o invariante do laço. Nas linhas 2-4, o invariante é mantido pois estamos adicionando somente arestas seguras. Na linha 5, como $T$ está contido em uma árvore geradora e em uma árvore geradora mínima, então o conjunto $T$ retornado nesta linha deve ser uma árvore geradora mínima. Assim, resta apenas como encontrar uma aresta segura na linha 3. Para isso, existem dois algoritmos gulosos que resolvem este problema: o algoritmo de Kruskal e o de Prim. Cada um deles estabelece uma regra específica para determinar uma aresta segura.
-
-Se um grafo $G$ tem $n$ vértices e $m$ arestas, o algoritmo de Kruskal consome O($m$lg$n$).
-
-
-Tais algoritmos e suas implementações estão bem descritos no Capítulo 23.2 do livro de Cormen, Leiserson, Rivest e Stein \cite{clrs}, não iremos aprofundá-los em nosso estudo. 
-
-
-
-Como se pode perceber, o algoritmo genérico resolve um problema estático em grafos, visto que todas as arestas de um grafo já foram definidas no início do problema. Dessa forma, como não precisamos nos preocupar com alterações no grafo, então ele sempre vai possuir as mesmas árvores geradoras de custo mínimo, ou até somente uma única árvore (quando os pesos das arestas são todos distintos). Em nosso estudo, estamos interessados no problema das florestas geradoras de custo mínimo (FGCM) em grafos dinâmicos, o que implica que a adição ou remoção de uma aresta ponderada pode modificar as árvores geradoras de custo mínimo dessas florestas.
-
-Uma floresta é um grafo não-dirigido que não contém nenhum ciclo. É um grafo que pode ser decomposto em várias árvores disjuntas. Dessa forma, quando temos várias árvores disjuntas geradoras de custo mínimo que compõem um grafo, então temos uma floresta geradora de custo mínimo deste grafo. Este problema já existe uma solução proposta por \textit{Holm, de Lichtenberg e Thorup} \cite{jacob_holm}, na Seção 2 de seu artigo. Na Seção 3, os autores propõem a solução do problema da conexidade em um grafo totalmente dinâmico, sem peso nas arestas. Já na Seção 4, é abordado o problema das florestas geradoras de custo mínimo decrementais (\textit{decremental MSF}, de \textit{Minimum Spanning Forest}), onde é descrito um algoritmo eficiente que suporta somente remoções de arestas. Por fim, na Seção 5 é retratado o problema da florestas geradoras de custo mínimo totalmente dinâmicas (\textit{fully dynamic MSF}), onde o algoritmo de FGCM decrementais é transformado em um algoritmo eficiente de FGCM totalmente dinâmicas, que suporta tanto remoções quanto adições de arestas.
-
-No decorrer do nosso estudo, iremos destrinchar a solução dos autores em vários capítulos do texto. No Capítulo 2 descreveremos brevemente o problema da conexidade em florestas dinâmicas. No Capítulo 3: descreveremos as pontos mais relevantes do algoritmo para o problema da conexidade em grafos dinâmicos. No Capítulo 4: descreveremos a nossa implementação do algoritmo para o problema das florestas geradoras de custo mínimo decrementais. No Capítulo 5...
+No decorrer do nosso estudo, iremos destrinchar a solução dos autores em vários capítulos do texto. No Capítulo 2 descreveremos brevemente o problema da conexidade em grafos dinâmicos. No Capítulo 3: descreveremos a nossa implementação do algoritmo para o problema da floresta geradora maximal de custo mínimo decremental. No Capítulo 4...
 
 As implementações dos nossos algoritmos da solução de \textit{Holm, de Lichtenberg e Thorup} \cite{jacob_holm} serão feitas utilizando a linguagem \textit{C++}, onde disponibilizamos o código no repositório do \textit{GitHub} \cite{chung2025}.
