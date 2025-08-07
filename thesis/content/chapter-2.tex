@@ -2,36 +2,8 @@
 %("dica" para o editor de texto: este arquivo é parte de um documento maior)
 % para saber mais: https://tex.stackexchange.com/q/78101
 
-\chapter{Conexidade em grafos dinâmicos}
+\chapter{Algoritmo decremental para MSF}
 
 \enlargethispage{.8\baselineskip}
 
 \section{Definição}
-
-Como citado no Capítulo 1, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente para a seguinte biblioteca, que contém:
-
-\begin{itemize}
-    \item \texttt{\textbf{grafoDinâmico(G, n)}}: contrói e devolve um grafo dinâmico $G$ com $n$ vértices isolados;
-    \item \texttt{\textbf{conectado(G, u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
-    \item \texttt{\textbf{adiciona(G, u, v)}}: adiciona a aresta $uv$ no grafo $G$;
-    \item \texttt{\textbf{remova(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
-\end{itemize} 
-
-O algoritmo de Holm, de Lichtenberg e Thorup para este problema de conexidade é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, que utilizam o algoritmo mencionado na Seção 2. Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$. O nível inicial de uma aresta recém-inserida é sempre $\left\lceil \lg n \right\rceil$, e ele nunca aumenta, apenas diminui. Assim, cada aresta de nível $i$ pertence à floresta dinâmica de mesmo nível. 
-
-Ademais, a consulta \texttt{conectado(u, v)} aplicada ao grafo $G$ significa fazer a mesma consulta para alguma floresta maximal $F$ de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos realizando-a em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\lg n$ florestas de vértices isolados.
-
-Quando realizamos uma chamada à função \texttt{adiciona(G, u, v)}, é feito uma chamada ao \texttt{conectado(G, u, v)} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserido a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
-
-Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
-
-\begin{itemize}
-    \item \texttt{\textbf{listaDeAdjacências(L, n)}}: constrói e devolve um grafo $L$ contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
-    \item \texttt{\textbf{adiciona(L, u, v)}}: adiciona $u$ na lista de adjacências de v em $L$ e vice-versa;
-    \item \texttt{\textbf{remova(L, u, v)}}: remove $u$ da lista de adjacências de $v$ em $L$ e vice-versa.
-\end{itemize} 
-
-O objetivo de guardar arestas reservas em nosso grafo é simples: suponha que temos duas componentes conexas $C_1$ e $C_2$ em nosso grafo $G$. O vértice $u$ está em $C_1$ e $v$ está em $C_2$. Se $C_1$ e $C_2$ são conectados por uma única aresta, a remoção dela acarretaria em duas componentes separadas. Então chamar \texttt{conectado(G, u, v)} após a remoção de desta aresta receberíamos falso como resposta. Agora, suponha que $C_1$ e $C_2$ estão conectados por alguma aresta $e$ diferente de $uv$. Ao chamarmos \texttt{adiciona(G, u, v)}, guardaríamos a aresta $uv$ como reserva. Se posteriormente removermos $e$, note que os componentes $C_1$ e $C_2$ não estariam conectados, e se não tivéssemos armazenado $uv$, então a consulta \texttt{conectado(G, u, v)} devolveria falso já que os componentes de $u$ e $v$ estariam separados. Dessa forma, a aresta reserva possui a função de substituir a conexão removida, neste caso a $e$. Dessa forma, ao realizar a consulta \texttt{conectado(G, u, v)}, ela devolveria verdadeiro visto que existe uma aresta ($uv$) que conecta as componentes do grafo $G$.
-
-Note que não podemos simplesmente adicionar $uv$ em $F$ de $G$ em vez de guardar nas listas de adjacências. Isso porque, como estamos mantendo uma floresta maximal $F$ de $G$, e por definição uma floresta não pode conter ciclos, adicionar $uv$ dada a existência da aresta $e$ acarretaria na formação de um ciclo contendo essas duas arestas, o que violaria a corretude do algoritmo, já que queremos manter árvores binárias de busca balanceadas para garantir a complexidade de tempo logarítmica em suas rotinas. Como um grafo dinâmico pode conter ciclos, guardar a aresta reserva é uma forma de manter o algoritmo eficiente. 
-

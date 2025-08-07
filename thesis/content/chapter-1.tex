@@ -2,9 +2,19 @@
 %("dica" para o editor de texto: este arquivo é parte de um documento maior)
 % para saber mais: https://tex.stackexchange.com/q/78101
 
-\chapter{Conexidade em florestas dinâmicas}
+%!TeX root=../tese.tex
+%("dica" para o editor de texto: este arquivo é parte de um documento maior)
+% para saber mais: https://tex.stackexchange.com/q/78101
+
+\chapter{Conexidade em grafos dinâmicos}
+
+\enlargethispage{.8\baselineskip}
 
 \section{Definição}
+
+Como citado no Capítulo 1, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dá suporte a inserções, remoções e consultas de conexidade. O algoritmo de Holm, de Lichtenberg e Thorup \cite{jacob_holm} para este problema de conexidade é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, e utiliza uma biblioteca que será descrita na Subseção 2.2. 
+
+\section{Conexidade em florestas dinâmicas}
 
 Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o seu algoritmo, que foi proposto na Seção 2 do artigo de Holm, de Lichtenberg e Thorup \cite{jacob_holm}. No Capítulo 2 da sua dissertação ele descreve as rotinas principais do algoritmo, baseado em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo das funções dos pseudocódigos. Dada essas circunstâncias, optamos por não apresentar uma descrição detalhada desse algoritmo, explicando brevemente sobre o que as rotinas principais fazem, bem como algumas diferenças da nossa implementação em código comparadas com a de Rodrigues.  
 
@@ -12,9 +22,53 @@ O problema da conexidade em florestas dinâmicas pode ser considerada uma simpli
 
 \begin{itemize}
     \item \texttt{\textbf{florestaDinâmica(F, n)}}: constrói e devolve uma floresta dinâmica $F$ com $n$ vértices isolados;
-    \item \texttt{\textbf{conectado(F, u, v)}}: devolve verdadeiro se \textit{u} e \textit{v} estão na mesma componente da floresta $F$ e falso caso contrário;
-    \item \texttt{\textbf{ligue(F, u, v)}}: insere uma aresta \textit{uv} na floresta $F$;
-    \item \texttt{\textbf{corte(u, v)}}: remove a aresta \textit{uv} da floresta $F$;
+    \item \texttt{\textbf{conectadosFD(F, u, v)}}: devolve verdadeiro se \textit{u} e \textit{v} estão na mesma componente da floresta $F$ e falso caso contrário;
+    \item \texttt{\textbf{adicioneFD(F, u, v)}}: insere uma aresta \textit{uv} na floresta $F$;
+    \item \texttt{\textbf{removaFD(u, v)}}: remove a aresta \textit{uv} da floresta $F$;
 \end{itemize}
 
 A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que é de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. Isso faz com que o custo amortizado da operação \textit{splay} seja $O(\lg n)$, onde $n$ é o número de nós da árvore, e que também uma sequência de $m$ acessos em uma árvore \textit{splay} tenha custo total $O(m \lg n)$.  Como também já existe bastante literatura sobre árvores \textit{splay}, e seu funcionamento interno não afeta a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
+
+\section{Estrutura da implementação do grafo dinâmico}
+
+Para implementar o grafo dinâmico, resume-se à construção da seguinte biblioteca de forma eficiente:
+
+\begin{itemize}
+    \item \texttt{\textbf{grafoDinâmico(G, n)}}: contrói e devolve um grafo dinâmico $G$ com $n$ vértices isolados;
+    \item \texttt{\textbf{conectadosGD(G, u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
+    \item \texttt{\textbf{adicioneGD(G, u, v)}}: adiciona a aresta $uv$ no grafo $G$;
+    \item \texttt{\textbf{removaGD(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
+\end{itemize} 
+
+Nossa implementação encapsula a complexidade de manutenção de $\left\lceil \lg n \right\rceil$ florestas dinâmicas em uma abstração do grafo dinâmico. 
+Assim, a consulta \texttt{conectadoGD} aplicada ao grafo $G$ significa fazer a mesma consulta para alguma floresta maximal $F$ de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\lg n$ florestas de vértices isolados.
+
+Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada ao \texttt{conectadoGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserido a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
+
+Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
+
+\begin{itemize}
+    \item \texttt{\textbf{listaDeAdjacências(L, n)}}: constrói e devolve um grafo $L$ contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
+    \item \texttt{\textbf{adicioneLA(L, u, v)}}: adiciona $u$ na lista de adjacências de v em $L$ e vice-versa;
+    \item \texttt{\textbf{removaLA(L, u, v)}}: remove $u$ da lista de adjacências de $v$ em $L$ e vice-versa.
+\end{itemize} 
+
+A nossa implementação \cite{chung2025} para lista de adjancências possui um custo O($n$) ao acionar o construtor \texttt{listaDeAdjacências}, e para 
+as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos o tempo esperado O($1$) visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjancência de $u$.
+
+
+......... EM PROGRESSO AINDA: FALTA ADICIONAR O DESENHO.............
+
+O objetivo de guardar arestas reservas em nosso grafo é simples: suponha que temos duas componentes conexas $C_1$ e $C_2$ em nosso grafo $G$. O vértice $u$ está em $C_1$ e $v$ está em $C_2$. Se $C_1$ e $C_2$ são conectados por uma única aresta, a remoção dela acarretaria em duas componentes separadas. Então chamar \texttt{conectado(G, u, v)} após a remoção de desta aresta receberíamos falso como resposta. Agora, suponha que $C_1$ e $C_2$ estão conectados por alguma aresta $e$ diferente de $uv$. Ao chamarmos \texttt{adiciona(G, u, v)}, guardaríamos a aresta $uv$ como reserva. Se posteriormente removermos $e$, note que os componentes $C_1$ e $C_2$ não estariam conectados, e se não tivéssemos armazenado $uv$, então a consulta \texttt{conectado(G, u, v)} devolveria falso já que os componentes de $u$ e $v$ estariam separados. Dessa forma, a aresta reserva possui a função de substituir a conexão removida, neste caso a $e$. Dessa forma, ao realizar a consulta \texttt{conectado(G, u, v)}, ela devolveria verdadeiro visto que existe uma aresta ($uv$) que conecta as componentes do grafo $G$.
+
+Note que não podemos simplesmente adicionar $uv$ em $F$ de $G$ em vez de guardar nas listas de adjacências. Isso porque, como estamos mantendo uma floresta maximal $F$ de $G$, e por definição uma floresta não pode conter ciclos, adicionar $uv$ dada a existência da aresta $e$ acarretaria na formação de um ciclo contendo essas duas arestas, o que violaria a corretude do algoritmo, já que queremos manter árvores binárias de busca balanceadas para garantir a complexidade de tempo logarítmica em suas rotinas. Como um grafo dinâmico pode conter ciclos, guardar a aresta reserva é uma forma de manter o algoritmo eficiente. 
+
+......................... EM PROGRESSO ...............................
+
+Como a inserção de arestas (\texttt{adicioneFA}) em uma floresta dinâmica com $n$ vértices possui uma complexidade de tempo esperado O(lg$n$), então temos que \texttt{adicioneGD} também terá o seu custo esperado de tempo O(lg$n$). 
+
+Quando queremos remover uma aresta reserva, podemos simplesmente acionar a rotina \texttt{removaLA}, e a floresta maximal do grafo não será afetada. Entretanto, se queremos remover uma aresta $uv$ do grafo $G$, a floresta é quebrada em duas componentes, que podemos chamar de árvores $T_u$ e $T_v$, de modo que o primeiro contém o vértice $u$ e o segundo contém o vértice $v$. Dessa forma, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que o teste de conexidade de $u$ e $v$ esteja correto. Assim, precisamos procurar uma aresta reserva que irá substituir a aresta que foi removida de $G$.
+
+\section{Fatiamento do grafo em níveis}
+
+Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$. O nível inicial de uma aresta recém-inserida é sempre $\left\lceil \lg n \right\rceil$, e ele nunca aumenta, apenas diminui. Este fatiamento em níveis será descrito em mais detalhes na Subseção 2.2. 
