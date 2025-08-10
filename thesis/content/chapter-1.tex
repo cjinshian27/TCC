@@ -16,7 +16,7 @@ Como citado no Capítulo~1, o problema da conexidade em grafos dinâmicos visa c
 
 \section{Conexidade em florestas dinâmicas}
 
-Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o seu algoritmo, que foi proposto na Seção 2 do artigo de Holm, de Lichtenberg e Thorup \cite{jacob_holm}. No Capítulo~2 da sua dissertação ele descreve as rotinas principais do algoritmo, baseado em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo das funções dos pseudocódigos. Dada essas circunstâncias, optamos por não apresentar uma descrição detalhada desse algoritmo, explicando brevemente sobre o que as rotinas principais fazem, bem como algumas diferenças da nossa implementação em código comparadas com a de Rodrigues.  
+Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o seu algoritmo, que foi proposto na Seção~2 do artigo de Holm, de Lichtenberg e Thorup \cite{jacob_holm}. No Capítulo~2 da sua dissertação ele descreve as rotinas principais do algoritmo, baseado em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo das funções dos pseudocódigos. Dada essas circunstâncias, optamos por não apresentar uma descrição detalhada desse algoritmo, explicando brevemente sobre o que as rotinas principais fazem, bem como algumas diferenças da nossa implementação em código comparadas com a de Rodrigues.  
 
 O problema da conexidade em florestas dinâmicas pode ser considerada uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. A biblioteca que usaremos contém os seguintes métodos:
 
@@ -166,41 +166,51 @@ Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o nú
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed}]
 
-        % Vertices in a circular arrangement
-        \node[node] (a) at (-1,2) {a};
-        \node[node] (b) at (-3,4) {b};
-        \node[node] (c) at (-5,2) {c};
-        \node[node] (d) at (-3,0) {d};
-        \node[node] (e) at (2,2) {e};
-        \node[node] (f) at (4,4) {f};
-        \node[node] (g) at (4,0) {g};
+        \node[node] (u) at (-1,2) {u};
+        \node[node] (a) at (-3,4) {a};
+        \node[node] (b) at (-5,2) {b};
+        \node[node] (c) at (-3,0) {c};
+        \node[node] (v) at (2,2) {v};
+        \node[node] (d) at (3,3.7) {d};
+        \node[node] (e) at (3,0.3) {e};
+        \node[node] (f) at (5,0.3) {f};
+        \node[node] (g) at (6, 2) {g};
+        \node[node] (h) at (5, 3.7) {h};
+        
         
          % Dotted circles for T_u and T_v
-        \draw[dotted, thick, gray] (-3,2) circle (3cm); % T_u circle around {a,b,c,d}
-        \draw[dotted, thick, gray] (4,2) circle (3cm);  % T_v circle around {e,f,g}
+        \draw[dotted, thick, gray] (-3,2) circle (3cm);
+        \draw[dotted, thick, gray] (4,2) circle (3cm);  
         
         % Labels for the circles
         \node at (-3,-1.5) {$T_u$};
         \node at (4,-1.5) {$T_v$};
 
         % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
         \draw[edge] (a) -- (b) node[midway, below] {};
         \draw[edge] (b) -- (c) node[midway, below] {};
-        \draw[edge] (a) -- (d) node[midway, below] {};
-        \draw[edge] (e) -- (f) node[midway, below] {};
-        \draw[edge] (e) -- (f) node[midway, below] {};
-        \draw[edge] (e) -- (g) node[midway, below] {};
-        \draw[edge] (a) -- (e) node[midway, below] {ae};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[edge] (u) -- (v) node[midway, below] {uv};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
 
-        % MST edges ( in red)
-        \draw[reserve] (d) -- (g) node[midway, below] {dg};
-        
+
+        % reserve edges (normal red edges)
+        \draw[reserve] (b) -- (u) node[midway, below] {};
+        \draw[reserve] (c) -- (u) node[midway, below] {};
+        \draw[reserve] (d) -- (f) node[midway, below] {};
+        \draw[reserve] (d) -- (h) node[midway, below] {};
+
+
+
     \end{tikzpicture}
-    \caption{Um grafo com sete vértices. O subgrafo $G_1$ contém os vértices $a$, $b$, $c$ e $d$, enquanto $G_2$ contém os vértices $e$, $f$ e $g$. A aresta vermelha $dg$ é uma aresta reserva do grafo.}
+    \caption{Um grafo com 10 vértices. As arestas pretas são da floresta maximal do grafo, enquanto as vermelhas são arestas reservas.}
     \label{fig:graph_with_Tu_and_Tv}
 \end{figure}
 
-Figura~\ref{fig:graph_with_Tu_and_Tv}
 
 
 \section{Fatiamento do grafo em níveis}
