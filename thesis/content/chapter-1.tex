@@ -103,7 +103,7 @@ O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $
     \label{fig:graph_without_reserve_edges}
 \end{figure}
 
-Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  conectadas pela aresta $ae$, tornando-se uma única componente conexa, como mostra a Figura~2.2. Ao chamarmos \texttt{adiciona(G, d, g)}, guardaríamos a aresta $dg$ como reserva. Se posteriormente removermos $ae$, note que os subgrafos $G_1$ e $G_2$ não estariam conectados. Assim, se não tivéssemos armazenado $dg$, então a consulta \texttt{conectado(G, a, e)} devolveria falso já que os subgrafos $G_2$ e $G_2$ estariam separados, o que estaria incorreto visto que a aresta $dg$ existe de fato no grafo. Dessa forma, a aresta reserva possui a função de substituir a aresta removida, como veremos adiante, mantendo a conexão entre $G_1$ e $G_2$.
+Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  conectadas pela aresta $ae$, tornando-se uma única componente conexa, como mostra a Figura~2.2. Ao chamarmos \texttt{adiciona(G, d, g)}, guardaríamos a aresta $dg$ como reserva. Se posteriormente removermos $ae$, note que os subgrafos $G_1$ e $G_2$ estariam em duas componentes separadas. Assim, se não tivéssemos armazenado $dg$, então a consulta \texttt{conectado(G, a, e)} devolveria falso, o que estaria incorreto visto que a aresta $dg$ existe de fato no grafo. Dessa forma, a aresta reserva possui a função de substituir a aresta removida, como veremos adiante, mantendo a conexão entre $G_1$ e $G_2$.
 
 \newpage
 \begin{figure}
