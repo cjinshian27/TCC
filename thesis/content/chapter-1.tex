@@ -12,11 +12,11 @@
 
 \section{Definição}
 
-Como citado no Capítulo~1, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dá suporte a inserções, remoções e consultas de conexidade. O algoritmo de Holm, de Lichtenberg e Thorup \cite{jacob_holm} para este problema de conexidade é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, e utiliza uma biblioteca que será descrita na Subseção 2.2. 
+Como citado no Capítulo~1, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dá suporte a inserções, remoções e consultas de conexidade. O algoritmo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} para este problema de conexidade é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, e utiliza uma biblioteca que será descrita na Subseção 2.2. 
 
 \section{Conexidade em florestas dinâmicas}
 
-Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o seu algoritmo, que foi proposto na Seção~2 do artigo de Holm, de Lichtenberg e Thorup \cite{jacob_holm}. No Capítulo~2 da sua dissertação ele descreve as rotinas principais do algoritmo, baseado em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo das funções dos pseudocódigos. Dada essas circunstâncias, optamos por não apresentar uma descrição detalhada desse algoritmo, explicando brevemente sobre o que as rotinas principais fazem, bem como algumas diferenças da nossa implementação em código comparadas com a de Rodrigues.  
+Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o seu algoritmo, que foi proposto na Seção~2 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}. No Capítulo~2 da sua dissertação ele descreve as rotinas principais do algoritmo, baseado em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo das funções dos pseudocódigos. Dada essas circunstâncias, optamos por não apresentar uma descrição detalhada desse algoritmo, explicando brevemente sobre o que as rotinas principais fazem, bem como algumas diferenças da nossa implementação em código comparadas com a de Rodrigues.  
 
 O problema da conexidade em florestas dinâmicas pode ser considerada uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. A biblioteca que usaremos contém os seguintes métodos:
 
@@ -27,7 +27,7 @@ O problema da conexidade em florestas dinâmicas pode ser considerada uma simpli
     \item \texttt{\textbf{removaFD(u, v)}}: remove a aresta \textit{uv} da floresta $F$;
 \end{itemize}
 
-A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que é de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. Isso faz com que o custo amortizado da operação \textit{splay} seja $O(\lg n)$, onde $n$ é o número de nós da árvore, e que também uma sequência de $m$ acessos em uma árvore \textit{splay} tenha custo total $O(m \lg n)$.  Como também já existe bastante literatura sobre árvores \textit{splay}, e seu funcionamento interno não afeta a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
+A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que é de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. Isso faz com que o custo amortizado da operação \textit{splay} seja $O(\lg n)$, onde $n$ é o número de nós da árvore, e que também uma sequência de $m$ acessos em uma árvore \textit{splay} tenha custo total $O(m \lg n)$.  Como também já existe bastante literatura sobre árvores \textit{splay}, e seu funcionamento interno não afeta a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
 
 \section{Estrutura da implementação do grafo dinâmico}
 
@@ -156,7 +156,7 @@ Note que não podemos simplesmente adicionar $dg$ como aresta da floresta maxima
 
 Dessa forma, quando queremos remover uma aresta reserva, podemos simplesmente acionar a rotina \texttt{removaLA} (da lista de adjacências) e a floresta maximal do grafo não será afetada. Entretanto, se queremos remover uma aresta $uv$ do grafo $G$, a floresta é quebrada em duas componentes, que podemos chamar de árvores $T_u$ e $T_v$, de modo que o primeiro contém o vértice $u$ e o segundo contém o vértice $v$. Dessa forma, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que o teste de conexidade de $u$ e $v$ esteja correto. Assim, precisamos procurar uma aresta reserva que irá substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
 
-Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, precisaríamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in T_v$, teríamos encontrado uma aresta substituta $xy$, bastando apenas acionar \texttt{adicioneGD(G, x, y)} para conectar os dois vértices e, consequentemente, $T_u$ e $T_v$ virariam uma única componente da floresta.
+Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, precisaríamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in V(T_v)$, teríamos encontrado uma aresta substituta $xy$, bastando apenas acionar \texttt{adicioneGD(G, x, y)} para conectar os dois vértices e, consequentemente, $T_u$ e $T_v$ virariam uma única componente da floresta.
 
 \begin{figure}
     \centering
@@ -197,21 +197,22 @@ Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o nú
         \draw[edge] (f) -- (g) node[midway, below] {};
         \draw[edge] (g) -- (h) node[midway, below] {};
 
-
         % reserve edges (normal red edges)
         \draw[reserve] (b) -- (u) node[midway, below] {};
         \draw[reserve] (c) -- (u) node[midway, below] {};
         \draw[reserve] (d) -- (f) node[midway, below] {};
         \draw[reserve] (d) -- (h) node[midway, below] {};
 
-
-
     \end{tikzpicture}
     \caption{Um grafo com 10 vértices. As arestas pretas são da floresta maximal do grafo, enquanto as vermelhas são arestas reservas.}
     \label{fig:graph_with_Tu_and_Tv}
 \end{figure}
 
+\newpage
 
+Após a remoção da aresta $uv$, note que teremos duas componentes do grado $G$ separadas em $T_u$ e $T_v$. Na Figura~\ref{fig:graph_with_Tu_and_Tv}, por exemplo, não temos uma aresta reserva que ligue $T_u$ e $T_v$. Sob essas condições, suponha que temos um vértice $w \in V(T_u)$ e $z \in V(T_v)$. Assim, ao chamarmos \texttt{conectadoGD(G, w, z)}, note que precisaremos percorrer cada vértice $a$ de $T_u$, e para cada vizinho $b$ de $a$ teríamos que verificar se $b \in V(T_v)$. Assim, o consumo de tempo esperado para essa busca exaustiva é de O($n^2$), visto que supusemos que não há nenhuma aresta reserva que ligue $T_u$ e $T_v$. Como \texttt{conectadoGD} tem consumo de tempo esperado O(lg$n$), então teremos um consumo de O($n^2$lg$n$) para \texttt{removaGD}, pois precisamos verificar se as duas pontas de cada aresta reserva estão conectadas chamando a rotina \texttt{conectadoGD}. Note que achamos uma aresta substituta caso as duas pontas da aresta reserva não estejam conectadas, pois uma delas estará em $T_u$ e outra estará em $T_v$.
+
+Assim, nota-se que é necessário uma implementação mais eficiente para a rotina de remoção de arestas, e  por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em O(lg$n^2$).
 
 \section{Fatiamento do grafo em níveis}
 
