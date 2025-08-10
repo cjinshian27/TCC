@@ -12,11 +12,11 @@
 
 \section{Definição}
 
-Como citado no Capítulo 1, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dá suporte a inserções, remoções e consultas de conexidade. O algoritmo de Holm, de Lichtenberg e Thorup \cite{jacob_holm} para este problema de conexidade é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, e utiliza uma biblioteca que será descrita na Subseção 2.2. 
+Como citado no Capítulo~1, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dá suporte a inserções, remoções e consultas de conexidade. O algoritmo de Holm, de Lichtenberg e Thorup \cite{jacob_holm} para este problema de conexidade é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, e utiliza uma biblioteca que será descrita na Subseção 2.2. 
 
 \section{Conexidade em florestas dinâmicas}
 
-Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o seu algoritmo, que foi proposto na Seção 2 do artigo de Holm, de Lichtenberg e Thorup \cite{jacob_holm}. No Capítulo 2 da sua dissertação ele descreve as rotinas principais do algoritmo, baseado em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo das funções dos pseudocódigos. Dada essas circunstâncias, optamos por não apresentar uma descrição detalhada desse algoritmo, explicando brevemente sobre o que as rotinas principais fazem, bem como algumas diferenças da nossa implementação em código comparadas com a de Rodrigues.  
+Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o seu algoritmo, que foi proposto na Seção 2 do artigo de Holm, de Lichtenberg e Thorup \cite{jacob_holm}. No Capítulo~2 da sua dissertação ele descreve as rotinas principais do algoritmo, baseado em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo das funções dos pseudocódigos. Dada essas circunstâncias, optamos por não apresentar uma descrição detalhada desse algoritmo, explicando brevemente sobre o que as rotinas principais fazem, bem como algumas diferenças da nossa implementação em código comparadas com a de Rodrigues.  
 
 O problema da conexidade em florestas dinâmicas pode ser considerada uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. A biblioteca que usaremos contém os seguintes métodos:
 
@@ -60,7 +60,7 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos o tempo esper
 
 Como a inserção de arestas (\texttt{adicioneFA}) em uma floresta dinâmica com $n$ vértices possui uma complexidade de tempo esperado O(lg$n$), então temos que \texttt{adicioneGD} também terá o seu custo esperado de tempo O(lg$n$). 
 
-O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $G$ com $V = \{a, b, c, d, e, f, g\}$ e suas respectivas arestas, como ilustrado na Figura~2.1. Temos dois subgrafos $G_1$ e $G_2$ em nosso grafo $G$. O vértice $a$ está em $G_1$ e $e$ está em $G_2$. Se $G_1$ e $G_2$ são conectados por uma única aresta $ae$, a remoção dela acarretaria em duas componentes separadas. Então chamar \texttt{conectado(G, a, e)} após a remoção de $ae$ receberíamos falso como resposta. 
+O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $G$ com $V = \{a, b, c, d, e, f, g\}$ e suas respectivas arestas, como ilustrado na Figura~\ref{fig:graph_without_reserve_edges}. Temos dois subgrafos $G_1$ e $G_2$ em nosso grafo $G$. O vértice $a$ está em $G_1$ e $e$ está em $G_2$. Se $G_1$ e $G_2$ são conectados por uma única aresta $ae$, a remoção dela acarretaria em duas componentes separadas. Então chamar \texttt{conectado(G, a, e)} após a remoção de $ae$ receberíamos falso como resposta. 
 
 \begin{figure}
     \centering
@@ -105,14 +105,14 @@ O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $
     \label{fig:graph_without_reserve_edges}
 \end{figure}
 
-Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  conectadas pela aresta $ae$, tornando-se uma única componente conexa, como mostra a Figura~2.2. Ao chamarmos \texttt{adiciona(G, d, g)}, guardaríamos a aresta $dg$ como reserva. Se posteriormente removermos $ae$, note que os subgrafos $G_1$ e $G_2$ estariam em duas componentes separadas. Assim, se não tivéssemos armazenado $dg$, então a consulta \texttt{conectado(G, a, e)} devolveria falso, o que estaria incorreto visto que a aresta $dg$ existe de fato no grafo. Dessa forma, a aresta reserva possui a função de substituir a aresta removida, como veremos adiante, mantendo a conexão entre $G_1$ e $G_2$.
+Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  conectadas pela aresta $ae$, tornando-se uma única componente conexa, como mostra a Figura~\ref{fig:graph_with_reserve_edges}. Ao chamarmos \texttt{adiciona(G, d, g)}, guardaríamos a aresta $dg$ como reserva. Se posteriormente removermos $ae$, note que os subgrafos $G_1$ e $G_2$ estariam em duas componentes separadas. Assim, se não tivéssemos armazenado $dg$, então a consulta \texttt{conectado(G, a, e)} devolveria falso, o que estaria incorreto visto que a aresta $dg$ existe de fato no grafo. Dessa forma, a aresta reserva possui a função de substituir a aresta removida, como veremos adiante, mantendo a conexão entre $G_1$ e $G_2$.
 
 \begin{figure}
     \centering
     \begin{tikzpicture}
         [node/.style={circle,draw,minimum size=2em, thick, font=\large},
         edge/.style={thick, black},
-        reserve/.style={red, very thick},
+        reserve/.style={red, thick},
         removed/.style={black, thick, dashed}]
 
         % Vertices in a circular arrangement
@@ -157,6 +157,51 @@ Note que não podemos simplesmente adicionar $dg$ como aresta da floresta maxima
 Dessa forma, quando queremos remover uma aresta reserva, podemos simplesmente acionar a rotina \texttt{removaLA} (da lista de adjacências) e a floresta maximal do grafo não será afetada. Entretanto, se queremos remover uma aresta $uv$ do grafo $G$, a floresta é quebrada em duas componentes, que podemos chamar de árvores $T_u$ e $T_v$, de modo que o primeiro contém o vértice $u$ e o segundo contém o vértice $v$. Dessa forma, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que o teste de conexidade de $u$ e $v$ esteja correto. Assim, precisamos procurar uma aresta reserva que irá substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
 
 Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, precisaríamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in T_v$, teríamos encontrado uma aresta substituta $xy$, bastando apenas acionar \texttt{adicioneGD(G, x, y)} para conectar os dois vértices e, consequentemente, $T_u$ e $T_v$ virariam uma única componente da floresta.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        [node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}]
+
+        % Vertices in a circular arrangement
+        \node[node] (a) at (-1,2) {a};
+        \node[node] (b) at (-3,4) {b};
+        \node[node] (c) at (-5,2) {c};
+        \node[node] (d) at (-3,0) {d};
+        \node[node] (e) at (2,2) {e};
+        \node[node] (f) at (4,4) {f};
+        \node[node] (g) at (4,0) {g};
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (3cm); % T_u circle around {a,b,c,d}
+        \draw[dotted, thick, gray] (4,2) circle (3cm);  % T_v circle around {e,f,g}
+        
+        % Labels for the circles
+        \node at (-3,-1.5) {$T_u$};
+        \node at (4,-1.5) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (a) -- (d) node[midway, below] {};
+        \draw[edge] (e) -- (f) node[midway, below] {};
+        \draw[edge] (e) -- (f) node[midway, below] {};
+        \draw[edge] (e) -- (g) node[midway, below] {};
+        \draw[edge] (a) -- (e) node[midway, below] {ae};
+
+        % MST edges ( in red)
+        \draw[reserve] (d) -- (g) node[midway, below] {dg};
+        
+    \end{tikzpicture}
+    \caption{Um grafo com sete vértices. O subgrafo $G_1$ contém os vértices $a$, $b$, $c$ e $d$, enquanto $G_2$ contém os vértices $e$, $f$ e $g$. A aresta vermelha $dg$ é uma aresta reserva do grafo.}
+    \label{fig:graph_with_Tu_and_Tv}
+\end{figure}
+
+Figura~\ref{fig:graph_with_Tu_and_Tv}
+
 
 \section{Fatiamento do grafo em níveis}
 
