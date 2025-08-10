@@ -80,12 +80,12 @@ O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $
         \node[node] (g) at (4,0) {g};
         
          % Dotted circles for T_u and T_v
-        \draw[dotted, thick, gray] (-3,2) circle (3cm); % T_u circle around {a,b,c,d}
-        \draw[dotted, thick, gray] (4,2) circle (3cm);  % T_v circle around {e,f,g}
+        \draw[dotted, thick, gray] (-3,2) circle (2.6cm); % T_u circle around {a,b,c,d}
+        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  % T_v circle around {e,f,g}
         
         % Labels for the circles
-        \node at (-3,-1.5) {$G_1$};
-        \node at (4,-1.5) {$G_2$};
+        \node at (-3,-1.1) {$G_1$};
+        \node at (4,-1.1) {$G_2$};
 
 
         % tree edges (normal black edges)
@@ -125,12 +125,12 @@ Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  co
         \node[node] (g) at (4,0) {g};
         
          % Dotted circles for T_u and T_v
-        \draw[dotted, thick, gray] (-3,2) circle (3cm); % T_u circle around {a,b,c,d}
-        \draw[dotted, thick, gray] (4,2) circle (3cm);  % T_v circle around {e,f,g}
+        \draw[dotted, thick, gray] (-3,2) circle (2.6cm); % T_u circle around {a,b,c,d}
+        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  % T_v circle around {e,f,g}
         
         % Labels for the circles
-        \node at (-3,-1.5) {$G_1$};
-        \node at (4,-1.5) {$G_2$};
+        \node at (-3,-1.1) {$G_1$};
+        \node at (4,-1.1) {$G_2$};
 
 
         % tree edges (normal black edges)
@@ -179,12 +179,12 @@ Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o nú
         
         
          % Dotted circles for T_u and T_v
-        \draw[dotted, thick, gray] (-3,2) circle (3cm);
-        \draw[dotted, thick, gray] (4,2) circle (3cm);  
+        \draw[dotted, thick, gray] (-3,2) circle (2.6cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  
         
         % Labels for the circles
-        \node at (-3,-1.5) {$T_u$};
-        \node at (4,-1.5) {$T_v$};
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
 
         % tree edges (normal black edges)
         \draw[edge] (a) -- (u) node[midway, below] {};
@@ -212,7 +212,59 @@ Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o nú
 
 Após a remoção da aresta $uv$, note que teremos duas componentes do grado $G$ separadas em $T_u$ e $T_v$. Na Figura~\ref{fig:graph_with_Tu_and_Tv}, por exemplo, não temos uma aresta reserva que ligue $T_u$ e $T_v$. Sob essas condições, suponha que temos um vértice $w \in V(T_u)$ e $z \in V(T_v)$. Assim, ao chamarmos \texttt{conectadoGD(G, w, z)}, note que precisaremos percorrer cada vértice $a$ de $T_u$, e para cada vizinho $b$ de $a$ teríamos que verificar se $b \in V(T_v)$. Assim, o consumo de tempo esperado para essa busca exaustiva é de O($n^2$), visto que supusemos que não há nenhuma aresta reserva que ligue $T_u$ e $T_v$. Como \texttt{conectadoGD} tem consumo de tempo esperado O(lg$n$), então teremos um consumo de O($n^2$lg$n$) para \texttt{removaGD}, pois precisamos verificar se as duas pontas de cada aresta reserva estão conectadas chamando a rotina \texttt{conectadoGD}. Note que achamos uma aresta substituta caso as duas pontas da aresta reserva não estejam conectadas, pois uma delas estará em $T_u$ e outra estará em $T_v$.
 
-Assim, nota-se que é necessário uma implementação mais eficiente para a rotina de remoção de arestas, e  por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em O(lg$n^2$).
+Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em O(lg$^2n$).
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        [node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {u};
+        \node[node] (a) at (-3,4) {a};
+        \node[node] (b) at (-5,2) {b};
+        \node[node] (c) at (-3,0) {c};
+        \node[node] (v) at (2,2) {v};
+        \node[node] (d) at (3,3.7) {d};
+        \node[node] (e) at (3,0.3) {e};
+        \node[node] (f) at (5,0.3) {f};
+        \node[node] (g) at (6, 2) {g};
+        \node[node] (h) at (5, 3.7) {h};
+        
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.6cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[edge] (u) -- (v) node[midway, below] {uv};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
+
+        % reserve edges (normal red edges)
+        \draw[reserve] (b) -- (u) node[midway, below] {};
+        \draw[reserve] (c) -- (u) node[midway, below] {};
+        \draw[reserve] (d) -- (f) node[midway, below] {};
+        \draw[reserve] (d) -- (h) node[midway, below] {};
+
+    \end{tikzpicture}
+    \caption{Um grafo com 10 vértices. As arestas pretas são da floresta maximal do grafo, enquanto as vermelhas são arestas reservas.}
+    \label{fig:graph_with_Tu_and_Tv_with_reserve_edge}
+\end{figure}
+
+\newpage
 
 \section{Fatiamento do grafo em níveis}
 
