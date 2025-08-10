@@ -43,13 +43,13 @@ seja mínimo. A Figura 1.1 mostra um exemplo de grafo conexo com pesos nas arest
         mst/.style={very thick, red}]
         
         % Vertices in a circular arrangement
-        \node[node] (A) at (0,0) {A};
-        \node[node] (B) at (3,0) {B};
-        \node[node] (C) at (4.5,2) {C};
-        \node[node] (D) at (3,4) {D};
-        \node[node] (E) at (0,4) {E};
-        \node[node] (F) at (-1.5,2) {F};
-        \node[node] (G) at (1.5,2) {G};
+        \node[node] (A) at (0,0) {a};
+        \node[node] (B) at (3,0) {b};
+        \node[node] (C) at (4.5,2) {c};
+        \node[node] (D) at (3,4) {d};
+        \node[node] (E) at (0,4) {e};
+        \node[node] (F) at (-1.5,2) {f};
+        \node[node] (G) at (1.5,2) {g};
         
         % Non-MST edges (normal black edges)
         \draw[edge] (A) -- (B) node[midway, below] {7};
@@ -68,7 +68,7 @@ seja mínimo. A Figura 1.1 mostra um exemplo de grafo conexo com pesos nas arest
         \draw[mst] (B) -- (G) node[midway, above] {5};
         
     \end{tikzpicture}
-    \caption{Um grafo não-dirigido com sete vértices. As arestas em vermelho formam uma árvore geradora mínima (MST) de peso total 17.}
+    \caption{Um grafo com sete vértices. As arestas em vermelho formam uma árvore geradora mínima (MST) de peso total 17.}
     \label{fig:mst_example}
 \end{figure}
 
