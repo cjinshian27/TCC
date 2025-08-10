@@ -41,11 +41,11 @@ Para implementar o grafo dinâmico, resume-se à construção da seguinte biblio
 \end{itemize} 
 
 Nossa implementação encapsula a complexidade de manutenção de $\left\lceil \lg n \right\rceil$ florestas dinâmicas em uma abstração do grafo dinâmico. 
-Assim, a consulta \texttt{conectadoGD} aplicada ao grafo $G$ significa fazer a mesma consulta para alguma floresta maximal $F$ de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\left\lceil \lg n \right\rceil$ florestas de vértices isolados.
+Assim, a consulta \texttt{conectadosGD} aplicada ao grafo $G$ significa fazer a mesma consulta para alguma floresta maximal $F$ de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\left\lceil \lg n \right\rceil$ florestas de vértices isolados.
 
 \section{Adição de arestas no grafo dinâmico}
 
-Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada ao \texttt{conectadoGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserido a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
+Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada ao \texttt{conectadosGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserido a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
 
 Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
 
@@ -60,7 +60,7 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos o tempo esper
 
 Como a inserção de arestas (\texttt{adicioneFA}) em uma floresta dinâmica com $n$ vértices possui uma complexidade de tempo esperado O(lg$n$), então temos que \texttt{adicioneGD} também terá o seu custo esperado de tempo O(lg$n$). 
 
-O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $G$ com $V = \{a, b, c, d, e, f, g\}$ e suas respectivas arestas, como ilustrado na Figura~\ref{fig:graph_without_reserve_edges}. Temos dois subgrafos $G_1$ e $G_2$ em nosso grafo $G$. O vértice $a$ está em $G_1$ e $e$ está em $G_2$. Se $G_1$ e $G_2$ são conectados por uma única aresta $ae$, a remoção dela acarretaria em duas componentes separadas. Então chamar \texttt{conectado(G, a, e)} após a remoção de $ae$ receberíamos falso como resposta. 
+O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $G$ com $V = \{a, b, c, d, e, f, g\}$ e suas respectivas arestas, como ilustrado na Figura~\ref{fig:graph_without_reserve_edges}. Temos dois subgrafos $G_1$ e $G_2$ em nosso grafo $G$. O vértice $a$ está em $G_1$ e $e$ está em $G_2$. Se $G_1$ e $G_2$ são conectados por uma única aresta $ae$, a remoção dela acarretaria em duas componentes separadas. Então chamar \texttt{conectados(G, a, e)} após a remoção de $ae$ receberíamos falso como resposta. 
 
 \begin{figure}
     \centering
@@ -105,7 +105,7 @@ O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $
     \label{fig:graph_without_reserve_edges}
 \end{figure}
 
-Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  conectadas pela aresta $ae$, tornando-se uma única componente conexa, como mostra a Figura~\ref{fig:graph_with_reserve_edges}. Ao chamarmos \texttt{adiciona(G, d, g)}, guardaríamos a aresta $dg$ como reserva. Se posteriormente removermos $ae$, note que os subgrafos $G_1$ e $G_2$ estariam em duas componentes separadas. Assim, se não tivéssemos armazenado $dg$, então a consulta \texttt{conectado(G, a, e)} devolveria falso, o que estaria incorreto visto que a aresta $dg$ existe de fato no grafo. Dessa forma, a aresta reserva possui a função de substituir a aresta removida, como veremos adiante, mantendo a conexão entre $G_1$ e $G_2$.
+Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  conectadas pela aresta $ae$, tornando-se uma única componente conexa, como mostra a Figura~\ref{fig:graph_with_reserve_edges}. Ao chamarmos \texttt{adiciona(G, d, g)}, guardaríamos a aresta $dg$ como reserva. Se posteriormente removermos $ae$, note que os subgrafos $G_1$ e $G_2$ estariam em duas componentes separadas. Assim, se não tivéssemos armazenado $dg$, então a consulta \texttt{conectados(G, a, e)} devolveria falso, o que estaria incorreto visto que a aresta $dg$ existe de fato no grafo. Dessa forma, a aresta reserva possui a função de substituir a aresta removida, como veremos adiante, mantendo a conexão entre $G_1$ e $G_2$.
 
 \begin{figure}
     \centering
@@ -210,7 +210,7 @@ Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o nú
 
 \newpage
 
-Após a remoção da aresta $uv$, note que teremos duas componentes do grafo $G$ separadas em $T_u$ e $T_v$. Na Figura~\ref{fig:graph_with_Tu_and_Tv}, por exemplo, não temos uma aresta reserva que ligue $T_u$ e $T_v$. Sob essas condições, para achar uma aresta substituta precisamos percorrer cada vértice $a$ de $T_u$, e para cada vizinho $b$ de $a$ teríamos que verificar se $b \in V(T_v)$. Assim, o consumo de tempo esperado para essa busca exaustiva é de O($n^2$), visto que supusemos que não há nenhuma aresta reserva que ligue $T_u$ e $T_v$. Como \texttt{conectadoGD} tem consumo de tempo esperado O(lg$n$), então teremos um consumo de O($n^2$lg$n$) para \texttt{removaGD}, pois precisamos verificar se as duas pontas de cada aresta reserva estão conectadas chamando a rotina \texttt{conectadoGD}. Note que achamos uma aresta substituta caso as duas pontas da aresta reserva não estejam conectadas, pois uma delas estará em $T_u$ e outra estará em $T_v$.
+Após a remoção da aresta $uv$, note que teremos duas componentes do grafo $G$ separadas em $T_u$ e $T_v$. Na Figura~\ref{fig:graph_with_Tu_and_Tv}, por exemplo, não temos uma aresta reserva que ligue $T_u$ e $T_v$. Sob essas condições, para achar uma aresta substituta precisamos percorrer cada vértice $a$ de $T_u$, e para cada vizinho $b$ de $a$ teríamos que verificar se $b \in V(T_v)$. Assim, o consumo de tempo esperado para essa busca exaustiva é de O($n^2$), visto que supusemos que não há nenhuma aresta reserva que ligue $T_u$ e $T_v$. Como \texttt{conectadosGD} tem consumo de tempo esperado O(lg$n$), então teremos um consumo de O($n^2$lg$n$) para \texttt{removaGD}, pois precisamos verificar se as duas pontas de cada aresta reserva estão conectadas chamando a rotina \texttt{conectadosGD}. Note que achamos uma aresta substituta caso as duas pontas da aresta reserva não estejam conectadas, pois uma delas estará em $T_u$ e outra estará em $T_v$.
 
 Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em O(lg$^2n$).
 
