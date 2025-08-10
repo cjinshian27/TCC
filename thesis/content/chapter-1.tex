@@ -43,6 +43,8 @@ Para implementar o grafo dinâmico, resume-se à construção da seguinte biblio
 Nossa implementação encapsula a complexidade de manutenção de $\left\lceil \lg n \right\rceil$ florestas dinâmicas em uma abstração do grafo dinâmico. 
 Assim, a consulta \texttt{conectadoGD} aplicada ao grafo $G$ significa fazer a mesma consulta para alguma floresta maximal $F$ de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\left\lceil \lg n \right\rceil$ florestas de vértices isolados.
 
+\section{Adição de arestas no grafo dinâmico}
+
 Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada ao \texttt{conectadoGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserido a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
 
 Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
@@ -105,7 +107,6 @@ O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $
 
 Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  conectadas pela aresta $ae$, tornando-se uma única componente conexa, como mostra a Figura~2.2. Ao chamarmos \texttt{adiciona(G, d, g)}, guardaríamos a aresta $dg$ como reserva. Se posteriormente removermos $ae$, note que os subgrafos $G_1$ e $G_2$ estariam em duas componentes separadas. Assim, se não tivéssemos armazenado $dg$, então a consulta \texttt{conectado(G, a, e)} devolveria falso, o que estaria incorreto visto que a aresta $dg$ existe de fato no grafo. Dessa forma, a aresta reserva possui a função de substituir a aresta removida, como veremos adiante, mantendo a conexão entre $G_1$ e $G_2$.
 
-\newpage
 \begin{figure}
     \centering
     \begin{tikzpicture}
@@ -151,11 +152,11 @@ Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  co
 
 Note que não podemos simplesmente adicionar $dg$ como aresta da floresta maximal de $G$ em vez de guardar nas listas de adjacências. Como por definição uma floresta não pode conter ciclos, adicionar $dg$ dada a existência da aresta $ae$ acarretaria na formação de um ciclo contendo essas duas arestas, o que violaria a estrutura do algoritmo, já que queremos manter árvores binárias de busca balanceadas para garantir a complexidade de tempo logarítmica em suas rotinas. Como um grafo pode conter ciclos, guardar a aresta como reserva é uma forma de manter o grafo correto e o algoritmo eficiente. 
 
-Dessa forma, quando queremos remover uma aresta reserva, podemos simplesmente acionar a rotina \texttt{removaLA}, e a floresta maximal do grafo não será afetada. Entretanto, se queremos remover uma aresta $uv$ do grafo $G$, a floresta é quebrada em duas componentes, que podemos chamar de árvores $T_u$ e $T_v$, de modo que o primeiro contém o vértice $u$ e o segundo contém o vértice $v$. Dessa forma, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que o teste de conexidade de $u$ e $v$ esteja correto. Assim, precisamos procurar uma aresta reserva que irá substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
+\section{Remoção de arestas no grafo dinâmico}
 
-Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, precisaríamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in T_v$, teríamos encontrado uma aresta substituta $xy$, bastando apenas acionar \texttt{adicioneGD} para conectar os dois vértices e, consequentemente, $T_u$ e $T_v$ virariam uma única componente da floresta.
+Dessa forma, quando queremos remover uma aresta reserva, podemos simplesmente acionar a rotina \texttt{removaLA} (da lista de adjacências) e a floresta maximal do grafo não será afetada. Entretanto, se queremos remover uma aresta $uv$ do grafo $G$, a floresta é quebrada em duas componentes, que podemos chamar de árvores $T_u$ e $T_v$, de modo que o primeiro contém o vértice $u$ e o segundo contém o vértice $v$. Dessa forma, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que o teste de conexidade de $u$ e $v$ esteja correto. Assim, precisamos procurar uma aresta reserva que irá substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
 
-........ INSERIR DESENHO CONTENDO $T_u$, $T_v$ e $xy$ ..................
+Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, precisaríamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in T_v$, teríamos encontrado uma aresta substituta $xy$, bastando apenas acionar \texttt{adicioneGD(G, x, y)} para conectar os dois vértices e, consequentemente, $T_u$ e $T_v$ virariam uma única componente da floresta.
 
 \section{Fatiamento do grafo em níveis}
 
