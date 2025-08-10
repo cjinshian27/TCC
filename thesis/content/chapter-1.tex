@@ -210,7 +210,7 @@ Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o nú
 
 \newpage
 
-Após a remoção da aresta $uv$, note que teremos duas componentes do grado $G$ separadas em $T_u$ e $T_v$. Na Figura~\ref{fig:graph_with_Tu_and_Tv}, por exemplo, não temos uma aresta reserva que ligue $T_u$ e $T_v$. Sob essas condições, suponha que temos um vértice $w \in V(T_u)$ e $z \in V(T_v)$. Assim, ao chamarmos \texttt{conectadoGD(G, w, z)}, note que precisaremos percorrer cada vértice $a$ de $T_u$, e para cada vizinho $b$ de $a$ teríamos que verificar se $b \in V(T_v)$. Assim, o consumo de tempo esperado para essa busca exaustiva é de O($n^2$), visto que supusemos que não há nenhuma aresta reserva que ligue $T_u$ e $T_v$. Como \texttt{conectadoGD} tem consumo de tempo esperado O(lg$n$), então teremos um consumo de O($n^2$lg$n$) para \texttt{removaGD}, pois precisamos verificar se as duas pontas de cada aresta reserva estão conectadas chamando a rotina \texttt{conectadoGD}. Note que achamos uma aresta substituta caso as duas pontas da aresta reserva não estejam conectadas, pois uma delas estará em $T_u$ e outra estará em $T_v$.
+Após a remoção da aresta $uv$, note que teremos duas componentes do grafo $G$ separadas em $T_u$ e $T_v$. Na Figura~\ref{fig:graph_with_Tu_and_Tv}, por exemplo, não temos uma aresta reserva que ligue $T_u$ e $T_v$. Sob essas condições, para achar uma aresta substituta precisamos percorrer cada vértice $a$ de $T_u$, e para cada vizinho $b$ de $a$ teríamos que verificar se $b \in V(T_v)$. Assim, o consumo de tempo esperado para essa busca exaustiva é de O($n^2$), visto que supusemos que não há nenhuma aresta reserva que ligue $T_u$ e $T_v$. Como \texttt{conectadoGD} tem consumo de tempo esperado O(lg$n$), então teremos um consumo de O($n^2$lg$n$) para \texttt{removaGD}, pois precisamos verificar se as duas pontas de cada aresta reserva estão conectadas chamando a rotina \texttt{conectadoGD}. Note que achamos uma aresta substituta caso as duas pontas da aresta reserva não estejam conectadas, pois uma delas estará em $T_u$ e outra estará em $T_v$.
 
 Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em O(lg$^2n$).
 
@@ -249,9 +249,11 @@ Assim, torna-se necessário uma implementação mais eficiente para a rotina de 
         \draw[edge] (v) -- (d) node[midway, below] {};
         \draw[edge] (v) -- (f) node[midway, below] {};
         \draw[edge] (v) -- (e) node[midway, below] {};
-        \draw[edge] (u) -- (v) node[midway, below] {uv};
+        \draw[removed] (u) -- (v) node[midway, below] {uv};
         \draw[edge] (f) -- (g) node[midway, below] {};
         \draw[edge] (g) -- (h) node[midway, below] {};
+        \draw[reserve] (a) -- (d) node[midway, below] {};
+        \draw[reserve] (c) -- (v) node[midway, below] {};
 
         % reserve edges (normal red edges)
         \draw[reserve] (b) -- (u) node[midway, below] {};
@@ -260,7 +262,7 @@ Assim, torna-se necessário uma implementação mais eficiente para a rotina de 
         \draw[reserve] (d) -- (h) node[midway, below] {};
 
     \end{tikzpicture}
-    \caption{Um grafo com 10 vértices. As arestas pretas são da floresta maximal do grafo, enquanto as vermelhas são arestas reservas.}
+    \caption{As arestas pretas são da floresta maximal do grafo, enquanto as vermelhas são reservas. A aresta $uv$ tracejada está prestes a ser removida e substituída pela $ad$ ou $cv$, que ligam $T_u$ e $T_v$.}
     \label{fig:graph_with_Tu_and_Tv_with_reserve_edge}
 \end{figure}
 
