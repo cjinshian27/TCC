@@ -17,7 +17,7 @@ Grafos são estruturas de dados que nos permitem modelar vários problemas exist
 
 Dessa forma, são considerados problemas em grafos completamente dinâmicos aqueles em que o grafo sofre, com o tempo, alterações como inserções e remoções 
 de arestas. Caso o algoritmo permita apenas inserção ou apenas remoção, tais 
-problemas são chamados de parcialmente dinâmicos, conforme Holm, de Lichtenberg e Thorup \cite{jacob_holm}. Note que as operações de 
+problemas são chamados de parcialmente dinâmicos, conforme Holm, de Lichtenberg e Thorup ~\cite{jacob_holm}. Note que as operações de 
 atualização e consulta são apresentadas de forma online, sem conhecimento algum das operações futuras.
 
 Aqui serão tratados problemas em que o grafo dinâmico possui um conjunto fixo de vértices \textit{V}, e estabelecemos $n = |\textit{V}\ |$. Além disso, pode-se definir $m$ como o número de arestas existentes. Na maior parte das vezes, a complexidade de tempo das operações será amortizada, o que implica que elas são calculadas como a média sobre todas as operações realizadas. 
@@ -74,10 +74,10 @@ seja mínimo. A Figura 1.1 mostra um exemplo de grafo conexo com pesos nas arest
 
 Para encontrar uma árvore geradora mínima, podemos utilizar uma abordagem gulosa para o problema. Existem dois algoritmos gulosos clássicos que resolvem este problema eficientemente, quando o grafo não é dinâmico: o algoritmo de Kruskal e o de Prim. Cada um deles estabelece uma regra específica para determinar uma aresta segura.
 
-Se um grafo $G$ tem $n$ vértices e $m$ arestas, o algoritmo de Kruskal consome O($m$lg$m$), que é a complexidade de tempo para ordenar as arestas em ordem crescente de peso. Já o algoritmo de Prim pode ser implementado de modo a consumir O($m$ + $n$lg$n$), usando Fibonacci heaps. Tais algoritmos e suas implementações estão bem descritos no Capítulo 23.2 do livro de Cormen, Leiserson, Rivest e Stein \cite{clrs}, não iremos aprofundá-los em nosso estudo. 
+Se um grafo $G$ tem $n$ vértices e $m$ arestas, o algoritmo de Kruskal consome O($m$lg$m$), que é a complexidade de tempo para ordenar as arestas em ordem crescente de peso. Já o algoritmo de Prim pode ser implementado de modo a consumir O($m$ + $n$lg$n$), usando Fibonacci heaps. Tais algoritmos e suas implementações estão bem descritos no Capítulo~23.2 do livro de Cormen, Leiserson, Rivest e Stein ~\cite{clrs}, não iremos aprofundá-los em nosso estudo. 
 
-No nosso estudo, estamos interessados em grafos dinâmicos, que podem sofrer inserções e remoções de arestas, e por isso abrimos mão de exigir que o grafo seja conexo. Queremos manter uma floresta geradora maximal (MSF) de custo mínimo do grafo. Este problema já existe uma solução proposta por Holm, de Lichtenberg e Thorup \cite{jacob_holm} na Seção 5 do seu artigo. Essa solução se baseia num algoritmo para o problema de conexidade em grafos dinâmicos, descrito na Seção 3 de seu artigo. 
+No nosso estudo, estamos interessados em grafos dinâmicos, que podem sofrer inserções e remoções de arestas, e por isso abrimos mão de exigir que o grafo seja conexo. Queremos manter uma floresta geradora maximal (MSF) de custo mínimo do grafo. Este problema já existe uma solução proposta por Holm, de Lichtenberg e Thorup~\cite{jacob_holm} na Seção~5 do seu artigo. Essa solução se baseia num algoritmo para o problema de conexidade em grafos dinâmicos, descrito na Seção~3 de seu artigo. 
 
-No decorrer do nosso estudo, iremos destrinchar a solução dos autores em vários capítulos do texto. No Capítulo 2 descreveremos brevemente o problema da conexidade em grafos dinâmicos. No Capítulo 3: descreveremos a nossa implementação do algoritmo para o problema da floresta geradora maximal de custo mínimo decremental. No Capítulo 4...
+No decorrer do nosso estudo, iremos destrinchar a solução dos autores em vários capítulos do texto. No Capítulo~2 descreveremos brevemente o problema da conexidade em grafos dinâmicos. No Capítulo~3: descreveremos a nossa implementação do algoritmo para o problema da floresta geradora maximal de custo mínimo decremental. No Capítulo~4...
 
-As implementações dos nossos algoritmos da solução de \textit{Holm, de Lichtenberg e Thorup} \cite{jacob_holm} serão feitas utilizando a linguagem \textit{C++}, onde disponibilizamos o código no repositório do \textit{GitHub} \cite{chung2025}.
+As implementações dos nossos algoritmos da solução de \textit{Holm, de Lichtenberg e Thorup}~\cite{jacob_holm} serão feitas utilizando a linguagem \textit{C++}, onde disponibilizamos o código no repositório do \textit{GitHub} ~\cite{chung2025}.

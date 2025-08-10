@@ -67,8 +67,14 @@ Note que não podemos simplesmente adicionar $uv$ em $F$ de $G$ em vez de guarda
 
 Como a inserção de arestas (\texttt{adicioneFA}) em uma floresta dinâmica com $n$ vértices possui uma complexidade de tempo esperado O(lg$n$), então temos que \texttt{adicioneGD} também terá o seu custo esperado de tempo O(lg$n$). 
 
-Quando queremos remover uma aresta reserva, podemos simplesmente acionar a rotina \texttt{removaLA}, e a floresta maximal do grafo não será afetada. Entretanto, se queremos remover uma aresta $uv$ do grafo $G$, a floresta é quebrada em duas componentes, que podemos chamar de árvores $T_u$ e $T_v$, de modo que o primeiro contém o vértice $u$ e o segundo contém o vértice $v$. Dessa forma, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que o teste de conexidade de $u$ e $v$ esteja correto. Assim, precisamos procurar uma aresta reserva que irá substituir a aresta que foi removida de $G$.
+Quando queremos remover uma aresta reserva, podemos simplesmente acionar a rotina \texttt{removaLA}, e a floresta maximal do grafo não será afetada. Entretanto, se queremos remover uma aresta $uv$ do grafo $G$, a floresta é quebrada em duas componentes, que podemos chamar de árvores $T_u$ e $T_v$, de modo que o primeiro contém o vértice $u$ e o segundo contém o vértice $v$. Dessa forma, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que o teste de conexidade de $u$ e $v$ esteja correto. Assim, precisamos procurar uma aresta reserva que irá substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
+
+Podemos supor, sem perda de generalidade, que $|T_u| \leq |T_v|$, ou seja, o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, precisaríamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in T_v$, teríamos encontrado uma aresta substituta $xy$, bastando apenas acionar \texttt{adicioneGD} para conectar os dois vértices e, consequentemente, $T_u$ e $T_v$ virariam uma única componente da floresta.
+
+........ INSERIR DESENHO CONTENDO $T_u$, $T_v$ e $xy$ ..................
 
 \section{Fatiamento do grafo em níveis}
 
-Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$. O nível inicial de uma aresta recém-inserida é sempre $\left\lceil \lg n \right\rceil$, e ele nunca aumenta, apenas diminui. Este fatiamento em níveis será descrito em mais detalhes na Subseção 2.2. 
+Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. Assim, o nível da aresta somente será decrementado quando estamos buscando uma aresta substituta. 
+
+Dessa forma, podemos definir um grafo $G_i$, que é gerador das arestas de nível $\leq i$. Além disso, podemos definir uma floresta maximal de $G_i$.
