@@ -274,7 +274,7 @@ Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é 
 
 Se $G$ é um grafo e $\emptyset \neq X \subseteq V(G)$, então o subgrafo de $G$ \textbf{induzido} ou \textbf{gerado} por $X$ é subgrafo $H$ de $G$ de modo que $V(H) = X$ e $E(H)$ é exatamente o conjunto de arestas de $G$ que têm ambos os extremos em $X$. Assim, podemos denotar $H$ como $G[X]$.
 
-Sendo assim, podemos definir um grafo $G_i$, que é o grafo induzido pelas arestas de nível menor ou igual a $i$. Para cada nível $i$, iremos manter uma floresta maximal $F_i$ de $G_i$ e o grafo $L_i$, mantido como listas de adjacências que guardam apenas arestas reservas de nível $i$. Dessa forma, temos que $G_0 \subseteq G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{l_{max}} = G$, onde $l_{max} =  \left\lceil \lg n \right\rceil$, para um grafo de $n$ vértices. Consequentemente, temos que $F_{l_{max}}$ é uma floresta maximal de $G$. 
+Sendo assim, podemos definir um grafo $G_i$, que é o grafo induzido pelas arestas de nível menor ou igual a $i$. Para cada nível $i$, iremos manter uma floresta maximal $F_i$ de $G_i$ e o grafo $L_i$, mantido como listas de adjacências que guardam apenas arestas reservas de nível $i$. Dessa forma, temos que $G_0 \subseteq G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{l_{max}} = G$, onde $l_{max} =  \left\lceil \lg n \right\rceil$, para um grafo de $n$ vértices. Consequentemente, temos que $F_{l_{max}}$ é uma floresta maximal de $G$. Em particular, $F_0 = G_0$, pois indica que o grafo não tem mais arestas, sobrando apenas os vértices isolados.  
 
 Assim, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
 
@@ -289,3 +289,5 @@ Assim, podemos estabelecer algumas invariantes, que são mantidas ao longo das m
 O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $L_i$. Caso não a encontremos, passamos a procurar nas listas de adjacência $L_{i+1}, L_{i+2}, \ldots, L_{ \left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ para um nível inferior $j-1$, caso $j > 0$. Tudo isso será retomado na seção seguinte, onde iremos detalhar mais nas implementações dos métodos principais da biblioteca do grafo dinâmico. 
 
 \section{Implementação do grafo dinâmico}
+
+\subsection{Construção do grafo dinâmico}
