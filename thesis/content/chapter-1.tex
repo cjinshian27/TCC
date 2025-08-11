@@ -29,7 +29,7 @@ O problema da conexidade em florestas dinâmicas pode ser considerada uma simpli
 
 A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que é de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. Isso faz com que o custo amortizado da operação \textit{splay} seja $O(\lg n)$, onde $n$ é o número de nós da árvore, e que também uma sequência de $m$ acessos em uma árvore \textit{splay} tenha custo total $O(m \lg n)$.  Como também já existe bastante literatura sobre árvores \textit{splay}, e seu funcionamento interno não afeta a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
 
-\section{Estrutura da implementação do grafo dinâmico}
+\section{Estrutura do grafo dinâmico}
 
 Para implementar o grafo dinâmico, resume-se à construção da seguinte biblioteca de forma eficiente:
 
@@ -270,6 +270,22 @@ Assim, torna-se necessário uma implementação mais eficiente para a rotina de 
 
 \section{Fatiamento do grafo em níveis}
 
-Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. Assim, o nível da aresta somente será decrementado quando estamos buscando uma aresta substituta. 
+Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada essa técnica de fatiar o grafo em níveis. Cada aresta do grafo possui um nível entre $0$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. Assim, o nível da aresta somente será decrementado quando estamos buscando uma aresta substituta. 
 
-Dessa forma, podemos definir um grafo $G_i$, que é gerador das arestas de nível $\leq i$. Além disso, podemos definir uma floresta maximal de $G_i$.
+Se $G$ é um grafo e $\emptyset \neq X \subseteq V(G)$, então o subgrafo de $G$ \textbf{induzido} ou \textbf{gerado} por $X$ é subgrafo $H$ de $G$ de modo que $V(H) = X$ e $E(H)$ é exatamente o conjunto de arestas de $G$ que têm ambos os extremos em $X$. Assim, podemos denotar $H$ como $G[X]$.
+
+Sendo assim, podemos definir um grafo $G_i$, que é o grafo induzido pelas arestas de nível menor ou igual a $i$. Para cada nível $i$, iremos manter uma floresta maximal $F_i$ de $G_i$ e o grafo $L_i$, mantido como listas de adjacências que guardam apenas arestas reservas de nível $i$. Dessa forma, temos que $G_0 \subseteq G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{l_{max}} = G$, onde $l_{max} =  \left\lceil \lg n \right\rceil$, para um grafo de $n$ vértices. Consequentemente, temos que $F_{l_{max}}$ é uma floresta maximal de $G$. 
+
+Assim, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
+
+\begin{itemize}
+    \item $F_i$ é uma floresta maximal de $G_i$ para todo $1 \leq i \leq  \left\lceil \lg n \right\rceil$;
+    
+    \item $F_i \subseteq F_{i+1}$ para todo $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$;
+    
+    \item Cada floresta $F_i$ possui no máximo $2^i$ vértices.
+\end{itemize}
+
+O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $L_i$. Caso não a encontremos, passamos a procurar nas listas de adjacência $L_{i+1}, L_{i+2}, \ldots, L_{ \left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ para um nível inferior $j-1$, caso $j > 0$. Tudo isso será retomado na seção seguinte, onde iremos detalhar mais nas implementações dos métodos principais da biblioteca do grafo dinâmico. 
+
+\section{Implementação do grafo dinâmico}
