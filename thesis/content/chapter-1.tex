@@ -11,10 +11,12 @@
 \enlargethispage{.8\baselineskip}
 
 \section{Definição}
+\label{sec:definition}
 
 Como citado no Capítulo~1, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dá suporte a inserções, remoções e consultas de conexidade. O algoritmo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} para este problema de conexidade é composto por $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, e utiliza uma biblioteca que será descrita na Subseção 2.2. 
 
 \section{Conexidade em florestas dinâmicas}
+\label{sec:dynamic-forest-connectivity}
 
 Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o seu algoritmo, que foi proposto na Seção~2 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}. No Capítulo~2 da sua dissertação ele descreve as rotinas principais do algoritmo, baseado em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo das funções dos pseudocódigos. Dada essas circunstâncias, optamos por não apresentar uma descrição detalhada desse algoritmo, explicando brevemente sobre o que as rotinas principais fazem, bem como algumas diferenças da nossa implementação em código comparadas com a de Rodrigues.  
 
@@ -30,6 +32,7 @@ O problema da conexidade em florestas dinâmicas pode ser considerada uma simpli
 A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que é de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. Isso faz com que o custo amortizado da operação \textit{splay} seja $O(\lg n)$, onde $n$ é o número de nós da árvore, e que também uma sequência de $m$ acessos em uma árvore \textit{splay} tenha custo total $O(m \lg n)$.  Como também já existe bastante literatura sobre árvores \textit{splay}, e seu funcionamento interno não afeta a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
 
 \section{Estrutura do grafo dinâmico}
+\label{sec:dynamic-graph-structure}
 
 Para implementar o grafo dinâmico, resume-se à construção da seguinte biblioteca de forma eficiente:
 
@@ -44,6 +47,7 @@ Nossa implementação encapsula a complexidade de manutenção de $\left\lceil \
 Assim, a consulta \texttt{conectadosGD} aplicada ao grafo $G$ significa fazer a mesma consulta para alguma floresta maximal $F$ de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\left\lceil \lg n \right\rceil$ florestas de vértices isolados.
 
 \section{Adição de arestas no grafo dinâmico}
+\label{sec:dynamic-graph-edge-addition}
 
 Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada ao \texttt{conectadosGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserido a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
 
@@ -153,6 +157,7 @@ Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  co
 Note que não podemos simplesmente adicionar $dg$ como aresta da floresta maximal de $G$ em vez de guardar nas listas de adjacências. Como por definição uma floresta não pode conter ciclos, adicionar $dg$ dada a existência da aresta $ae$ acarretaria na formação de um ciclo contendo essas duas arestas, o que violaria a estrutura do algoritmo, já que queremos manter árvores binárias de busca balanceadas para garantir a complexidade de tempo logarítmica em suas rotinas. Como um grafo pode conter ciclos, guardar a aresta como reserva é uma forma de manter o grafo correto e o algoritmo eficiente. 
 
 \section{Remoção de arestas no grafo dinâmico}
+\label{sec:dynamic-graph-edge-removal}
 
 Dessa forma, quando queremos remover uma aresta reserva, podemos simplesmente acionar a rotina \texttt{removaLA} (da lista de adjacências) e a floresta maximal do grafo não será afetada. Entretanto, se queremos remover uma aresta $uv$ do grafo $G$, a floresta é quebrada em duas componentes, que podemos chamar de árvores $T_u$ e $T_v$, de modo que o primeiro contém o vértice $u$ e o segundo contém o vértice $v$. Dessa forma, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que o teste de conexidade de $u$ e $v$ esteja correto. Assim, precisamos procurar uma aresta reserva que irá substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
 
@@ -269,6 +274,7 @@ Assim, torna-se necessário uma implementação mais eficiente para a rotina de 
 \newpage
 
 \section{Fatiamento do grafo em níveis}
+\label{sec:level-slicing}
 
 Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada essa técnica de fatiar o grafo em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. Assim, o nível da aresta somente será decrementado quando estamos buscando uma aresta substituta. 
 
@@ -278,19 +284,21 @@ Sendo assim, podemos definir um grafo $G_i$, que é o grafo induzido pelas arest
 
 Assim, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
 
-\begin{itemize}
-    \item $F_i$ é uma floresta maximal de $G_i$ para todo $1 \leq i \leq  \left\lceil \lg n \right\rceil$;
+\begin{enumerate}[label=(\Roman*)]
+    \item \label{invariant1} $F_i$ é uma floresta maximal de $G_i$ para todo $1 \leq i \leq  \left\lceil \lg n \right\rceil$;
     
-    \item $F_i \subseteq F_{i+1}$ para todo $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$;
+    \item \label{invariant2} $F_i \subseteq F_{i+1}$ para todo $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$;
     
-    \item Cada floresta $F_i$ possui no máximo $2^i$ vértices.
-\end{itemize}
+    \item \label{invariant3} Cada floresta $F_i$ possui no máximo $2^i$ vértices.
+\end{enumerate}
 
 O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $L_i$. Caso não a encontremos, passamos a procurar nas listas de adjacência $L_{i+1}, L_{i+2}, \ldots, L_{ \left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ para um nível inferior $j-1$, caso $j > 0$. Tudo isso será retomado na seção seguinte, onde iremos detalhar mais nas implementações dos métodos principais da biblioteca do grafo dinâmico. 
 
 \section{Implementação do grafo dinâmico}
+\label{sec:dynamic-graph-implementation}
 
 \subsection{Construtor}
+\label{sec:code-constructor}
 
 Para implementar um grafo dinâmico, chamamos \texttt{novoGD(n)} para inicializar cada $F_i$ e $L_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{novaFD(n)} e \texttt{novaLA(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacência com $n$ vértices isolados para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $L_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
 
@@ -305,9 +313,9 @@ Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv
 \end{itemize}
 
 
-Dessa forma, podemos enunciar o construtor do grafo no Programa \ref{prog:new-dynamic-graph}. 
+Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}. 
 
-\begin{programruledcaption}{\texttt{novoGD(n)} \label{prog:new-dynamic-graph}}
+\begin{programruledcaption}{\texttt{novoGD(n)} \label{prog:newGD}}
     \noindent\textbf{Entrada}: Recebe um número $n$ de vértices do grafo. \\
     \textbf{Saída}: Devolve um grafo dinâmico com $n$ vértices isolados.
     \vspace{-0.5\baselineskip}
@@ -319,7 +327,7 @@ Dessa forma, podemos enunciar o construtor do grafo no Programa \ref{prog:new-dy
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{para} $i$ := $0$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+    \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
         G.$F_i$ := \texttt{novaFD(n)}
         G.$L_i$ := \texttt{novaLA(n)}
     G.nível := \texttt{novoMapaHash(n)}
@@ -328,5 +336,33 @@ Dessa forma, podemos enunciar o construtor do grafo no Programa \ref{prog:new-dy
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
+Como ambos \texttt{novaFD(n)} e \texttt{novaLA(n)} consomem tempo O($n$), então \texttt{novoGD(n)} consome tempo O($n$lg$n$), pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além, disso, as invariantes são mantidas porque estamos criando um grafo com $n$ vértices isolados.
 
+\subsection{Teste de conexidade}
+\label{sec:code-connectivity-test}
+
+Como mostrado na Seção~\ref{sec:dynamic-graph-structure}, ao chamarmos o método \texttt{conectadosGD} estamos na verdade testando a conexidade na floresta maximal $F_{\left\lceil \lg n \right\rceil}$ de $G$, ou seja, estamos chamando a rotina \texttt{conectadosFD}. O invariante \ref{invariant1} garante que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$, e, portanto, consultas em 
+\texttt{conectados($F_{\left\lceil \lg n \right\rceil}$, u, v)} deveriam dar a mesma resposta que \texttt{conectadosGD(G, u, v)}, onde $G$ = $G_{\left\lceil \lg n \right\rceil}$. Dessa forma, podemos enunciar o Programa~\ref{prog:connectedGD}.
+
+\begin{programruledcaption}{\texttt{conectadosGD(G, u, v)} \label{prog:connectedGD}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$ \\
+    \textbf{Saída}: Devolve um booleano indicando se $u$ e $v$ estão conectados em $G$.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    devolva \texttt{conectadoFD($G.F_{\left\lceil \lg n \right\rceil}$, u, v)}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+O consumo de tempo esperado de \texttt{conectadoGD} é O(lg$n$), visto que \texttt{conectadoFD} tem consumo esperado O(lg$n$). Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação nele, então as invariantes são mantidas. 
+
+\subsection{Adição de arestas}
+\label{sec:code-edge-addition}
 
