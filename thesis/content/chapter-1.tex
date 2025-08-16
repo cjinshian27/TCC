@@ -317,7 +317,7 @@ Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}
 
 \begin{programruledcaption}{\texttt{novoGD(n)} \label{prog:newGD}}
     \noindent\textbf{Entrada}: Recebe um número $n$ de vértices do grafo. \\
-    \textbf{Saída}: Devolve um grafo dinâmico com $n$ vértices isolados.
+    \textbf{Saída}: Devolve um grafo dinâmico $G$ com $n$ vértices isolados.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -338,14 +338,24 @@ Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}
 
 Como ambos \texttt{novaFD(n)} e \texttt{novaLA(n)} consomem tempo O($n$), então \texttt{novoGD(n)} consome tempo O($n$lg$n$), pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além, disso, as invariantes são mantidas porque estamos criando um grafo com $n$ vértices isolados.
 
+\subsection{Nós do grafo}
+\label{sec:graph-nodes}
+
+Como estamos utilizando a técnica de \textit{Euler tour trees}, mencionada brevemente na Seção~\ref{sec:dynamic-graph-structure}, então estamos utilizando uma estrutura chamada \textbf{nó} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
+
+Um nó pode representar tanto um vértice da forma $uu$ quanto uma aresta da forma $uv$, $u \neq v$. Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Dessa forma, se $uv$ possui nível $2$, então em $F_2$ esse booleano será verdadeiro, e falso em outras $F_i$, $i \neq 2$. Além disso, iremos adicionar um contador \text{arestasDeNível} para cada nó do tipo aresta, a fim de calcular a quantidade de arestas em sua subárvore que tenham o booleano \textit{éNível} como verdadeiro. 
+
+Já para o nó do tipo vértice $uu$, iremos armazenar um booleano chamado \textit{incideArestaReservaDeNível} que indica se $uu$ é uma das pontas de alguma aresta reserva com o booleano \textit{éNível} verdadeiro. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \text{incideArestaReservaDeNível} como verdadeiro. Além disso, iremos manter um contador para cada nó do tipo vértice, a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaDeNível} como verdadeiro. 
+
+
 \subsection{Teste de conexidade}
 \label{sec:code-connectivity-test}
 
 Como mostrado na Seção~\ref{sec:dynamic-graph-structure}, ao chamarmos o método \texttt{conectadosGD} estamos na verdade testando a conexidade na floresta maximal $F_{\left\lceil \lg n \right\rceil}$ de $G$, ou seja, estamos chamando a rotina \texttt{conectadosFD}. O invariante \ref{invariant1} garante que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$, e, portanto, consultas em 
-\texttt{conectados($F_{\left\lceil \lg n \right\rceil}$, u, v)} deveriam dar a mesma resposta que \texttt{conectadosGD(G, u, v)}, onde $G$ = $G_{\left\lceil \lg n \right\rceil}$. Dessa forma, podemos enunciar o Programa~\ref{prog:connectedGD}.
+\texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} deveriam dar a mesma resposta que \texttt{conectadosGD(G, u, v)}, onde $G$ = $G_{\left\lceil \lg n \right\rceil}$. Dessa forma, podemos enunciar o Programa~\ref{prog:connectedGD}.
 
 \begin{programruledcaption}{\texttt{conectadosGD(G, u, v)} \label{prog:connectedGD}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$ \\
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
     \textbf{Saída}: Devolve um booleano indicando se $u$ e $v$ estão conectados em $G$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -361,8 +371,35 @@ Como mostrado na Seção~\ref{sec:dynamic-graph-structure}, ao chamarmos o méto
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O consumo de tempo esperado de \texttt{conectadoGD} é O(lg$n$), visto que \texttt{conectadoFD} tem consumo esperado O(lg$n$). Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação nele, então as invariantes são mantidas. 
+O consumo de tempo esperado de \texttt{conectadoGD} é O(lg$n$), visto que ele simplesmente chama \texttt{conectadoFD} que tem consumo esperado O(lg$n$). Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação nele, e isso implica que as invariantes são mantidas. 
 
 \subsection{Adição de arestas}
 \label{sec:code-edge-addition}
 
+Se queremos inserir uma aresta $uv$ no grafo $G$, basta chamar o método \texttt{adicioneGD(G, u, v)}. Entretanto, antes de adicionar na floresta maximal de $G$, chamamos antes a rotina \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} para verificar já estão conectados. Se sim, então $uv$ será armazenada como aresta reserva em $L_{\left\lceil \lg n \right\rceil}$. Se os vértices $u$ e $v$ não estiverem conectados, então adicionamos a aresta $uv$ em $F_{\left\lceil \lg n \right\rceil}$. O Programa~\ref{prog:addGD} ilustra essa rotina.
+
+\begin{programruledcaption}{\texttt{adicioneGD(G, u, v)} \label{prog:addGD}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
+    \textbf{Saída}: Devolve o grafo $G$ com a aresta $uv$ inserida.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    G.nível[u, v] := $\left\lceil \lg n \right\rceil$
+    \textbf{se} \texttt{conectadosFD(G.$F_{\left\lceil \lg n \right\rceil}$, u, v)} \textbf{então}
+        \texttt{adicioneLA(G.$R_{\left\lceil \lg n \right\rceil}$, u, v)}
+    \textbf{senão}
+        \texttt{adicioneFD(G.$F_{\left\lceil \lg n \right\rceil}$, u, v)}
+    devolva G
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+
+\subsection{Remoção de arestas}
+\label{sec:code-edge-removal}
