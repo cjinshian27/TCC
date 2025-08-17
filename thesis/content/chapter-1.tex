@@ -276,7 +276,7 @@ Assim, torna-se necessário uma implementação mais eficiente para a rotina de 
 \section{Fatiamento do grafo em níveis}
 \label{sec:level-slicing}
 
-Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada essa técnica de fatiar o grafo em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. Assim, o nível da aresta somente será decrementado quando estamos buscando uma aresta substituta. 
+Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada a técnica de fatiar o grafo em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. Assim, o nível da aresta somente será decrementado quando estamos buscando uma aresta substituta. 
 
 Se $G$ é um grafo e $\emptyset \neq X \subseteq V(G)$, então o subgrafo de $G$ \textbf{induzido} ou \textbf{gerado} por $X$ é subgrafo $H$ de $G$ de modo que $V(H) = X$ e $E(H)$ é exatamente o conjunto de arestas de $G$ que têm ambos os extremos em $X$. Assim, podemos denotar $H$ como $G[X]$.
 
