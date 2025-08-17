@@ -343,7 +343,7 @@ Como ambos \texttt{novaFD(n)} e \texttt{novaLA(n)} consomem tempo O($n$), então
 
 Como adotamos a técnica de \textit{Euler tour trees} na implementação das nossas florestas dinâmicas, mencionada brevemente na Seção~\ref{sec:dynamic-graph-structure}, estamos utilizando uma estrutura chamada \textbf{nó} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
 
-Um nó pode representar tanto um vértice da forma $uu$ quanto uma aresta da forma $uv$, $u \neq v$. Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Toda vez que uma aresta nova é inserida no grafo, ela vai ter este atributo definido como verdadeiro. O atributo só se torna falso quando rebaixamos o nível de uma aresta para uma unidade inferior, que será descrita em mais detalhes na Seção~\ref{sec:code-edge-removal}. 
+Um nó pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Toda vez que uma aresta nova é inserida no grafo, ela vai ter este atributo definido como verdadeiro. O atributo só se torna falso quando rebaixamos o nível de uma aresta para uma unidade inferior, que será descrita em mais detalhes na Seção~\ref{sec:code-edge-removal}. 
 
 Dessa forma, se $uv$ possui nível $2$, então em $F_2$ esse booleano será verdadeiro, e falso em outras $F_i$, $i \neq 2$. Além disso, iremos adicionar um contador \text{arestasDeNível} para cada nó do tipo aresta, a fim de calcular a quantidade de arestas em sua subárvore que tenham o booleano \textit{éNível} como verdadeiro. 
 
@@ -470,7 +470,7 @@ Como mostrado na Seção~\ref{sec:dynamic-graph-structure}, ao chamarmos o méto
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    devolva \texttt{conectadoFD($G.F_{\left\lceil \lg n \right\rceil}$, u, v)}
+    devolva \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, u, v)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
