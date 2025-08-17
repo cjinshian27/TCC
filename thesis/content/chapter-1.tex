@@ -449,7 +449,7 @@ O consumo de tempo esperado de \texttt{conectadosGD} é O(lg$n$), visto que ele 
 \subsection{Adição de arestas}
 \label{sec:code-edge-addition}
 
-Se queremos inserir uma aresta $uv$ no grafo $G$, basta chamar o método \texttt{adicioneGD(G, u, v)}. Entretanto, antes de adicionar na floresta maximal de $G$, chamamos antes a rotina \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} para verificar já estão conectados. Se sim, então $uv$ será armazenada como aresta reserva em $L_{\left\lceil \lg n \right\rceil}$. Se os vértices $u$ e $v$ não estiverem conectados, então adicionamos a aresta $uv$ em $F_{\left\lceil \lg n \right\rceil}$. O Programa~\ref{prog:addGD} ilustra essa rotina.
+Se queremos inserir uma aresta $uv$ no grafo $G$, basta chamar o método \texttt{adicioneGD(G, u, v)}. Entretanto, antes de adicionar na floresta maximal de $G$, chamamos antes a rotina \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} para verificar se $u$ e $v$ já estão conectados. Se sim, então $uv$ será armazenada como aresta reserva em $L_{\left\lceil \lg n \right\rceil}$. Se os vértices $u$ e $v$ não estiverem conectados, então adicionamos a aresta $uv$ em $F_{\left\lceil \lg n \right\rceil}$. O Programa~\ref{prog:addGD} ilustra essa rotina.
 
 \begin{programruledcaption}{\texttt{adicioneGD(G, u, v)} \label{prog:addGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
@@ -475,6 +475,11 @@ Se queremos inserir uma aresta $uv$ no grafo $G$, basta chamar o método \texttt
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
+Se inserirmos uma aresta reserva $uv$ em $G$, precisamos atualizar o atributo \textit{incideArestaReservaDeNível} de $u$ e de $v$ para verdadeiro, se necessário. A Seção~\ref{sec:graph-nodes} explica com mais detalhes o método auxiliar (\texttt{incrementeArestasReservasDeNível}) usado. 
+
+A invariante \ref{invariant1} se mantém para o nível $i = \left\lceil \lg n \right\rceil$. Como sempre adicionamos arestas em $F_{\left\lceil \lg n \right\rceil}$ (se não forem reservas), então as outras florestas de níveis inferiores não são afetadas, mantendo-se, assim, os invariantes \ref{invariant2} e \ref{invariant3} também.
+
+Como o consumo de tempo esperado de \texttt{conectadosFD}, \texttt{adicioneFD} e de \texttt{incrementeArestasReservasDeNível} é esperado O(lg$n$), e \texttt{adicioneLA} possui custo esperado O($1$), então temos que \texttt{adicioneGD} possui consumo de tempo esperado O(lg$n$).
 
 \subsection{Remoção de arestas}
 \label{sec:code-edge-removal}
