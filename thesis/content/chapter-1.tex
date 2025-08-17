@@ -292,7 +292,7 @@ Assim, podemos estabelecer algumas invariantes, que são mantidas ao longo das m
     \item \label{invariant3} Cada floresta $F_i$ possui no máximo $2^i$ vértices.
 \end{enumerate}
 
-O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $L_i$. Caso não a encontremos, passamos a procurar nas listas de adjacência $L_{i+1}, L_{i+2}, \ldots, L_{ \left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ para um nível inferior $j-1$, caso $j > 0$. Tudo isso será retomado na seção seguinte, onde iremos detalhar mais nas implementações dos métodos principais da biblioteca do grafo dinâmico. 
+O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $L_i$. Caso não a encontremos, passamos a procurar nas listas de adjacência $L_{i+1}, L_{i+2}, \ldots, L_{ \left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $L_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $L_j$ para um nível inferior $j-1$, caso $j > 0$. Tudo isso será retomado na seção seguinte, onde iremos detalhar mais nas implementações dos métodos principais da biblioteca do grafo dinâmico. 
 
 \section{Implementação do grafo dinâmico}
 \label{sec:dynamic-graph-implementation}
@@ -343,13 +343,44 @@ Como ambos \texttt{novaFD(n)} e \texttt{novaLA(n)} consomem tempo O($n$), então
 
 Como adotamos a técnica de \textit{Euler tour trees} na implementação das nossas florestas dinâmicas, mencionada brevemente na Seção~\ref{sec:dynamic-graph-structure}, estamos utilizando uma estrutura chamada \textbf{nó} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
 
-Um nó pode representar tanto um vértice da forma $uu$ quanto uma aresta da forma $uv$, $u \neq v$. Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Dessa forma, se $uv$ possui nível $2$, então em $F_2$ esse booleano será verdadeiro, e falso em outras $F_i$, $i \neq 2$. Além disso, iremos adicionar um contador \text{arestasDeNível} para cada nó do tipo aresta, a fim de calcular a quantidade de arestas em sua subárvore que tenham o booleano \textit{éNível} como verdadeiro. 
+Um nó pode representar tanto um vértice da forma $uu$ quanto uma aresta da forma $uv$, $u \neq v$. Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Toda vez que uma aresta nova é inserida no grafo, ela vai ter este atributo definido como verdadeiro. O atributo só se torna falso quando rebaixamos o nível de uma aresta para uma unidade inferior, que será descrita em mais detalhes na Seção~\ref{sec:code-edge-removal}. 
 
-Já para o nó do tipo vértice $uu$, iremos armazenar um booleano chamado \textit{incideArestaReservaDeNível} que indica se $uu$ é uma das pontas de alguma aresta reserva com o booleano \textit{éNível} verdadeiro. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. Além disso, iremos manter um contador \textit{arestasReservasDeNível} para cada nó do tipo vértice, a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} como verdadeiro. 
+Dessa forma, se $uv$ possui nível $2$, então em $F_2$ esse booleano será verdadeiro, e falso em outras $F_i$, $i \neq 2$. Além disso, iremos adicionar um contador \text{arestasDeNível} para cada nó do tipo aresta, a fim de calcular a quantidade de arestas em sua subárvore que tenham o booleano \textit{éNível} como verdadeiro. 
 
-Dessa forma, podemos introduzir dois métodos que modificam o atributo \textit{incideArestaReservaDeNível}.
+Como o atributo \textit{éNível} pode ser alterado no decorrer das remoções das arestas, precisamos definir uma rotina auxiliar que atualiza o contador \textit{arestasDeNível}, que está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
 
-\begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível(F, u)} \label{prog:decrementReserveEdgesCount-GD}}
+\begin{programruledcaption}{\texttt{atualizeArestasDeNível(F, u, v)} \label{prog:updateIsLevelCount-GD}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ da floresta $F$.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    arestaUV := F.nó[u, v]
+    c := 0
+    \textbf{se} arestaUV.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
+        \textbf{se} arestaUV.filhoEsq.éNível = verdadeiro \textbf{então}
+            c := c + 1
+    \textbf{se} arestaUV.filhoDir $\neq$ \texttt{NIL} \textbf{então}
+        \textbf{se} arestaUV.filhoDir.éNível = verdadeiro \textbf{então}
+            c := c + 1
+    \textbf{se} arestaUV.éNível = verdadeiro \textbf{então}
+        c := c + 1
+    arestaUV.arestasDeNível := c
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+
+Já para o nó do tipo vértice $uu$, iremos armazenar um booleano chamado \textit{incideArestaReservaDeNível} que indica se $uu$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. Além disso, iremos manter um contador \textit{arestasReservasDeNível} para cada nó do tipo vértice, a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} como verdadeiro. 
+
+Dessa forma, podemos introduzir dois métodos que modificam o atributo \textit{incideArestaReservaDeNível} e atualizam o contador \textit{arestasReservasDeNível}.
+
+\begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível(F, L, u)} \label{prog:decrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -361,7 +392,7 @@ Dessa forma, podemos introduzir dois métodos que modificam o atributo \textit{i
         escapeinside={(*@}{@*)},
     ]
     vérticeU := F.nó[u, u]
-    \textbf{se} LA(vérticeU) = $\emptyset$ \textbf{então} 
+    \textbf{se} L[u] = $\emptyset$ \textbf{então} 
         \texttt{puxeParaRaiz(F, vérticeU)}
         vérticeU.incideArestaReservaDeNível = falso
         \texttt{atualizeIncideArestaReservaDeNível(F, u)}
@@ -369,7 +400,7 @@ Dessa forma, podemos introduzir dois métodos que modificam o atributo \textit{i
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-\begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível(F, u)} \label{prog:incrementReserveEdgesCount-GD}}
+\begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível(F, L, u)} \label{prog:incrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -381,7 +412,7 @@ Dessa forma, podemos introduzir dois métodos que modificam o atributo \textit{i
         escapeinside={(*@}{@*)},
     ]
     vérticeU := F.nó[u, u]
-    \textbf{se} |LA(vérticeU)| = $1$ \textbf{então} 
+    \textbf{se} |L[u]| = $1$ \textbf{então} 
         \texttt{puxeParaRaiz(F, vérticeU)}
         vérticeU.incideArestaReservaDeNível = verdadeiro
         \texttt{atualizeIncideArestaReservaDeNível(F, u)}
@@ -389,7 +420,7 @@ Dessa forma, podemos introduzir dois métodos que modificam o atributo \textit{i
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-No Programa~\ref{prog:decrementReserveEdgesCount-GD}, atualizamos o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para falso quando ele não tiver mais vizinhos, visto que não haverá mais nenhuma aresta reserva incidente nele. A rotina auxiliar \texttt{puxeParaRaiz} serve apenas para propagar corretamente a atualização deste atributo nos outros nós que estão conectados com $u$. Como estamos usando uma ABBB, então puxar o vértice $u$ para a raiz consome tempo esperado O(lg$n$). Já a rotina auxiliar \texttt{atualizeIncideArestaReservaDeNível} no Programa~\ref{prog:updateReserveEdgesCount-GD} apenas atualiza o atributo \textit{arestasReservasDeNível}, consumindo tempo O($1$). Dessa forma, \texttt{decrementeArestasReservasDeNível} consome tempo esperado O(lg$n$).
+No Programa~\ref{prog:decrementReserveEdgesCount-GD}, atualizamos o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para falso quando ele não tiver mais vizinhos, visto que não haverá mais nenhuma aresta reserva incidente nele. O método \texttt{L[u]} retorna o conjunto de vizinhos do vértice $u$. A rotina auxiliar \texttt{puxeParaRaiz} serve apenas para propagar corretamente a atualização deste atributo nos outros nós que estão conectados com $u$. Como estamos usando uma ABBB, então puxar o vértice $u$ para a raiz consome tempo esperado O(lg$n$). Já a rotina auxiliar \texttt{atualizeIncideArestaReservaDeNível} no Programa~\ref{prog:updateReserveEdgesCount-GD} apenas atualiza o atributo \textit{arestasReservasDeNível}, consumindo tempo O($1$). Dessa forma, \texttt{decrementeArestasReservasDeNível} consome tempo esperado O(lg$n$).
 
 Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para verdadeiro quando adicionamos um vértice $v$ na lista de adjacência de $u$ (assumindo que $u$ não tinha nenhum vizinho antes), pois isso indica que $u$ é incidente à aresta reserva $uv$. Da mesma forma que o Programa~\ref{prog:decrementReserveEdgesCount-GD}, o método \texttt{incrementeArestasReservasDeNível} possui consumo de tempo esperado O(lg$n$).
 
@@ -407,10 +438,10 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
     vérticeU := F.nó[u, u]
     c := 0
     \textbf{se} vérticeU.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} vértice.filhoEsq.incideArestaReservaDeNível = verdadeiro \textbf{então}
+        \textbf{se} vérticeU.filhoEsq.incideArestaReservaDeNível = verdadeiro \textbf{então}
             c := c + 1
     \textbf{se} vérticeU.filhoDir $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} vértice.filhoDir.incideArestaReservaDeNível = verdadeiro \textbf{então}
+        \textbf{se} vérticeU.filhoDir.incideArestaReservaDeNível = verdadeiro \textbf{então}
             c := c + 1
     \textbf{se} vérticeU.incideArestaReservaDeNível = verdadeiro \textbf{então}
         c := c + 1
@@ -465,9 +496,9 @@ Se queremos inserir uma aresta $uv$ no grafo $G$, basta chamar o método \texttt
     ]
     G.nível[u, v] := $\left\lceil \lg n \right\rceil$
     \textbf{se} \texttt{conectadosFD(G.$F_{\left\lceil \lg n \right\rceil}$, u, v)} \textbf{então}
-        \texttt{adicioneLA(G.$R_{\left\lceil \lg n \right\rceil}$, u, v)}
-        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, u)}
-        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, v)}
+        \texttt{adicioneLA(G.$L_{\left\lceil \lg n \right\rceil}$, u, v)}
+        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, G.$L_{\left\lceil \lg n \right\rceil}$, u)}
+        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, G.$L_{\left\lceil \lg n \right\rceil}$, v)}
     \textbf{senão}
         \texttt{adicioneFD(G.$F_{\left\lceil \lg n \right\rceil}$, u, v)}
     devolva G
@@ -508,8 +539,8 @@ Nesse caso, portanto, precisamos também de uma rotina auxiliar \texttt{substitu
         \texttt{substituaAresta(G, i, u, v)}
     \textbf{senão}
         \texttt{removaLA(G.$L_i$, u, v)}
-        \texttt{decrementeArestasReservasDeNível(G.$F_i$, u)}
-        \texttt{decrementeArestasReservasDeNível(G.$F_i$, v)}
+        \texttt{decrementeArestasReservasDeNível(G.$F_i$, G.$L_i$, u)}
+        \texttt{decrementeArestasReservasDeNível(G.$F_i$, G.$L_i$, v)}
     devolva G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -539,4 +570,46 @@ Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la
 Já para o caso em que $uv$ é uma aresta da floresta, precisamos removê-la das florestas $F_j$, $F_{j+1}, \ldots, F_{\left\lceil \lg n \right\rceil}$, para $i \leq j \leq \left\lceil \lg n \right\rceil$, onde $i$ é o nível de $uv$. Essa remoção é feita na linha $5$ chamando a rotina \texttt{removaFD}. Essa remoção é necessária devido ao invariante~\ref{invariant2}, pois sabemos que $uv$ está somente nessas florestas. 
 
 O laço da linha $4$ no Programa~\ref{prog:removeGD} executa no pior dos casos O(lg$n$) vezes, e como \texttt{removaFD} consome tempo esperado O(lg$n$) também, então as linhas $4$ e $5$ do código juntas possuem um consumo de tempo esperado O(lg$^2n$). Como vimos que \texttt{removaLA} tem consumo esperado de tempo O($1$) e \texttt{decrementeArestasReservasDeNível} consome tempo esperado O(lg$n$), então o trecho do código que abrange as linhas 8 a 10 tem custo O(lg$n$). Por fim, veremos que a rotina auxiliar \texttt{substituaAresta} terá custo amortizado O(lg$^2n$), concluindo-se então que \texttt{removaGD} consome tempo esperado O(lg$^2n$).
+
+Veremos agora a rotina auxiliar mais complexa do Grafo Dinâmico, descrita no Programa~\ref{prog:replaceGD}.
+
+\begin{programruledcaption}{\texttt{substitua(G, i, u, v)} \label{prog:replaceGD}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+        $T_u$ := \texttt{árvore($F_j$.nó[u, u])}
+        $T_v$ := \texttt{árvore($F_j$.nó[v, v])}    
+        \textbf{se} |$T_u$| > |$T_v$| \textbf{então}
+            u $\leftrightarrow$ v
+            $T_u \leftrightarrow T_v$
+        \textbf{para} $xy$ $\in$ $T_u$ \textbf{e} G.nível[x, y] = j \textbf{faça}
+            G.nível[x, y] := j - 1
+            \texttt{adicioneFD($G.F_{j-1}$, x, y)}
+            arestaXY := $F_j$.nó[x, y]
+            \texttt{puxeParaRaiz(arestaXY)}
+            arestaXY.éNível := falso
+            \texttt{atualizeNívelDeAresta($F_j$, x, y)}
+        \textbf{para} $xy$ $\in G.L_j$ \textbf{e} x $\in T_u$ \textbf{faça} // procura aresta substituta que ligue $T_u$ e $T_v$
+            \texttt{removaLA($G.L_j$, x, y)} 
+            \textbf{se} $y \in T_v$ \textbf{então} // achamos uma aresta substituta
+                \textbf{para} k := j \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+                    \texttt{adicioneFD($G.F_k$, x, y)}
+                \textbf{devolva}
+            \textbf{senão}
+                G.nível[x, y] := j - 1
+                \texttt{adicioneLA($G.L_{j-1}$, x, y)}
+                \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.L_{j-1}$, x)}
+                \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.L_{j-1}$, y)}
+
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
 
