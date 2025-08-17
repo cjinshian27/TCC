@@ -347,7 +347,7 @@ Um nó pode representar tanto um vértice da forma $uu$ quanto uma aresta da for
 
 Já para o nó do tipo vértice $uu$, iremos armazenar um booleano chamado \textit{incideArestaReservaDeNível} que indica se $uu$ é uma das pontas de alguma aresta reserva com o booleano \textit{éNível} verdadeiro. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. Além disso, iremos manter um contador \textit{arestasReservasDeNível} para cada nó do tipo vértice, a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} como verdadeiro. 
 
-Dessa forma, iremos introduzir dois métodos que modificam o atributo \textit{incideArestaReservaDeNível}, nos Programas~\ref{prog:incrementIncidentToReserveEdge-GD} e \ref{prog:updateIncrementIncidentToReserveEdge-GD}.
+Dessa forma, podemos introduzir dois métodos que modificam o atributo \textit{incideArestaReservaDeNível}.
 
 \begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível(F, u)} \label{prog:decrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$.
