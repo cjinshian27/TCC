@@ -483,3 +483,60 @@ Como o consumo de tempo esperado de \texttt{conectadosFD}, \texttt{adicioneFD} e
 
 \subsection{Remoção de arestas}
 \label{sec:code-edge-removal}
+
+Como mencionado na Seção~\ref{sec:dynamic-graph-edge-removal}, encontramos duas situações ao removermos uma aresta $uv$ de um grafo $G$. A mais simples é quando a que queremos resolver é uma reserva, pois basta removermos da lista de adjacências de $G$. Entretanto, quando removemos uma aresta da floresta, podemos acabar quebrando ela em duas componentes conexas, $T_u$ e $T_v$, e precisamos procurar uma aresta reserva para substituir a removida, se existir. 
+
+Nesse caso, portanto, precisamos também de uma rotina auxiliar \texttt{substituaAresta} que irá procurar uma aresta reserva que substitua a removida. O Programa~\ref{prog:removeGD} ilustra o método \texttt{removaGD}.
+
+\begin{programruledcaption}{\texttt{removaGD(G, u, v)} \label{prog:removeGD}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
+    \textbf{Saída}: Devolve o grafo $G$ com a aresta $uv$ removida.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    i := G.nível[u, v]
+    nível[u, v] := NIL // marcamos uv como removida
+    \textbf{se} uv $\in$ G.$F_{\left\lceil \lg n \right\rceil}$ \textbf{então}
+        \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+            \texttt{removaFD(G.$F_j$, u, v)}
+        \texttt{substituaAresta(G, i, u, v)}
+    \textbf{senão}
+        \texttt{removaLA(G.$L_i$, u, v)}
+        \texttt{decrementeArestasReservasDeNível(G.$F_i$, u)}
+        \texttt{decrementeArestasReservasDeNível(G.$F_i$, v)}
+    devolva G
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Ao remover uma aresta $uv$ de nível $i$ de $G$, precisamos conferir se ela pertence à floresta $F_{\left\lceil \lg n \right\rceil}$ (linha $3$ do Programa~\ref{prog:removeGD}). Para isso, podemos utilizar um método auxiliar como em Programa~\ref{prog:existGD}, que usa um mapa hash \textbf{nó} para verificar se a entrada \{$u, v$\} existe e retornando um booleano em tempo esperado O($1$).
+
+\begin{programruledcaption}{\texttt{existeNoGrafo(F, u, v)} \label{prog:existGD}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
+    \textbf{Saída}: Devolve um booleano indicando se a aresta $uv$ existe em $G$.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    devolva F.nó[u, v] $\neq \emptyset$ 
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la de $L_i$ (linha $8$) em tempo esperado O($1$). Entretanto, quando removemos, pode ocorrer o caso em que $u$ (ou $v$) não seja mais incidente a alguma outra aresta reserva, por isso precisamos atualizar o contador \textit{arestasReservasDeNível} tanto de $u$ quanto de $v$ chamando a rotina auxiliar \texttt{decrementeArestasReservasDeNível}.
+
+Já para o caso em que $uv$ é uma aresta da floresta, precisamos removê-la das florestas $F_j$, $F_{j+1}, \ldots, F_{\left\lceil \lg n \right\rceil}$, para $i \leq j \leq \left\lceil \lg n \right\rceil$, onde $i$ é o nível de $uv$. Essa remoção é feita na linha $5$ chamando a rotina \texttt{removaFD}. Essa remoção é necessária devido ao invariante~\ref{invariant2}, pois sabemos que $uv$ está somente nessas florestas. 
+
+O laço da linha $4$ no Programa~\ref{prog:removeGD} executa no pior dos casos O(lg$n$) vezes, e como \texttt{removaFD} consome tempo esperado O(lg$n$) também, então as linhas $4$ e $5$ do código juntas possuem um consumo de tempo esperado O(lg$^2n$). Como vimos que \texttt{removaLA} tem consumo esperado de tempo O($1$) e \texttt{decrementeArestasReservasDeNível} consome tempo esperado O(lg$n$), então o trecho do código que abrange as linhas 8 a 10 tem custo O(lg$n$). Por fim, veremos que a rotina auxiliar \texttt{substituaAresta} terá custo amortizado O(lg$^2n$), concluindo-se então que \texttt{removaGD} consome tempo esperado O(lg$^2n$).
+
