@@ -343,7 +343,7 @@ Como ambos \texttt{novaFD(n)} e \texttt{novaLA(n)} consomem tempo O($n$), então
 
 Como adotamos a técnica de \textit{Euler tour trees} na implementação das nossas florestas dinâmicas, mencionada brevemente na Seção~\ref{sec:dynamic-graph-structure}, estamos utilizando uma estrutura chamada \textbf{nó} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
 
-Um nó pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Toda vez que uma aresta nova é inserida no grafo, ela vai ter este atributo definido como verdadeiro. O atributo só se torna falso quando rebaixamos o nível de uma aresta para uma unidade inferior, que será descrita em mais detalhes na Seção~\ref{sec:code-edge-removal}. 
+Um nó pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Toda vez que uma aresta nova é inserida no grafo, ela vai ter este atributo definido como verdadeiro. O atributo só se torna falso quando rebaixamos o nível de uma aresta para uma unidade inferior, caso que será descrito em mais detalhes na Seção~\ref{sec:code-edge-removal}. 
 
 Dessa forma, se $uv$ possui nível $2$, então em $F_2$ esse booleano será verdadeiro, e falso em outras $F_i$, $i \neq 2$. Além disso, iremos adicionar um contador \text{arestasDeNível} para cada nó do tipo aresta, a fim de calcular a quantidade de arestas em sua subárvore que tenham o booleano \textit{éNível} como verdadeiro. 
 
@@ -407,7 +407,7 @@ Note que tanto o Programa~\ref{prog:updateIsLevelCount-GD} quando o Programa~\re
 Com o Programa~\ref{prog:updateReserveEdgesCount-GD} presente, podemos introduzir dois métodos que modificam o atributo \textit{incideArestaReservaDeNível} e atualizam o contador \textit{arestasReservasDeNível}.
 
 \begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível(F, L, u)} \label{prog:decrementReserveEdgesCount-GD}}
-    \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$.
+    \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $L$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -430,7 +430,7 @@ Com o Programa~\ref{prog:updateReserveEdgesCount-GD} presente, podemos introduzi
 No Programa~\ref{prog:decrementReserveEdgesCount-GD}, atualizamos o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para falso quando ele não tiver mais vizinhos, visto que não haverá mais nenhuma aresta reserva incidente nele. A assinatura \texttt{L[u]} retorna o conjunto de vizinhos do vértice $u$. A rotina auxiliar \texttt{puxeParaRaiz} serve apenas para propagar corretamente a atualização deste atributo nos outros nós que estão conectados com $u$. Como estamos usando uma ABBB, então puxar o vértice $u$ para a raiz consome tempo esperado O(lg$n$). Já a rotina auxiliar \texttt{atualizeIncideArestaReservaDeNível} no Programa~\ref{prog:updateReserveEdgesCount-GD} apenas atualiza o atributo \textit{arestasReservasDeNível}, consumindo tempo O($1$). Dessa forma, \texttt{decrementeArestasReservasDeNível} consome tempo esperado O(lg$n$).
 
 \begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível(F, L, u)} \label{prog:incrementReserveEdgesCount-GD}}
-    \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$.
+    \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $L$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -614,7 +614,9 @@ Veremos agora a rotina auxiliar mais complexa do Grafo Dinâmico, descrita no Pr
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Para explicar o Programa~\ref{prog:replaceGD}, iremos usar imagens para ilustrar o que está acontecendo em cada trecho do código. 
+Para explicar o Programa~\ref{prog:replaceGD}, iremos usar imagens para ilustrar o que está acontecendo em cada trecho do código. Como já comentado na Seção~\ref{sec:dynamic-graph-edge-removal}, ao removermos uma única aresta $uv$ que conecta $T_u$ e $T_v$, que contêm, respectivamente, o vértice $u$ e $v$, quebramos a floresta em duas componentes $T_u$ e $T_v$. Na Figura~\ref{fig:example-removal-part1}, temos um exemplo onde $uv$ é removida da floresta de nível $i$, separando-a em duas árvores $T_u$ e $T_v$. Denotando $|T|$ como o número de vértices de uma árvore $T$, podemos, sem perda de generalidade, assumir que $|T_u| < |T_v|$.  
+
+Nesse momento, estamos abrangendo as linhas $2$ a $6$ do Programa\ref{prog:replaceGD}. 
 
 \newpage
 
@@ -661,13 +663,14 @@ Para explicar o Programa~\ref{prog:replaceGD}, iremos usar imagens para ilustrar
         \draw[edge] (v) -- (d) node[midway, below] {};
         \draw[edge] (v) -- (f) node[midway, below] {};
         \draw[edge] (v) -- (e) node[midway, below] {};
-        \draw[removed] (u) -- (v) node[midway, below] {uv};
+        \draw[removed] (u) -- (v) node[midway, above] {uv};
         \draw[edge] (f) -- (g) node[midway, below] {};
         \draw[edge] (g) -- (h) node[midway, below] {};
+        % reserve edges (normal red edges)
+
         \draw[reserve] (a) -- (d) node[midway, below] {};
         \draw[reserve] (c) -- (v) node[midway, below] {};
-
-        % reserve edges (normal red edges)
+        \draw[reserve] (a) -- (c) node[midway, below] {};
         \draw[reserve] (b) -- (u) node[midway, below] {};
         \draw[reserve] (c) -- (u) node[midway, below] {};
         \draw[reserve] (d) -- (f) node[midway, below] {};
