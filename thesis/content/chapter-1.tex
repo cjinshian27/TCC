@@ -566,7 +566,7 @@ Ao remover uma aresta $uv$ de nível $i$ de $G$, precisamos conferir se ela pert
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la de $L_i$ (linha $8$) em tempo esperado O($1$). Entretanto, quando removemos, pode ocorrer o caso em que $u$ (ou $v$) não seja mais incidente a alguma outra aresta reserva, por isso precisamos atualizar o contador \textit{arestasReservasDeNível} tanto de $u$ quanto de $v$ chamando a rotina auxiliar \texttt{decrementeArestasReservasDeNível}.
+Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la de $L_i$ (linha $8$ do Programa~\ref{prog:removeGD}) em tempo esperado O($1$). Entretanto, quando removemos uma aresta $uv$, pode ocorrer o caso em que $u$ (ou $v$) não seja mais incidente a alguma outra aresta reserva, por isso precisamos atualizar o contador \textit{arestasReservasDeNível} tanto de $u$ quanto de $v$ chamando a rotina auxiliar \texttt{decrementeArestasReservasDeNível} do Programa~\ref{prog:decrementReserveEdgesCount-GD}.
 
 Já para o caso em que $uv$ é uma aresta da floresta, precisamos removê-la das florestas $F_j$, $F_{j+1}, \ldots, F_{\left\lceil \lg n \right\rceil}$, para $i \leq j \leq \left\lceil \lg n \right\rceil$, onde $i$ é o nível de $uv$. Essa remoção é feita na linha $5$ chamando a rotina \texttt{removaFD}. Essa remoção é necessária devido ao invariante~\ref{invariant2}, pois sabemos que $uv$ está somente nessas florestas. 
 
@@ -591,7 +591,7 @@ Veremos agora a rotina auxiliar mais complexa do Grafo Dinâmico, descrita no Pr
         \textbf{se} |$T_u$| > |$T_v$| \textbf{então}
             u $\leftrightarrow$ v
             $T_u \leftrightarrow T_v$
-        \textbf{para} $xy$ $\in$ $T_u$ \textbf{e} G.nível[x, y] = j \textbf{faça}
+        \textbf{para} $xy$ $\in$ $T_u$ \textbf{e} G.nível[x, y] = j \textbf{faça} // rebaixa o nível das arestas de $T_u$ para $j-1$
             G.nível[x, y] := j - 1
             \texttt{adicioneFD($G.F_{j-1}$, x, y)}
             arestaXY := $F_j$.nó[x, y]
@@ -600,7 +600,7 @@ Veremos agora a rotina auxiliar mais complexa do Grafo Dinâmico, descrita no Pr
             \texttt{atualizeNívelDeAresta($F_j$, x, y)}
         \textbf{para} $xy$ $\in G.L_j$ \textbf{e} x $\in T_u$ \textbf{faça} // procura aresta substituta que ligue $T_u$ e $T_v$
             \texttt{removaLA($G.L_j$, x, y)} 
-            \textbf{se} $y \in T_v$ \textbf{então} // achamos uma aresta substituta
+            \textbf{se} $y \in T_v$ \textbf{então} // achamos uma aresta substituta $xy$
                 \textbf{para} k := j \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
                     \texttt{adicioneFD($G.F_k$, x, y)}
                 \textbf{devolva}
@@ -613,4 +613,106 @@ Veremos agora a rotina auxiliar mais complexa do Grafo Dinâmico, descrita no Pr
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
+
+Para explicar o Programa~\ref{prog:replaceGD}, iremos usar imagens para ilustrar o que está acontecendo em cada trecho do código. 
+
+\newpage
+
+\begin{figure}
+    \centering
+
+    \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $i$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {u};
+        \node[node] (a) at (-3,4) {a};
+        \node[node] (b) at (-5,2) {b};
+        \node[node] (c) at (-3,0) {c};
+        \node[node] (v) at (2,2) {v};
+        \node[node] (d) at (3,3.7) {d};
+        \node[node] (e) at (3,0.3) {e};
+        \node[node] (f) at (5,0.3) {f};
+        \node[node] (g) at (6, 2) {g};
+        \node[node] (h) at (5, 3.7) {h};
+        
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.6cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[removed] (u) -- (v) node[midway, below] {uv};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
+        \draw[reserve] (a) -- (d) node[midway, below] {};
+        \draw[reserve] (c) -- (v) node[midway, below] {};
+
+        % reserve edges (normal red edges)
+        \draw[reserve] (b) -- (u) node[midway, below] {};
+        \draw[reserve] (c) -- (u) node[midway, below] {};
+        \draw[reserve] (d) -- (f) node[midway, below] {};
+        \draw[reserve] (d) -- (h) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \vspace{1cm}
+        \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $i - 1$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+            [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {u};
+            \node[node] (a) at (-3,4) {a};
+            \node[node] (b) at (-5,2) {b};
+            \node[node] (c) at (-3,0) {c};
+            \node[node] (v) at (2,2) {v};
+            \node[node] (d) at (3,3.7) {d};
+            \node[node] (e) at (3,0.3) {e};
+            \node[node] (f) at (5,0.3) {f};
+            \node[node] (g) at (6, 2) {g};
+            \node[node] (h) at (5, 3.7) {h};
+            
+            
+            % Dotted circles for T_u and T_v
+            \draw[dotted, thick, gray] (-3,2) circle (2.6cm);
+            \draw[dotted, thick, gray] (4,2) circle (2.6cm);  
+            
+            % Labels for the circles
+            \node at (-3,-1.1) {$T_u$};
+            \node at (4,-1.1) {$T_v$};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \caption{As arestas pretas são da floresta maximal do grafo, enquanto as vermelhas são reservas. A aresta $uv$ tracejada está prestes a ser removida. A floresta de cima é de nível i, enquanto a de baixo é de nível i - 1.}
+    \vspace{-1cm}
+    \label{fig:example-removal-part1}
+\end{figure}
 
