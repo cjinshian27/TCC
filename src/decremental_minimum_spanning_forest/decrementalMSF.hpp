@@ -131,7 +131,7 @@ class DecrementalMSF{
 				this->adjacencyLists[i]->remove(nodeXX, nodeYY);
 
 				/*
-				if y is not incident to any other node of level i, then
+				if y is not incident to any other edge of level i, then
 				decrease its reserve node count. Otherwise, we splay y
 				to update their min weight. 
 				*/
@@ -143,7 +143,7 @@ class DecrementalMSF{
 				}
 				
 				/*
-				if x is not incident to any other node of level i, then
+				if x is not incident to any other edge of level i, then
 				decrease its reserve node count. Otherwise, we splay x 
 				to update their min weight count. 
 				*/
