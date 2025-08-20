@@ -447,12 +447,12 @@ Como mencionado na Seção~\ref{sec:dynamic-graph-edge-removal}, encontramos dua
     nível[u, v] := NIL // marcamos uv como removida
     \textbf{se} uv $\in$ G.$F_{\left\lceil \lg n \right\rceil}$ \textbf{então}
         \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
-            \texttt{removaFD(G.$F_j$, u, v)}
+            \texttt{removaFD($G.F_j$, u, v)}
         \texttt{substituaAresta(G, i, u, v)}
     \textbf{senão}
-        \texttt{removaLA(G.$R_i$, u, v)}
-        \texttt{decrementeArestasReservasDeNível(G.$F_i$, G.$R_i$, u)}
-        \texttt{decrementeArestasReservasDeNível(G.$F_i$, G.$R_i$, v)}
+        \texttt{removaLA($G.R_i$, u, v)}
+        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, u)}
+        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, v)}
     devolva G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
