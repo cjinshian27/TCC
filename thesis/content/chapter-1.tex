@@ -47,112 +47,20 @@ Assim, a consulta \texttt{conectadosGD} aplicada ao grafo $G$ pode ser respondid
 \section{Adição de arestas no grafo dinâmico}
 \label{sec:dynamic-graph-edge-addition}
 
-Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada ao \texttt{conectadosGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserido a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
+Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada ao \texttt{conectadosGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserida a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
 
 Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
 
 \begin{itemize}
     \item \texttt{\textbf{listaDeAdjacências(L, n)}}: constrói e devolve um grafo $L$ contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
-    \item \texttt{\textbf{adicioneLA(L, u, v)}}: adiciona $u$ na lista de adjacências de v em $L$ e vice-versa;
+    \item \texttt{\textbf{adicioneLA(L, u, v)}}: adiciona $u$ na lista de adjacências de $v$ em $L$ e vice-versa;
     \item \texttt{\textbf{removaLA(L, u, v)}}: remove $u$ da lista de adjacências de $v$ em $L$ e vice-versa.
 \end{itemize} 
 
-A nossa implementação \cite{chung2025} para lista de adjancências possui um custo O($n$) ao acionar o construtor \texttt{listaDeAdjacências}, e para 
-as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos o tempo esperado O($1$) visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjancência de $u$.
+A nossa implementação \cite{chung2025} para listas de adjancências possui um custo O($n$) ao acionar o construtor \texttt{listaDeAdjacências}, e para 
+as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperado O($1$) visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjancências de $u$.
 
-Como a inserção de arestas (\texttt{adicioneFA}) em uma floresta dinâmica com $n$ vértices possui uma complexidade de tempo esperado O(lg$n$), então temos que \texttt{adicioneGD} também terá o seu custo esperado de tempo O(lg$n$). 
-
-O objetivo de guardar arestas reservas em nosso grafo é simples. Seja o grafo $G$ com $V = \{a, b, c, d, e, f, g\}$ e suas respectivas arestas, como ilustrado na Figura~\ref{fig:graph_without_reserve_edges}. Temos dois subgrafos $G_1$ e $G_2$ em nosso grafo $G$. O vértice $a$ está em $G_1$ e $e$ está em $G_2$. Se $G_1$ e $G_2$ são conectados por uma única aresta $ae$, a remoção dela acarretaria em duas componentes separadas. Então chamar \texttt{conectados(G, a, e)} após a remoção de $ae$ receberíamos falso como resposta. 
-
-\begin{figure}
-    \centering
-    \begin{tikzpicture}
-        [node/.style={circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, very thick, dashed},
-        removed/.style={black, thick, dashed}]
-
-        % Vertices in a circular arrangement
-        \node[node] (a) at (-1,2) {a};
-        \node[node] (b) at (-3,4) {b};
-        \node[node] (c) at (-5,2) {c};
-        \node[node] (d) at (-3,0) {d};
-        \node[node] (e) at (2,2) {e};
-        \node[node] (f) at (4,4) {f};
-        \node[node] (g) at (4,0) {g};
-        
-         % Dotted circles for T_u and T_v
-        \draw[dotted, thick, gray] (-3,2) circle (2.6cm); % T_u circle around {a,b,c,d}
-        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  % T_v circle around {e,f,g}
-        
-        % Labels for the circles
-        \node at (-3,-1.1) {$G_1$};
-        \node at (4,-1.1) {$G_2$};
-
-
-        % tree edges (normal black edges)
-        \draw[edge] (a) -- (b) node[midway, below] {};
-        \draw[edge] (b) -- (c) node[midway, below] {};
-        \draw[edge] (a) -- (d) node[midway, below] {};
-        \draw[edge] (e) -- (f) node[midway, below] {};
-        \draw[edge] (e) -- (f) node[midway, below] {};
-        \draw[edge] (e) -- (g) node[midway, below] {};
-        \draw[removed] (a) -- (e) node[midway, below] {ae};
-
-        % MST edges ( in red)
-        %\draw[reserve] (d) -- (g) node[midway, below] {dg};
-        
-    \end{tikzpicture}
-    \caption{Um grafo com sete vértices e sem nenhuma aresta reserva. O subgrafo $G_1$ contém os vértices $a$, $b$, $c$ e $d$, enquanto $G_2$ contém os vértices $e$, $f$ e $g$. A aresta tracejada $ae$ está prestes a ser removida.}
-    \label{fig:graph_without_reserve_edges}
-\end{figure}
-
-Agora, suponha que $G_1$ e $G_2$ eram componentes conexas separadas, e foram  conectadas pela aresta $ae$, tornando-se uma única componente conexa, como mostra a Figura~\ref{fig:graph_with_reserve_edges}. Ao chamarmos \texttt{adiciona(G, d, g)}, guardaríamos a aresta $dg$ como reserva. Se posteriormente removermos $ae$, note que os subgrafos $G_1$ e $G_2$ estariam em duas componentes separadas. Assim, se não tivéssemos armazenado $dg$, então a consulta \texttt{conectados(G, a, e)} devolveria falso, o que estaria incorreto visto que a aresta $dg$ existe de fato no grafo. Dessa forma, a aresta reserva possui a função de substituir a aresta removida, como veremos adiante, mantendo a conexão entre $G_1$ e $G_2$.
-
-\begin{figure}
-    \centering
-    \begin{tikzpicture}
-        [node/.style={circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}]
-
-        % Vertices in a circular arrangement
-        \node[node] (a) at (-1,2) {a};
-        \node[node] (b) at (-3,4) {b};
-        \node[node] (c) at (-5,2) {c};
-        \node[node] (d) at (-3,0) {d};
-        \node[node] (e) at (2,2) {e};
-        \node[node] (f) at (4,4) {f};
-        \node[node] (g) at (4,0) {g};
-        
-         % Dotted circles for T_u and T_v
-        \draw[dotted, thick, gray] (-3,2) circle (2.6cm); % T_u circle around {a,b,c,d}
-        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  % T_v circle around {e,f,g}
-        
-        % Labels for the circles
-        \node at (-3,-1.1) {$G_1$};
-        \node at (4,-1.1) {$G_2$};
-
-
-        % tree edges (normal black edges)
-        \draw[edge] (a) -- (b) node[midway, below] {};
-        \draw[edge] (b) -- (c) node[midway, below] {};
-        \draw[edge] (a) -- (d) node[midway, below] {};
-        \draw[edge] (e) -- (f) node[midway, below] {};
-        \draw[edge] (e) -- (f) node[midway, below] {};
-        \draw[edge] (e) -- (g) node[midway, below] {};
-        \draw[edge] (a) -- (e) node[midway, below] {ae};
-
-        % MST edges ( in red)
-        \draw[reserve] (d) -- (g) node[midway, below] {dg};
-        
-    \end{tikzpicture}
-    \caption{Um grafo com sete vértices. O subgrafo $G_1$ contém os vértices $a$, $b$, $c$ e $d$, enquanto $G_2$ contém os vértices $e$, $f$ e $g$. A aresta vermelha $dg$ é uma aresta reserva do grafo.}
-    \label{fig:graph_with_reserve_edges}
-\end{figure}
-
-Note que não podemos simplesmente adicionar $dg$ como aresta da floresta maximal de $G$ em vez de guardar nas listas de adjacências. Como por definição uma floresta não pode conter ciclos, adicionar $dg$ dada a existência da aresta $ae$ acarretaria na formação de um ciclo contendo essas duas arestas, o que violaria a estrutura do algoritmo, já que queremos manter árvores binárias de busca balanceadas para garantir a complexidade de tempo logarítmica em suas rotinas. Como um grafo pode conter ciclos, guardar a aresta como reserva é uma forma de manter o grafo correto e o algoritmo eficiente. 
+Como a inserção de arestas (\texttt{adicioneFA}) em uma floresta dinâmica com $n$ vértices consome tempo O(lg$n$) (armotizado, na nossa implementação), então temos que \texttt{adicioneGD} também terá o seu custo amortizado de tempo O(lg$n$). 
 
 \section{Remoção de arestas no grafo dinâmico}
 \label{sec:dynamic-graph-edge-removal}
