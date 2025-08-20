@@ -33,7 +33,7 @@ Nesse sentido, o resultado é uma implementação em que \texttt{florestaDinâmi
 \section{Estrutura do grafo dinâmico}
 \label{sec:dynamic-graph-structure}
 
-Para implementar o grafo dinâmico, resume-se à construção da seguinte biblioteca de forma eficiente:
+Implementar o grafo dinâmico resume-se à construção da seguinte biblioteca de forma eficiente:
 
 \begin{itemize}
     \item \texttt{\textbf{grafoDinâmico(G, n)}}: contrói e devolve um grafo dinâmico $G$ com $n$ vértices isolados;
@@ -41,9 +41,8 @@ Para implementar o grafo dinâmico, resume-se à construção da seguinte biblio
     \item \texttt{\textbf{adicioneGD(G, u, v)}}: adiciona a aresta $uv$ no grafo $G$;
     \item \texttt{\textbf{removaGD(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
 \end{itemize} 
-
-Nossa implementação encapsula a complexidade de manutenção de $\left\lceil \lg n \right\rceil$ florestas dinâmicas em uma abstração do grafo dinâmico. 
-Assim, a consulta \texttt{conectadosGD} aplicada ao grafo $G$ significa fazer a mesma consulta para alguma floresta maximal $F$ de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\left\lceil \lg n \right\rceil$ florestas de vértices isolados.
+ 
+Assim, a consulta \texttt{conectadosGD} aplicada ao grafo $G$ pode ser respondida fazendo-se a mesma consulta para a floresta $F_{\left\lceil \lg n \right\rceil}$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\left\lceil \lg n \right\rceil$ florestas de vértices isolados.
 
 \section{Adição de arestas no grafo dinâmico}
 \label{sec:dynamic-graph-edge-addition}
@@ -279,7 +278,7 @@ Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é 
 
 Se $G$ é um grafo e $\emptyset \neq X \subseteq V(G)$, então o subgrafo de $G$ \textbf{induzido} ou \textbf{gerado} por $X$ é subgrafo $H$ de $G$ de modo que $V(H) = X$ e $E(H)$ é exatamente o conjunto de arestas de $G$ que têm ambos os extremos em $X$. Assim, podemos denotar $H$ como $G[X]$.
 
-Sendo assim, podemos definir um grafo $G_i$, que é o grafo induzido pelas arestas de nível menor ou igual a $i$. Para cada nível $i$, iremos manter uma floresta maximal $F_i$ de $G_i$ e o grafo $L_i$, mantido como listas de adjacências que guardam apenas arestas reservas de nível $i$. Dessa forma, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{l_{max}} = G$, onde $l_{max} =  \left\lceil \lg n \right\rceil$, para um grafo de $n$ vértices. Consequentemente, temos que $F_{l_{max}}$ é uma floresta maximal de $G$. 
+Sendo assim, podemos definir um grafo $G_i$, que é o grafo induzido pelas arestas de nível menor ou igual a $i$. Para cada nível $i$, iremos manter uma floresta maximal $F_i$ de $G_i$ e o grafo $R_i$, mantido como listas de adjacências que guardam apenas arestas reservas de nível $i$. Dessa forma, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{l_{max}} = G$, onde $l_{max} =  \left\lceil \lg n \right\rceil$, para um grafo de $n$ vértices. Consequentemente, temos que $F_{l_{max}}$ é uma floresta maximal de $G$. 
 
 Assim, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
 
@@ -291,7 +290,7 @@ Assim, podemos estabelecer algumas invariantes, que são mantidas ao longo das m
     \item \label{invariant3} Cada floresta $F_i$ possui no máximo $2^i$ vértices.
 \end{enumerate}
 
-O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $L_i$. Caso não a encontremos, passamos a procurar nas listas de adjacência $L_{i+1}, L_{i+2}, \ldots, L_{ \left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $L_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $L_j$ para um nível inferior $j-1$, caso $j > 0$. Tudo isso será retomado na seção seguinte, onde iremos detalhar mais nas implementações dos métodos principais da biblioteca do grafo dinâmico. 
+O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, passamos a procurar nas listas de adjacência $R_{i+1}, R_{i+2}, \ldots, R_{ \left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ para um nível inferior $j-1$, caso $j > 0$. Tudo isso será retomado na seção seguinte, onde iremos detalhar mais nas implementações dos métodos principais da biblioteca do grafo dinâmico. 
 
 \section{Implementação do grafo dinâmico}
 \label{sec:dynamic-graph-implementation}
@@ -299,7 +298,7 @@ O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é par
 \subsection{Construtor}
 \label{sec:code-constructor}
 
-Para implementar um grafo dinâmico, chamamos \texttt{novoGD(n)} para inicializar cada $F_i$ e $L_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{novaFD(n)} e \texttt{novaLA(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacência com $n$ vértices isolados para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $L_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
+Para implementar um grafo dinâmico, chamamos \texttt{novoGD(n)} para inicializar cada $F_i$ e $R_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{novaFD(n)} e \texttt{novaLA(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacência com $n$ vértices isolados para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $R_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
 
 Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado O($1$). Assim, este mapa usa como chave os valores das pontas da aresta ($u$ e $v$) e retornam o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuir a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
@@ -328,7 +327,7 @@ Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}
     ]
     \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
         G.$F_i$ := \texttt{novaFD(n)}
-        G.$L_i$ := \texttt{novaLA(n)}
+        G.$R_i$ := \texttt{novaLA(n)}
     G.nível := \texttt{novoMapaHash(n)}
     devolva G
     \end{lstlisting}
@@ -480,7 +479,7 @@ O consumo de tempo esperado de \texttt{conectadosGD} é O(lg$n$), visto que ele 
 \subsection{Adição de arestas}
 \label{sec:code-edge-addition}
 
-Se queremos inserir uma aresta $uv$ no grafo $G$, basta chamar o método \texttt{adicioneGD(G, u, v)}. Entretanto, antes de adicionar na floresta maximal de $G$, chamamos antes a rotina \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} para verificar se $u$ e $v$ já estão conectados. Se sim, então $uv$ será armazenada como aresta reserva em $L_{\left\lceil \lg n \right\rceil}$. Se os vértices $u$ e $v$ não estiverem conectados, então adicionamos a aresta $uv$ em $F_{\left\lceil \lg n \right\rceil}$. O Programa~\ref{prog:addGD} ilustra a rotina \texttt{adicioneGD}.
+Se queremos inserir uma aresta $uv$ no grafo $G$, basta chamar o método \texttt{adicioneGD(G, u, v)}. Entretanto, antes de adicionar na floresta maximal de $G$, chamamos antes a rotina \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} para verificar se $u$ e $v$ já estão conectados. Se sim, então $uv$ será armazenada como aresta reserva em $R_{\left\lceil \lg n \right\rceil}$. Se os vértices $u$ e $v$ não estiverem conectados, então adicionamos a aresta $uv$ em $F_{\left\lceil \lg n \right\rceil}$. O Programa~\ref{prog:addGD} ilustra a rotina \texttt{adicioneGD}.
 
 \begin{programruledcaption}{\texttt{adicioneGD(G, u, v)} \label{prog:addGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
@@ -496,9 +495,9 @@ Se queremos inserir uma aresta $uv$ no grafo $G$, basta chamar o método \texttt
     ]
     G.nível[u, v] := $\left\lceil \lg n \right\rceil$
     \textbf{se} \texttt{conectadosFD(G.$F_{\left\lceil \lg n \right\rceil}$, u, v)} \textbf{então}
-        \texttt{adicioneLA(G.$L_{\left\lceil \lg n \right\rceil}$, u, v)}
-        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, G.$L_{\left\lceil \lg n \right\rceil}$, u)}
-        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, G.$L_{\left\lceil \lg n \right\rceil}$, v)}
+        \texttt{adicioneLA(G.$R_{\left\lceil \lg n \right\rceil}$, u, v)}
+        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, G.$R_{\left\lceil \lg n \right\rceil}$, u)}
+        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, G.$R_{\left\lceil \lg n \right\rceil}$, v)}
     \textbf{senão}
         \texttt{adicioneFD(G.$F_{\left\lceil \lg n \right\rceil}$, u, v)}
     devolva G
@@ -538,9 +537,9 @@ Nesse caso, portanto, precisamos também de uma rotina auxiliar \texttt{substitu
             \texttt{removaFD(G.$F_j$, u, v)}
         \texttt{substituaAresta(G, i, u, v)}
     \textbf{senão}
-        \texttt{removaLA(G.$L_i$, u, v)}
-        \texttt{decrementeArestasReservasDeNível(G.$F_i$, G.$L_i$, u)}
-        \texttt{decrementeArestasReservasDeNível(G.$F_i$, G.$L_i$, v)}
+        \texttt{removaLA(G.$R_i$, u, v)}
+        \texttt{decrementeArestasReservasDeNível(G.$F_i$, G.$R_i$, u)}
+        \texttt{decrementeArestasReservasDeNível(G.$F_i$, G.$R_i$, v)}
     devolva G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -565,7 +564,7 @@ Ao remover uma aresta $uv$ de nível $i$ de $G$, precisamos conferir se ela pert
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la de $L_i$ (linha $8$ do Programa~\ref{prog:removeGD}) em tempo esperado O($1$). Entretanto, quando removemos uma aresta $uv$, pode ocorrer o caso em que $u$ (ou $v$) não seja mais incidente a alguma outra aresta reserva, por isso precisamos atualizar o contador \textit{arestasReservasDeNível} tanto de $u$ quanto de $v$ chamando a rotina auxiliar \texttt{decrementeArestasReservasDeNível} do Programa~\ref{prog:decrementReserveEdgesCount-GD}.
+Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la de $R_i$ (linha $8$ do Programa~\ref{prog:removeGD}) em tempo esperado O($1$). Entretanto, quando removemos uma aresta $uv$, pode ocorrer o caso em que $u$ (ou $v$) não seja mais incidente a alguma outra aresta reserva, por isso precisamos atualizar o contador \textit{arestasReservasDeNível} tanto de $u$ quanto de $v$ chamando a rotina auxiliar \texttt{decrementeArestasReservasDeNível} do Programa~\ref{prog:decrementReserveEdgesCount-GD}.
 
 Já para o caso em que $uv$ é uma aresta da floresta, precisamos removê-la das florestas $F_j$, $F_{j+1}, \ldots, F_{\left\lceil \lg n \right\rceil}$, para $i \leq j \leq \left\lceil \lg n \right\rceil$, onde $i$ é o nível de $uv$. Essa remoção é feita na linha $5$ chamando a rotina \texttt{removaFD}. Essa remoção é necessária devido ao invariante~\ref{invariant2}, pois sabemos que $uv$ está somente nessas florestas. 
 
@@ -597,17 +596,17 @@ Veremos agora a rotina auxiliar mais complexa do Grafo Dinâmico, descrita no Pr
             \texttt{puxeParaRaiz(arestaXY)}
             arestaXY.éNível := falso
             \texttt{atualizeNívelDeAresta($F_j$, x, y)}
-        \textbf{para} $xy$ $\in G.L_j$ \textbf{e} x $\in T_u$ \textbf{faça} // procura aresta substituta que ligue $T_u$ e $T_v$
-            \texttt{removaLA($G.L_j$, x, y)} 
+        \textbf{para} $xy$ $\in G.R_j$ \textbf{e} x $\in T_u$ \textbf{faça} // procura aresta substituta que ligue $T_u$ e $T_v$
+            \texttt{removaLA($G.R_j$, x, y)} 
             \textbf{se} $y \in T_v$ \textbf{então} // achamos uma aresta substituta $xy$
                 \textbf{para} k := j \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
                     \texttt{adicioneFD($G.F_k$, x, y)}
                 \textbf{devolva}
             \textbf{senão}
                 G.nível[x, y] := j - 1
-                \texttt{adicioneLA($G.L_{j-1}$, x, y)}
-                \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.L_{j-1}$, x)}
-                \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.L_{j-1}$, y)}
+                \texttt{adicioneLA($G.R_{j-1}$, x, y)}
+                \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, x)}
+                \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, y)}
 
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
