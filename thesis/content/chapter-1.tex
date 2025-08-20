@@ -111,6 +111,8 @@ Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é
         \draw[edge] (g) -- (h) node[midway, below] {};
 
         % reserve edges (normal red edges)
+        \draw[reserve] (a) -- (d) node[midway, below] {};
+        \draw[reserve] (c) -- (v) node[midway, below] {};
         \draw[reserve] (b) -- (u) node[midway, below] {};
         \draw[reserve] (c) -- (u) node[midway, below] {};
         \draw[reserve] (d) -- (f) node[midway, below] {};
@@ -120,8 +122,6 @@ Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é
     \caption{Um grafo com 10 vértices. As arestas pretas são da floresta maximal $F_{\left\lceil \lg n \right\rceil}$ do grafo, enquanto as vermelhas são arestas reservas.}
     \label{fig:graph_with_Tu_and_Tv}
 \end{figure}
-
-\newpage
 
 Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em tempo amortizado O(lg$^2n$).
 
@@ -359,7 +359,7 @@ Por fim, o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo
 
 Como essas rotinas auxiliares não fazem nenhuma modificação na floresta maximal do grafo, então todas as invariantes não mantidas.
 
-\subsection{Teste de conexidade}
+\subsection{Teste de conexidade entre dois vértices}
 \label{sec:code-connectivity-test}
 
 Como mostrado na Seção~\ref{sec:dynamic-graph-structure}, ao chamarmos o método \texttt{conectadosGD} estamos na verdade testando a conexidade na floresta maximal $F_{\left\lceil \lg n \right\rceil}$ de $G$, ou seja, estamos chamando a rotina \texttt{conectadosFD}. O invariante \ref{invariant1} garante que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$, e, portanto, consultas em 
