@@ -28,6 +28,8 @@ O problema da conexidade em florestas dinâmicas pode ser considerado uma simpli
 
 A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que é de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. Isso faz com que o custo de uma sequência de $m$ operações (inserção, remoção ou busca) em uma árvore \textit{splay} com $n$ nós seja O($m$lg$n$), ou seja, o custo amortizado por operação é $O(\lg n)$. Como também já existe bastante literatura sobre árvores \textit{splay}, e seu funcionamento interno não afeta a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
 
+Nesse sentido, o resultado é uma implementação em que \texttt{florestaDinâmica(F, n)} tem custo $\Theta$($n$) e os demais métodos da biblioteca têm custo amortizado O(lg$n$).
+
 \section{Estrutura do grafo dinâmico}
 \label{sec:dynamic-graph-structure}
 
