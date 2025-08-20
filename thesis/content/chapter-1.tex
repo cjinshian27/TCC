@@ -198,7 +198,7 @@ Assim, podemos estabelecer algumas invariantes, que são mantidas ao longo das m
     \item \label{invariant3} Cada floresta $F_i$ possui no máximo $2^i$ vértices.
 \end{enumerate}
 
-O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, passamos a procurar nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
+O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, procuramos nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
 
 Além disso, é fácil ver que a implementação de \texttt{conectadosGD(G, u, v)} é simplesmente o acionamento de \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)}, e portanto tem custo (na nossa implementação, amortizado) O(lg $n$). A implementação de \texttt{adicioneGD(G,u,v)} também é simples: basta acionar o \texttt{conectadosGD(G, u, v)} para decidir se a nova aresta $uv$ é uma aresta reserva ou não e, dependendo disso, incluir $uv$ em $R_{\left\lceil \lg n \right\rceil}$ ou em $F_{\left\lceil \lg n \right\rceil}$. 
 
@@ -339,6 +339,7 @@ Com o Programa~\ref{prog:updateReserveEdgesCount-GD} presente, podemos introduzi
 
 No Programa~\ref{prog:decrementReserveEdgesCount-GD}, atualizamos o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para falso quando ele não tiver mais vizinhos, visto que não haverá mais nenhuma aresta reserva incidente nele. A assinatura \texttt{L[u]} retorna o conjunto de vizinhos do vértice $u$. A rotina auxiliar \texttt{puxeParaRaiz} serve apenas para propagar corretamente a atualização deste atributo nos outros nós que estão conectados com $u$. Como estamos usando uma \textit{splay tree}, então puxar o vértice $u$ para a raiz consome tempo amortizado O(lg$n$). Já a rotina auxiliar \texttt{atualizeIncideArestaReservaDeNível} no Programa~\ref{prog:updateReserveEdgesCount-GD} apenas atualiza o atributo \textit{arestasReservasDeNível}, consumindo tempo O($1$). Dessa forma, \texttt{decrementeArestasReservasDeNível} consome tempo amortizado O(lg$n$).
 
+\newpage
 \begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível(F, L, u)} \label{prog:incrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $L$.
     \vspace{-0.5\baselineskip}
@@ -426,9 +427,7 @@ Como o consumo de tempo de \texttt{conectadosFD}, \texttt{adicioneFD} e de \text
 \subsection{Remoção de arestas}
 \label{sec:code-edge-removal}
 
-Como mencionado na Seção~\ref{sec:dynamic-graph-edge-removal}, encontramos duas situações ao removermos uma aresta $uv$ de um grafo $G$. A mais simples é quando a que queremos resolver é uma reserva, pois basta removermos da lista de adjacências de $G$. Entretanto, quando removemos uma aresta da floresta, podemos acabar quebrando ela em duas componentes conexas, $T_u$ e $T_v$, e precisamos procurar uma aresta reserva para substituir a removida, se existir. 
-
-Nesse caso, portanto, precisamos também de uma rotina auxiliar \texttt{substituaAresta} que irá procurar uma aresta reserva que substitua a removida. O Programa~\ref{prog:removeGD} ilustra o método \texttt{removaGD}.
+Como mencionado na Seção~\ref{sec:dynamic-graph-edge-removal}, encontramos duas situações ao removermos uma aresta $uv$ de um grafo $G$. A mais simples é quando a que queremos resolver é uma reserva, pois basta removermos da lista de adjacências de $G$. Porém, quando removemos uma aresta da floresta, podemos acabar quebrando ela em duas componentes, $T_u$ e $T_v$, e precisamos procurar uma aresta substituta que conecte as duas. O Programa~\ref{prog:removeGD} ilustra o método \texttt{removaGD}.
 
 \begin{programruledcaption}{\texttt{removaGD(G, u, v)} \label{prog:removeGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
@@ -478,7 +477,7 @@ Ao remover uma aresta $uv$ de nível $i$ de $G$, precisamos conferir se ela pert
 
 Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la de $R_i$ (linha $8$ do Programa~\ref{prog:removeGD}) em tempo esperado O($1$). Entretanto, quando removemos uma aresta $uv$, pode ocorrer o caso em que $u$ (ou $v$) não seja mais incidente a alguma outra aresta reserva, por isso precisamos atualizar o contador \textit{arestasReservasDeNível} tanto de $u$ quanto de $v$ chamando a rotina auxiliar \texttt{decrementeArestasReservasDeNível} do Programa~\ref{prog:decrementReserveEdgesCount-GD}.
 
-Já para o caso em que $uv$ é uma aresta da floresta, precisamos removê-la das florestas $F_j$, $F_{j+1}, \ldots, F_{\left\lceil \lg n \right\rceil}$, para $i \leq j \leq \left\lceil \lg n \right\rceil$, onde $i$ é o nível de $uv$. Essa remoção é feita na linha $5$ chamando a rotina \texttt{removaFD}. Essa remoção é necessária devido ao invariante~\ref{invariant2}, pois sabemos que $uv$ está somente nessas florestas. 
+Já para o caso em que $uv$ é uma aresta da floresta, precisamos removê-la das florestas $F_j$, $F_{j+1}, \ldots, F_{\left\lceil \lg n \right\rceil}$, para $i \leq j \leq \left\lceil \lg n \right\rceil$, onde $i$ é o nível de $uv$. Essa remoção é feita na linha $5$ chamando a rotina \texttt{removaFD}. Essa remoção é necessária devido ao invariante~\ref{invariant2}, pois sabemos que $uv$ está somente nas florestas desses níveis. 
 
 O laço da linha $4$ no Programa~\ref{prog:removeGD} executa no pior dos casos O(lg$n$) vezes, e como \texttt{removaFD} consome tempo amortizado O(lg$n$), então as linhas $4$ e $5$ do código juntas possuem um consumo de tempo esperado O(lg$^2n$). Como vimos que \texttt{removaLA} tem consumo esperado de tempo O($1$) e \texttt{decrementeArestasReservasDeNível} consome tempo amortizado O(lg$n$), então o trecho do código que abrange as linhas 8 a 10 tem custo amortizado O(lg$n$). Por fim, veremos que a rotina auxiliar \texttt{substituaAresta} terá custo amortizado O(lg$^2n$), concluindo-se então que \texttt{removaGD} consome tempo amortizado O(lg$^2n$). Essa rotina auxiliar é a mais complexa do grafo dinâmico, e ela está descrita no descrita no Programa~\ref{prog:replaceGD}.
 
@@ -526,7 +525,6 @@ Para explicar o Programa~\ref{prog:replaceGD}, iremos usar imagens para ilustrar
 
 Denotando $|T|$ como o número de vértices de uma árvore $T$, podemos, sem perda de generalidade, assumir que $|T_u| \leq |T_v|$. Pela invariante~\ref{invariant3}, temos que $|T| \leq 2^i$, e como $|T_u| + |T_v| = |T|$, então $|T_u| \leq 2^{i-1}$. Por isso, podemos rebaixar todas as arestas de nível $i$ de $|T_u|$ para o nível $i-1$, mantendo-se, assim, a invariante~\ref{invariant3}. 
 
-\newpage
 \begin{figure}
     \centering
 
