@@ -253,7 +253,9 @@ Como ambos \texttt{novaFD(n)} e \texttt{novaLA(n)} consomem tempo O($n$), então
 
 Como adotamos a técnica de \textit{Euler tour trees} na implementação das nossas florestas dinâmicas, mencionada brevemente na Seção~\ref{sec:dynamic-graph-structure}, estamos utilizando uma estrutura chamada \textbf{nó} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
 
-Um nó pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Toda vez que uma aresta nova é inserida no grafo, ela vai ter este atributo definido como verdadeiro. O atributo só se torna falso quando rebaixamos o nível de uma aresta para uma unidade inferior, caso que será descrito em mais detalhes na Seção~\ref{sec:code-edge-removal}. 
+Um \textbf{nó} pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado O($1$).
+
+Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Toda vez que uma aresta nova é inserida no grafo, ela vai ter este atributo definido como verdadeiro. O atributo só se torna falso quando rebaixamos o nível de uma aresta para uma unidade inferior, caso que será descrito em mais detalhes na Seção~\ref{sec:code-edge-removal}. 
 
 Dessa forma, se $uv$ possui nível $2$, então em $F_2$ esse booleano será verdadeiro, e falso em outras $F_i$, $i \neq 2$. Além disso, iremos adicionar um contador \text{arestasDeNível} para cada nó do tipo aresta, a fim de calcular a quantidade de arestas em sua subárvore que tenham o booleano \textit{éNível} como verdadeiro. 
 
@@ -387,7 +389,7 @@ Como mostrado na Seção~\ref{sec:dynamic-graph-structure}, ao chamarmos o méto
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O consumo de tempo amortizado de \texttt{conectadosGD} é O(lg$n$), visto que ele simplesmente chama \texttt{conectadosFD} que tem consumo amortizado O(lg$n$). Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação neles. Isso implica que as invariantes são mantidas. 
+O consumo de tempo de \texttt{conectadosGD} é amortizado O(lg$n$), visto que ele simplesmente chama \texttt{conectadosFD} que tem consumo amortizado O(lg$n$). Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação neles. Isso implica que as invariantes são mantidas. 
 
 \subsection{Adição de arestas}
 \label{sec:code-edge-addition}
@@ -456,7 +458,7 @@ Como mencionado na Seção~\ref{sec:dynamic-graph-edge-removal}, encontramos dua
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Ao remover uma aresta $uv$ de nível $i$ de $G$, precisamos conferir se ela pertence à floresta $F_{\left\lceil \lg n \right\rceil}$ (linha $3$ do Programa~\ref{prog:removeGD}). Para isso, podemos utilizar um método auxiliar como em Programa~\ref{prog:existGD}, que usa um mapa hash \textbf{nó} para verificar se a entrada \{$u, v$\} existe e retornando um booleano em tempo esperado O($1$).
+Ao remover uma aresta $uv$ de nível $i$ de $G$, precisamos conferir se ela pertence à floresta $F_{\left\lceil \lg n \right\rceil}$ (linha $3$ do Programa~\ref{prog:removeGD}). Para isso, podemos utilizar um método auxiliar como em Programa~\ref{prog:existGD}, que retorna um booleano indicando se o nó $uv$ existe ou não.
 
 \begin{programruledcaption}{\texttt{existeNoGrafo(F, u, v)} \label{prog:existGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
