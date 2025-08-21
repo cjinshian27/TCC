@@ -42,7 +42,7 @@ class DecrementalMSF{
 		
 		this->forests[i]->splayNode(nodeToSplay);
 
-		treeContainingU->root->isLevel = 0;
+		treeContainingU->root->isLevel = false;
 		treeContainingU->root->setNodeLevelCount();
 		
 		Key u = treeContainingU->root->first;
@@ -230,8 +230,20 @@ class DecrementalMSF{
 				Node<Key> * nodeVV = nodeLevelForest->getNode(v, v);
 
 				this->adjacencyLists[nodeLevel]->remove(nodeUU, nodeVV);
-				nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeUU);
-				nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeVV);
+				
+				if(nodeUU->neighbors->isEmpty()){
+					nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeUU);
+				}
+				else{
+					nodeLevelForest->splayNode(nodeUU);
+				}
+
+				if(nodeVV->neighbors->isEmpty()){
+					nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeVV);
+				}
+				else{
+					nodeLevelForest->splayNode(nodeVV);
+				}
 			}
 		}
 
