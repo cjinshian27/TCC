@@ -152,7 +152,7 @@ class DecrementalMSF{
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		// instantiate a dynamic graph in O(lg(n)) time
+		// create a dynamic graph in O(nlg(n)) time
 		DecrementalMSF(std::vector<Key> & vertices){
 			
 			this->maxLevel = static_cast<int>(std::ceil(std::log2(vertices.size()))); 
