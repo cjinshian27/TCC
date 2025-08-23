@@ -6,6 +6,7 @@
 #include "./helpful_classes/adjacencyList.hpp"
 
 #include <cmath>
+#include <utility>
 
 inline void printStylishLine(){
 	std::cout << "════════════════════════════════════════════════════════════════════════════════════\n";
@@ -28,9 +29,9 @@ class DecrementalMSF{
 	unsigned int maxLevel;
 	
 	// update node forest level
-	void updateNodeLevels(Key u, Key v, unsigned int level){
+	void updateEdgeLevel(Key u, Key v, unsigned int level){
+		if(u > v) std::swap(u, v);
 		this->mapNodeLevels[{u, v}] = level;
-		this->mapNodeLevels[{v, u}] = level;
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -47,7 +48,8 @@ class DecrementalMSF{
 		
 		Key u = treeContainingU->root->first;
 		Key v = treeContainingU->root->second;
-		updateNodeLevels(u, v, i - 1);
+
+		updateEdgeLevel(u, v, i - 1);
 		
 		this->forests[i - 1]->link(u, v, nodeToSplay->weight);
 	}	
@@ -97,7 +99,7 @@ class DecrementalMSF{
 				Key x = nodeXX->first;
 				Key y = neighbor.first;
 				int nodeXYWeight = neighbor.second;
-				
+								
 				/*
 				if the nodes x and y are connected, then we know 
 				they are in treeContaningU, because they are in 
@@ -108,7 +110,7 @@ class DecrementalMSF{
 				*/
 				
 				if(this->forests[i]->areConnected(x, y)){
-					updateNodeLevels(x, y, i - 1);
+					updateEdgeLevel(x, y, i - 1);
 					Node<Key> * nodeXX = this->forests[i - 1]->getNode(x, x);
 					Node<Key> * nodeYY = this->forests[i - 1]->getNode(y, y);
 					
@@ -122,9 +124,7 @@ class DecrementalMSF{
 					}
 					nodeIsReplaced = true;
 				}
-		
-				
-				
+
 				Node<Key> * nodeYY = this->forests[i]->getNode(y, y);
 				
 				//remove the edge <x, y> from the adjacency list of level i
@@ -169,10 +169,12 @@ class DecrementalMSF{
 
 		// add node <u, v, weight> in O(lg(n)) expected time
 		void add(Key u, Key v, int weight){
+			
+			if(u > v) std::swap(u, v);
 
 			if(mapNodeLevels[{u, v}]) return;
 
-			updateNodeLevels(u, v, this->maxLevel);
+			updateEdgeLevel(u, v, this->maxLevel);
 			Forest<Key> * maxLevelForest = this->forests[this->maxLevel];
 
 			if(maxLevelForest->areConnected(u, v)){
@@ -193,11 +195,13 @@ class DecrementalMSF{
 		//remove the node (edge) <u, v, weight> in O(lg²(n))
 		void remove(Key u, Key v){
 			
+			if(u > v) std::swap(u, v);
+
 			if(!mapNodeLevels[{u, v}]) return;
 
 			unsigned int nodeLevel = mapNodeLevels[{u, v}];
 			mapNodeLevels.erase({u, v});
-			mapNodeLevels.erase({v, u});
+			//mapNodeLevels.erase({v, u});
 			
 			/*
 			if the forest of level ⌈lg(n)⌉ has <u, v, weight>, 
