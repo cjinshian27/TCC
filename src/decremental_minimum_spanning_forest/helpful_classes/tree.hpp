@@ -332,12 +332,6 @@ class Tree{
 		}
 
 		// get the node with the smallest weight
-
-		/*
-		adicionar pré-condições (root != nullptr e
-		root->minWeight != INT_MAX)
-
-		*/
 		Node<Key>* getNodeWithTheLightestIncidentEdge(Node<Key>* root) {
 
 			int currentMinWeight = root->neighbors->isEmpty() ? 
