@@ -4,6 +4,7 @@
 #include "./helpful_classes/tree.hpp"
 #include "./helpful_classes/forestRobinHoodHash.hpp"
 #include "./helpful_classes/adjacencyList.hpp"
+#include "./helpful_classes/robin_hood.h"
 
 #include <cmath>
 #include <utility>
