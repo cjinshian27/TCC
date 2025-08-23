@@ -56,6 +56,10 @@ class MinHeap {
         bool isEmpty() const {
             return heap.empty();
         }
+
+        unsigned int size() {
+            return heap.size();
+        }
         
         // gets the pair <v, weight> from heap in O(1) time
         std::pair<Key, int> getMin() {

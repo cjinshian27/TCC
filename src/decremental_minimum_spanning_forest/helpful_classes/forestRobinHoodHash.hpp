@@ -303,8 +303,10 @@ class Forest{
 			// find() alread splays the given node
 			find(node);
 
-			node->isIncidentToReserveNode = false;
-			node->setReserveNodesCount();
+			if(node->neighbors->isEmpty()){
+				node->isIncidentToReserveNode = false;
+				node->setReserveNodesCount();
+			}
 		}
 		
 		// increase the reserveNodes count
@@ -313,8 +315,10 @@ class Forest{
 			// find() alread splays the given node
 			find(node);
 
-			node->isIncidentToReserveNode = true;
-			node->setReserveNodesCount();
+			if(node->neighbors->size() == 1){
+				node->isIncidentToReserveNode = true;
+				node->setReserveNodesCount();
+			}
 		}
 		
 		// return the node uu

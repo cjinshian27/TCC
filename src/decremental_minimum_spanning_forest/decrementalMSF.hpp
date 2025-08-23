@@ -135,24 +135,14 @@ class DecrementalMSF{
 				decrease its reserve node count. Otherwise, we splay y
 				to update their min weight. 
 				*/
-				if(nodeYY->neighbors->isEmpty()){
-					this->forests[i]->decreaseIncidentToReserveNodeCount(nodeYY);
-				}
-				else{
-					this->forests[i]->splayNode(nodeYY);
-				}
-				
+				this->forests[i]->decreaseIncidentToReserveNodeCount(nodeYY);
+
 				/*
 				if x is not incident to any other edge of level i, then
 				decrease its reserve node count. Otherwise, we splay x 
 				to update their min weight count. 
 				*/
-				if(nodeXX->neighbors->isEmpty()){
-					this->forests[i]->decreaseIncidentToReserveNodeCount(nodeXX);
-				}
-				else{
-					this->forests[i]->splayNode(nodeXX);
-				}
+				this->forests[i]->decreaseIncidentToReserveNodeCount(nodeXX);
 				
 			}
 		}
@@ -231,19 +221,8 @@ class DecrementalMSF{
 
 				this->adjacencyLists[nodeLevel]->remove(nodeUU, nodeVV);
 				
-				if(nodeUU->neighbors->isEmpty()){
-					nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeUU);
-				}
-				else{
-					nodeLevelForest->splayNode(nodeUU);
-				}
-
-				if(nodeVV->neighbors->isEmpty()){
-					nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeVV);
-				}
-				else{
-					nodeLevelForest->splayNode(nodeVV);
-				}
+				nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeUU);
+				nodeLevelForest->decreaseIncidentToReserveNodeCount(nodeVV);
 			}
 		}
 

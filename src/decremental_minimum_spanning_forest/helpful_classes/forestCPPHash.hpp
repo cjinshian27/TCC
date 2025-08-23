@@ -299,6 +299,7 @@ class Forest{
 			// find() alread splays the given node
 			find(node);
 
+			if()
 			node->isIncidentToReserveNode = false;
 			node->setReserveNodesCount();
 		}
