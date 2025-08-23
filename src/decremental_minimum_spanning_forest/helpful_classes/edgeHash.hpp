@@ -15,3 +15,16 @@ struct EdgeHash {
         return h1 ^ (h2 << 1) ^ (h3 << 2);
     }
 };
+
+struct EdgeKey {
+    int u, v;
+
+    bool operator==(const EdgeKey& other) const {
+        return u == other.u && v == other.v;
+    }
+};
+struct EdgeKeyHash {
+    size_t operator()(const EdgeKey& k) const noexcept {
+        return (static_cast<size_t>(k.u) << 32) ^ static_cast<size_t>(k.v);
+    }
+};

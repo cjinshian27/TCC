@@ -2,7 +2,7 @@
 
 #include "./helpful_classes/node.hpp"
 #include "./helpful_classes/tree.hpp"
-#include "./helpful_classes/forest.hpp"
+#include "./helpful_classes/forestRobinHoodHash.hpp"
 #include "./helpful_classes/adjacencyList.hpp"
 
 #include <cmath>
