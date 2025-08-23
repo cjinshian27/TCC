@@ -353,10 +353,9 @@ class Tree{
 			if (root->left && root->left->minWeight == root->minWeight) {
 				return getNodeWithTheLightestIncidentEdge(root->left);
 			} 
-			if (root->right && root->right->minWeight == root->minWeight){
+			else {
 				return getNodeWithTheLightestIncidentEdge(root->right);
 			}
 
-			return nullptr;
 		}
 	};
