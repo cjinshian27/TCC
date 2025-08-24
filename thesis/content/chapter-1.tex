@@ -26,11 +26,10 @@ O problema da conexidade em florestas dinâmicas pode ser considerado uma simpli
     \item \texttt{\textbf{removaFD(u, v)}}: remove a aresta \textit{uv} da floresta $F$.
 \end{itemize}
 
-\newcommand{\Oh}{\mathrm{O}}
 
 A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que são de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. Isso faz com que o custo de uma sequência de $m$ operações (inserção, remoção ou busca) em uma árvore \textit{splay} com $n$ nós seja $\Oh(m\lg n)$, ou seja, o custo amortizado por operação é $\Oh(\lg n)$. Como também já existe bastante literatura sobre árvores \textit{splay}~\cite[Lecture 12]{kozen}, e seu funcionamento interno não afeta a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
 
-Nesse sentido, o resultado é uma implementação em que \texttt{florestaDinâmica(F, n)} tem custo $\Theta$($n$) e os demais métodos da biblioteca têm custo amortizado O(lg$n$).
+Nesse sentido, o resultado é uma implementação em que \texttt{florestaDinâmica(F, n)} tem custo $\Theta(n)$ e os demais métodos da biblioteca têm custo amortizado $\Oh(\lg n)$.
 
 \section{Estrutura do grafo dinâmico}
 \label{sec:dynamic-graph-structure}
@@ -69,13 +68,10 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
 
 Na Seção~\ref{sec:dynamic-graph-implementation}, iremos descrever como as rotinas da biblioteca funcionam e como cada uma preserva as invariantes acima, de modo a manter a corretude do algoritmo durante toda a sua execução.
 
-Por fim, para simplificar um pouco a notação, iremos escrever $L = \left\lceil \lg n \right\rceil$, isto é, $F_{\left\lceil \lg n \right\rceil}$ passa a ser escrito como $F_{L}$, da mesma forma que $G_L = G_{\left\lceil \lg n \right\rceil}$ e $R_L = R_{\left\lceil \lg n \right\rceil}$.
+Por fim, para simplificar um pouco a notação, iremos escrever $L = \left\lceil \lg n \right\rceil$, isto é, $F_{\left\lceil \lg n \right\rceil}$ passa a ser escrita como $F_{L}$, da mesma forma que $G_L = G_{\left\lceil \lg n \right\rceil}$ e $R_L = R_{\left\lceil \lg n \right\rceil}$.
 
 \subsection{Tipos de arestas do grafo}
 \label{sec:dynamic-graph-edge-types}
-
-
-
 
 % O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, procuramos nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
 
@@ -91,10 +87,14 @@ Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chama
     \item \texttt{\textbf{removaLA(L, u, v)}}: remove $u$ da lista de adjacências de $v$ em $L$ e vice-versa.
 \end{itemize} 
 
-A nossa implementação \cite{chung2025} de listas de adjacências possui um custo O($n$) ao acionar o construtor \texttt{listaDeAdjacências}, e para 
-as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperado O($1$) visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjancências de $u$.
+A nossa implementação \cite{chung2025} de listas de adjacências possui um custo $\Oh(n)$ ao acionar o construtor \texttt{listaDeAdjacências}, e para 
+as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperado $\Oh(1)$, visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjancências de $u$.
 
-Como a inserção de arestas em uma floresta dinâmica com $n$ vértices consome tempo O(lg$n$) (amortizado, na nossa implementação), então temos que \texttt{adicioneGD} também terá o seu custo amortizado de tempo O(lg$n$). 
+\section{Criação do grafo dinâmico}
+
+\section{Consultas de conexidade no grafo dinâmico}
+
+\section{Inserções de arestas no grafo dinâmico}
 
 \section{Remoção de arestas no grafo dinâmico}
 \label{sec:dynamic-graph-edge-removal}
@@ -157,9 +157,9 @@ Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é
     \label{fig:graph_with_Tu_and_Tv}
 \end{figure}
 
-Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em tempo amortizado O(lg$^2n$).
+Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em tempo amortizado $\Oh(n \lg 2^n)$.
 
-Por fim, o custo da rotina \texttt{grafoDinâmico(G, n)} será O($n$lg$n$), enquanto que, na nossa implementação, o custo amortizado das demais rotinas será O(lg$^2n$), que serão descritas na Seção~\ref{sec:dynamic-graph-implementation}.
+Por fim, o custo da rotina \texttt{grafoDinâmico(G, n)} será $\Oh(n \lg n)$, enquanto que, na nossa implementação, o custo amortizado das demais rotinas será $\Oh(n \lg 2^n)$, que serão descritas na Seção~\ref{sec:dynamic-graph-implementation}.
 
 \begin{figure}
     \centering
@@ -221,7 +221,7 @@ Por fim, o custo da rotina \texttt{grafoDinâmico(G, n)} será O($n$lg$n$), enqu
 
 Para implementar um grafo dinâmico, chamamos \texttt{novoGD(n)} para inicializar cada $F_i$ e $R_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{novaFD(n)} e \texttt{novaLA(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacências com $n$ vértices isolados para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $R_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
 
-Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado O($1$). Assim, este mapa usa como chave os valores das pontas da aresta ($u$ e $v$) e retornam o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuir a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
+Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave os valores das pontas da aresta ($u$ e $v$) e retornam o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuir a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
 \begin{itemize}
     \item \textit{nível[u, v]} $\leftarrow$ i: atribui o nível $i$ a uma aresta $uv$. 
@@ -255,14 +255,14 @@ Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como ambos \texttt{novaFD(n)} e \texttt{novaLA(n)} consomem tempo O($n$), então \texttt{novoGD(n)} consome tempo O($n$lg$n$), pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além, disso, as invariantes são mantidas porque estamos criando um grafo com $n$ vértices isolados.
+Como ambos \texttt{novaFD(n)} e \texttt{novaLA(n)} consomem tempo $\Oh(n)$, então \texttt{novoGD(n)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além, disso, as invariantes são mantidas porque estamos criando um grafo com $n$ vértices isolados.
 
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
 
 Como adotamos a técnica de \textit{Euler tour trees} na implementação das nossas florestas dinâmicas, mencionada brevemente na Seção~\ref{sec:dynamic-graph-structure}, estamos utilizando uma estrutura chamada \textbf{nó} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
 
-Um \textbf{nó} pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado O($1$).
+Um \textbf{nó} pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
 
 Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Toda vez que uma aresta nova é inserida no grafo, ela vai ter este atributo definido como verdadeiro. O atributo só se torna falso quando rebaixamos o nível de uma aresta para uma unidade inferior, caso que será descrito em mais detalhes na Seção~\ref{sec:code-edge-removal}. 
 
@@ -323,7 +323,7 @@ Já para o nó do tipo vértice $uu$ (ou apenas $u$), iremos armazenar um boolea
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
-Note que tanto o Programa~\ref{prog:updateIsLevelCount-GD} quando o Programa~\ref{prog:updateReserveEdgesCount-GD} consomem tempo constante O($1$), já que ambos envolvem apenas comparações de igualdade e atribuições de valores às variáveis.
+Note que tanto o Programa~\ref{prog:updateIsLevelCount-GD} quando o Programa~\ref{prog:updateReserveEdgesCount-GD} consomem tempo constante $\Oh(1)$, já que ambos envolvem apenas comparações de igualdade e atribuições de valores às variáveis.
 
 Com o Programa~\ref{prog:updateReserveEdgesCount-GD} presente, podemos introduzir dois métodos que modificam o atributo \textit{incideArestaReservaDeNível} e atualizam o contador \textit{arestasReservasDeNível}.
 
@@ -348,7 +348,7 @@ Com o Programa~\ref{prog:updateReserveEdgesCount-GD} presente, podemos introduzi
 \end{programruledcaption}
 
 
-No Programa~\ref{prog:decrementReserveEdgesCount-GD}, atualizamos o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para falso quando ele não tiver mais vizinhos, visto que não haverá mais nenhuma aresta reserva incidente nele. A assinatura \texttt{L[u]} retorna o conjunto de vizinhos do vértice $u$. A rotina auxiliar \texttt{puxeParaRaiz} serve apenas para propagar corretamente a atualização deste atributo nos outros nós que estão conectados com $u$. Como estamos usando uma \textit{splay tree}, então puxar o vértice $u$ para a raiz consome tempo amortizado O(lg$n$). Já a rotina auxiliar \texttt{atualizeIncideArestaReservaDeNível} no Programa~\ref{prog:updateReserveEdgesCount-GD} apenas atualiza o atributo \textit{arestasReservasDeNível}, consumindo tempo O($1$). Dessa forma, \texttt{decrementeArestasReservasDeNível} consome tempo amortizado O(lg$n$).
+No Programa~\ref{prog:decrementReserveEdgesCount-GD}, atualizamos o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para falso quando ele não tiver mais vizinhos, visto que não haverá mais nenhuma aresta reserva incidente nele. A assinatura \texttt{L[u]} retorna o conjunto de vizinhos do vértice $u$. A rotina auxiliar \texttt{puxeParaRaiz} serve apenas para propagar corretamente a atualização deste atributo nos outros nós que estão conectados com $u$. Como estamos usando uma \textit{splay tree}, então puxar o vértice $u$ para a raiz consome tempo amortizado O(lg$n$). Já a rotina auxiliar \texttt{atualizeIncideArestaReservaDeNível} no Programa~\ref{prog:updateReserveEdgesCount-GD} apenas atualiza o atributo \textit{arestasReservasDeNível}, consumindo tempo $\Oh(1)$. Dessa forma, \texttt{decrementeArestasReservasDeNível} consome tempo amortizado O(lg$n$).
 
 \newpage
 \begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível(F, L, u)} \label{prog:incrementReserveEdgesCount-GD}}
@@ -433,7 +433,7 @@ Ao inserirmos uma aresta reserva $uv$ em $G$, precisamos atualizar o atributo \t
 
 A invariante \ref{invariant1} se mantém para o nível $i = \left\lceil \lg n \right\rceil$. Como sempre adicionamos arestas em $F_{\left\lceil \lg n \right\rceil}$ (se não forem reservas), então as outras florestas de níveis inferiores não são afetadas, mantendo-se, assim, os invariantes \ref{invariant2} e \ref{invariant3} também.
 
-Como o consumo de tempo de \texttt{conectadosFD}, \texttt{adicioneFD} e de \texttt{incrementeArestasReservasDeNível} é amortizado O(lg$n$), e \texttt{adicioneLA} possui custo esperado O($1$), então temos que \texttt{adicioneGD} possui consumo de tempo amortizado O(lg$n$).
+Como o consumo de tempo de \texttt{conectadosFD}, \texttt{adicioneFD} e de \texttt{incrementeArestasReservasDeNível} é amortizado O(lg$n$), e \texttt{adicioneLA} possui custo esperado $\Oh(1)$, então temos que \texttt{adicioneGD} possui consumo de tempo amortizado O(lg$n$).
 
 \subsection{Remoção de arestas}
 \label{sec:code-edge-removal}
@@ -486,11 +486,11 @@ Ao remover uma aresta $uv$ de nível $i$ de $G$, precisamos conferir se ela pert
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la de $R_i$ (linha $8$ do Programa~\ref{prog:removeGD}) em tempo esperado O($1$). Entretanto, quando removemos uma aresta $uv$, pode ocorrer o caso em que $u$ (ou $v$) não seja mais incidente a alguma outra aresta reserva, por isso precisamos atualizar o contador \textit{arestasReservasDeNível} tanto de $u$ quanto de $v$ chamando a rotina auxiliar \texttt{decrementeArestasReservasDeNível} do Programa~\ref{prog:decrementReserveEdgesCount-GD}.
+Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la de $R_i$ (linha $8$ do Programa~\ref{prog:removeGD}) em tempo esperado $\Oh(1)$. Entretanto, quando removemos uma aresta $uv$, pode ocorrer o caso em que $u$ (ou $v$) não seja mais incidente a alguma outra aresta reserva, por isso precisamos atualizar o contador \textit{arestasReservasDeNível} tanto de $u$ quanto de $v$ chamando a rotina auxiliar \texttt{decrementeArestasReservasDeNível} do Programa~\ref{prog:decrementReserveEdgesCount-GD}.
 
 Já para o caso em que $uv$ é uma aresta da floresta, precisamos removê-la das florestas $F_j$, $F_{j+1}, \ldots, F_{\left\lceil \lg n \right\rceil}$, para $i \leq j \leq \left\lceil \lg n \right\rceil$, onde $i$ é o nível de $uv$. Essa remoção é feita na linha $5$ chamando a rotina \texttt{removaFD}. Essa remoção é necessária devido ao invariante~\ref{invariant2}, pois sabemos que $uv$ está somente nas florestas desses níveis. 
 
-O laço da linha $4$ no Programa~\ref{prog:removeGD} executa no pior dos casos O(lg$n$) vezes, e como \texttt{removaFD} consome tempo amortizado O(lg$n$), então as linhas $4$ e $5$ do código juntas possuem um consumo de tempo esperado O(lg$^2n$). Como vimos que \texttt{removaLA} tem consumo esperado de tempo O($1$) e \texttt{decrementeArestasReservasDeNível} consome tempo amortizado O(lg$n$), então o trecho do código que abrange as linhas 8 a 10 tem custo amortizado O(lg$n$). Por fim, veremos que a rotina auxiliar \texttt{substituaAresta} terá custo amortizado O(lg$^2n$), concluindo-se então que \texttt{removaGD} consome tempo amortizado O(lg$^2n$). Essa rotina auxiliar é a mais complexa do grafo dinâmico, e ela está descrita no descrita no Programa~\ref{prog:replaceGD}.
+O laço da linha $4$ no Programa~\ref{prog:removeGD} executa no pior dos casos O(lg$n$) vezes, e como \texttt{removaFD} consome tempo amortizado O(lg$n$), então as linhas $4$ e $5$ do código juntas possuem um consumo de tempo esperado $\Oh(n \lg 2^n)$. Como vimos que \texttt{removaLA} tem consumo esperado de tempo $\Oh(1)$ e \texttt{decrementeArestasReservasDeNível} consome tempo amortizado O(lg$n$), então o trecho do código que abrange as linhas 8 a 10 tem custo amortizado O(lg$n$). Por fim, veremos que a rotina auxiliar \texttt{substituaAresta} terá custo amortizado $\Oh(n \lg 2^n)$, concluindo-se então que \texttt{removaGD} consome tempo amortizado $\Oh(n \lg 2^n)$. Essa rotina auxiliar é a mais complexa do grafo dinâmico, e ela está descrita no descrita no Programa~\ref{prog:replaceGD}.
 
 \begin{programruledcaption}{\texttt{substituaAresta(G, i, u, v)} \label{prog:replaceGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$.
