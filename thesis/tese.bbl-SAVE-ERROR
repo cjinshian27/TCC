@@ -113,6 +113,34 @@
       \verb https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=1f63499a9cb43f0f4d6a56b37de551c7e0c94971
       \endverb
     \endentry
+    \entry{kozen}{book}{}
+      \name{author}{1}{}{%
+        {{hash=5265940fab4b264eb95d50dc840e91b8}{%
+           family={Kozen},
+           familyi={K\bibinitperiod},
+           given={Dexter\bibnamedelima C.},
+           giveni={D\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY}%
+      }
+      \list{publisher}{1}{%
+        {Springer-Verlag}%
+      }
+      \strng{namehash}{5265940fab4b264eb95d50dc840e91b8}
+      \strng{fullhash}{5265940fab4b264eb95d50dc840e91b8}
+      \strng{bibnamehash}{5265940fab4b264eb95d50dc840e91b8}
+      \strng{authorbibnamehash}{5265940fab4b264eb95d50dc840e91b8}
+      \strng{authornamehash}{5265940fab4b264eb95d50dc840e91b8}
+      \strng{authorfullhash}{5265940fab4b264eb95d50dc840e91b8}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{0-387-97687-6}
+      \field{title}{The Design and Analysis of Algorithms}
+      \field{year}{1991}
+    \endentry
     \entry{arthur}{thesis}{}
       \name{author}{1}{}{%
         {{hash=7a96f958eddfa1f4c75ee5fede3596e3}{%

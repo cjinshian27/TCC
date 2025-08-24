@@ -43,8 +43,44 @@ Implementar o grafo dinâmico resume-se à construção da seguinte biblioteca d
     \item \texttt{\textbf{adicioneGD(G, u, v)}}: adiciona a aresta $uv$ no grafo $G$;
     \item \texttt{\textbf{removaGD(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
 \end{itemize} 
- 
-Assim, a consulta \texttt{conectadosGD} aplicada ao grafo $G$ pode ser respondida fazendo-se a mesma consulta para a floresta $F_{\left\lceil \lg n \right\rceil}$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\left\lceil \lg n \right\rceil$ florestas de vértices isolados.
+
+Para entender a base de como cada uma dessas rotinas funcionam, será necessário apresentar a estrutura interna da implementação do grafo para explicar como ele mantém essas estruturas e como elas deixam essas rotinas mais eficientes.
+
+\subsection{Fatiamento do grafo em níveis}
+\label{sec:level-slicing}
+
+Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada a técnica de fatiar o grafo em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. 
+
+Seja $G$ um grafo com $V(G)$ vértices e $E(G)$ arestas. Se existe um conjunto $X$ de arestas tal que $\emptyset \neq X \subseteq E(G)$, então o subgrafo de $G$ \textbf{induzido} por $X$ é o subgrafo $H$ de $G$ tal que $V(H) = \{v \in  V(G): v \text{ é extremo de alguma aresta de }X \}$ e $E(H) = X$. Denotamos, portanto, $H$ como $G[X]$.
+
+Sendo assim, seja $G_i = G[X]$ um grafo onde $X$ é o conjunto de arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, iremos manter uma floresta maximal $F_i$ de $G_i$, a qual por sua vez é a floresta induzida pelas arestas de $G$ de nível menor ou igual a $i$. Além disso, vamos manter também para cada nível $i$ um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas reservas de nível $i$. 
+
+Dessa forma, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{\left\lceil \lg n \right\rceil}$, para um grafo de $n$ vértices. Daqui, deduzimos que $G = G_{\left\lceil \lg n \right\rceil}$ e que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$. Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
+
+\begin{enumerate}[label=(\Roman*)]
+    \item \label{invariant1} $F_i$ é uma floresta maximal de $G_i$ para todo $1 \leq i \leq  \left\lceil \lg n \right\rceil$;
+    
+    \item \label{invariant2} $F_i \subseteq F_{i+1}$ para todo $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$;
+    
+    \item \label{invariant3} Cada floresta $F_i$ possui no máximo $2^i$ vértices.
+\end{enumerate}
+
+Na Seção~\ref{sec:dynamic-graph-implementation}, iremos descrever como as rotinas da biblioteca funcionam e como cada uma preserva as invariantes acima, de modo a manter a corretude do algoritmo durante toda a sua execução.
+
+Por fim, para simplificar um pouco a notação iremos escrever $L = \left\lceil \lg n \right\rceil$, isto é, $F_{\left\lceil \lg n \right\rceil}$ passa a ser escrito como $F_{L}$, da mesma forma que $G_L = G_{\left\lceil \lg n \right\rceil}$ e $R_L = R_{\left\lceil \lg n \right\rceil}$.
+
+\subsection{Tipos de arestas do grafo}
+\label{sec:dynamic-graph-edge-types}
+
+Em nossa implementação, 
+
+
+
+% O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, procuramos nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
+
+%Além disso, é fácil ver que a implementação de \texttt{conectadosGD(G, u, v)} é simplesmente o acionamento de \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)}, e portanto tem custo (na nossa implementação, amortizado) O(lg $n$). A implementação de \texttt{adicioneGD(G,u,v)} também é simples: basta acionar o \texttt{conectadosGD(G, u, v)} para decidir se a nova aresta $uv$ é uma aresta reserva ou não e, dependendo disso, incluir $uv$ em $R_{\left\lceil \lg n \right\rceil}$ ou em $F_{\left\lceil \lg n \right\rceil}$. 
+
+%Assim, a consulta \texttt{conectadosGD} aplicada ao grafo $G$ pode ser respondida fazendo-se a mesma consulta para a floresta $F_{\left\lceil \lg n \right\rceil}$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando em uma floresta dinâmica $F$ que seja maximal em $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\left\lceil \lg n \right\rceil$ florestas de vértices isolados.
 
 \section{Adição de arestas no grafo dinâmico}
 \label{sec:dynamic-graph-edge-addition}
@@ -59,10 +95,10 @@ Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chama
     \item \texttt{\textbf{removaLA(L, u, v)}}: remove $u$ da lista de adjacências de $v$ em $L$ e vice-versa.
 \end{itemize} 
 
-A nossa implementação \cite{chung2025} para listas de adjancências possui um custo O($n$) ao acionar o construtor \texttt{listaDeAdjacências}, e para 
+A nossa implementação \cite{chung2025} de listas de adjacências possui um custo O($n$) ao acionar o construtor \texttt{listaDeAdjacências}, e para 
 as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperado O($1$) visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjancências de $u$.
 
-Como a inserção de arestas (\texttt{adicioneFA}) em uma floresta dinâmica com $n$ vértices consome tempo O(lg$n$) (armotizado, na nossa implementação), então temos que \texttt{adicioneGD} também terá o seu custo amortizado de tempo O(lg$n$). 
+Como a inserção de arestas em uma floresta dinâmica com $n$ vértices consome tempo O(lg$n$) (amortizado, na nossa implementação), então temos que \texttt{adicioneGD} também terá o seu custo amortizado de tempo O(lg$n$). 
 
 \section{Remoção de arestas no grafo dinâmico}
 \label{sec:dynamic-graph-edge-removal}
@@ -180,31 +216,6 @@ Por fim, o custo da rotina \texttt{grafoDinâmico(G, n)} será O($n$lg$n$), enqu
     \caption{As arestas pretas são da floresta maximal $F_{\left\lceil \lg n \right\rceil}$ do grafo, enquanto as vermelhas são reservas. A aresta $uv$ tracejada está prestes a ser removida e substituída pela $ad$ ou $cv$, que ligam $T_u$ e $T_v$.}
     \label{fig:graph_with_Tu_and_Tv_with_reserve_edge}
 \end{figure}
-
-\section{Fatiamento do grafo em níveis}
-\label{sec:level-slicing}
-
-Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada a técnica de fatiar o grafo em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. Assim, o nível da aresta somente será decrementado quando estamos buscando uma aresta substituta. 
-
-Se $G$ é um grafo e $\emptyset \neq X \subseteq V(G)$, então o subgrafo de $G$ \textbf{induzido} ou \textbf{gerado} por $X$ é subgrafo $H$ de $G$ de modo que $V(H) = X$ e $E(H)$ é exatamente o conjunto de arestas de $G$ que têm ambos os extremos em $X$. Assim, podemos denotar $H$ como $G[X]$.
-
-Sendo assim, podemos definir um grafo $G_i$, que é o grafo induzido pelas arestas de nível menor ou igual a $i$. Para cada nível $i$, iremos manter uma floresta maximal $F_i$ de $G_i$ e o grafo $R_i$, mantido como listas de adjacências que guardam apenas arestas reservas de nível $i$. Dessa forma, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{\left\lceil \lg n \right\rceil} = G$, para um grafo de $n$ vértices. Consequentemente, temos que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$. 
-
-Assim, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
-
-\begin{enumerate}[label=(\Roman*)]
-    \item \label{invariant1} $F_i$ é uma floresta maximal de $G_i$ para todo $1 \leq i \leq  \left\lceil \lg n \right\rceil$;
-    
-    \item \label{invariant2} $F_i \subseteq F_{i+1}$ para todo $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$;
-    
-    \item \label{invariant3} Cada floresta $F_i$ possui no máximo $2^i$ vértices.
-\end{enumerate}
-
-O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, procuramos nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
-
-Além disso, é fácil ver que a implementação de \texttt{conectadosGD(G, u, v)} é simplesmente o acionamento de \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)}, e portanto tem custo (na nossa implementação, amortizado) O(lg $n$). A implementação de \texttt{adicioneGD(G,u,v)} também é simples: basta acionar o \texttt{conectadosGD(G, u, v)} para decidir se a nova aresta $uv$ é uma aresta reserva ou não e, dependendo disso, incluir $uv$ em $R_{\left\lceil \lg n \right\rceil}$ ou em $F_{\left\lceil \lg n \right\rceil}$. 
-
-Tudo isso será retomado na seção seguinte, onde iremos detalhar mais nas implementações dos métodos principais da biblioteca do grafo dinâmico. 
 
 \section{Implementação do grafo dinâmico}
 \label{sec:dynamic-graph-implementation}
