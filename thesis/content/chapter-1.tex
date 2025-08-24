@@ -82,15 +82,17 @@ Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma cham
 Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
 
 \begin{itemize}
-    \item \texttt{\textbf{listaDeAdjacências(L, n)}}: constrói e devolve um grafo $L$ contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
-    \item \texttt{\textbf{adicioneLA(L, u, v)}}: adiciona $u$ na lista de adjacências de $v$ em $L$ e vice-versa;
-    \item \texttt{\textbf{removaLA(L, u, v)}}: remove $u$ da lista de adjacências de $v$ em $L$ e vice-versa.
+    \item \texttt{\textbf{listaDeAdjacências(R, n)}}: constrói e devolve um grafo $R$ contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
+    \item \texttt{\textbf{adicioneLA(R, u, v)}}: adiciona $u$ na lista de adjacências de $v$ em $R$ e vice-versa;
+    \item \texttt{\textbf{removaLA(R, u, v)}}: remove $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
 \end{itemize} 
 
 A nossa implementação \cite{chung2025} de listas de adjacências possui um custo $\Oh(n)$ ao acionar o construtor \texttt{listaDeAdjacências}, e para 
 as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperado $\Oh(1)$, visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjancências de $u$.
 
 \section{Criação do grafo dinâmico}
+
+Para criar o grafo dinâmico $G$ de $n$ vértices, chamamos a rotina \texttt{grafoDinâmico(G, n)}, que por sua vez irá chamar \texttt{florestaDinâmica(F, n)}, inicializando $\left\lceil \lg n \right\rceil$ florestas dinâmicas de $n$ vértices isolados, e \texttt{listaDeAdjacências(R, n)}, inicializando $\left\lceil \lg n \right\rceil$ listas de adjacências de $n$ vértices isolados. Como as duas últimas rotinas consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico} consome tempo $\Oh(n \lg n)$.
 
 \section{Consultas de conexidade no grafo dinâmico}
 
@@ -219,7 +221,7 @@ Por fim, o custo da rotina \texttt{grafoDinâmico(G, n)} será $\Oh(n \lg n)$, e
 \subsection{Construtor}
 \label{sec:code-constructor}
 
-Para implementar um grafo dinâmico, chamamos \texttt{novoGD(n)} para inicializar cada $F_i$ e $R_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{novaFD(n)} e \texttt{novaLA(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacências com $n$ vértices isolados para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $R_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
+Para implementar um grafo dinâmico, chamamos \texttt{grafoDinâmico(n)} para inicializar cada $F_i$ e $R_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacências com $n$ vértices isolados para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $R_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
 
 Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave os valores das pontas da aresta ($u$ e $v$) e retornam o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuir a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
@@ -234,7 +236,7 @@ Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv
 
 Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}. 
 
-\begin{programruledcaption}{\texttt{novoGD(n)} \label{prog:newGD}}
+\begin{programruledcaption}{\texttt{grafoDinâmico(n)} \label{prog:newGD}}
     \noindent\textbf{Entrada}: Recebe um número $n$ de vértices do grafo. \\
     \textbf{Saída}: Devolve um grafo dinâmico $G$ com $n$ vértices isolados.
     \vspace{-0.5\baselineskip}
@@ -247,15 +249,15 @@ Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}
         escapeinside={(*@}{@*)},
     ]
     \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
-        G.$F_i$ := \texttt{novaFD(n)}
-        G.$R_i$ := \texttt{novaLA(n)}
+        G.$F_i$ := \texttt{florestaDinâmica(F, n)}
+        G.$R_i$ := \texttt{listaDeAdjacências(R, n)}
     G.nível := \texttt{novoMapaHash(n)}
     devolva G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como ambos \texttt{novaFD(n)} e \texttt{novaLA(n)} consomem tempo $\Oh(n)$, então \texttt{novoGD(n)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além, disso, as invariantes são mantidas porque estamos criando um grafo com $n$ vértices isolados.
+Como ambos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico(n)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além, disso, as invariantes são mantidas porque estamos criando um grafo com $n$ vértices isolados.
 
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
