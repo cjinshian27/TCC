@@ -48,7 +48,7 @@ Para entender a base de como cada uma dessas rotinas funcionam, será necessári
 \subsection{Fatiamento do grafo em níveis}
 \label{sec:level-slicing}
 
-Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada a técnica de fatiar o grafo em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. 
+Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada a técnica de fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. 
 
 Seja $G$ um grafo com $V(G)$ vértices e $E(G)$ arestas. Se existe um conjunto $X$ de arestas tal que $\emptyset \neq X \subseteq E(G)$, então o subgrafo de $G$ \textbf{induzido} por $X$ é o subgrafo $H$ de $G$ tal que $V(H) = \{v \in  V(G): v \text{ é extremo de alguma aresta de }X \}$ e $E(H) = X$. Denotamos, portanto, $H$ como $G[X]$.
 
@@ -382,10 +382,61 @@ O caso da remoção de uma aresta $uv$ da floresta é mais complexo. Se o grafo 
     \label{fig:graph_with_Tu_and_Tv_with_reserve_edge}
 \end{figure}
 
-
 Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, vamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in V(T_v)$, então a aresta $xy$ é uma aresta substituta, bastando apenas acionar \texttt{adicioneGD(G, x, y)} para reconectar $T_u$ e $T_v$, que virariam uma única componente da floresta $F_L$.
 
+Note que procurar todas as arestas que tenham a ponta em algum vértice de $T_u$ pode ser custoso, visto que $V(T_u)$ é da ordem de $\Oh(n)$, onde $n$ é o número de vértices do grafo $G$. É por este motivo que introduzimos o fatiamento em níveis na Seção~\ref{sec:level-slicing}. A intuição por trás deste fatiamento é que, quando uma aresta da floresta de nível $i$ é removida, não é necessário buscar por substitutas nos níveis menores que $i$. Isso quer dizer que começamos a busca no nível em questão, ou seja, $R_i$, e caso nesta lista de adjacências não haja nenhuma substituta, passamos a procurar em $R_{i+1}, R_{i + 2}, \ldots, R_L$. Quando não encontramos uma substituta em um certo $R_j$, aproveitamos para rebaixar o nível de todas as arestas percorridas em $R_j$ para $j - 1$, $j > 1$, de modo que não precisaremos percorrer mais essas arestas quando removermos uma outra aresta de nível $j$, visto que elas já estariam em $R_{j-1}$.
+
+O motivo de não precisarmos procurar uma substituta em níveis menores que $i$ quando removemos uma aresta $uv$ de nível $i$ é devido ao invariantes~\ref{invariant1} e \ref{invariant2}. Vamos provar esse fato por contradição, supondo inicialmente que exista uma aresta $xy$ de nível $j < i$ que substitua $uv$. Como $xy$ é uma aresta de nível $j$, temos que $xy \in E(G_{j})$, e, portanto, os vértices $x$ e $y$ estão na mesma componente de $G_j$. Pela invariante~\ref{invariant1}, $F_j$ é uma floresta maximal de $G_j$, o que implica que $x$ e $y$ estão na mesma componente conexa de $F_j$. Pela invariante~\ref{invariant2}, temos $F_{j} \subseteq F_{i}$ e, consequentemente, $xy$ é uma aresta de $F_i$. Com a remoção de $uv$, note que 
+
+Dessa forma, precisamos de uma rotina auxiliar que ajude a encontrar essa aresta substituta de forma eficiente. Chamaremos a de \texttt{substituaAresta}. 
+
+
+
 Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em tempo amortizado $\Oh(n \lg 2^n)$.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
