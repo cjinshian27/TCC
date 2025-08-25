@@ -110,7 +110,7 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
 
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}
         [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
@@ -162,7 +162,7 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
     \item  Se $u$ e $v$ não estão conectados por nenhum caminho em $G$, então inserimos $uv$ como aresta de floresta de nível $L$ em $F_L$ chamando a função \texttt{adicioneFD($F_L$, u, v)}. A Figura~\ref{fig:graph_tree_edge_uv_addition} ilustra esse cenário.
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}
         [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
@@ -209,8 +209,6 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
     \caption{As arestas pretas são da floresta maximal $F_L$ do grafo. Como os vértices $u$ e $v$ não estão conectados, então inserimos $uv$ como aresta da floresta (em verde), nesse caso conectando as componentes $T_u$ e $T_v$.}
     \label{fig:graph_tree_edge_uv_addition}
 \end{figure}
-
-\newpage
 
 Em nossa implementação, \texttt{conectadosGD} consome tempo amortizado $\Oh(\lg n)$. A rotina \texttt{adicioneLA}, quando acionada, consome tempo esperado constante $\Oh(1)$ em nossa implementação por conta do mapa \textit{hash}. Já inserir uma aresta da floresta chamando \texttt{adicioneFD} consome tempo $\Oh(\lg n)$ (amortizado, em nossa implementação). Portanto, o custo de tempo ao acionar a rotina \texttt{adicioneGD} será amortizado $\Oh(\lg n)$.
 
@@ -275,7 +273,7 @@ A remoção de arestas se divide em dois casos: remoção de uma aresta reserva 
 
 Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente acionar a rotina \texttt{removaLA($R_i$, u, v)} onde $i$ é o nível da aresta a ser removida e $R_i$ a lista de adjacências na qual ela está armazenada. Por conta disso, a floresta maximal $F_L$ do grafo não será afetada. A Figura~\ref{fig:graph_reserve_edge_removal} mostra esse cenário apresentado.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}
         [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
@@ -330,7 +328,7 @@ Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente a
 
 O caso da remoção de uma aresta $uv$ da floresta é mais complexo. Se o grafo no qual queremos fazer a remoção possuir somente uma componente, remover $uv$ iria acabar quebrando ela em duas componentes, as quais chamaremos de árvores $T_u$ e $T_v$, de modo que a primeira contém o vértice $u$ e a segunda contém o vértice $v$. Neste caso, precisamos verificar se existe alguma aresta reserva que ligue $T_u$ a $T_v$, para que possamos garantir que a floresta $F_L $ continue maximal em $G$. Assim, precisamos procurar uma aresta reserva para substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}
         [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
@@ -395,7 +393,7 @@ O motivo de não precisarmos procurar uma substituta em níveis menores que $i$ 
 A seguir, iremos demonstrar a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement1}, temos um grafo $G$ de $n = 10$ vértices. Para facilitar, iremos assumir que, até o momento, só houve inserções de arestas. Temos também que $n = 10$, $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$, e consequentemente, $G = G_4$. Como todas as inserções só acontecem no nível $L$, no momento só temos arestas de nível $4$ na floresta maximal $F_4$ de $G$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que 
 a remoção da aresta $uv$ (representada por uma linha tracejada na figura), que é da floresta, acaba quebrando a única componente do grafo em duas, $T_u$ e $T_v$. 
 
-\begin{figure}
+\begin{figure}[H]
     \centering
 
     \noindent
@@ -406,7 +404,7 @@ a remoção da aresta $uv$ (representada por uma linha tracejada na figura), que
     \begin{minipage}[c]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-        [scale=0.65, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
         edge/.style={thick, black},
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed}]
@@ -460,7 +458,7 @@ a remoção da aresta $uv$ (representada por uma linha tracejada na figura), que
     \begin{minipage}[c]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-            [scale=0.65, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
             edge/.style={thick, black},
             reserve/.style={red, thick},
             removed/.style={black, thick, dashed}]
@@ -502,7 +500,7 @@ O próximo passo é rebaixar o nível de todas as arestas de nível $4$ em $T_u$
 
 Perceba que, devido ao invariante~\ref{invariant2}, podemos ter arestas de diferentes níveis em uma mesma árvore. Assim, percorrer todas as arestas da árvore e selecionar somente as de nível $i$ para rebaixar pode se tornar muito demorado quando o grafo possui uma enorme quantidade de arestas. A forma como o algoritmo procura as arestas de nível $i$ será descrito de maneira mais detalhada a nível de código na Seção~\ref{sec:code-edge-removal}. No momento, só precisamos entender que precisamos rebaixar as arestas da floresta de mesmo nível daquela que foi removida.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
 
     \noindent
@@ -513,7 +511,7 @@ Perceba que, devido ao invariante~\ref{invariant2}, podemos ter arestas de difer
     \begin{minipage}[c]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-        [scale=0.65, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
         edge/.style={thick, black},
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed}]
@@ -566,7 +564,7 @@ Perceba que, devido ao invariante~\ref{invariant2}, podemos ter arestas de difer
     \begin{minipage}[c]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-            [scale=0.65, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
             edge/.style={thick, black},
             reserve/.style={red, thick},
             removed/.style={black, thick, dashed}]
@@ -599,10 +597,119 @@ Perceba que, devido ao invariante~\ref{invariant2}, podemos ter arestas de difer
     \end{minipage}
     \caption{Representação da remoção da aresta $uv$ em $G$. As arestas de nível $4$ de $T_u$ foram rebaixadas para a floresta $F_{3}$.}
     \vspace{-1cm}
-    \label{fig:example-replacement2}
+    \label{fig:example-replacement2}    
 \end{figure}
 
+\raggedbottom
 
+Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção, precisamos achar, se existir, uma aresta reserva que possa reconectá-las. Note que percorrer todas as arestas reservas para achar uma substituta que ligue $T_u$ e $T_v$ pode ser ineficiente quando temos muitas arestas reservas. Por isso, explicaremos como implementar essa busca pela substituta de forma eficiente na Seção~\ref{sec:code-edge-removal}. 
+
+Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas de nível $4$ em $R_4$ que tenha uma das pontas em $T_u$. Para cada aresta percorrida, verificamos se as pontas dela estão contidas em $T_u$. Caso estejam, ela não é candidata à substituta, e por isso a rebaixamos para o nível $3$. Como para lista de adjacências a invariante~\ref{invariant2} não vale, temos que remover essas arestas percorridas em $R_4$ e inserir em $R_3$. No momento que achamos uma aresta substituta, ela passa a ser uma aresta da floresta e conectamos $T_u$ e $T_v$ chamando \texttt{adicioneFD($F_4$, u, v)} no nosso exemplo. De modo em geral, se a aresta substituta é de nível $i$, e $j$ é o nível máximo do grafo, então não será necessário reconectar $T_u$ e $T_v$ chamando \texttt{adicioneFD} do nível $i$ ao nível $j$.
+
+
+
+\begin{figure}[H]
+    \centering
+
+    \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $4$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+        [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        reserveremoved/.style={red, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {u};
+        \node[node] (a) at (-3,4) {a};
+        \node[node] (b) at (-5,2) {b};
+        \node[node] (c) at (-3,0) {c};
+        \node[node] (v) at (2,2) {v};
+        \node[node] (d) at (3,3.7) {d};
+        \node[node] (e) at (3,0.3) {e};
+        \node[node] (f) at (5,0.3) {f};
+        \node[node] (g) at (6, 2) {g};
+        \node[node] (h) at (5, 3.7) {h};
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
+        % reserve edges (normal red edges)
+        
+        \draw[reserve] (a) -- (d) node[midway, below] {};
+        \draw[reserve] (c) -- (v) node[midway, below] {};
+        \draw[reserveremoved] (b) -- (u) node[midway, below] {};
+        \draw[reserveremoved] (c) -- (u) node[midway, below] {};
+        \draw[reserve] (d) -- (f) node[midway, below] {};
+        \draw[reserve] (d) -- (h) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \vspace{1cm}
+        \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $3$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+            [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {u};
+            \node[node] (a) at (-3,4) {a};
+            \node[node] (b) at (-5,2) {b};
+            \node[node] (c) at (-3,0) {c};
+            \node[node] (v) at (2,2) {v};
+            \node[node] (d) at (3,3.7) {d};
+            \node[node] (e) at (3,0.3) {e};
+            \node[node] (f) at (5,0.3) {f};
+            \node[node] (g) at (6, 2) {g};
+            \node[node] (h) at (5, 3.7) {h};
+            
+            
+            % Dotted circles for T_u and T_v
+            \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+            \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+            
+            % Labels for the circles
+            \node at (-3,-1.1) {$T_u$};
+            \node at (4,-1.1) {$T_v$};
+            
+            \draw[reserve] (b) -- (u) node[midway, below] {};
+            \draw[reserve] (c) -- (u) node[midway, below] {};
+            \draw[edge] (a) -- (u) node[midway, below] {};
+            \draw[edge] (a) -- (b) node[midway, below] {};
+            \draw[edge] (b) -- (c) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \caption{Representação da busca pela aresta substituta em $T_u$ de $R_4$. As arestas reservas de nível $4$, inteiramente contidas em $T_u$, estão prestes a ser removidas de $R_4$ e foram rebaixadas para $R_3$.}
+    \vspace{-1cm}
+    \label{fig:example-replacement3}
+\end{figure}
 
 
 
@@ -974,7 +1081,7 @@ Para explicar o Programa~\ref{prog:replaceGD}, iremos usar imagens para ilustrar
 
 Denotando $|T|$ como o número de vértices de uma árvore $T$, podemos, sem perda de generalidade, assumir que $|T_u| \leq |T_v|$. Pela invariante~\ref{invariant3}, temos que $|T| \leq 2^i$, e como $|T_u| + |T_v| = |T|$, então $|T_u| \leq 2^{i-1}$. Por isso, podemos rebaixar todas as arestas de nível $i$ de $|T_u|$ para o nível $i-1$, mantendo-se, assim, a invariante~\ref{invariant3}. 
 
-\begin{figure}
+\begin{figure}[H]
     \centering
 
     \noindent
@@ -985,7 +1092,7 @@ Denotando $|T|$ como o número de vértices de uma árvore $T$, podemos, sem per
     \begin{minipage}[c]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-        [scale=0.65, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        [scale=0.6, node/.style={circle,draw,minimum size=2em, thick, font=\large},
         edge/.style={thick, black},
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed}]
@@ -1040,7 +1147,7 @@ Denotando $|T|$ como o número de vértices de uma árvore $T$, podemos, sem per
     \begin{minipage}[c]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-            [scale=0.65, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+            [scale=0.6, node/.style={circle,draw,minimum size=2em, thick, font=\large},
             edge/.style={thick, black},
             reserve/.style={red, thick},
             removed/.style={black, thick, dashed}]
@@ -1079,7 +1186,7 @@ Alem disso, note que, após o rebaixamento, essas arestas não são mais de nív
 
 O Programa~\ref{fig:example-removal-part2} ilustra o rebaixamento das arestas no grafo.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
 
     \noindent
@@ -1090,7 +1197,7 @@ O Programa~\ref{fig:example-removal-part2} ilustra o rebaixamento das arestas no
     \begin{minipage}[c]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-        [scale=0.65, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        [scale=0.6, node/.style={circle,draw,minimum size=2em, thick, font=\large},
         edge/.style={thick, black},
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed}]
@@ -1144,7 +1251,7 @@ O Programa~\ref{fig:example-removal-part2} ilustra o rebaixamento das arestas no
     \begin{minipage}[c]{0.8\textwidth}
         \centering
         \begin{tikzpicture}
-            [scale=0.65, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+            [scale=0.6, node/.style={circle,draw,minimum size=2em, thick, font=\large},
             edge/.style={thick, black},
             reserve/.style={red, thick},
             removed/.style={black, thick, dashed}]

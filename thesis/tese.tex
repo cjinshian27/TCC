@@ -51,6 +51,7 @@
 
 %\nocolorlinks % para impressão em P&B
 
+
 % Diretórios onde estão as figuras; com isso, não é necessário (mas
 % é permitido) colocar o caminho completo em \includegraphics. Note
 % que a extensão nunca é necessária (mas é permitida), ou seja, o
@@ -104,8 +105,8 @@
   Prof. Dr. Ciclano de Tal -- IME-USP [sem ponto final],
   \profa{} \dra{} Convidada de Tal -- IMPA [sem ponto final],
   }
-
-% A página de rosto da versão para depósito (ou seja, a versão final
+  
+  % A página de rosto da versão para depósito (ou seja, a versão final
 % antes da defesa) deve ser diferente da página de rosto da versão
 % definitiva (ou seja, a versão final após a incorporação das sugestões
 % da banca).
@@ -116,16 +117,16 @@
   %definitiva, % É a versão para defesa ou a versão definitiva?
   %quali, % É qualificação?
   programa={Ciência da Computação},
-}
-
-\defesa{
+  }
+  
+  \defesa{
   local={São Paulo},
   data=2025-06-02, % YYYY-MM-DD
-}
-
-\direitos{CC-BY}
-
-% Para gerar a ficha catalográfica, acesse https://fc.ime.usp.br/,
+  }
+  
+  \direitos{CC-BY}
+  
+  % Para gerar a ficha catalográfica, acesse https://fc.ime.usp.br/,
 % preencha o formulário e escolha a opção "Gerar Código LaTeX".
 % Basta copiar e colar o resultado aqui.
 \fichacatalografica{}
@@ -135,6 +136,8 @@
 %%%%%%%%%%%%%%%%%%%%%%% AQUI COMEÇA O CONTEÚDO DE FATO %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\usepackage{float}       % for [H]
+\usepackage{subcaption}  
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% CAPA E PÁGINAS INICIAIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%
