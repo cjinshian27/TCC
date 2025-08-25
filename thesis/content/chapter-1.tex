@@ -54,7 +54,7 @@ Seja $G$ um grafo com $V(G)$ vértices e $E(G)$ arestas. Se existe um conjunto $
 
 Sendo assim, seja $G_i = G[X]$ um grafo onde $X$ é o conjunto de arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, iremos manter uma floresta maximal $F_i$ de $G_i$, a qual por sua vez é a floresta induzida pelas arestas de $G$ de nível menor ou igual a $i$. Além disso, vamos manter também para cada nível $i$ um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas reservas de nível $i$. 
 
-Consequentemente, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{\left\lceil \lg n \right\rceil}$, para um grafo de $n$ vértices. Daqui, deduzimos que $G = G_{\left\lceil \lg n \right\rceil}$ e que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando na floresta $F_{\left\lceil \lg n \right\rceil}$ de $G$. Da mesma forma, quando chamamos o construtor do grafo dinâmico, estamos criando $\left\lceil \lg n \right\rceil$ florestas de vértices isolados.
+Consequentemente, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{\left\lceil \lg n \right\rceil}$, para um grafo de $n$ vértices, e deduzimos que $G = G_{\left\lceil \lg n \right\rceil}$ e que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando na floresta $F_{\left\lceil \lg n \right\rceil}$ de $G$.
 
 Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
 
@@ -66,7 +66,7 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     \item \label{invariant3} Cada floresta $F_i$ possui no máximo $2^i$ vértices.
 \end{enumerate}
 
-Na Seção~\ref{sec:dynamic-graph-implementation}, iremos descrever como as rotinas da biblioteca funcionam e como cada uma preserva as invariantes acima, de modo a manter a corretude do algoritmo durante toda a sua execução.
+Na Seção~\ref{sec:dynamic-graph-implementation}, iremos descrever com mais detalhes como as rotinas da biblioteca funcionam a nível de código e como cada uma preserva as invariantes acima, de modo a manter a corretude do algoritmo durante toda a sua execução.
 
 Por fim, para simplificar um pouco a notação, iremos escrever $L = \left\lceil \lg n \right\rceil$, isto é, $F_{\left\lceil \lg n \right\rceil}$ passa a ser escrita como $F_{L}$, da mesma forma que $G_L = G_{\left\lceil \lg n \right\rceil}$ e $R_L = R_{\left\lceil \lg n \right\rceil}$.
 
@@ -75,7 +75,7 @@ Por fim, para simplificar um pouco a notação, iremos escrever $L = \left\lceil
 
 % O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, procuramos nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
 
-Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada ao \texttt{conectadosGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserida a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
+Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada à rotina \texttt{conectadosGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserida a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
 
 Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
 
@@ -102,7 +102,7 @@ Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta cham
 
 \subsection{Inserções de arestas no grafo dinâmico}
 
-Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, quando inserimos uma aresta $uv$ no grafo $G$ chamando a rotina \texttt{adicioneGD(G, u, v)}, ela pode ser tanto uma aresta reserva quanto uma aresta da floresta. Assumindo que não exista nenhuma aresta $uv$ na floresta maximal $F_L$ de $G$, temos dois cenários:
+Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma aresta $uv$ no grafo $G$ chamando a rotina \texttt{adicioneGD(G, u, v)}, e, em seguida, testamos a conexidade de $u$ e $v$ chamando a rotina \texttt{conectadosGD(G, u, v)}, que dependendo do resultado $uv$ pode ser inserida como aresta reserva ou aresta da floresta. Assumindo que a aresta $uv$ não exista na floresta maximal $F_L$ de $G$ no momento de sua inserção, temos dois cenários:
 
 \begin{itemize}
     \item 
@@ -212,7 +212,7 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, quando inserimos u
 
 \newpage
 
-Assim, acionamos \texttt{adicioneLA} quando inserimos uma aresta reserva, e essa rotina consome tempo esperado constante $\Oh(1)$ em nossa implementação por conta do mapa \textit{hash}. Já inserir uma aresta da floresta chamando \texttt{adicioneFD} consome tempo $\Oh(\lg n)$ (amortizado, em nossa implementação). Portanto, o custo de tempo ao acionar a rotina \texttt{adicioneGD} será amortizado $\Oh(\lg n)$.
+Em nossa implementação, \texttt{conectadosGD} consome tempo amortizado $\Oh(\lg n)$. A rotina \texttt{adicioneLA}, quando acionada, consome tempo esperado constante $\Oh(1)$ em nossa implementação por conta do mapa \textit{hash}. Já inserir uma aresta da floresta chamando \texttt{adicioneFD} consome tempo $\Oh(\lg n)$ (amortizado, em nossa implementação). Portanto, o custo de tempo ao acionar a rotina \texttt{adicioneGD} será amortizado $\Oh(\lg n)$.
 
 
 
