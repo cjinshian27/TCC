@@ -75,8 +75,6 @@ Por fim, para simplificar um pouco a notação, iremos escrever $L = \left\lceil
 
 % O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, procuramos nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
 
-%Além disso, é fácil ver que a implementação de \texttt{conectadosGD(G, u, v)} é simplesmente o acionamento de \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)}, e portanto tem custo (na nossa implementação, amortizado) O(lg $n$). A implementação de \texttt{adicioneGD(G,u,v)} também é simples: basta acionar o \texttt{conectadosGD(G, u, v)} para decidir se a nova aresta $uv$ é uma aresta reserva ou não e, dependendo disso, incluir $uv$ em $R_{\left\lceil \lg n \right\rceil}$ ou em $F_{\left\lceil \lg n \right\rceil}$. 
-
 Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma chamada ao \texttt{conectadosGD} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então é inserida a aresta $uv$ na floresta maximal que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ nessa floresta. Chamamos essas arestas de \textbf{arestas da floresta}.
 
 Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
@@ -90,15 +88,151 @@ Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chama
 A nossa implementação \cite{chung2025} de listas de adjacências possui um custo $\Oh(n)$ ao acionar o construtor \texttt{listaDeAdjacências}, e para 
 as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperado $\Oh(1)$, visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjancências de $u$.
 
-\section{Criação do grafo dinâmico}
+\section{Rotinas da biblioteca do grafo dinâmico}
+
+\subsection{Criação do grafo}
+\label{sec:dynamic-graph-creation}
 
 Para criar o grafo dinâmico $G$ de $n$ vértices, chamamos a rotina \texttt{grafoDinâmico(G, n)}, que por sua vez irá chamar \texttt{florestaDinâmica(F, n)}, inicializando $\left\lceil \lg n \right\rceil$ florestas dinâmicas de $n$ vértices isolados, e \texttt{listaDeAdjacências(R, n)}, inicializando $\left\lceil \lg n \right\rceil$ listas de adjacências de $n$ vértices isolados. Como as duas últimas rotinas consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico} consome tempo $\Oh(n \lg n)$.
 
-\section{Consultas de conexidade no grafo dinâmico}
+\subsection{Consultas de conexidade no grafo dinâmico}
+\label{sec:dynamic-graph-connectivity-queries}
 
-\section{Inserções de arestas no grafo dinâmico}
+Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta chamarmos \texttt{conectadosGD(G, u, v)}, que por sua vez irá devolver a resposta de \texttt{conectadosFD($F_L$, u, v)}, pois $F_L$ é a floresta maximal de $G$. A rotina \texttt{conectadosFD($F_L$, u, v)} em nossa implementação consome tempo amortizado $\Oh(\lg n)$, e, portanto, \texttt{conectadosGD($F_L$, u, v)} também terá o mesmo consumo de tempo amortizado.
 
-\section{Remoção de arestas no grafo dinâmico}
+\subsection{Inserções de arestas no grafo dinâmico}
+
+Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, quando inserimos uma aresta $uv$ no grafo $G$ chamando a rotina \texttt{adicioneGD(G, u, v)}, ela pode ser tanto uma aresta reserva quanto uma aresta da floresta. Assumindo que não exista nenhuma aresta $uv$ na floresta maximal $F_L$ de $G$, temos dois cenários:
+
+\begin{itemize}
+    \item 
+    Se os vértices $u$ e $v$ já estão conectados, então iremos chamar a função \texttt{adicioneLA($R_L$, u, v)}, que irá armazenar $uv$ como aresta reserva de nível $L$ de $G$ em $R_L$. A Figura~\ref{fig:graph_reserve_edge_uv_addition} ilustra esse cenário.
+
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {u};
+        \node[node] (a) at (-3,4) {a};
+        \node[node] (b) at (-5,2) {b};
+        \node[node] (c) at (-3,0) {c};
+        \node[node] (v) at (2,2) {v};
+        \node[node] (d) at (3,3.7) {d};
+        \node[node] (e) at (3,0.3) {e};
+        \node[node] (f) at (5,0.3) {f};
+        \node[node] (g) at (6, 2) {g};
+        \node[node] (h) at (5, 3.7) {h};
+        
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.6cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[edge] (c) -- (e) node[midway, below] {};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
+
+        % reserve edges (normal red edges)
+        \draw[reserve] (u) -- (v) node[midway, below] {};
+
+
+    \end{tikzpicture}
+    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo. Como queremos inserir a aresta $uv$ e os vértices $u$ e $v$ já estão conectados pelo caminho $u \rightarrow a \rightarrow b \rightarrow c \rightarrow e \rightarrow v$, então armazenamos $uv$ como aresta reserva (em vermelho).}
+    \label{fig:graph_reserve_edge_uv_addition}
+\end{figure}
+
+\begin{itemize}
+    \item  Se $u$ e $v$ não estão conectados por nenhum caminho em $G$, então inserimos $uv$ como aresta de floresta de nível $L$ em $F_L$ chamando a função \texttt{adicioneFD($F_L$, u, v)}. A Figura~\ref{fig:graph_tree_edge_uv_addition} ilustra esse cenário.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        added/.style={thick, green},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {u};
+        \node[node] (a) at (-3,4) {a};
+        \node[node] (b) at (-5,2) {b};
+        \node[node] (c) at (-3,0) {c};
+        \node[node] (v) at (2,2) {v};
+        \node[node] (d) at (3,3.7) {d};
+        \node[node] (e) at (3,0.3) {e};
+        \node[node] (f) at (5,0.3) {f};
+        \node[node] (g) at (6, 2) {g};
+        \node[node] (h) at (5, 3.7) {h};
+        
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.6cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
+        \draw[added] (u) -- (v) node[midway, below] {};
+
+        % reserve edges (normal red edges)
+
+
+    \end{tikzpicture}
+    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo. Como os vértices $u$ e $v$ não estão conectados, então inserimos $uv$ como aresta da floresta (em verde), nesse caso conectando as componentes $T_u$ e $T_v$.}
+    \label{fig:graph_tree_edge_uv_addition}
+\end{figure}
+
+\newpage
+
+Assim, acionamos \texttt{adicioneLA} quando inserimos uma aresta reserva, e essa rotina consome tempo esperado constante $\Oh(1)$ em nossa implementação por conta do mapa \textit{hash}. Já inserir uma aresta da floresta chamando \texttt{adicioneFD} consome tempo $\Oh(\lg n)$ (amortizado, em nossa implementação). Portanto, o custo de tempo ao acionar a rotina \texttt{adicioneGD} será amortizado $\Oh(\lg n)$.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Remoção de arestas no grafo dinâmico}
 \label{sec:dynamic-graph-edge-removal}
 
 A remoção de arestas se divide em dois casos: remoção de uma aresta reserva ou remoção de uma aresta da floresta $F_{\left\lceil \lg n \right\rceil}$.
@@ -352,7 +486,6 @@ Com o Programa~\ref{prog:updateReserveEdgesCount-GD} presente, podemos introduzi
 
 No Programa~\ref{prog:decrementReserveEdgesCount-GD}, atualizamos o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para falso quando ele não tiver mais vizinhos, visto que não haverá mais nenhuma aresta reserva incidente nele. A assinatura \texttt{L[u]} retorna o conjunto de vizinhos do vértice $u$. A rotina auxiliar \texttt{puxeParaRaiz} serve apenas para propagar corretamente a atualização deste atributo nos outros nós que estão conectados com $u$. Como estamos usando uma \textit{splay tree}, então puxar o vértice $u$ para a raiz consome tempo amortizado O(lg$n$). Já a rotina auxiliar \texttt{atualizeIncideArestaReservaDeNível} no Programa~\ref{prog:updateReserveEdgesCount-GD} apenas atualiza o atributo \textit{arestasReservasDeNível}, consumindo tempo $\Oh(1)$. Dessa forma, \texttt{decrementeArestasReservasDeNível} consome tempo amortizado O(lg$n$).
 
-\newpage
 \begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível(F, L, u)} \label{prog:incrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $L$.
     \vspace{-0.5\baselineskip}
