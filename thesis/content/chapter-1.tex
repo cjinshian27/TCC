@@ -93,7 +93,7 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperad
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
 
-Para criar o grafo dinâmico $G$ de $n$ vértices, chamamos a rotina \texttt{grafoDinâmico(G, n)}, que por sua vez irá chamar \texttt{florestaDinâmica(F, n)}, inicializando $\left\lceil \lg n \right\rceil$ florestas dinâmicas de $n$ vértices isolados, e \texttt{listaDeAdjacências(R, n)}, inicializando $\left\lceil \lg n \right\rceil$ listas de adjacências de $n$ vértices isolados. Como as duas últimas rotinas consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico} consome tempo $\Oh(n \lg n)$.
+Para criar o grafo dinâmico $G$ com $n$ vértices isolados, chamamos a rotina \texttt{grafoDinâmico(G, n)}, que por sua vez irá chamar \texttt{florestaDinâmica(F, n)}, inicializando $\left\lceil \lg n \right\rceil$ florestas dinâmicas de $n$ vértices isolados, e \texttt{listaDeAdjacências(R, n)}, inicializando $\left\lceil \lg n \right\rceil$ listas de adjacências de $n$ vértices isolados. Como as duas últimas rotinas consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico} consome tempo $\Oh(n \lg n)$.
 
 \subsection{Consultas de conexidade no grafo dinâmico}
 \label{sec:dynamic-graph-connectivity-queries}
@@ -273,7 +273,7 @@ Em nossa implementação, \texttt{conectadosGD} consome tempo amortizado $\Oh(\l
 
 A remoção de arestas se divide em dois casos: remoção de uma aresta reserva ou remoção de uma aresta da floresta.
 
-Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente acionar a rotina \texttt{removaLA($R_i$, u, v)} onde $i$ é o nível da aresta a ser removida e $R_i$ a lista de adjacências em que ela está armazenada. Por conta disso, a floresta maximal do grafo não será afetada.
+Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente acionar a rotina \texttt{removaLA($R_i$, u, v)} onde $i$ é o nível da aresta a ser removida e $R_i$ a lista de adjacências na qual ela está armazenada. Por conta disso, a floresta maximal $F_L$ do grafo não será afetada. A Figura~\ref{fig:graph_reserve_edge_removal} mostra esse cenário apresentado.
 
 \begin{figure}
     \centering
@@ -311,30 +311,24 @@ Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente a
         \draw[edge] (v) -- (d) node[midway, below] {};
         \draw[edge] (v) -- (f) node[midway, below] {};
         \draw[edge] (v) -- (e) node[midway, below] {};
-        \draw[edge] (u) -- (v) node[midway, below] {};
+        \draw[edge] (c) -- (e) node[midway, below] {};
         \draw[edge] (f) -- (g) node[midway, below] {};
         \draw[edge] (g) -- (h) node[midway, below] {};
 
         % reserve edges (normal red edges)
         \draw[reserve] (a) -- (d) node[midway, below] {};
         \draw[reserve] (c) -- (v) node[midway, below] {};
-        \draw[removed_reserve] (b) -- (u) node[midway, below] {};
+        \draw[removed_reserve] (u) -- (v) node[midway, below] {};
         \draw[reserve] (c) -- (u) node[midway, below] {};
         \draw[reserve] (d) -- (f) node[midway, below] {};
         \draw[reserve] (d) -- (h) node[midway, below] {};
 
     \end{tikzpicture}
-    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo, enquanto as vermelhas são arestas reservas. A aresta vermelha $ub$ tracejada é reserva e está prestes a ser removida.}
+    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo, enquanto as vermelhas são arestas reservas. A aresta vermelha $uv$ tracejada é reserva e está prestes a ser removida.}
     \label{fig:graph_reserve_edge_removal}
 \end{figure}
 
-Já se queremos remover uma aresta $uv$ da floresta $F_{\left\lceil \lg n \right\rceil}$, essa remoção quebrará uma componente em duas, que podemos chamar de árvores $T_u$ e $T_v$, de modo que a primeira contém o vértice $u$ e a segunda contém o vértice $v$. Neste caso, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que a floresta $F_{\left\lceil \lg n \right\rceil} $ continue maximal em $G$. Assim, precisamos procurar uma aresta reserva para substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
-
-Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, vamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in V(T_v)$, então a uma aresta $xy$ é uma aresta substituta, bastando apenas acionar \texttt{adicioneGD(G, x, y)} para reconectar $T_u$ e $T_v$, que virariam uma única componente da floresta $F_{\left\lceil \lg n \right\rceil}$.
-
-Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em tempo amortizado $\Oh(n \lg 2^n)$.
-
-Por fim, o custo da rotina \texttt{grafoDinâmico(G, n)} será $\Oh(n \lg n)$, enquanto que, na nossa implementação, o custo amortizado das demais rotinas será $\Oh(n \lg 2^n)$, que serão descritas na Seção~\ref{sec:dynamic-graph-implementation}.
+O caso da remoção de uma aresta $uv$ da floresta é mais complexo. Se o grafo no qual queremos fazer a remoção possuir somente uma componente, remover $uv$ iria acabar quebrando ela em duas componentes, as quais chamaremos de árvores $T_u$ e $T_v$, de modo que a primeira contém o vértice $u$ e a segunda contém o vértice $v$. Neste caso, precisamos verificar se existe alguma aresta reserva que ligue $T_u$ a $T_v$, para que possamos garantir que a floresta $F_L $ continue maximal em $G$. Assim, precisamos procurar uma aresta reserva para substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
 
 \begin{figure}
     \centering
@@ -371,11 +365,11 @@ Por fim, o custo da rotina \texttt{grafoDinâmico(G, n)} será $\Oh(n \lg n)$, e
         \draw[edge] (v) -- (d) node[midway, below] {};
         \draw[edge] (v) -- (f) node[midway, below] {};
         \draw[edge] (v) -- (e) node[midway, below] {};
-        \draw[removed] (u) -- (v) node[midway, above] {uv};
+        \draw[removed] (u) -- (v) node[midway, above] {};
         \draw[edge] (f) -- (g) node[midway, below] {};
         \draw[edge] (g) -- (h) node[midway, below] {};
-        \draw[reserve] (a) -- (d) node[midway, below] {ad};
-        \draw[reserve] (c) -- (v) node[midway, below] {cv};
+        \draw[reserve] (a) -- (d) node[midway, below] {};
+        \draw[reserve] (c) -- (v) node[midway, below] {};
 
         % reserve edges (normal red edges)
         \draw[reserve] (b) -- (u) node[midway, below] {};
@@ -384,9 +378,17 @@ Por fim, o custo da rotina \texttt{grafoDinâmico(G, n)} será $\Oh(n \lg n)$, e
         \draw[reserve] (d) -- (h) node[midway, below] {};
 
     \end{tikzpicture}
-    \caption{As arestas pretas são da floresta maximal $F_{\left\lceil \lg n \right\rceil}$ do grafo, enquanto as vermelhas são reservas. A aresta $uv$ tracejada está prestes a ser removida e substituída pela $ad$ ou $cv$, que ligam $T_u$ e $T_v$.}
+    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo, enquanto as vermelhas são reservas. A aresta $uv$ tracejada está prestes a ser removida e substituída pela $ad$ ou $cv$, pois qualquer uma destas liga $T_u$ a $T_v$.}
     \label{fig:graph_with_Tu_and_Tv_with_reserve_edge}
 \end{figure}
+
+
+Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, vamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in V(T_v)$, então a aresta $xy$ é uma aresta substituta, bastando apenas acionar \texttt{adicioneGD(G, x, y)} para reconectar $T_u$ e $T_v$, que virariam uma única componente da floresta $F_L$.
+
+Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em tempo amortizado $\Oh(n \lg 2^n)$.
+
+
+
 
 \section{Implementação do grafo dinâmico}
 \label{sec:dynamic-graph-implementation}
