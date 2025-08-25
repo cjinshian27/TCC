@@ -232,14 +232,48 @@ Em nossa implementação, \texttt{conectadosGD} consome tempo amortizado $\Oh(\l
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \subsection{Remoção de arestas no grafo dinâmico}
 \label{sec:dynamic-graph-edge-removal}
 
-A remoção de arestas se divide em dois casos: remoção de uma aresta reserva ou remoção de uma aresta da floresta $F_{\left\lceil \lg n \right\rceil}$.
+A remoção de arestas se divide em dois casos: remoção de uma aresta reserva ou remoção de uma aresta da floresta.
 
-Quando queremos remover uma aresta reserva, podemos simplesmente acionar a rotina \texttt{removaLA} à lista $R_i$ em que $i$ é o nível da aresta removida(da lista de adjacências), e a floresta maximal do grafo não será afetada. Já se queremos remover uma aresta $uv$ da floresta $F_{\left\lceil \lg n \right\rceil}$, essa remoção quebrará uma componente em duas, que podemos chamar de árvores $T_u$ e $T_v$, de modo que a primeira contém o vértice $u$ e a segunda contém o vértice $v$. Neste caso, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que a floresta $F_{\left\lceil \lg n \right\rceil} $ continue maximal em $G$. Assim, precisamos procurar uma aresta reserva para substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
-
-Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, vamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in V(T_v)$, então a uma aresta $xy$ é uma aresta substituta, bastando apenas acionar \texttt{adicioneGD(G, x, y)} para reconectar $T_u$ e $T_v$, que virariam uma única componente da floresta $F_{\left\lceil \lg n \right\rceil}$.
+Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente acionar a rotina \texttt{removaLA($R_i$, u, v)} onde $i$ é o nível da aresta a ser removida e $R_i$ a lista de adjacências em que ela está armazenada. Por conta disso, a floresta maximal do grafo não será afetada.
 
 \begin{figure}
     \centering
@@ -247,7 +281,8 @@ Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é
         [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
         edge/.style={thick, black},
         reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}]
+        removed/.style={black, thick, dashed},
+        removed_reserve/.style={red, thick, dashed}]
 
         \node[node] (u) at (-1,2) {u};
         \node[node] (a) at (-3,4) {a};
@@ -283,15 +318,19 @@ Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é
         % reserve edges (normal red edges)
         \draw[reserve] (a) -- (d) node[midway, below] {};
         \draw[reserve] (c) -- (v) node[midway, below] {};
-        \draw[reserve] (b) -- (u) node[midway, below] {};
+        \draw[removed_reserve] (b) -- (u) node[midway, below] {};
         \draw[reserve] (c) -- (u) node[midway, below] {};
         \draw[reserve] (d) -- (f) node[midway, below] {};
         \draw[reserve] (d) -- (h) node[midway, below] {};
 
     \end{tikzpicture}
-    \caption{Um grafo com 10 vértices. As arestas pretas são da floresta maximal $F_{\left\lceil \lg n \right\rceil}$ do grafo, enquanto as vermelhas são arestas reservas.}
-    \label{fig:graph_with_Tu_and_Tv}
+    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo, enquanto as vermelhas são arestas reservas. A aresta vermelha $ub$ tracejada é reserva e está prestes a ser removida.}
+    \label{fig:graph_reserve_edge_removal}
 \end{figure}
+
+Já se queremos remover uma aresta $uv$ da floresta $F_{\left\lceil \lg n \right\rceil}$, essa remoção quebrará uma componente em duas, que podemos chamar de árvores $T_u$ e $T_v$, de modo que a primeira contém o vértice $u$ e a segunda contém o vértice $v$. Neste caso, precisamos verificar se existe alguma aresta reserva que liga $T_u$ a $T_v$, para que possamos garantir que a floresta $F_{\left\lceil \lg n \right\rceil} $ continue maximal em $G$. Assim, precisamos procurar uma aresta reserva para substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
+
+Podemos supor, sem perda de generalidade, que o número de vértices de $T_u$ é no máximo o de $T_v$. Assim, para procurar uma aresta reserva que substitua a removida, vamos percorrer cada vértice $x$ de $T_u$ e verificar se existe algum vértice $y$ na lista de adjacências de $x$, de modo que $y$ esteja em $T_v$. Se $y \in V(T_v)$, então a uma aresta $xy$ é uma aresta substituta, bastando apenas acionar \texttt{adicioneGD(G, x, y)} para reconectar $T_u$ e $T_v$, que virariam uma única componente da floresta $F_{\left\lceil \lg n \right\rceil}$.
 
 Assim, torna-se necessário uma implementação mais eficiente para a rotina de remoção de arestas, e por isso apresentaremos a solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, que resolve este problema em tempo amortizado $\Oh(n \lg 2^n)$.
 
