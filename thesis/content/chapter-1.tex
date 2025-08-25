@@ -86,7 +86,7 @@ Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chama
 \end{itemize} 
 
 A nossa implementação \cite{chung2025} de listas de adjacências possui um custo $\Oh(n)$ ao acionar o construtor \texttt{listaDeAdjacências}, e para 
-as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperado $\Oh(1)$, visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjancências de $u$.
+as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperado $\Oh(1)$, visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjacências de $u$.
 
 \section{Rotinas da biblioteca do grafo dinâmico}
 
@@ -604,9 +604,6 @@ Perceba que, devido ao invariante~\ref{invariant2}, podemos ter arestas de difer
 
 Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção, precisamos achar, se existir, uma aresta reserva que possa reconectá-las. Note que percorrer todas as arestas reservas para achar uma substituta que ligue $T_u$ e $T_v$ pode ser ineficiente quando temos muitas arestas reservas. Por isso, explicaremos como implementar essa busca pela substituta de forma eficiente na Seção~\ref{sec:code-edge-removal}. 
 
-Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas de nível $4$ em $R_4$ que tenha uma das pontas em $T_u$. Para cada aresta percorrida, verificamos se as pontas dela estão contidas em $T_u$. Caso estejam, ela não é candidata à substituta, e por isso a rebaixamos para o nível $3$. Como para lista de adjacências a invariante~\ref{invariant2} não vale, temos que remover essas arestas percorridas em $R_4$ e inserir em $R_3$. No momento que achamos uma aresta substituta, ela passa a ser uma aresta da floresta e conectamos $T_u$ e $T_v$ chamando \texttt{adicioneFD($F_4$, u, v)} no nosso exemplo. De modo em geral, se a aresta substituta é de nível $i$, e $j$ é o nível máximo do grafo, então não será necessário reconectar $T_u$ e $T_v$ chamando \texttt{adicioneFD} do nível $i$ ao nível $j$.
-
-
 
 \begin{figure}[H]
     \centering
@@ -706,14 +703,117 @@ Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas de ní
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Representação da busca pela aresta substituta em $T_u$ de $R_4$. As arestas reservas de nível $4$, inteiramente contidas em $T_u$, estão prestes a ser removidas de $R_4$ e foram rebaixadas para $R_3$.}
+    \caption{Representação da busca pela aresta substituta em $T_u$ de $R_4$. As arestas reservas de nível $4$, inteiramente contidas em $T_u$, estão prestes a ser removidas de $R_4$ e foram rebaixadas para o nível $3$.}
     \vspace{-1cm}
     \label{fig:example-replacement3}
 \end{figure}
 
+Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas de nível $4$ em $R_4$ que tenha uma das pontas em $T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. Caso não incida, a aresta está inteiramente contida em $T_u$ e logo ela não pode ser a substituta, e por isso a rebaixamos para o nível $3$. Como as invariantes não valem para listas de adjacências, temos que remover de $R_4$ essas arestas percorridas e inseri-las em $R_3$. 
 
+No momento em que achamos uma aresta substituta $xy$, ela passa a ser uma aresta da floresta e conectamos $T_u$ e $T_v$ chamando \texttt{adicioneFD($F_i$, x, y)}. De modo geral, se a aresta substituta é de nível $i$, e $j$ é o nível máximo do grafo, então será necessário reconectar $T_u$ e $T_v$ chamando \texttt{adicioneFD} do nível $i$ ao nível $j$.
 
+No nosso exemplo, ilustrado na Figura~\ref{fig:example-replacement4}, assumindo que achamos a aresta substituta $ad$, chamamos \texttt{adicioneFD($F_4$, a, d)} para conectar $T_u$ e $T_v$. Como $i = 4$ é o nível máximo do grafo, então terminamos o algoritmo para achar uma aresta substituta.
 
+\begin{figure}[H]
+    \centering
+
+    \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $4$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+        [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        reserveremoved/.style={red, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {u};
+        \node[node] (a) at (-3,4) {a};
+        \node[node] (b) at (-5,2) {b};
+        \node[node] (c) at (-3,0) {c};
+        \node[node] (v) at (2,2) {v};
+        \node[node] (d) at (3,3.7) {d};
+        \node[node] (e) at (3,0.3) {e};
+        \node[node] (f) at (5,0.3) {f};
+        \node[node] (g) at (6, 2) {g};
+        \node[node] (h) at (5, 3.7) {h};
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
+        % reserve edges (normal red edges)
+        
+        \draw[edge] (a) -- (d) node[midway, below] {};
+        \draw[reserve] (c) -- (v) node[midway, below] {};
+        \draw[reserve] (d) -- (f) node[midway, below] {};
+        \draw[reserve] (d) -- (h) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \vspace{1cm}
+        \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $3$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+            [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {u};
+            \node[node] (a) at (-3,4) {a};
+            \node[node] (b) at (-5,2) {b};
+            \node[node] (c) at (-3,0) {c};
+            \node[node] (v) at (2,2) {v};
+            \node[node] (d) at (3,3.7) {d};
+            \node[node] (e) at (3,0.3) {e};
+            \node[node] (f) at (5,0.3) {f};
+            \node[node] (g) at (6, 2) {g};
+            \node[node] (h) at (5, 3.7) {h};
+            
+            
+            % Dotted circles for T_u and T_v
+            \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+            \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+            
+            % Labels for the circles
+            \node at (-3,-1.1) {$T_u$};
+            \node at (4,-1.1) {$T_v$};
+            
+            \draw[reserve] (b) -- (u) node[midway, below] {};
+            \draw[reserve] (c) -- (u) node[midway, below] {};
+            \draw[edge] (a) -- (u) node[midway, below] {};
+            \draw[edge] (a) -- (b) node[midway, below] {};
+            \draw[edge] (b) -- (c) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \caption{Representação do grafo com a aresta substituta $ad$ escohida para reconectar $T_u$ e $T_v$.}
+    \vspace{-1cm}
+    \label{fig:example-replacement4}
+\end{figure}
 
 
 
