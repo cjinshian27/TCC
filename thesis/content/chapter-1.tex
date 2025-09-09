@@ -20,7 +20,7 @@ Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros
 O problema da conexidade em florestas dinâmicas pode ser considerado uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. A biblioteca que usaremos contém os seguintes métodos:
 
 \begin{itemize}
-    \item \texttt{\textbf{florestaDinâmica(F, n)}}: constrói e devolve uma floresta dinâmica $F$ com $n$ vértices isolados;
+    \item \texttt{\textbf{florestaDinâmica(n)}}: constrói e devolve uma floresta dinâmica $F$ com $n$ vértices sem arestas ;
     \item \texttt{\textbf{conectadosFD(F, u, v)}}: devolve verdadeiro se \textit{u} e \textit{v} estão na mesma componente da floresta $F$ e falso caso contrário;
     \item \texttt{\textbf{adicioneFD(F, u, v)}}: insere uma aresta \textit{uv} na floresta $F$;
     \item \texttt{\textbf{removaFD(u, v)}}: remove a aresta \textit{uv} da floresta $F$.
@@ -29,7 +29,7 @@ O problema da conexidade em florestas dinâmicas pode ser considerado uma simpli
 
 A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que são de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. Isso faz com que o custo de uma sequência de $m$ operações (inserção, remoção ou busca) em uma árvore \textit{splay} com $n$ nós seja $\Oh(m\lg n)$, ou seja, o custo amortizado por operação é $\Oh(\lg n)$. Como também já existe bastante literatura sobre árvores \textit{splay}~\cite[Lecture 12]{kozen}, e seu funcionamento interno não afeta a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
 
-Nesse sentido, o resultado é uma implementação em que \texttt{florestaDinâmica(F, n)} tem custo $\Theta(n)$ e os demais métodos da biblioteca têm custo amortizado $\Oh(\lg n)$.
+Nesse sentido, o resultado é uma implementação em que \texttt{florestaDinâmica(n)} tem custo $\Theta(n)$ e os demais métodos da biblioteca têm custo amortizado $\Oh(\lg n)$.
 
 \section{Estrutura do grafo dinâmico}
 \label{sec:dynamic-graph-structure}
@@ -37,7 +37,7 @@ Nesse sentido, o resultado é uma implementação em que \texttt{florestaDinâmi
 Implementar o grafo dinâmico resume-se à construção da seguinte biblioteca de forma eficiente:
 
 \begin{itemize}
-    \item \texttt{\textbf{grafoDinâmico(G, n)}}: contrói e devolve um grafo dinâmico $G$ com $n$ vértices isolados;
+    \item \texttt{\textbf{grafoDinâmico(n)}}: contrói e devolve um grafo dinâmico com $n$ vértices sem arestas ;
     \item \texttt{\textbf{conectadosGD(G, u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
     \item \texttt{\textbf{adicioneGD(G, u, v)}}: adiciona a aresta $uv$ no grafo $G$;
     \item \texttt{\textbf{removaGD(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
@@ -50,9 +50,9 @@ Para entender a base de como cada uma dessas rotinas funcionam, será necessári
 
 Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada a técnica de fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. 
 
-Seja $G$ um grafo com $V(G)$ vértices e $E(G)$ arestas. Se existe um conjunto $X$ de arestas tal que $\emptyset \neq X \subseteq E(G)$, então o subgrafo de $G$ \textbf{induzido} por $X$ é o subgrafo $H$ de $G$ tal que $V(H) = \{v \in  V(G): v \text{ é extremo de alguma aresta de }X \}$ e $E(H) = X$. Denotamos, portanto, $H$ como $G[X]$.
+Seja $G$ um grafo com $V(G)$ vértices e $E(G)$ arestas. Se $X$ é um conjunto de arestas tal que $\emptyset \neq X \subseteq E(G)$, então dizemos que o subgrafo de $G$ \textbf{induzido} por $X$ é o subgrafo gerador $H$ de $G$ tal que $E(H) = X$. Denotamos, portanto, $H$ como $G[X]$.
 
-Sendo assim, seja $G_i = G[X]$ um grafo onde $X$ é o conjunto de arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, iremos manter uma floresta maximal $F_i$ de $G_i$, a qual por sua vez é a floresta induzida pelas arestas de $G$ de nível menor ou igual a $i$. Além disso, vamos manter também para cada nível $i$ um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas reservas de nível $i$. 
+Sendo assim, seja $G_i = G[X]$ um grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Além disso, vamos manter também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$. 
 
 Consequentemente, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{\left\lceil \lg n \right\rceil}$, para um grafo de $n$ vértices, e deduzimos que $G = G_{\left\lceil \lg n \right\rceil}$ e que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando na floresta $F_{\left\lceil \lg n \right\rceil}$ de $G$.
 
@@ -80,7 +80,7 @@ Quando realizamos uma chamada à função \texttt{adicioneGD}, é feita uma cham
 Caso $u$ e $v$ já estiverem conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada em um grafo representado por listas de adjacências, que contém a seguinte biblioteca:
 
 \begin{itemize}
-    \item \texttt{\textbf{listaDeAdjacências(R, n)}}: constrói e devolve um grafo $R$ contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
+    \item \texttt{\textbf{listaDeAdjacências(n)}}: constrói e devolve um grafo $R$ contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
     \item \texttt{\textbf{adicioneLA(R, u, v)}}: adiciona $u$ na lista de adjacências de $v$ em $R$ e vice-versa;
     \item \texttt{\textbf{removaLA(R, u, v)}}: remove $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
 \end{itemize} 
@@ -93,7 +93,7 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperad
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
 
-Para criar o grafo dinâmico $G$ com $n$ vértices isolados, chamamos a rotina \texttt{grafoDinâmico(G, n)}, que por sua vez irá chamar \texttt{florestaDinâmica(F, n)}, inicializando $\left\lceil \lg n \right\rceil$ florestas dinâmicas de $n$ vértices isolados, e \texttt{listaDeAdjacências(R, n)}, inicializando $\left\lceil \lg n \right\rceil$ listas de adjacências de $n$ vértices isolados. Como as duas últimas rotinas consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico} consome tempo $\Oh(n \lg n)$.
+Para criar o grafo dinâmico $G$ com $n$ vértices sem arestas , chamamos a rotina \texttt{grafoDinâmico(n)}, que por sua vez irá chamar \texttt{florestaDinâmica(n)}, inicializando $\left\lceil \lg n \right\rceil$ florestas dinâmicas de $n$ vértices isolados, e \texttt{listaDeAdjacências(n)}, inicializando $\left\lceil \lg n \right\rceil$ listas de adjacências de $n$ vértices isolados. Como as duas últimas rotinas consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico} consome tempo $\Oh(n \lg n)$.
 
 \subsection{Consultas de conexidade no grafo dinâmico}
 \label{sec:dynamic-graph-connectivity-queries}
@@ -866,7 +866,7 @@ Como essa seção é para dar mais um contexto geral de como a remoção de ares
 \subsection{Construtor}
 \label{sec:code-constructor}
 
-Para implementar um grafo dinâmico, chamamos \texttt{grafoDinâmico(n)} para inicializar cada $F_i$ e $R_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacências com $n$ vértices isolados para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $R_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
+Para implementar um grafo dinâmico, chamamos \texttt{grafoDinâmico(n)} para inicializar cada $F_i$ e $R_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacências com $n$ vértices sem arestas  para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $R_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
 
 Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave os valores das pontas da aresta ($u$ e $v$) e retornam o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuir a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
@@ -883,7 +883,7 @@ Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}
 
 \begin{programruledcaption}{\texttt{grafoDinâmico(n)} \label{prog:newGD}}
     \noindent\textbf{Entrada}: Recebe um número $n$ de vértices do grafo. \\
-    \textbf{Saída}: Devolve um grafo dinâmico $G$ com $n$ vértices isolados.
+    \textbf{Saída}: Devolve um grafo dinâmico $G$ com $n$ vértices sem arestas .
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -894,15 +894,15 @@ Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}
         escapeinside={(*@}{@*)},
     ]
     \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
-        G.$F_i$ := \texttt{florestaDinâmica(F, n)}
-        G.$R_i$ := \texttt{listaDeAdjacências(R, n)}
+        G.$F_i$ := \texttt{florestaDinâmica(n)}
+        G.$R_i$ := \texttt{listaDeAdjacências(n)}
     G.nível := \texttt{novoMapaHash(n)}
     devolva G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como ambos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico(n)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além, disso, as invariantes são mantidas porque estamos criando um grafo com $n$ vértices isolados.
+Como ambos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico(n)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além, disso, as invariantes são mantidas porque estamos criando um grafo com $n$ vértices sem arestas .
 
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
