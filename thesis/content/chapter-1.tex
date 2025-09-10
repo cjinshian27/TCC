@@ -66,7 +66,7 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     \item \label{invariant3} Cada componente da floresta $F_i$ possui no máximo $2^i$ vértices.
 \end{enumerate}
 
-Na Seção~\ref{sec:dynamic-graph-implementation}, descreveremos com mais detalhes como as rotinas da biblioteca funcionam e como cada uma preserva as invariantes acima, de modo a manter a corretude do algoritmo durante toda a sua execução.
+Na Seção~\ref{sec:dynamic-graph-routines}, descreveremos com mais detalhes como as rotinas da biblioteca funcionam e como cada uma preserva as invariantes acima, de modo a manter a corretude do algoritmo durante toda a sua execução.
 
 Por fim, para simplificar um pouco a notação, iremos escrever $L = \left\lceil \lg n \right\rceil$, isto é, $F_{\left\lceil \lg n \right\rceil}$ passa a ser escrita como $F_{L}$, da mesma forma que $G_L = G_{\left\lceil \lg n \right\rceil}$ e $R_L = R_{\left\lceil \lg n \right\rceil}$.
 
@@ -89,6 +89,7 @@ A nossa implementação \cite{chung2025} de listas de adjacências possui um cus
 as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $\Oh(1)$, visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ na lista de $u$ e, remoção de $v$ da lista de adjacências de $u$.
 
 \section{Rotinas da biblioteca do grafo dinâmico}
+\label{sec:dynamic-graph-routines}
 
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
