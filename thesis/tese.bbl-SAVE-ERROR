@@ -63,6 +63,45 @@
       \field{title}{Introduction to Algorithms}
       \field{year}{2009}
     \endentry
+    \entry{henzinger_king}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=8397503437f589797f52937b49c16620}{%
+           family={Henzinger},
+           familyi={H\bibinitperiod},
+           given={Monika\bibnamedelima Rauch},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=523d42c006c014c1ea6e02836f89825e}{%
+           family={King},
+           familyi={K\bibinitperiod},
+           given={Valerie},
+           giveni={V\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Las Vegas, Nevada, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{00df9619d4f8b837c440cb618da977f5}
+      \strng{fullhash}{00df9619d4f8b837c440cb618da977f5}
+      \strng{bibnamehash}{00df9619d4f8b837c440cb618da977f5}
+      \strng{authorbibnamehash}{00df9619d4f8b837c440cb618da977f5}
+      \strng{authornamehash}{00df9619d4f8b837c440cb618da977f5}
+      \strng{authorfullhash}{00df9619d4f8b837c440cb618da977f5}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 27th Annual ACM Symposium on Theory of Computing (STOC '95)}
+      \field{isbn}{0897917189}
+      \field{title}{Randomized dynamic graph algorithms with polylogarithmic time per operation}
+      \field{year}{1995}
+      \field{pages}{519\bibrangedash 527}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1145/225058.225269
+      \endverb
+    \endentry
     \entry{jacob_holm}{article}{}
       \name{author}{3}{}{%
         {{hash=5ef988b66ee622a15f50641b757c54e2}{%

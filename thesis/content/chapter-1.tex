@@ -754,7 +754,7 @@ Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas de ní
         \draw[edge] (f) -- (g) node[midway, below] {};
         \draw[edge] (g) -- (h) node[midway, below] {};
         % reserve edges (normal red edges)
-        
+  
         \draw[reserve] (a) -- (d) node[midway, below] {};
         \draw[reserve] (c) -- (v) node[midway, below] {};
         \draw[reserveremoved] (b) -- (u) node[midway, below] {};
@@ -1029,8 +1029,40 @@ A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} prop�
 A representação da árvore $T$ é basicamente a sequência de arcos que forma uma trilha euleriana do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, então o arco será escrito como $uu$. Dessa forma, no exemplo da Figura~\ref{fig:euler-tour-trees}, temos a seguinte trilha euleriana: 
 
 \begin{center}
-    
+    \textit{ee ea aa ab bb ba ad dd dc cc cd da ae}
 \end{center}
+
+Note que, embora tenhamos passado pelo mesmo vértice mais de uma vez, só escrevemos uma vez o laço quando passamos por ele pela primeira vez. Além disso, a sequência dos arcos pode mudar dependendo do vértice inicial e da ordem em que o vizinho de cada vértice é visitado.
+
+Henzing e King \cite{henzinger_king} propuseram armazenar uma sequência euleriana em uma árvore binária de busca. 
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}]
+
+        \node[node] (ad) at (0, 0) {$ad$};
+        \node[node] (ab) at (-3, -2) {$ab$};
+        \node[node] (cd) at (3, -2) {$cd$};
+        \node[node] (ea) at (-4, -4) {$ea$};
+        \node[node] (ba) at (-2, -4) {$ba$};
+
+        
+
+        % tree edges (normal black edges)
+        \draw[edge] (ad) -- (ab) node[midway, below] {};
+        \draw[edge] (ad) -- (cd) node[midway, below] {};
+
+
+    \end{tikzpicture}
+    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo. Como queremos inserir a aresta $uv$ e os vértices $u$ e $v$ já estão conectados pelo caminho $u \rightarrow a \rightarrow b \rightarrow c \rightarrow e \rightarrow v$, então armazenamos $uv$ como aresta reserva (em vermelho).}
+    \label{fig:euler-tour-balanced-tree}
+\end{figure}
+
 
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
