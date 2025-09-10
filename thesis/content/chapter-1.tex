@@ -363,7 +363,7 @@ A invariante \ref{invariant1} se mantém para o nível $i = \left\lceil \lg n \r
 
 A remoção de arestas se divide em dois casos: remoção de uma aresta reserva ou remoção de uma aresta da floresta.
 
-Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente acionar a rotina \texttt{removaLA($R_i$, u, v)} onde $i$ é o nível da aresta a ser removida e $R_i$ a lista de adjacências na qual ela está armazenada. Por conta disso, a floresta maximal $F_L$ do grafo não será afetada. A Figura~\ref{fig:graph_reserve_edge_removal} mostra esse cenário apresentado.
+Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente acionar a rotina \texttt{removaLA($R_i$, $u$, $v$)} onde $i$ é o nível da aresta a ser removida e $R_i$ a lista de adjacências na qual ela está armazenada. Por conta disso, nenhuma das florestas maximais $F_j$ do grafo será afetada, e as três invariantes serão mantidas. A Figura~\ref{fig:graph_reserve_edge_removal} mostra esse cenário apresentado.
 
 \begin{figure}[H]
     \centering
@@ -385,14 +385,6 @@ Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente a
         \node[node] (g) at (6, 2) {$g$};
         \node[node] (h) at (5, 3.7) {$h$};
         
-        
-         % Dotted circles for T_u and T_v
-        \draw[dotted, thick, gray] (-3,2) circle (2.6cm);
-        \draw[dotted, thick, gray] (4,2) circle (2.6cm);  
-        
-        % Labels for the circles
-        \node at (-3,-1.1) {$T_u$};
-        \node at (4,-1.1) {$T_v$};
 
         % tree edges (normal black edges)
         \draw[edge] (a) -- (u) node[midway, below] {};
@@ -418,7 +410,7 @@ Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente a
     \label{fig:graph_reserve_edge_removal}
 \end{figure}
 
-O caso da remoção de uma aresta $uv$ da floresta é mais complexo. Se o grafo no qual queremos fazer a remoção possuir somente uma componente, remover $uv$ iria acabar quebrando ela em duas componentes, as quais chamaremos de árvores $T_u$ e $T_v$, de modo que a primeira contém o vértice $u$ e a segunda contém o vértice $v$. Neste caso, precisamos verificar se existe alguma aresta reserva que ligue $T_u$ à $T_v$, para que possamos garantir que a floresta $F_L $ continue maximal em $G$. Assim, precisamos procurar uma aresta reserva para substituir a aresta que foi removida de $G$, que vamos chamar de \textbf{aresta substituta}.
+O caso da remoção de uma aresta $uv$ da floresta é mais complexo. Se a aresta $uv$ tem nível $i$, remover $uv$ sempre quebra uma componente de $F_i$ em duas árvores $T_u$ e $T_v$, de modo que a primeira contém o vértice $u$ e a segunda contém o vértice $v$. Neste caso, precisamos verificar se existe alguma aresta reserva que ligue $T_u$ a $T_v$, para que possamos garantir que a floresta $F_i$ continue maximal em $G_i$. Chamamos uma tal aresta de \textbf{aresta substituta}.
 
 \begin{figure}[H]
     \centering
@@ -468,7 +460,7 @@ O caso da remoção de uma aresta $uv$ da floresta é mais complexo. Se o grafo 
         \draw[reserve] (d) -- (h) node[midway, below] {};
 
     \end{tikzpicture}
-    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo, enquanto as vermelhas são reservas. A aresta $uv$ tracejada está prestes a ser removida e substituída pela $ad$ ou $cv$, pois qualquer uma destas liga $T_u$ à $T_v$.}
+    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo, enquanto as vermelhas são reservas. A aresta $uv$ tracejada está prestes a ser removida e substituída pela $ad$ ou $cv$, pois qualquer uma destas liga $T_u$ a $T_v$.}
     \label{fig:graph_with_Tu_and_Tv_with_reserve_edge}
 \end{figure}
 
@@ -694,7 +686,7 @@ Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de difer
 
 \raggedbottom
 
-Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos achar, se existir, uma aresta reserva que possa reconectá-las. Note que percorrer todas as arestas reservas para achar uma substituta que ligue $T_u$ à $T_v$ pode ser ineficiente quando temos muitas arestas reservas. Por isso, explicaremos como implementar essa busca pela substituta de forma eficiente na Seção~\ref{sec:code-edge-removal}. 
+Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos achar, se existir, uma aresta reserva que possa reconectá-las. Note que percorrer todas as arestas reservas para achar uma substituta que ligue $T_u$ a $T_v$ pode ser ineficiente quando temos muitas arestas reservas. Por isso, explicaremos como implementar essa busca pela substituta de forma eficiente na Seção~\ref{sec:code-edge-removal}. 
 
 
 \begin{figure}[H]
@@ -802,7 +794,7 @@ Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisa
 
 Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas de nível $4$ em $R_4$ que tenha uma das pontas em $T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. Caso não incida, a aresta está inteiramente contida em $T_u$ e logo ela não pode ser a substituta, e então a rebaixamos para o nível $3$. Como as invariantes não valem para listas de adjacências, temos que remover de $R_4$ essas arestas percorridas e inseri-las em $R_3$. Para o caso geral, se estamos percorrendo uma aresta reserva de nível $i$ e ela não é substituta, ela será rebaixada para o nível $i-1$, passando a existir somente em $R_{i-1}$. 
 
-No momento em que achamos uma aresta substituta $xy$ de nível $i$, conectamos $T_u$ à $T_v$ chamando \texttt{adicioneFD($F_i$, x, y)} e ela passa a ser uma aresta da floresta. De modo geral, se a aresta substituta é de nível $i$, e $j$ é o nível máximo do grafo, então será necessário reconectar $T_u$ à $T_v$ de todas as florestas chamando \texttt{adicioneFD}, do nível $i$ ao $j$, para preservar a invariante~\ref{invariant2}.
+No momento em que achamos uma aresta substituta $xy$ de nível $i$, conectamos $T_u$ a $T_v$ chamando \texttt{adicioneFD($F_i$, x, y)} e ela passa a ser uma aresta da floresta. De modo geral, se a aresta substituta é de nível $i$, e $j$ é o nível máximo do grafo, então será necessário reconectar $T_u$ a $T_v$ de todas as florestas chamando \texttt{adicioneFD}, do nível $i$ ao $j$, para preservar a invariante~\ref{invariant2}.
 
 No nosso exemplo, ilustrado na Figura~\ref{fig:example-replacement4}, assumindo que achamos a aresta substituta $ad$, chamamos \texttt{adicioneFD($F_4$, a, d)} para conectar $T_u$ e $T_v$. Como $i = 4$ é o nível máximo do grafo, então terminamos a execução do algoritmo.
 
@@ -904,7 +896,7 @@ Quando removemos uma aresta da floresta de nível $i$ que quebra a floresta em d
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Representação do grafo com a aresta substituta $ad$ escohida para conectar $T_u$ à $T_v$ em $F_4$, tornando-se uma aresta da floresta.}
+    \caption{Representação do grafo com a aresta substituta $ad$ escohida para conectar $T_u$ a $T_v$ em $F_4$, tornando-se uma aresta da floresta.}
     \vspace{-1cm}
     \label{fig:example-replacement4}
 \end{figure}
