@@ -963,10 +963,67 @@ Como essa seção é para dar mais um contexto geral de como a remoção de ares
 \section{Implementação do grafo dinâmico}
 \label{sec:dynamic-graph-implementation}
 
+\subsection{Euler Tour Trees}
+\label{sec:euler-tour-trees}
+
+A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propõe o uso de Euler Tour Trees, que é uma técnica utilizada para representar uma árvore binária balanceada através da trilha euleriana. Essa representação é obtida de uma árvore $T$ substituindo-se cada aresta por dois arcos em sentidos opostos e adicionando-se um laço a cada vértice, como pode ser visto na Figura~\ref{fig:euler-tour-trees}. O digrafo resultante é chamado de Euleriano, tendo as principais características como sendo um grafo conexo e possuir uma trilha que começa e termina num mesmo vértice, passando por todos os arcos do digrafo somente uma vez. Tal trilha é chamada de \textbf{trilha euleriana}.
+
+\begin{figure}[H]
+    \centering
+\begin{tikzpicture}[>=stealth, thick, node distance=2cm,
+  vtx/.style={draw, circle, minimum size=8mm, inner sep=0pt}]
+
+% ---------- Left: original graph ----------
+\node[vtx] (a) at (0,0) {$a$};
+\node[vtx] (b) at (1.5,1.5) {$b$};
+\node[vtx] (c) at (3,0) {$c$};
+\node[vtx] (d) at (1.5,-1.5) {$d$};
+\node[vtx] (e) at (-1.5,-1.5) {$e$};
+
+% Graph edges
+\draw (a) -- (b);
+\draw (c) -- (d);
+\draw (d) -- (a);
+\draw (a) -- (e);
+
+% \node[vtx] (a) at (0,0) {$a$};
+% \node[vtx] (b) at (1.5,1.5) {$b$};
+% \node[vtx] (c) at (3,0) {$c$};
+% \node[vtx] (d) at (1.5,-1.5) {$d$};
+% \node[vtx] (e) at (-1.5,-1.5) {$e$};
+
+% ---------- Right: Euler-tour representation ----------
+\begin{scope}[xshift=8cm]
+  \node[vtx] (a1) at (0,0) {$a$};
+  \node[vtx] (b1) at (1.5, 1.5) {$b$};
+  \node[vtx] (c1) at (3,0) {$c$};
+  \node[vtx] (d1) at (1.5,-1.5) {$d$};
+  \node[vtx] (e1) at (-1.5,-1.5) {$e$};
+
+  % Bidirectional arcs
+  \draw[->] (a1) to[bend left=20] (b1);
+  \draw[->] (b1) to[bend left=20] (a1);
+
+  \draw[->] (c1) to[bend left=20] (d1);
+  \draw[->] (d1) to[bend left=20] (c1);
+
+  \draw[->] (d1) to[bend left=20] (a1);
+  \draw[->] (a1) to[bend left=20] (d1);
+
+  \draw[->] (a1) to[bend left=20] (e1);
+  \draw[->] (e1) to[bend left=20] (a1);
+
+\end{scope}
+
+\end{tikzpicture}
+    \caption{À esquerda, temos a árvore $T$. e à direita, temos a trilha euleriana de $T$.}
+    \label{fig:euler-tour-trees}
+\end{figure}
+
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
 
-Como adotamos a técnica de \textit{Euler tour trees} na implementação das nossas florestas dinâmicas, mencionada brevemente na Seção~\ref{sec:dynamic-graph-structure}, estamos utilizando uma estrutura chamada \textbf{nó} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
+Como adotamos a técnica de \textit{Euler tour trees} na implementação das nossas florestas dinâmicas, estamos utilizando uma estrutura chamada \textbf{nó} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
 
 Um \textbf{nó} pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
 
@@ -1087,7 +1144,6 @@ Como mencionado na Seção~\ref{sec:dynamic-graph-edge-removal}, encontramos dua
 
 \begin{programruledcaption}{\texttt{removaGD(G, u, v)} \label{prog:removeGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
-    \textbf{Saída}: Devolve o grafo $G$ com a aresta $uv$ removida.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1138,7 +1194,9 @@ Já para o caso em que $uv$ é uma aresta da floresta, precisamos removê-la das
 O laço da linha $4$ no Programa~\ref{prog:removeGD} executa no pior dos casos O(lg$n$) vezes, e como \texttt{removaFD} consome tempo amortizado O(lg$n$), então as linhas $4$ e $5$ do código juntas possuem um consumo de tempo esperado $\Oh(n \lg 2^n)$. Como vimos que \texttt{removaLA} tem consumo esperado de tempo $\Oh(1)$ e \texttt{decrementeArestasReservasDeNível} consome tempo amortizado O(lg$n$), então o trecho do código que abrange as linhas 8 a 10 tem custo amortizado O(lg$n$). Por fim, veremos que a rotina auxiliar \texttt{substituaAresta} terá custo amortizado $\Oh(n \lg 2^n)$, concluindo-se então que \texttt{removaGD} consome tempo amortizado $\Oh(n \lg 2^n)$. Essa rotina auxiliar é a mais complexa do grafo dinâmico, e ela está descrita no descrita no Programa~\ref{prog:replaceGD}.
 
 \begin{programruledcaption}{\texttt{substituaAresta(G, i, u, v)} \label{prog:replaceGD}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$.
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
+    \noindent\textbf{Saída}: Devolve G com a aresta substituta.
+    
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1172,7 +1230,7 @@ O laço da linha $4$ no Programa~\ref{prog:removeGD} executa no pior dos casos O
                 \texttt{adicioneLA($G.R_{j-1}$, x, y)}
                 \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, x)}
                 \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, y)}
-
+    \textbf{devolva} G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
