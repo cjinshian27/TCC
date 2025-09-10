@@ -21,8 +21,8 @@ O problema da conexidade em florestas dinâmicas pode ser considerado uma simpli
 
 \begin{itemize}
     \item \texttt{\textbf{florestaDinâmica(n)}}: constrói e devolve uma floresta dinâmica $F$ com $n$ vértices e sem arestas;
-    \item \texttt{\textbf{conectadosFD($F$, $u$, $v$)}}: devolve verdadeiro se \textit{$u$} e \textit{$v$} estão na mesma componente da floresta $F$ e falso caso contrário;
-    \item \texttt{\textbf{adicioneFD($F$, $u$, $v$)}}: insere uma aresta \textit{uv} na floresta $F$;
+    \item \texttt{\textbf{conectadosFD(F, u, v)}}: devolve verdadeiro se \textit{$u$} e \textit{$v$} estão na mesma componente da floresta $F$ e falso caso contrário;
+    \item \texttt{\textbf{adicioneFD(F, u, v)}}: insere uma aresta \textit{uv} na floresta $F$;
     \item \texttt{\textbf{removaFD(u, v)}}: remove a aresta \textit{uv} da floresta $F$.
 \end{itemize}
 
@@ -38,8 +38,8 @@ Implementar o grafo dinâmico resume-se à construção da seguinte biblioteca d
 
 \begin{itemize}
     \item \texttt{\textbf{grafoDinâmico(n)}}: contrói e devolve um grafo dinâmico com $n$ vértices e sem arestas;
-    \item \texttt{\textbf{conectadosGD($G$, $u$, $v$)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
-    \item \texttt{\textbf{adicioneGD($G$, $u$, $v$)}}: adiciona a aresta $uv$ no grafo $G$;
+    \item \texttt{\textbf{conectadosGD(G, u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
+    \item \texttt{\textbf{adicioneGD(G, u, v)}}: adiciona a aresta $uv$ no grafo $G$;
     \item \texttt{\textbf{removaGD(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
 \end{itemize} 
 
@@ -470,7 +470,7 @@ Para buscar uma aresta reserva de maneira o mais eficiente possível, o algoritm
 
 Ao remover uma aresta de nível $i$ da floresta, na verdade temos que removê-la não só de $F_i$, mas também de $F_{i + 1}, \ldots, F_{L}$ pela invariante~\ref{invariant2}. Similarmente, quando encontramos uma aresta substituta de nível $i$, temos que acrescentá-la não só a $F_i$, mas também a $F_{i+1}, \ldots, F_{L}$ para manter as invariantes~\ref{invariant1} e \ref{invariant2}.
 
-O motivo de não precisarmos procurar uma substituta em níveis menores que $i$ quando removemos uma aresta $uv$ de nível $i$ é devido à invariantes~\ref{invariant1} e \ref{invariant2}. Veja que, como a aresta $uv$ tem nível $i$, ela não pertence a $F_{i-1}$. Logo, pela invariante~\ref{invariant2}, $u$ e $v$ estão em componentes distintas de $F_{i-1}$. Como $F_{i-1}$ é maximal em $G_{i-1}$, não existe aresta reserva de nível $\leq i - 1$ que conecte as componentes $T_u$ e $T_v$. Portanto, só procuramos uma substituta em níveis $\geq i$. A Figura~\ref{fig:why-not-search-in-less-or-equal-than-i} torna a explicação mais intuitiva.
+Agora veremos o motivo de não precisarmos procurar uma substituta em níveis menores que $i$ quando removemos uma aresta $uv$ de nível $i$. Veja que, como a aresta $uv$ tem nível $i$, ela não pertence a $F_{i-1}$. Logo, pela invariante~\ref{invariant2}, $u$ e $v$ estão em componentes distintas de $F_{i-1}$. Como $F_{i-1}$ é maximal em $G_{i-1}$, não existe aresta reserva de nível $\leq i - 1$ que conecte as componentes $T_u$ e $T_v$. Portanto, só procuramos uma substituta em níveis $\geq i$. A Figura~\ref{fig:why-not-search-in-less-or-equal-than-i} torna a explicação mais intuitiva.
 
 \begin{figure}[H]
     \centering
