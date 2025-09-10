@@ -134,7 +134,27 @@ Como ambos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)} conso
 \subsection{Consultas de conexidade no grafo dinâmico}
 \label{sec:dynamic-graph-connectivity-queries}
 
-Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta chamarmos \texttt{conectadosGD(G, u, v)}, que por sua vez irá devolver a resposta de \texttt{conectadosFD($F_L$, u, v)}, pois $F_L$ é a floresta maximal de $G$. A rotina \texttt{conectadosFD($F_L$, u, v)} em nossa implementação consome tempo amortizado $\Oh(\lg n)$, e, portanto, \texttt{conectadosGD($F_L$, u, v)} também terá o mesmo consumo de tempo amortizado.
+Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta chamarmos \texttt{conectadosGD(G, u, v)}, que por sua vez irá devolver a resposta de \texttt{conectadosFD($F_L$, u, v)}, pois $F_L$ é uma floresta maximal de $G$ pelo invariante \ref{invariant1}. O Programa~\ref{prog:connectedGD} mostra essa rotina.
+
+\begin{programruledcaption}{\texttt{conectadosGD(G, u, v)} \label{prog:connectedGD}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
+    \textbf{Saída}: Devolve um booleano indicando se $u$ e $v$ estão conectados em $G$.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    devolva \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, u, v)}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+A rotina \texttt{conectadosFD($F_L$, u, v)} em nossa implementação consome tempo amortizado $\Oh(\lg n)$, e, portanto, \texttt{conectadosGD($F_L$, u, v)} também terá o mesmo consumo de tempo amortizado.
+Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação neles. Isso implica que as invariantes são mantidas. 
 
 \subsection{Inserções de arestas no grafo dinâmico}
 
@@ -899,12 +919,6 @@ Como essa seção é para dar mais um contexto geral de como a remoção de ares
 \section{Implementação do grafo dinâmico}
 \label{sec:dynamic-graph-implementation}
 
-\subsection{Construtor}
-\label{sec:code-constructor}
-
-Para implementar um grafo dinâmico, chamamos \texttt{grafoDinâmico(n)} para inicializar cada $F_i$ e $R_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacências com $n$ vértices e sem arestas para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $R_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
-
-
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
 
@@ -1021,31 +1035,6 @@ No Programa~\ref{prog:decrementReserveEdgesCount-GD}, atualizamos o atributo \te
 Por fim, o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para verdadeiro quando adicionamos um vértice $v$ na lista de adjacências de $u$ (assumindo que $u$ não tinha nenhum vizinho antes), pois isso indica que $u$ é incidente à aresta reserva $uv$. Da mesma forma que o Programa~\ref{prog:decrementReserveEdgesCount-GD}, o método \texttt{incrementeArestasReservasDeNível} possui consumo de tempo amortizado O(lg$n$).
 
 Como essas rotinas auxiliares não fazem nenhuma modificação na floresta maximal do grafo, então todas as invariantes não mantidas.
-
-\subsection{Teste de conexidade entre dois vértices}
-\label{sec:code-connectivity-test}
-
-Como mostrado na Seção~\ref{sec:dynamic-graph-structure}, ao chamarmos o método \texttt{conectadosGD} estamos na verdade testando a conexidade na floresta maximal $F_{\left\lceil \lg n \right\rceil}$ de $G$, ou seja, estamos chamando a rotina \texttt{conectadosFD}. O invariante \ref{invariant1} garante que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$, e, portanto, consultas em 
-\texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} deveriam dar a mesma resposta que \texttt{conectadosGD(G, u, v)}, onde $G$ = $G_{\left\lceil \lg n \right\rceil}$. Dessa forma, podemos apresentar essa rotina no Programa~\ref{prog:connectedGD}.
-
-\begin{programruledcaption}{\texttt{conectadosGD(G, u, v)} \label{prog:connectedGD}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
-    \textbf{Saída}: Devolve um booleano indicando se $u$ e $v$ estão conectados em $G$.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    devolva \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, u, v)}
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
-
-O consumo de tempo de \texttt{conectadosGD} é amortizado O(lg$n$), visto que ele simplesmente chama \texttt{conectadosFD} que tem consumo amortizado O(lg$n$). Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação neles. Isso implica que as invariantes são mantidas. 
 
 \subsection{Adição de arestas}
 \label{sec:code-edge-addition}
