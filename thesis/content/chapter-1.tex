@@ -153,6 +153,9 @@ Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta cham
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
+\raggedbottom
+
+
 A rotina \texttt{conectadosFD($F_L$, u, v)} em nossa implementação consome tempo amortizado $\Oh(\lg n)$, e, portanto, \texttt{conectadosGD($F_L$, u, v)} também terá o mesmo consumo de tempo amortizado.
 Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação neles. Isso implica que as invariantes são mantidas. 
 
@@ -267,7 +270,39 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
     \label{fig:graph_tree_edge_uv_addition}
 \end{figure}
 
+O Programa~\ref{prog:addGD} ilustra a rotina \texttt{adicioneGD}.
+
+\begin{programruledcaption}{\texttt{adicioneGD($G$, $u$, $v$)} \label{prog:addGD}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
+    \textbf{Saída}: Devolve o grafo $G$ com a aresta $uv$ inserida.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    G.nível[u, v] := $\left\lceil \lg n \right\rceil$
+    \textbf{se} \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)} \textbf{então}
+        \texttt{adicioneLA($G.R_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $u$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $v$)}
+    \textbf{senão}
+        \texttt{adicioneFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
+    devolva G
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+\raggedbottom
+
+Ao inserirmos uma aresta reserva $uv$ em $G$, precisamos atualizar o atributo \textit{incideArestaReservaDeNível} de $u$ e de $v$ para verdadeiro, se necessário. A Seção~\ref{sec:graph-nodes} explica com mais detalhes o método auxiliar (\texttt{incrementeArestasReservasDeNível}) usado. 
+
 Em nossa implementação, \texttt{conectadosGD} consome tempo amortizado $\Oh(\lg n)$. A rotina \texttt{adicioneLA}, quando acionada, consome tempo esperado constante $\Oh(1)$ em nossa implementação por conta do mapa hash. Já inserir uma aresta da floresta chamando \texttt{adicioneFD} consome tempo $\Oh(\lg n)$ (amortizado, em nossa implementação). Portanto, o custo de tempo ao acionar a rotina \texttt{adicioneGD} será amortizado $\Oh(\lg n)$.
+
+A invariante \ref{invariant1} se mantém para o nível $i = \left\lceil \lg n \right\rceil$. Como sempre adicionamos arestas em $F_{\left\lceil \lg n \right\rceil}$ (se não forem reservas), então as outras florestas de níveis inferiores não são afetadas, mantendo-se, assim, os invariantes \ref{invariant2} e \ref{invariant3} também.
 
 
 
@@ -1035,42 +1070,7 @@ No Programa~\ref{prog:decrementReserveEdgesCount-GD}, atualizamos o atributo \te
 
 Por fim, o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para verdadeiro quando adicionamos um vértice $v$ na lista de adjacências de $u$ (assumindo que $u$ não tinha nenhum vizinho antes), pois isso indica que $u$ é incidente à aresta reserva $uv$. Da mesma forma que o Programa~\ref{prog:decrementReserveEdgesCount-GD}, o método \texttt{incrementeArestasReservasDeNível} possui consumo de tempo amortizado O(lg$n$).
 
-Como essas rotinas auxiliares não fazem nenhuma modificação na floresta maximal do grafo, então todas as invariantes não mantidas.
-
-\subsection{Adição de arestas}
-\label{sec:code-edge-addition}
-
-Se quisermos inserir uma aresta $uv$ no grafo $G$, basta chamarmos o método \texttt{adicioneGD($G$, $u$, $v$)}. Entretanto, antes de adicionar na floresta maximal $F_{\left\lceil \lg n \right\rceil}$ de $G$, chamamos antes a rotina \texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} para verificar se $u$ e $v$ já estão conectados. Se sim, então $uv$ será armazenada como aresta reserva em $R_{\left\lceil \lg n \right\rceil}$. Se os vértices $u$ e $v$ não estiverem conectados, então adicionamos a aresta $uv$ em $F_{\left\lceil \lg n \right\rceil}$. O Programa~\ref{prog:addGD} ilustra a rotina \texttt{adicioneGD}.
-
-\begin{programruledcaption}{\texttt{adicioneGD($G$, $u$, $v$)} \label{prog:addGD}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
-    \textbf{Saída}: Devolve o grafo $G$ com a aresta $uv$ inserida.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    G.nível[u, v] := $\left\lceil \lg n \right\rceil$
-    \textbf{se} \texttt{conectadosFD(G.$F_{\left\lceil \lg n \right\rceil}$, u, v)} \textbf{então}
-        \texttt{adicioneLA(G.$R_{\left\lceil \lg n \right\rceil}$, u, v)}
-        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, G.$R_{\left\lceil \lg n \right\rceil}$, u)}
-        \texttt{incrementeArestasReservasDeNível(G.$F_{\left\lceil \lg n \right\rceil}$, G.$R_{\left\lceil \lg n \right\rceil}$, v)}
-    \textbf{senão}
-        \texttt{adicioneFD(G.$F_{\left\lceil \lg n \right\rceil}$, u, v)}
-    devolva G
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
-
-Ao inserirmos uma aresta reserva $uv$ em $G$, precisamos atualizar o atributo \textit{incideArestaReservaDeNível} de $u$ e de $v$ para verdadeiro, se necessário. A Seção~\ref{sec:graph-nodes} explica com mais detalhes o método auxiliar (\texttt{incrementeArestasReservasDeNível}) usado. 
-
-A invariante \ref{invariant1} se mantém para o nível $i = \left\lceil \lg n \right\rceil$. Como sempre adicionamos arestas em $F_{\left\lceil \lg n \right\rceil}$ (se não forem reservas), então as outras florestas de níveis inferiores não são afetadas, mantendo-se, assim, os invariantes \ref{invariant2} e \ref{invariant3} também.
-
-Como o consumo de tempo de \texttt{conectadosFD}, \texttt{adicioneFD} e de \texttt{incrementeArestasReservasDeNível} é amortizado O(lg$n$), e \texttt{adicioneLA} possui custo esperado $\Oh(1)$, então temos que \texttt{adicioneGD} possui consumo de tempo amortizado O(lg$n$).
+Como essas rotinas auxiliares não fazem nenhuma modificação na floresta maximal do grafo, então todas as invariantes não mantidas. 
 
 \subsection{Remoção de arestas}
 \label{sec:code-edge-removal}
