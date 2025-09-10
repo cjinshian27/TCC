@@ -468,6 +468,8 @@ Para buscar uma aresta reserva de maneira o mais eficiente possível, o algoritm
 
 É por este motivo que introduzimos o fatiamento em níveis na Seção~\ref{sec:level-slicing}. A intuição por trás deste fatiamento é que, quando uma aresta de nível $i$ da floresta é removida, não é necessário buscar por substitutas nos níveis menores que $i$. Isso quer dizer que começamos a busca no nível em questão, ou seja, $R_i$, e caso nesta lista de adjacências não haja nenhuma substituta, passamos a procurar em $R_{i+1}, R_{i + 2}, \ldots, R_L$. Quando não encontramos uma substituta em um certo $R_j$, aproveitamos para rebaixar o nível de todas as arestas percorridas em $R_j$ para $j - 1$, de modo que não precisaremos mais percorrer essas arestas quando removermos uma outra aresta de nível $j$, visto que elas já estariam em $R_{j-1}$.
 
+Ao remover uma aresta de nível $i$ da floresta, na verdade temos que removê-la não só de $F_i$, mas também de $F_{i + 1}, \ldots, F_{L}$ pela invariante~\ref{invariant2}. Similarmente, quando encontramos uma aresta substituta de nível $i$, temos que acrescentá-la não só a $F_i$, mas também a $F_{i+1}, \ldots, F_{L}$ para manter as invariantes~\ref{invariant1} e \ref{invariant2}.
+
 O motivo de não precisarmos procurar uma substituta em níveis menores que $i$ quando removemos uma aresta $uv$ de nível $i$ é devido à invariantes~\ref{invariant1} e \ref{invariant2}. Veja que, como a aresta $uv$ tem nível $i$, ela não pertence a $F_{i-1}$. Logo, pela invariante~\ref{invariant2}, $u$ e $v$ estão em componentes distintas de $F_{i-1}$. Como $F_{i-1}$ é maximal em $G_{i-1}$, não existe aresta reserva de nível $\leq i - 1$ que conecte as componentes $T_u$ e $T_v$. Portanto, só procuramos uma substituta em níveis $\geq i$. A Figura~\ref{fig:why-not-search-in-less-or-equal-than-i} torna a explicação mais intuitiva.
 
 \begin{figure}[H]
@@ -505,8 +507,7 @@ O motivo de não precisarmos procurar uma substituta em níveis menores que $i$ 
     \label{fig:why-not-search-in-less-or-equal-than-i}
 \end{figure}
 
-
-Ao remover uma aresta de nível $i$ da floresta, na verdade temos que removê-la não só de $F_i$, mas também de $F_{i + 1}, \ldots, F_{L}$ pela invariante~\ref{invariant2}. Similarmente, quando encontramos uma aresta substituta de nível $i$, temos que acrescentá-la não só a $F_i$, mas também a $F_{i+1}, \ldots, F_{L}$ para manter as invariantes~\ref{invariant1} e \ref{invariant2}.
+\raggedbottom
 
 A seguir, iremos demonstrar a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement1}, temos um grafo $G$ de $n = 10$ vértices. Para facilitar, iremos assumir que, até o momento, só houve inserções de arestas. Temos também que $n = 10$, $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$, e consequentemente, $G = G_4$. Como todas as inserções só acontecem no nível $L$, no momento só temos arestas da floresta de nível $4$ em $F_4$ de $G$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que 
 a remoção da aresta $uv$ da floresta (representada por uma linha tracejada na figura) acaba quebrando a única componente da floresta em duas, $T_u$ e $T_v$. 
@@ -592,31 +593,22 @@ a remoção da aresta $uv$ da floresta (representada por uma linha tracejada na 
             \node[node] (g) at (6, 2) {$g$};
             \node[node] (h) at (5, 3.7) {$h$};
             
-            
-            % Dotted circles for T_u and T_v
-            \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
-            \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
-            
-            % Labels for the circles
-            \node at (-3,-1.1) {$T_u$};
-            \node at (4,-1.1) {$T_v$};
-            
             %\draw[edge] (a) -- (u) node[midway, below] {};
             %\draw[edge] (a) -- (b) node[midway, below] {};
             %\draw[edge] (b) -- (c) node[midway, below] {};
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Um grafo $G$ de 10 vértices, onde as arestas pretas são da floresta, enquanto as vermelhas são reservas. A aresta $uv$ está prestes a ser removida. A floresta $F_{i = 4}$ de $G$ de cima contém todas as arestas recém-inseridas, enquanto a de baixo é a $F_{i = 3}$, com os vértices isolados.}
+    \caption{Um grafo $G$ de 10 vértices, onde as arestas pretas são da floresta, enquanto as vermelhas são reservas. A aresta $uv$ está prestes a ser removida. A floresta $F_{4}$ de $G$ de cima contém todas as arestas recém-inseridas, enquanto a de baixo é a $F_{3}$, com os vértices isolados.}
     \vspace{-1cm}
     \label{fig:example-replacement1}
 \end{figure}
 
 Note que precisamos remover todas as arestas $uv$ que estão presentes no nível $i = 4$ e os que estão acima dele também, por conta da invariante~\ref{invariant2}. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
 
-O próximo passo é rebaixar o nível de todas as arestas de nível $4$ em $T_u$. Rebaixar o nível das arestas significa inserir as arestas de nível $4$ de $T_u$ em $F_3$, onde elas passam a ser de nível $3$. Esse rebaixamento se torna necessário para preservar a invariante~\ref{invariant3}. Denotando $|T|$ como o número de vértices de uma árvore $T$, podemos, sem perda de generalidade, assumir que $|T_u| \leq |T_v|$. Pela invariante~\ref{invariant3}, temos que $|T| \leq 2^i$, e como $|T_u| + |T_v| = |T|$, então $|T_u| \leq 2^{i-1}$. Por isso, rebaixamos todas as arestas de nível $i$ de $T_u$ para o nível $i-1$, mantendo-se, assim, a invariante. 
+O próximo passo é rebaixar o nível de todas as arestas de nível $4$ em $T_u$. Rebaixar o nível das arestas significa inserir as arestas de nível $4$ de $T_u$ em $F_3$, onde elas passam a ser de nível $3$. Esse rebaixamento se torna necessário para preservar a invariante~\ref{invariant3}. Denotando $|T|$ como o número de vértices de uma árvore $T$, podemos, sem perda de generalidade, assumir que $|T_u| \leq |T_v|$. Pela invariante~\ref{invariant3}, temos que $|T| \leq 2^i$, e como $|T_u| + |T_v| = |T|$, então $|T_u| \leq 2^{i-1}$. Por isso, rebaixamos todas as arestas de nível $i$ de $T_u$ para o nível $i-1$, preservando-se, assim, a invariante. 
 
-Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de diferentes níveis em uma mesma árvore. Assim, percorrer todas as arestas da floresta de $T_u$ e selecionar somente as de nível $i$ para rebaixar pode se tornar muito demorado quando o grafo possui uma enorme quantidade de arestas. A forma como o algoritmo procura as arestas de nível $i$ será descrita de maneira mais detalhada a nível de código na Seção~\ref{sec:code-edge-removal}. No momento, só precisamos entender como este rebaixamento funciona.
+Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de diferentes níveis em uma mesma árvore. Assim, percorrer todas as arestas da floresta de $T_u$ e selecionar apenas as de nível $i$ para rebaixar pode se tornar muito demorado quando o grafo possui uma grande quantidade de arestas. A forma como o algoritmo procura as arestas de nível $i$ será descrita de maneira mais detalhada a nível de código na Seção~\ref{sec:code-edge-removal}. No momento, só precisamos entender como este rebaixamento funciona.
 
 \begin{figure}[H]
     \centering
@@ -699,14 +691,6 @@ Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de difer
             \node[node] (h) at (5, 3.7) {$h$};
             
             
-            % Dotted circles for T_u and T_v
-            \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
-            \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
-            
-            % Labels for the circles
-            \node at (-3,-1.1) {$T_u$};
-            \node at (4,-1.1) {$T_v$};
-            
             \draw[edge] (a) -- (u) node[midway, below] {};
             \draw[edge] (a) -- (b) node[midway, below] {};
             \draw[edge] (b) -- (c) node[midway, below] {};
@@ -722,6 +706,7 @@ Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de difer
 
 Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos achar, se existir, uma aresta reserva que possa reconectá-las. Note que percorrer todas as arestas reservas para achar uma substituta que ligue $T_u$ a $T_v$ pode ser ineficiente quando temos muitas arestas reservas. Por isso, explicaremos como implementar essa busca pela substituta de forma eficiente na Seção~\ref{sec:code-edge-removal}. 
 
+Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas de nível $4$ em $R_4$ que tenha uma das pontas em $T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. Caso não incida, a aresta está inteiramente contida em $T_u$ e logo ela não pode ser a substituta, e então a rebaixamos para o nível $3$. Como as invariantes não valem para listas de adjacências, temos que remover de $R_4$ essas arestas percorridas e inseri-las em $R_3$.
 
 \begin{figure}[H]
     \centering
@@ -826,13 +811,8 @@ Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisa
     \label{fig:example-replacement3}
 \end{figure}
 
-Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas de nível $4$ em $R_4$ que tenha uma das pontas em $T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. Caso não incida, a aresta está inteiramente contida em $T_u$ e logo ela não pode ser a substituta, e então a rebaixamos para o nível $3$. Como as invariantes não valem para listas de adjacências, temos que remover de $R_4$ essas arestas percorridas e inseri-las em $R_3$. Para o caso geral, se estamos percorrendo uma aresta reserva de nível $i$ e ela não é substituta, ela será rebaixada para o nível $i-1$, passando a existir somente em $R_{i-1}$. 
 
-No momento em que achamos uma aresta substituta $xy$ de nível $i$, conectamos $T_u$ a $T_v$ chamando \texttt{adicioneFD($F_i$, x, y)} e ela passa a ser uma aresta da floresta. De modo geral, se a aresta substituta é de nível $i$, e $j$ é o nível máximo do grafo, então será necessário reconectar $T_u$ a $T_v$ de todas as florestas chamando \texttt{adicioneFD}, do nível $i$ ao $j$, para preservar a invariante~\ref{invariant2}.
-
-No nosso exemplo, ilustrado na Figura~\ref{fig:example-replacement4}, assumindo que achamos a aresta substituta $ad$, chamamos \texttt{adicioneFD($F_4$, a, d)} para conectar $T_u$ e $T_v$. Como $i = 4$ é o nível máximo do grafo, então terminamos a execução do algoritmo.
-
-Quando removemos uma aresta da floresta de nível $i$ que quebra a floresta em duas componentes, note que ao procurar pela substituta não necessariamente iremos percorrer todas as reservas de nível $i$ em $T_u$. Então nem sempre todas as arestas reservas de nível $i$ em $T_u$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontramos uma substituta.
+Supondo que achamos a aresta $ad$ como substituta de nível $i$ antes de $cv$, conectamos $T_u$ e $T_v$ chamando \texttt{adicioneFD($F_i$, a, d)} e ela passa a ser uma aresta da floresta. Como $i = 4$ é o nível máximo do grafo, não precisamos chamar esta rotina para os níveis $i$ superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement4} ilustra essa etapa do algoritmo.
 
 \begin{figure}[H]
     \centering
@@ -934,6 +914,8 @@ Quando removemos uma aresta da floresta de nível $i$ que quebra a floresta em d
     \vspace{-1cm}
     \label{fig:example-replacement4}
 \end{figure}
+
+Quando removemos uma aresta da floresta de nível $i$ que quebra a floresta em duas componentes, note que ao procurar pela substituta não necessariamente iremos percorrer todas as reservas de nível $i$ em $T_u$. Então nem sempre todas as arestas reservas de nível $i$ em $T_u$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontramos uma substituta.
 
 Como essa seção é para dar mais um contexto geral de como a remoção de arestas funciona no grafo dinâmico, optamos por postergar para a Seção~\ref{sec:code-edge-removal} a análise de complexidade de tempo e como as invariantes são preservadas durante a execução do algoritmo, além de mostrar a estratégia usada para percorrer as arestas da floresta e reservas de forma eficiente.  
 
