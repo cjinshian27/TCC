@@ -501,7 +501,7 @@ O motivo de não precisarmos procurar uma substituta em níveis menores que $i$ 
     \draw[thick, red] (r11.north east) to[bend left=20] node[pos=0.7, above] {$i-1$} (r21.north west);
 
     \end{tikzpicture}
-    \caption{Os círculos verdes representam as componentes da floresta $F_i$ do grafo $G_i$, enquanto os círculos vermelhos representam as componentes da floresta $F_{i-1}$ do grafo $G_{i-1}$. Note que a aresta reserva de nível $i-1$ mostrada não deveria existir, porque senão ela estaria conectando duas componentes de $F_{i-1}$ e viraria uma aresta da floresta. Isso acaba violando a invariante~\ref{invariant2}, visto que obrigatoriamente $F_{i-1} \subseteq F_i$, mas a aresta de nível $i-1 \notin F_i$. Portanto, a aresta $i-1$ não existe e só será possível procurar arestas substitutas a partir de nível $i$ (como a aresta verde) para conectar as duas componentes.}
+    \caption{Os círculos verdes representam as componentes da floresta $F_i$ do grafo $G_i$, enquanto os círculos vermelhos representam as componentes da floresta $F_{i-1}$ do grafo $G_{i-1}$. Note que a aresta reserva de nível $i-1$ mostrada não deveria existir, porque senão ela estaria conectando duas componentes de $F_{i-1}$ e viraria uma aresta da floresta de $F_{i-1}$. Isso acaba violando a invariante~\ref{invariant2}, visto que obrigatoriamente $F_{i-1} \subseteq F_i$, mas tal aresta de nível $i-1 \notin F_i$. Portanto, essa aresta $i-1$ não existe e só será possível procurar arestas substitutas a partir de nível $i$ (como a aresta verde) para conectar as duas componentes.}
     \label{fig:why-not-search-in-less-or-equal-than-i}
 \end{figure}
 
