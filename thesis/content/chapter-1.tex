@@ -80,13 +80,13 @@ Quando realizamos uma chamada à função \texttt{adicioneGD(G, u, v)}, é feita
 Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$ representado por listas de adjacências, que contém a seguinte biblioteca:
 
 \begin{itemize}
-    \item \texttt{\textbf{listaDeAdjacências(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas contendo $n$ listas de adjacências, onde $n$ é o número de vértices isolados;
+    \item \texttt{\textbf{listaDeAdjacências(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas representado por listas de adjacências;
     \item \texttt{\textbf{adicioneLA(R, u, v)}}: adiciona $u$ na lista de adjacências de $v$ em $R$ e vice-versa;
     \item \texttt{\textbf{removaLA(R, u, v)}}: remove $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
 \end{itemize} 
 
 A nossa implementação \cite{chung2025} de listas de adjacências possui um custo $\Oh(n)$ ao acionar o construtor \texttt{listaDeAdjacências}, e para 
-as rotinas \texttt{adicioneLA} e \texttt{removaLA} são garantidos tempo esperado $\Oh(1)$, visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ em $u$ e, se houver, remoção de $v$ da lista de adjacências de $u$.
+as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $\Oh(1)$, visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ na lista de $u$ e, remoção de $v$ da lista de adjacências de $u$.
 
 \section{Rotinas da biblioteca do grafo dinâmico}
 
