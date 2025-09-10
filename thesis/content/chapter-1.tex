@@ -95,16 +95,15 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $
 
 Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, chamamos a rotina \texttt{grafoDinâmico(n)}, que por sua vez irá chamar \texttt{florestaDinâmica(n)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listaDeAdjacências(n)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
 
-Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave os valores das pontas da aresta ($u$ e $v$) e retornam o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuir a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
+Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave as pontas da aresta ($u$ e $v$) e armazena o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuirmos o objeto devolvido a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
 \begin{itemize}
-    \item \textit{nível[u, v]} $\leftarrow$ i: atribui o nível $i$ a uma aresta $uv$. 
+    \item \textit{nível[u, v]} $\leftarrow$ i: armazena $i$ como o nível da aresta $uv$. 
     
-    \item \textit{nível[u, v]} $\leftarrow$ \texttt{NIL}: remove a aresta $uv$ e, consequentemente, o seu nível.
+    \item \textit{nível[u, v]} $\leftarrow$ \texttt{NIL}: remove a aresta $uv$ do mapa hash.
     
     \item $x$ $\leftarrow$ \textit{nível[u, v]}: atribui o valor do nível da aresta $uv$ à variável $x$. 
 \end{itemize}
-
 
 Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newGD}. 
 
