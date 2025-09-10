@@ -1013,12 +1013,24 @@ A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} prop�
   \draw[->] (a1) to[bend left=20] (e1);
   \draw[->] (e1) to[bend left=20] (a1);
 
+  \draw[->] (a1) edge[loop above] ();
+  \draw[->] (b1) edge[loop above] ();
+  \draw[->] (c1) edge[loop right] ();
+  \draw[->] (d1) edge[loop below] ();
+  \draw[->] (e1) edge[loop left] ();
+
 \end{scope}
 
 \end{tikzpicture}
-    \caption{À esquerda, temos a árvore $T$. e à direita, temos a trilha euleriana de $T$.}
+    \caption{À esquerda, temos a árvore $T$ e, à direita, temos a trilha euleriana de $T$.}
     \label{fig:euler-tour-trees}
 \end{figure}
+
+A representação da árvore $T$ é basicamente a sequência de arcos que forma uma trilha euleriana do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, então o arco será escrito como $uu$. Dessa forma, no exemplo da Figura~\ref{fig:euler-tour-trees}, temos a seguinte trilha euleriana: 
+
+\begin{center}
+    
+\end{center}
 
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
