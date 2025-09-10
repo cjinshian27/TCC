@@ -93,7 +93,43 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
 
-Para criar o grafo dinâmico $G$ com $n$ vértices e sem arestas, chamamos a rotina \texttt{grafoDinâmico(n)}, que por sua vez irá chamar \texttt{florestaDinâmica(n)}, inicializando $\left\lceil \lg n \right\rceil$ florestas dinâmicas de $n$ vértices isolados, e \texttt{listaDeAdjacências(n)}, inicializando $\left\lceil \lg n \right\rceil$ listas de adjacências de $n$ vértices isolados. Como as duas últimas rotinas consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico} consome tempo $\Oh(n \lg n)$.
+Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, chamamos a rotina \texttt{grafoDinâmico(n)}, que por sua vez irá chamar \texttt{florestaDinâmica(n)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listaDeAdjacências(n)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
+
+Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave os valores das pontas da aresta ($u$ e $v$) e retornam o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuir a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
+
+\begin{itemize}
+    \item \textit{nível[u, v]} $\leftarrow$ i: atribui o nível $i$ a uma aresta $uv$. 
+    
+    \item \textit{nível[u, v]} $\leftarrow$ \texttt{NIL}: remove a aresta $uv$ e, consequentemente, o seu nível.
+    
+    \item $x$ $\leftarrow$ \textit{nível[u, v]}: atribui o valor do nível da aresta $uv$ à variável $x$. 
+\end{itemize}
+
+
+Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newGD}. 
+
+\begin{programruledcaption}{\texttt{grafoDinâmico(n)} \label{prog:newGD}}
+    \noindent\textbf{Entrada}: Recebe um número $n$ de vértices do grafo. \\
+    \textbf{Saída}: Devolve um grafo dinâmico $G$ com $n$ vértices e sem arestas.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+        G.$F_i$ := \texttt{florestaDinâmica(n)}
+        G.$R_i$ := \texttt{listaDeAdjacências(n)}
+    G.nível := \texttt{novoMapaHash(n)}
+    devolva G
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Como ambos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico(n)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além disso, é fácil de ver que as três invariantes valem.
 
 \subsection{Consultas de conexidade no grafo dinâmico}
 \label{sec:dynamic-graph-connectivity-queries}
@@ -210,7 +246,7 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
     \label{fig:graph_tree_edge_uv_addition}
 \end{figure}
 
-Em nossa implementação, \texttt{conectadosGD} consome tempo amortizado $\Oh(\lg n)$. A rotina \texttt{adicioneLA}, quando acionada, consome tempo esperado constante $\Oh(1)$ em nossa implementação por conta do mapa \textit{hash}. Já inserir uma aresta da floresta chamando \texttt{adicioneFD} consome tempo $\Oh(\lg n)$ (amortizado, em nossa implementação). Portanto, o custo de tempo ao acionar a rotina \texttt{adicioneGD} será amortizado $\Oh(\lg n)$.
+Em nossa implementação, \texttt{conectadosGD} consome tempo amortizado $\Oh(\lg n)$. A rotina \texttt{adicioneLA}, quando acionada, consome tempo esperado constante $\Oh(1)$ em nossa implementação por conta do mapa hash. Já inserir uma aresta da floresta chamando \texttt{adicioneFD} consome tempo $\Oh(\lg n)$ (amortizado, em nossa implementação). Portanto, o custo de tempo ao acionar a rotina \texttt{adicioneGD} será amortizado $\Oh(\lg n)$.
 
 
 
@@ -868,41 +904,6 @@ Como essa seção é para dar mais um contexto geral de como a remoção de ares
 
 Para implementar um grafo dinâmico, chamamos \texttt{grafoDinâmico(n)} para inicializar cada $F_i$ e $R_i$ do grafo $G$ de $n$ vértices, $1 \leq i \leq \left\lceil \lg n \right\rceil$, chamando os métodos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)}, respectivamente. Isso quer dizer que estamos criando florestas dinâmicas e listas de adjacências com $n$ vértices e sem arestas para cada nível $i$. Note que $F_{\left\lceil \lg n \right\rceil}$ e $R_{\left\lceil \lg n \right\rceil}$ representam o grafo dinâmico vazio, sem nenhuma aresta. 
 
-Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave os valores das pontas da aresta ($u$ e $v$) e retornam o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuir a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
-
-\begin{itemize}
-    \item \textit{nível[u, v]} $\leftarrow$ i: atribui o nível $i$ a uma aresta $uv$. 
-    
-    \item \textit{nível[u, v]} $\leftarrow$ \texttt{NIL}: remove a aresta $uv$ e, consequentemente, o seu nível.
-    
-    \item $x$ $\leftarrow$ \textit{nível[u, v]}: atribui o valor do nível da aresta $uv$ à variável $x$. 
-\end{itemize}
-
-
-Dessa forma, podemos enunciar o construtor do grafo no Programa~\ref{prog:newGD}. 
-
-\begin{programruledcaption}{\texttt{grafoDinâmico(n)} \label{prog:newGD}}
-    \noindent\textbf{Entrada}: Recebe um número $n$ de vértices do grafo. \\
-    \textbf{Saída}: Devolve um grafo dinâmico $G$ com $n$ vértices e sem arestas.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
-        G.$F_i$ := \texttt{florestaDinâmica(n)}
-        G.$R_i$ := \texttt{listaDeAdjacências(n)}
-    G.nível := \texttt{novoMapaHash(n)}
-    devolva G
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
-
-Como ambos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico(n)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além, disso, as invariantes são mantidas porque estamos criando um grafo com $n$ vértices e sem arestas.
 
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
@@ -1025,7 +1026,7 @@ Como essas rotinas auxiliares não fazem nenhuma modificação na floresta maxim
 \label{sec:code-connectivity-test}
 
 Como mostrado na Seção~\ref{sec:dynamic-graph-structure}, ao chamarmos o método \texttt{conectadosGD} estamos na verdade testando a conexidade na floresta maximal $F_{\left\lceil \lg n \right\rceil}$ de $G$, ou seja, estamos chamando a rotina \texttt{conectadosFD}. O invariante \ref{invariant1} garante que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$, e, portanto, consultas em 
-\texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} deveriam dar a mesma resposta que \texttt{conectadosGD(G, u, v)}, onde $G$ = $G_{\left\lceil \lg n \right\rceil}$. Dessa forma, podemos enunciar essa rotina no Programa~\ref{prog:connectedGD}.
+\texttt{conectadosFD($F_{\left\lceil \lg n \right\rceil}$, u, v)} deveriam dar a mesma resposta que \texttt{conectadosGD(G, u, v)}, onde $G$ = $G_{\left\lceil \lg n \right\rceil}$. Dessa forma, podemos apresentar essa rotina no Programa~\ref{prog:connectedGD}.
 
 \begin{programruledcaption}{\texttt{conectadosGD(G, u, v)} \label{prog:connectedGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
