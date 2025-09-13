@@ -94,9 +94,9 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
 
-Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, chamamos a rotina \texttt{grafoDinâmico($n$)}, que por sua vez irá chamar \texttt{florestaDinâmica(n)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências(n)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
+Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, chamamos a rotina \texttt{grafoDinâmico($n$)}, que por sua vez irá chamar \texttt{florestaDinâmica($n$)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências($n$)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
 
-Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave as pontas da aresta ($u$ e $v$) e armazena o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuirmos o objeto devolvido a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
+Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave as pontas da aresta ($u$~e~$v$) e armazena o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash($n$)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuirmos o objeto devolvido a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
 \begin{itemize}
     \item \textit{nível[u, v]} $\leftarrow$ $i$: armazena $i$ como o nível da aresta $uv$.
@@ -109,7 +109,7 @@ Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv
 Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newGD}. 
 
 \begin{programruledcaption}{\texttt{grafoDinâmico($n$)} \label{prog:newGD}}
-    \noindent\textbf{Entrada}: Recebe um número $n$ de vértices do grafo. \\
+    \noindent\textbf{Entrada}: Recebe o número $n$ de vértices do grafo. \\
     \textbf{Saída}: Devolve um grafo dinâmico $G$ com $n$ vértices e sem arestas.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -121,20 +121,20 @@ Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newG
         escapeinside={(*@}{@*)},
     ]
     \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
-        G.$F_i$ := \texttt{florestaDinâmica(n)}
-        G.$R_i$ := \texttt{listasDeAdjacências(n)}
-    G.nível := \texttt{novoMapaHash(n)}
+        $G.F_i$ := \texttt{florestaDinâmica($n$)}
+        $G.R_i$ := \texttt{listasDeAdjacências($n$)}
+    G.nível := \texttt{novoMapaHash($n$)}
     devolva G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como ambos \texttt{florestaDinâmica(n)} e \texttt{listasDeAdjacências(n)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico($n$)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além disso, é fácil de ver que as três invariantes valem.
+Como ambos \texttt{florestaDinâmica($n$)} e \texttt{listasDeAdjacências($n$)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico($n$)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além disso, é fácil de ver que, ao final, as três invariantes valem.
 
 \subsection{Consultas de conexidade no grafo dinâmico}
 \label{sec:dynamic-graph-connectivity-queries}
 
-Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta chamarmos \texttt{conectadosGD($G$, $u$, $v$)}, que por sua vez aciona \texttt{conectadosFD($F_L$, u, v)}, pois $F_L$ é uma floresta maximal de $G$ pelo invariante \ref{invariant1}. O Programa~\ref{prog:connectedGD} mostra essa rotina.
+Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta chamarmos \texttt{conectadosGD($G$, $u$, $v$)}, que por sua vez aciona \texttt{conectadosFD($F_L$, $u$, $v$)}, pois $F_L$ é uma floresta maximal de $G$ pelo invariante \ref{invariant1}. O Programa~\ref{prog:connectedGD} mostra essa rotina.
 
 \begin{programruledcaption}{\texttt{conectadosGD($G$, $u$, $v$)} \label{prog:connectedGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
@@ -148,7 +148,7 @@ Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta cham
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    devolva \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, u, v)}
+    devolva \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -156,7 +156,7 @@ Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta cham
 \raggedbottom
 
 
-A rotina \texttt{conectadosFD($F_L$, u, v)} em nossa implementação consome tempo amortizado $\Oh(\lg n)$, e, portanto, \texttt{conectadosGD($F_L$, u, v)} também terá o mesmo consumo de tempo amortizado.
+A rotina \texttt{conectadosFD($F_L$, $u$, $v$)} em nossa implementação consome tempo amortizado $\Oh(\lg n)$, e, portanto, \texttt{conectadosGD($F_L$, $u$, $v$)} também terá o mesmo consumo de tempo amortizado.
 Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação neles. Isso implica que as invariantes são mantidas. 
 
 
@@ -169,7 +169,7 @@ Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas
 
 \subsection{Inserções de arestas no grafo dinâmico}
 
-Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma aresta $uv$ no grafo $G$ chamando a rotina \texttt{adicioneGD($G$, $u$, $v$)} e, em seguida, testamos a conexidade de $u$ e $v$ chamando a rotina \texttt{conectadosGD($G$, $u$, $v$)}, o que, dependendo do resultado, $uv$ pode ser inserida como aresta reserva ou como aresta da floresta. Assumindo que a aresta $uv$ não exista em $G$ no momento de sua inserção, temos dois cenários:
+Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma aresta $uv$ no grafo $G$ chamando a rotina \texttt{adicioneGD($G$, $u$, $v$)} e, em seguida, testamos a conexidade de $u$ e $v$ chamando a rotina \texttt{conectadosGD($G$, $u$, $v$)}, e, dependendo do resultado, $uv$ pode ser inserida como aresta reserva ou como aresta da floresta. Assumindo que a aresta $uv$ não exista em $G$ no momento de sua inserção, temos dois cenários:
 
 \begin{itemize}
     \item 
@@ -219,7 +219,7 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
 \end{figure}
 
 \begin{itemize}
-    \item  Se $u$ e $v$ não estão conectados por nenhum caminho em $G$, então inserimos $uv$ como aresta da floresta de nível $L$ em $F_L$ chamando a função \texttt{adicioneFD($F_L$, $u$, $v$)}. A Figura~\ref{fig:graph_tree_edge_uv_addition} ilustra esse cenário.
+    \item  Se $u$ e $v$ não estão conectados em $G$, então inserimos $uv$ como aresta da floresta $F_L$ de nível $L$, chamando a função \texttt{adicioneFD($F_L$, $u$, $v$)}. A Figura~\ref{fig:graph_tree_edge_uv_addition} ilustra esse cenário.
 \end{itemize}
 
 \begin{figure}[H]
@@ -266,15 +266,15 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
 
 
     \end{tikzpicture}
-    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo. Como os vértices $u$ e $v$ não estão conectados, então inserimos $uv$ como aresta da floresta (em verde), nesse caso conectando as componentes $T_u$ e $T_v$ de $F_L$.}
+    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo. Como os vértices $u$ e $v$ não estão conectados em $F_L$, então inserimos $uv$ como aresta da floresta (em verde), nesse caso conectando as componentes $T_u$ e $T_v$ de $F_L$.}
     \label{fig:graph_tree_edge_uv_addition}
 \end{figure}
 
-O Programa~\ref{prog:addGD} ilustra a rotina \texttt{adicioneGD}.
+O Programa~\ref{prog:addGD} ilustra uma primeira versão da rotina \texttt{adicioneGD}. Posteriormente, faremos alguns ajustes nessa rotina por causa da rotina de remoção de arestas explicada na Seção~\ref{sec:dynamic-graph-edge-removal}.
 
 \begin{programruledcaption}{\texttt{adicioneGD($G$, $u$, $v$)} \label{prog:addGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
-    \textbf{Saída}: Devolve o grafo $G$ com a aresta $uv$ inserida.
+    \textbf{Efeito}: Adiciona a aresta $uv$ no grafo $G$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -291,18 +291,17 @@ O Programa~\ref{prog:addGD} ilustra a rotina \texttt{adicioneGD}.
         \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $v$)}
     \textbf{senão}
         \texttt{adicioneFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
-    devolva G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
 \raggedbottom
 
-Ao inserirmos uma aresta reserva $uv$ em $G$, precisamos atualizar o atributo \textit{incideArestaReservaDeNível} de $u$ e de $v$ para verdadeiro, se necessário. A Seção~\ref{sec:graph-nodes} explica com mais detalhes o método auxiliar (\texttt{incrementeArestasReservasDeNível}) usado. 
+% Ao inserirmos uma aresta reserva $uv$ em $G$, precisamos atualizar o atributo \textit{incideArestaReservaDeNível} de $u$ e de $v$ para verdadeiro, se necessário. A Seção~\ref{sec:graph-nodes} explica com mais detalhes o método auxiliar (\texttt{incrementeArestasReservasDeNível}) usado. 
 
 Em nossa implementação, \texttt{conectadosGD} consome tempo amortizado $\Oh(\lg n)$. A rotina \texttt{adicioneLA}, quando acionada, consome tempo esperado constante $\Oh(1)$ em nossa implementação por conta do mapa hash. Já inserir uma aresta da floresta chamando \texttt{adicioneFD} consome tempo $\Oh(\lg n)$ (amortizado, em nossa implementação). Portanto, o custo de tempo ao acionar a rotina \texttt{adicioneGD} será amortizado $\Oh(\lg n)$.
 
-A invariante \ref{invariant1} se mantém para o nível $i = \left\lceil \lg n \right\rceil$. Como sempre adicionamos arestas em $F_{\left\lceil \lg n \right\rceil}$ (se não forem reservas), então as outras florestas de níveis inferiores não são afetadas, mantendo-se, assim, os invariantes \ref{invariant2} e \ref{invariant3} também.
+A invariante \ref{invariant1} se mantém para o nível $i = \left\lceil \lg n \right\rceil$. Como sempre adicionamos arestas com nível $\left\lceil \lg n \right\rceil$ em $F_{\left\lceil \lg n \right\rceil}$ (se não forem reservas), então as outras florestas de níveis inferiores não são afetadas, mantendo-se, assim, os invariantes \ref{invariant2} e \ref{invariant3} também.
 
 
 
