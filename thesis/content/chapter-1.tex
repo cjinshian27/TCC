@@ -50,11 +50,11 @@ Para entender a base de como cada uma dessas rotinas funcionam, será necessári
 
 Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada a técnica de fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. 
 
-Seja $G$ um grafo com $V(G)$ vértices e $E(G)$ arestas. Se $X$ é um conjunto de arestas tal que $\emptyset \neq X \subseteq E(G)$, então dizemos que o subgrafo de $G$ \textbf{induzido} por $X$ é o subgrafo gerador $H$ de $G$ tal que $E(H) = X$. Denotamos, portanto, $H$ como $G[X]$.
+Seja $G$ um grafo com conjunto $V(G)$ de vértices e conjunto $E(G)$ de arestas. Se $X$ é um conjunto não-vazio de arestas, dizemos que o subgrafo de $G$ \textbf{induzido} por $X$ é o subgrafo gerador $H$ de $G$ tal que $E(H) = X$. Denotamos, $H$ como $G[X]$.
 
-Sendo assim, seja $G_i = G[X]$ um grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Além disso, vamos manter também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$. 
+Sendo assim, seja $G_i = G[X]$ o grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Além disso, vamos manter também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$. 
 
-Consequentemente, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{\left\lceil \lg n \right\rceil}$, para um grafo $G$ de $n$ vértices, e deduzimos que $G = G_{\left\lceil \lg n \right\rceil}$ e que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de alteração ou consulta de conexidade em nosso grafo $G$, estamos também a realizando na floresta $F_{\left\lceil \lg n \right\rceil}$ de $G$.
+Consequentemente, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{\left\lceil \lg n \right\rceil}$, para um grafo $G$ de $n$ vértices, e deduzimos que $G = G_{\left\lceil \lg n \right\rceil}$ e que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de consulta de conexidade em nosso grafo $G$, podemos realizá-la na floresta $F_{\left\lceil \lg n \right\rceil}$ de $G$.
 
 Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
 
@@ -75,17 +75,17 @@ Por fim, para simplificar um pouco a notação, iremos escrever $L = \left\lceil
 
 % O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, procuramos nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
 
-Quando realizamos uma chamada à função \texttt{adicioneGD($G$, $u$, $v$)}, é feita uma chamada à rotina \texttt{conectadosGD($G$, $u$, $v$)} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem ligados em $G$, então a aresta $uv$ é inserida na floresta maximal $F_L$ que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ em $F_L$. Chamamos esse tipo de aresta de \textbf{arestas da floresta}.
+Quando realizamos uma chamada à função \texttt{adicioneGD($G$, $u$, $v$)}, é feita uma chamada à rotina \texttt{conectadosGD($G$, $u$, $v$)} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem na mesma componente de $G$, então a aresta $uv$ é inserida na floresta maximal $F_L$ que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ em $F_L$. Chamamos esse tipo de aresta de \textbf{aresta da floresta}.
 
 Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$ representado por listas de adjacências, que contém a seguinte biblioteca:
 
 \begin{itemize}
-    \item \texttt{\textbf{listaDeAdjacências(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas representado por listas de adjacências;
+    \item \texttt{\textbf{listasDeAdjacências(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências;
     \item \texttt{\textbf{adicioneLA(R, u, v)}}: adiciona $u$ na lista de adjacências de $v$ em $R$ e vice-versa;
     \item \texttt{\textbf{removaLA(R, u, v)}}: remove $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
 \end{itemize} 
 
-A nossa implementação \cite{chung2025} de listas de adjacências possui um custo $\Oh(n)$ ao acionar o construtor \texttt{listaDeAdjacências}, e para 
+A nossa implementação \cite{chung2025} de listas de adjacências possui um custo $\Oh(n)$ ao acionar o construtor \texttt{listasDeAdjacências}, e para 
 as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $\Oh(1)$, visto que estamos utilizando um mapa hash da linguagem \textit{C++} para realizar adição de um vizinho $v$ na lista de $u$ e, remoção de $v$ da lista de adjacências de $u$.
 
 \section{Rotinas da biblioteca do grafo dinâmico}
@@ -94,12 +94,12 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
 
-Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, chamamos a rotina \texttt{grafoDinâmico(n)}, que por sua vez irá chamar \texttt{florestaDinâmica(n)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listaDeAdjacências(n)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
+Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, chamamos a rotina \texttt{grafoDinâmico($n$)}, que por sua vez irá chamar \texttt{florestaDinâmica(n)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências(n)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
 
 Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave as pontas da aresta ($u$ e $v$) e armazena o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash(n)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuirmos o objeto devolvido a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
 \begin{itemize}
-    \item \textit{nível[u, v]} $\leftarrow$ i: armazena $i$ como o nível da aresta $uv$. 
+    \item \textit{nível[u, v]} $\leftarrow$ $i$: armazena $i$ como o nível da aresta $uv$.
     
     \item \textit{nível[u, v]} $\leftarrow$ \texttt{NIL}: remove a aresta $uv$ do mapa hash.
     
@@ -108,7 +108,7 @@ Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv
 
 Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newGD}. 
 
-\begin{programruledcaption}{\texttt{grafoDinâmico(n)} \label{prog:newGD}}
+\begin{programruledcaption}{\texttt{grafoDinâmico($n$)} \label{prog:newGD}}
     \noindent\textbf{Entrada}: Recebe um número $n$ de vértices do grafo. \\
     \textbf{Saída}: Devolve um grafo dinâmico $G$ com $n$ vértices e sem arestas.
     \vspace{-0.5\baselineskip}
@@ -122,19 +122,19 @@ Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newG
     ]
     \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
         G.$F_i$ := \texttt{florestaDinâmica(n)}
-        G.$R_i$ := \texttt{listaDeAdjacências(n)}
+        G.$R_i$ := \texttt{listasDeAdjacências(n)}
     G.nível := \texttt{novoMapaHash(n)}
     devolva G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como ambos \texttt{florestaDinâmica(n)} e \texttt{listaDeAdjacências(n)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico(n)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além disso, é fácil de ver que as três invariantes valem.
+Como ambos \texttt{florestaDinâmica(n)} e \texttt{listasDeAdjacências(n)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico($n$)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além disso, é fácil de ver que as três invariantes valem.
 
 \subsection{Consultas de conexidade no grafo dinâmico}
 \label{sec:dynamic-graph-connectivity-queries}
 
-Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta chamarmos \texttt{conectadosGD($G$, $u$, $v$)}, que por sua vez irá devolver a resposta de \texttt{conectadosFD($F_L$, u, v)}, pois $F_L$ é uma floresta maximal de $G$ pelo invariante \ref{invariant1}. O Programa~\ref{prog:connectedGD} mostra essa rotina.
+Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta chamarmos \texttt{conectadosGD($G$, $u$, $v$)}, que por sua vez aciona \texttt{conectadosFD($F_L$, u, v)}, pois $F_L$ é uma floresta maximal de $G$ pelo invariante \ref{invariant1}. O Programa~\ref{prog:connectedGD} mostra essa rotina.
 
 \begin{programruledcaption}{\texttt{conectadosGD($G$, $u$, $v$)} \label{prog:connectedGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
