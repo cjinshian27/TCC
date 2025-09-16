@@ -1062,8 +1062,7 @@ A representação da árvore $T$ é basicamente a sequência de arcos que forma 
 
 Note que, embora tenhamos passado pelo mesmo vértice mais de uma vez, só escrevemos uma vez o laço quando passamos por ele pela primeira vez. Além disso, a sequência dos arcos pode mudar dependendo do vértice inicial e da ordem em que o vizinho de cada vértice é visitado. Uma tal sequência é chamada \textbf{sequência Euleriana}. 
 
-Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euleriana em uma árvore binária de busca. Usando o nosso exemplo do grafo da Figura~\ref{fig:euler-tour-trees}, podemos ilustrar uma possível árvore binária balanceada para ele na Figura~\ref{fig:euler-tour-balanced-tree}.
-
+Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euleriana em uma árvore binária balanceada. Usando o nosso exemplo do grafo da Figura~\ref{fig:euler-tour-trees}, podemos ilustrar uma possível árvore binária balanceada para ele na Figura~\ref{fig:euler-tour-balanced-tree}.
 
 \begin{figure}[H]
     \centering
@@ -1128,7 +1127,7 @@ Assim, Henzinger e King \cite{henzinger_king} propuseram representar uma florest
 Vimos na Seção~\ref{sec:euler-tour-trees} que uma sequência Euleriana é constituída de arestas \textit{uv} ou vértices \textit{uu}. 
 Como adotamos a técnica de \textit{Euler Tour trees} na implementação das nossas florestas dinâmicas, introduziremos uma estrutura chamada \textbf{nó do grafo}, que pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
 
-Como uma \textit{Euler tour tree} é essencialmente uma árvore binária, para cada nó precisamos de apontadores para o filho esquerdo e filho direito do nó, além do pai. Em nossa implementação, denotamos por \textit{nó.filhoEsq}, \textit{nó.filhoDir} e \textit{nó.pai}, respectivamente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
+Como representamos uma \textit{Euler tour tree} por uma árvore binária, para cada nó precisamos de apontadores para o filho esquerdo e filho direito do nó, além do pai. Em nossa implementação, denotamos por \textit{nó.filhoEsq}, \textit{nó.filhoDir} e \textit{nó.pai}, respectivamente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
 \subsection{Nó aresta}
 \label{sec:node-edge}
