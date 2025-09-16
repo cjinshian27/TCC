@@ -1123,15 +1123,15 @@ Assim, Henzinger e King \cite{henzinger_king} propuseram representar uma florest
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
 
-Como adotamos a técnica de \textit{Euler tour trees} na implementação das nossas florestas dinâmicas, estamos utilizando uma estrutura chamada \textbf{nó} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
+Como adotamos a técnica de \textit{Euler tour trees} na implementação das nossas florestas dinâmicas, estamos utilizando uma estrutura chamada \textbf{nó do grafo} que armazena vários atributos relevantes, cuja funcionalidade será descrita mais detalhadamente nas Seções~\ref{sec:code-edge-addition} e \ref{sec:code-edge-removal}. 
 
-Um \textbf{nó} pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
+Como visto na Seção~\ref{sec:euler-tour-trees}, uma sequência Euleriana é constituída de arestas do tipo \textit{uv} ou vértices do tipo \textit{uu}. Sendo assim, um nó do grafo pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
 
-Assim, exclusivamente para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence a uma floresta maximal de nível $i$. Toda vez que uma aresta nova é inserida no grafo, ela vai ter este atributo definido como verdadeiro. O atributo só se torna falso quando rebaixamos o nível de uma aresta para uma unidade inferior, caso que será descrito em mais detalhes na Seção~\ref{sec:code-edge-removal}. 
+Para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence ao grafo de nível $i$. Toda vez que uma aresta $uv$ é inserida na floresta $F_L$ de $G$, $uv$ vai ter este atributo definido como verdadeiro nesta árvore. O atributo só se torna falso em $F_L$ quando rebaixamos o nível desta aresta para $L-1$. Entretanto, em $F_{L-1}$, o atributo é verdadeiro para $uv$, pois indica que $uv$ é de nível $L-1$ após o rebaixamento.
 
-Dessa forma, se $uv$ possui nível $2$, então em $F_2$ esse booleano será verdadeiro, e falso em outras $F_i$, $i \neq 2$. Além disso, iremos adicionar um contador \text{arestasDeNível} para cada nó do tipo aresta, a fim de calcular a quantidade de arestas em sua subárvore que tenham o booleano \textit{éNível} como verdadeiro. 
+Da mesma forma, uma aresta reserva de nível $i$ vai ter este atributo definido como verdadeiro em $R_i$. Quando rebaixamos tal aresta reserva, ela passa a ser de nível $i-1$, pois ela estará em $R_{i-1}$.
 
-Como o atributo \textit{éNível} pode ser alterado no decorrer das remoções das arestas, precisamos definir uma rotina auxiliar que atualiza o contador \textit{arestasDeNível}, que está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
+Como o nível das arestas só diminui e apenas acontece durante o rebaixamento na remoção das arestas, o valor de \textit{éNível} sofre alteração no decorrer das operações de remoção. Assim, para cada nó (seja ele vértice ou aresta) introduzimos um contador chamado \textit{arestasDeNível}, que armazena a quantidade de arestas com o \textit{éNível} verdadeiro em sua subárvore. A rotina auxiliar que atualiza este contador está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeArestasDeNível(F, u, v)} \label{prog:updateIsLevelCount-GD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ da floresta $F$.
@@ -1158,6 +1158,63 @@ Como o atributo \textit{éNível} pode ser alterado no decorrer das remoções d
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
+
+Usando o mesmo exemplo da floresta da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como \textit{arestasDeNível} é propagada das folhas da árvore até a raiz.
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        inner sep=0pt]
+
+        \node[node, fill=red!30, label=below:{4}] (ad) at (0, 0) {$ad$};
+        \node[node, fill=red!30, label=below:{1}] (ab) at (-4.5, -1.5) {$ab$};
+        \node[node, fill=red!30, label=below:{2}] (cd) at (4.5, -1.5) {$cd$};
+        \node[node, label=below:{0}] (dc) at (3, -3) {$dc$};
+        \node[node, label=below:{0}] (dd) at (1.5, -4.5) {$dd$};
+        \node[node, label=below:{0}] (cc) at (4.5, -4.5) {$cc$};
+        
+        
+        \node[node, label=below:{1}] (da) at (6, -3) {$da$};
+        \node[node, fill=red!30, label=below:{1}] (ae) at (7.5, -4.5) {$ae$};
+        
+        
+        \node[node, label=below:{0}] (ea) at (-6, -3) {$ea$};
+        \node[node, label=below:{0}] (ee) at (-7.5, -4.5) {$ee$};
+        \node[node, label=below:{0}] (aa) at (-4.5, -4.5) {$aa$};
+
+
+        \node[node, label=below:{0}] (bb) at (-3, -3) {$bb$};
+        \node[node, label=below:{0}] (ba) at (-1.5, -4.5) {$ba$};
+
+        
+
+        % tree edges (normal black edges)
+        \draw[edge] (ad) -- (ab) node[midway, below] {};
+        \draw[edge] (ad) -- (cd) node[midway, below] {};
+        \draw[edge] (cd) -- (dc) node[midway, below] {};
+        \draw[edge] (cd) -- (da) node[midway, below] {};
+        \draw[edge] (bb) -- (ba) node[midway, below] {};
+        \draw[edge] (ea) -- (ee) node[midway, below] {};
+        \draw[edge] (ea) -- (aa) node[midway, below] {};
+        \draw[edge] (dc) -- (dd) node[midway, below] {};
+        \draw[edge] (dc) -- (cc) node[midway, below] {};
+        \draw[edge] (da) -- (ae) node[midway, below] {};
+
+        \draw[edge] (ab) -- (ea) node[midway, below] {};
+        \draw[edge] (ab) -- (bb) node[midway, below] {};
+
+
+    \end{tikzpicture}
+    \caption{Uma árvore binária balanceada contendo uma trilha Euleriana. Nós pintados em vermelho indicam que são arestas com o éNível verdadeiro. Embaixo de cada nó temos o contador arestasDeŃível. Note que o campo éNível não existe em vértices, somente em arestas.}
+    \label{fig:euler-tour-balanced-tree-is-level-propagation}
+\end{figure}
+
+Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que as arestas $ab$ e $ba$ são a mesma aresta, mas elas existem por conta da sequência Euleriana. Em nossa implementação, para evitar a duplicação do atributo \textit{éNível}, optamos por colocar este atributo em arestas cujas pontas estão em ordem lexicográfica. Então, no nosso exemplo, arestas do tipo $ba$, $da$, $dc$ e $ea$ não tem este atributo definido. Se usássemos números em vez de letras nas pontas das arestas, então o atributo \textit{éNível} existiria apenas em arestas com as pontas lidas em ordem crescente, como $12$, $23$, etc.  
 
 Já para o nó do tipo vértice $uu$ (ou apenas $u$), iremos armazenar um booleano chamado \textit{incideArestaReservaDeNível} que indica se $uu$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. Além disso, iremos manter um contador \textit{arestasReservasDeNível} para cada nó do tipo vértice, a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} como verdadeiro. Esse contador é costantemente atualizado durante as adições e remoções de arestas, e por isso precisamos de um método auxiliar \texttt{atualizeArestasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}.
 
