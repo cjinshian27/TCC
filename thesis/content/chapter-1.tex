@@ -68,7 +68,7 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
 
 Na Seção~\ref{sec:dynamic-graph-routines}, descreveremos com mais detalhes como as rotinas da biblioteca funcionam e como cada uma preserva as invariantes acima, de modo a manter a corretude do algoritmo durante toda a sua execução.
 
-Por fim, para simplificar um pouco a notação, iremos escrever $L = \left\lceil \lg n \right\rceil$, isto é, $F_{\left\lceil \lg n \right\rceil}$ passa a ser escrita como $F_{L}$, da mesma forma que $G_L = G_{\left\lceil \lg n \right\rceil}$ e $R_L = R_{\left\lceil \lg n \right\rceil}$.
+Por fim, para simplificar um pouco a notação, escreveremos $L = \left\lceil \lg n \right\rceil$, isto é, $F_{\left\lceil \lg n \right\rceil}$ passa a ser escrita como $F_{L}$, da mesma forma que $G_L = G_{\left\lceil \lg n \right\rceil}$ e $R_L = R_{\left\lceil \lg n \right\rceil}$.
 
 \subsection{Tipos de arestas do grafo}
 \label{sec:dynamic-graph-edge-types}
@@ -510,7 +510,7 @@ Agora, veremos em detalhes o motivo de não precisarmos procurar uma substituta 
 
 \raggedbottom
 
-A seguir, iremos demonstrar a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement1}, temos um grafo $G$ de $n = 10$ vértices. Para facilitar, iremos assumir que, até o momento, só houve inserções de arestas. 
+A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement1}, temos um grafo $G$ de $n = 10$ vértices. Para facilitar, assumiremos que, até o momento, só houve inserções de arestas. 
 
 \begin{figure}[H]
     \centering
@@ -917,10 +917,10 @@ Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, c
     \label{fig:example-replacement4}
 \end{figure}
 
-Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, note que ao procurar por uma aresta substituta não necessariamente iremos percorrer todas as arestas reservas em $R_i$. Então nem sempre todas as arestas reservas de $R_i$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
+Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, note que ao procurar por uma aresta substituta não necessariamente percorreremos todas as arestas reservas em $R_i$. Então nem sempre todas as arestas reservas de $R_i$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
 
 O Programa~\ref{prog:removeGD} apresenta uma primeira versão da rotina \texttt{removaGD}. Note que ele contém uma chamada à rotina \texttt{substituaAresta} que será explicada na próxima seção. Alguns ajustes em \texttt{removaGD} serão necessários devido à implementação da rotina \texttt{substituaAresta}. 
-Além disso, falta apresentar a estratégia usada para percorrer as arestas da floresta e reservas de forma eficiente. Toda essa parte faltante também será descrita na próxima seção.
+Além disso, falta apresentar a estratégia usada para percorrer as arestas da floresta e reservas de forma eficiente. Isso também será descrito na próxima seção.
 
 \begin{programruledcaption}{\texttt{removaGD($G$, $u$, $v$)} \label{prog:removeGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
@@ -1052,9 +1052,9 @@ A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} prop�
     \label{fig:euler-tour-trees}
 \end{figure}
 
-A representação da árvore $T$ é basicamente a sequência de arcos que forma uma trilha Euleriana do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, então o arco será escrito como $uu$. 
+\raggedbottom
 
-Assim, no exemplo da Figura~\ref{fig:euler-tour-trees}, uma possível trilha Euleriana poderia ser a seguinte: 
+A representação da árvore $T$ é basicamente a sequência de arcos que forma uma trilha Euleriana do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, então o arco será escrito como $uu$. Assim, no exemplo da Figura~\ref{fig:euler-tour-trees}, uma possível trilha Euleriana poderia ser a seguinte: 
 
 \begin{center}
     \textit{ee ea aa ab bb ba ad dd dc cc cd da ae}
@@ -1118,24 +1118,26 @@ Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euler
     \label{fig:euler-tour-balanced-tree}
 \end{figure}
 
-Assim, Henzinger e King \cite{henzinger_king} propuseram representar uma floresta por uma coleção de árvores Eulerianas, pois assim as operações de consulta de conexidade e de alteração na árvore possuem consumo esperado $\Oh(\lg n)$ (amortizado em nossa implementação usando \textit{splay trees}).
+\raggedbottom
+
+Assim, Henzinger e King \cite{henzinger_king} propuseram representar uma floresta por uma coleção de árvores Eulerianas, pois assim as operações de consulta de conexidade e de alteração na árvore possuem consumo esperado $\Oh(\lg n)$ (amortizado em nossa implementação).
 
 \subsection{Nós do grafo}
 \label{sec:graph-nodes}
 
-Vimos na Seção~\ref{sec:euler-tour-trees} que uma sequência Euleriana é constituída de arestas do tipo \textit{uv} ou vértices do tipo \textit{uu}. 
-Como adotamos a técnica de \textit{Euler Tour trees} na implementação das nossas florestas dinâmicas, iremos introduzir uma estrutura chamada \textbf{nó do grafo}, que pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
+Vimos na Seção~\ref{sec:euler-tour-trees} que uma sequência Euleriana é constituída de arestas \textit{uv} ou vértices \textit{uu}. 
+Como adotamos a técnica de \textit{Euler Tour trees} na implementação das nossas florestas dinâmicas, introduziremos uma estrutura chamada \textbf{nó do grafo}, que pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
 
-A seguir, iremos descrever sobre a funcionalidade de cada tipo de nó, bem como os atributos relevantes que lhe pertencem. 
+Como uma \textit{Euler tour tree} é essencialmente uma árvore binária, para cada nó precisamos de apontadores para o filho esquerdo e filho direito do nó, além do pai. Em nossa implementação, denotamos por \textit{nó.filhoEsq}, \textit{nó.filhoDir} e \textit{nó.pai}, respectivamente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
 \subsection{Nó aresta}
 \label{sec:node-edge}
 
-Para cada nó do tipo aresta $uv$, iremos armazenar um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence ao grafo de nível $i$. Toda vez que uma aresta $uv$ é inserida na floresta $F_L$ de $G$, $uv$ vai ter este atributo definido como verdadeiro nesta árvore. O atributo só se torna falso em $F_L$ quando rebaixamos o nível desta aresta para $L-1$. Entretanto, em $F_{L-1}$, o atributo é verdadeiro para $uv$, pois indica que $uv$ é de nível $L-1$ após o rebaixamento.
+Para cada nó do tipo aresta $uv$, armazenaremos um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence ao grafo de nível $i$. Toda vez que uma aresta $uv$ é inserida na floresta $F_L$ de $G$, $uv$ vai ter este atributo definido como verdadeiro nesta árvore. O atributo só se torna falso em $F_L$ quando rebaixamos o nível desta aresta para $L-1$. Entretanto, em $F_{L-1}$, o atributo é verdadeiro para $uv$, pois indica que $uv$ é de nível $L-1$ após o rebaixamento.
 
 Da mesma forma, uma aresta reserva de nível $i$ vai ter este atributo definido como verdadeiro em $R_i$. Quando rebaixamos tal aresta reserva, ela passa a ser de nível $i-1$, pois ela estará em $R_{i-1}$.
 
-Como o nível das arestas só diminui e apenas acontece durante o rebaixamento na remoção das arestas, o valor de \textit{éNível} sofre alteração no decorrer das operações de remoção. Assim, para cada nó (seja ele vértice ou aresta) introduzimos um contador chamado \textit{arestasDeNível}, que armazena a quantidade de arestas com o \textit{éNível} verdadeiro em sua subárvore. A rotina auxiliar que atualiza este contador está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
+Sabemos, então, que o valor de \textit{éNível} sofre alteração quando ocorre rebaixamento de alguma aresta. Assim, para cada nó (seja ele vértice ou aresta) introduzimos um contador chamado \textit{arestasDeNível}, que armazena a quantidade de arestas com o \textit{éNível} verdadeiro em sua subárvore. A rotina auxiliar que atualiza este contador está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeArestasDeNível(F, u, v)} \label{prog:updateIsLevelCount-GD}}
     \noindent\textbf{Entrada}: Recebe a aresta $uv$ da floresta $F$.\\
@@ -1164,7 +1166,7 @@ Como o nível das arestas só diminui e apenas acontece durante o rebaixamento n
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Usando o mesmo exemplo da floresta da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como \textit{arestasDeNível} é propagada das folhas da árvore até a raiz.
+Usando o mesmo exemplo do grafo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como \textit{arestasDeNível} é propagada das folhas da árvore até a raiz.
 
 \begin{figure}[H]
     \centering
@@ -1222,12 +1224,40 @@ Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que as a
 
 Note que o Programa~\ref{prog:updateIsLevelCount-GD} consome tempo constante $\Oh(1)$, pois envolve apenas atribuições de variáveis e comparações de igualdade.
 
+Lembre-se de que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, podemos acabar quebrando a componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, precisamos realizar o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para 
+resolver este problema de forma eficiente, já que uma árvore pode conter arestas de níveis diferentes, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}, que irá procurar apenas as arestas da floresta de nível $i$ no nosso exemplo.
+
+\begin{programruledcaption}{\texttt{procureArestaDeNível(\textit{nó})} \label{prog:findEdgesIsLevel-GD}}
+    \noindent\textbf{Entrada}: Recebe um nó do grafo.
+    \\
+    \noindent\textbf{Saída}: Devolve uma aresta com \textit{éNível} verdadeiro.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    \textbf{se} nó.éNível $=$ verdadeiro \textbf{então}
+        devolva nó
+    \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasDeNível > 0 \textbf{então}
+        devolva \texttt{procureArestaDeNível(nó.filhoEsq)}
+    \textbf{senão}
+        devolva \texttt{procureArestaDeNível(nó.filhoDir)}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e assim as preservantes são preservadas. Se temos $k$ arestas de nível $i$ a serem rebaixadas, chamaremos \texttt{procureArestaDeNível} $\Oh(k \lg n)$ vezes. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
+
 \subsection{Nó vértice}
 \label{sec:node-vertex}
 
-Já para o nó do tipo vértice $u$ (ou $uu$), iremos armazenar um booleano chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. 
+Para o nó do tipo vértice $u$ (ou $uu$), armazenaremos um booleano chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. 
 
-Além disso, iremos manter um contador \textit{arestasReservasDeNível} para cada nó (seja ele vértice ou aresta), a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante as adições e remoções de arestas, e por isso precisamos de um método auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}.
+Além disso, manteremos um contador \textit{arestasReservasDeNível} para cada nó (seja ele vértice ou aresta), a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante as adições e remoções de arestas, e por isso precisamos de um método auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeArestasReservasDeNível(F, u)} \label{prog:updateReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$.
@@ -1382,7 +1412,7 @@ O laço da linha $4$ no Programa~\ref{prog:removeGD} executa no pior dos casos O
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Para explicar o Programa~\ref{prog:replaceGD}, iremos usar imagens para ilustrar o que está acontecendo em cada trecho do código. Como já comentado na Seção~\ref{sec:dynamic-graph-edge-removal}, ao removermos uma única aresta $uv$ que conecta $T_u$ e $T_v$, que contêm, respectivamente, o vértice $u$ e $v$, quebramos a floresta em duas componentes $T_u$ e $T_v$. Na Figura~\ref{fig:example-removal-part1}, a floresta de nível $i$ mostra um exemplo em que a aresta da floresta $uv$ é removida da floresta de nível $i$, separando-a em duas árvores $T_u$ e $T_v$. Já a floresta de nível $i-1$ no momento contém apenas vértice isolados.
+Para explicar o Programa~\ref{prog:replaceGD}, usaremos imagens para ilustrar o que está acontecendo em cada trecho do código. Como já comentado na Seção~\ref{sec:dynamic-graph-edge-removal}, ao removermos uma única aresta $uv$ que conecta $T_u$ e $T_v$, que contêm, respectivamente, o vértice $u$ e $v$, quebramos a floresta em duas componentes $T_u$ e $T_v$. Na Figura~\ref{fig:example-removal-part1}, a floresta de nível $i$ mostra um exemplo em que a aresta da floresta $uv$ é removida da floresta de nível $i$, separando-a em duas árvores $T_u$ e $T_v$. Já a floresta de nível $i-1$ no momento contém apenas vértice isolados.
 
 Denotando $|T|$ como o número de vértices de uma árvore $T$, podemos, sem perda de generalidade, assumir que $|T_u| \leq |T_v|$. Pela invariante~\ref{invariant3}, temos que $|T| \leq 2^i$, e como $|T_u| + |T_v| = |T|$, então $|T_u| \leq 2^{i-1}$. Por isso, podemos rebaixar todas as arestas de nível $i$ de $|T_u|$ para o nível $i-1$, mantendo-se, assim, a invariante~\ref{invariant3}. 
 
