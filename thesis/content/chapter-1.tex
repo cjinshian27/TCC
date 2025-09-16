@@ -287,8 +287,6 @@ O Programa~\ref{prog:addGD} ilustra uma primeira versão da rotina \texttt{adici
     G.nível[u, v] := $\left\lceil \lg n \right\rceil$
     \textbf{se} \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)} \textbf{então}
         \texttt{adicioneLA($G.R_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
-        \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $u$)}
-        \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $v$)}
     \textbf{senão}
         \texttt{adicioneFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
     \end{lstlisting}
@@ -944,8 +942,6 @@ Além disso, falta apresentar a estratégia usada para percorrer as arestas da f
         \texttt{substituaAresta($G$, $i$, $u$, $v$)}
     \textbf{senão} (*@\hfill $\triangleright$ uv é aresta reserva@*)
         \texttt{removaLA($G.R_i$, $u$, $v$)}
-        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $u$)}
-        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $v$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1000,7 +996,7 @@ A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} prop�
 
 \begin{figure}[H]
     \centering
-\begin{tikzpicture}[>=stealth, thick, node distance=2cm,
+\begin{tikzpicture}[scale=0.8, thick, node distance=2cm,
   vtx/.style={draw, circle, minimum size=8mm, inner sep=0pt}]
 
 % ---------- Left: original graph ----------
@@ -1073,23 +1069,50 @@ Henzing e King \cite{henzinger_king} propuseram armazenar uma sequência euleria
         [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
         edge/.style={thick, black},
         reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}]
+        removed/.style={black, thick, dashed}, 
+        inner sep=0pt]
 
         \node[node] (ad) at (0, 0) {$ad$};
-        \node[node] (ab) at (-3, -2) {$ab$};
-        \node[node] (cd) at (3, -2) {$cd$};
-        \node[node] (ea) at (-4, -4) {$ea$};
-        \node[node] (ba) at (-2, -4) {$ba$};
+        \node[node] (ab) at (-4.5, -1.5) {$ab$};
+        \node[node] (cd) at (4.5, -1.5) {$cd$};
+        \node[node] (dc) at (3, -3) {$dc$};
+        \node[node] (dd) at (1.5, -4.5) {$dd$};
+        \node[node] (cc) at (4.5, -4.5) {$cc$};
+        
+        
+        
+        \node[node] (da) at (6, -3) {$da$};
+        \node[node] (ae) at (7.5, -4.5) {$ae$};
+        
+        
+        \node[node] (ea) at (-6, -3) {$ea$};
+        \node[node] (ee) at (-7.5, -4.5) {$ee$};
+        \node[node] (aa) at (-4.5, -4.5) {$aa$};
+
+
+        \node[node] (bb) at (-3, -3) {$bb$};
+        \node[node] (ba) at (-1.5, -4.5) {$ba$};
 
         
 
         % tree edges (normal black edges)
         \draw[edge] (ad) -- (ab) node[midway, below] {};
         \draw[edge] (ad) -- (cd) node[midway, below] {};
+        \draw[edge] (cd) -- (dc) node[midway, below] {};
+        \draw[edge] (cd) -- (da) node[midway, below] {};
+        \draw[edge] (bb) -- (ba) node[midway, below] {};
+        \draw[edge] (ea) -- (ee) node[midway, below] {};
+        \draw[edge] (ea) -- (aa) node[midway, below] {};
+        \draw[edge] (dc) -- (dd) node[midway, below] {};
+        \draw[edge] (dc) -- (cc) node[midway, below] {};
+        \draw[edge] (da) -- (ae) node[midway, below] {};
+
+        \draw[edge] (ab) -- (ea) node[midway, below] {};
+        \draw[edge] (ab) -- (bb) node[midway, below] {};
 
 
     \end{tikzpicture}
-    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo. Como queremos inserir a aresta $uv$ e os vértices $u$ e $v$ já estão conectados pelo caminho $u \rightarrow a \rightarrow b \rightarrow c \rightarrow e \rightarrow v$, então armazenamos $uv$ como aresta reserva (em vermelho).}
+    \caption{Uma árvore binária balanceada contendo uma trilha euleriana do grafo da Figura~\ref{fig:euler-tour-trees}. Note que percorrer os nós da árvore no sentido \textit{inorder} obtemos a seguinte trilha euleriana: \textit{ee ea aa ab bb ba ad dd dc cc cd da ae}.}
     \label{fig:euler-tour-balanced-tree}
 \end{figure}
 
