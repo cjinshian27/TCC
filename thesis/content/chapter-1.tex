@@ -1249,7 +1249,7 @@ resolver este problema de forma eficiente, já que uma árvore pode conter arest
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e assim as preservantes são preservadas. Se temos $k$ arestas de nível $i$ a serem rebaixadas, chamaremos \texttt{procureArestaDeNível} $\Oh(k \lg n)$ vezes. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
+Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e assim as preservantes são preservadas. Se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, chamaremos \texttt{procureArestaDeNível} $\Oh(k \lg n)$ vezes. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
 
 \subsection{Nó vértice}
 \label{sec:node-vertex}
