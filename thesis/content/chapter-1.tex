@@ -1244,12 +1244,12 @@ resolver este problema de forma eficiente, já que uma árvore pode conter arest
     \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasDeNível > 0 \textbf{então}
         devolva \texttt{procureArestaDeNível(nó.filhoEsq)}
     \textbf{senão}
+        devolva \texttt{procureArestaDeNível(nó.filhoDir)}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
-devolva \texttt{procureArestaDeNível(nó.filhoDir)}
 
-Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, portanto, as preservantes são preservadas. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então \texttt{procureArestaDeNível} consome tempo $\Oh(k \lg n)$. Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
+Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então \texttt{procureArestaDeNível} consome tempo $\Oh(k \lg n)$. Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
 
 \subsection{Nó vértice}
 \label{sec:node-vertex}
@@ -1344,7 +1344,38 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
 
 Note que o Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo constante $\Oh(1)$, pois envolve apenas atribuições de variáveis e comparações de igualdade.
 
-Com o Programa~\ref{prog:updateReserveEdgesCount-GD} presente, podemos introduzir dois métodos que modificam o atributo \textit{incideArestaReservaDeNível} e atualizam o contador \textit{arestasReservasDeNível}.
+
+Lembre-se de que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, podemos acabar quebrando a componente de $F_i$ em duas, $T_u$ e $T_v$. Após o rebaixamento das arestas de nível $i$ de $T_u$, precisamos procurar por uma aresta substituta. Note que precisamos buscar por uma aresta reserva de nível $i$, de modo que uma de suas pontas estejam em $T_u$ e outra em $T_v$, para que consigamos reconectar as duas componentes separadas. 
+
+Para resolver este problema de maneira eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaReservaDeNível}, que irá procurar um vértice que incide a uma das arestas reservas de nível $i$.
+Essa rotina devolve um vértice que incide a uma das arestas reservas de nível $i$. Se ela retorna o vértice $u$, percorremos em $R_i$ cada vizinho $v$ de $u$, e verificamos se $uv$ liga $T_u$ a $T_v$. 
+
+\begin{programruledcaption}{\texttt{procureArestaReservaDeNível(\textit{nó})} \label{prog:findReserveEdge-GD}}
+    \noindent\textbf{Entrada}: Recebe um nó do grafo.
+    \\
+    \noindent\textbf{Saída}: Devolve um vértice com \textit{incideArestaReservaDeNível} verdadeiro.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    \textbf{se} nó.incideArestaReservaDeNível $=$ verdadeiro \textbf{então}
+        devolva nó
+    \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasReservasDeNível > 0 \textbf{então}
+        devolva \texttt{procureArestaDeNível(nó.filhoEsq)}
+    \textbf{senão}
+        devolva \texttt{procureArestaDeNível(nó.filhoDir)}
+\end{lstlisting}
+\vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
+
+Podemos introduzir dois métodos que modificam o atributo \textit{incideArestaReservaDeNível} e atualizam o contador \textit{arestasReservasDeNível}.
 
 \begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível(F, L, u)} \label{prog:decrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $L$.
