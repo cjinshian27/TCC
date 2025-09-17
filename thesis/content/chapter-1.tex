@@ -610,7 +610,7 @@ Temos também que $n = 10$ e $\left\lceil \lg 10 \right\rceil = 4$, logo o níve
 
 O próximo passo é rebaixar o nível de todas as arestas de nível $4$ em $T_u$ para o nível $3$. Dessa forma, as arestas de $T_u$ estão em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement2}, pois agora elas passam a ser de nível $3$.  
 
-Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de diferentes níveis em uma mesma árvore. Assim, percorrer todas as arestas de $T_u$ e selecionar apenas as de nível $i$ para rebaixar pode se tornar demorado quando o grafo possui uma grande quantidade de arestas. A forma como o algoritmo procura as arestas de nível $i$ de $T_u$ será descrita de maneira mais detalhada na Seção~\ref{sec:code-edge-removal}. No momento, só precisamos entender como este rebaixamento funciona.
+Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de diferentes níveis em uma mesma árvore. Assim, percorrer todas as arestas de $T_u$ e selecionar apenas as de nível $i$ para rebaixar pode se tornar demorado quando o grafo possui uma grande quantidade de arestas. A forma como o algoritmo procura as arestas de nível $i$ de $T_u$ será descrita de maneira mais detalhada na Seção~\ref{sec:node-edge}. No momento, só precisamos entender como este rebaixamento funciona.
 
 \begin{figure}[H]
     \centering
@@ -706,7 +706,7 @@ Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de difer
 
 \raggedbottom
 
-Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos achar, se existir, uma aresta reserva que possa reconectá-las. Note que percorrer todas as arestas reservas para achar uma substituta que ligue $T_u$ a $T_v$ pode ser ineficiente quando temos muitas arestas reservas. Por isso, explicaremos como implementar essa busca pela substituta de forma eficiente na Seção~\ref{sec:code-edge-removal}. 
+Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos achar, se existir, uma aresta reserva que possa reconectá-las. Note que percorrer todas as arestas reservas para achar uma substituta que ligue $T_u$ a $T_v$ pode ser ineficiente quando temos muitas arestas reservas. Por isso, explicaremos como implementar essa busca pela substituta de forma eficiente na Seção~\ref{sec:node-vertex}. 
 
 Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas em $R_4$ que tenham uma das pontas em $T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. Caso não incida, a aresta tem duas pontas em $T_u$ e logo ela não é uma substituta.  Então a rebaixamos para o nível $3$, ou seja, removemos de $R_4$ as arestas  percorridas que não são substitutas e inserimos em $R_3$.
 
@@ -919,8 +919,8 @@ Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, c
 
 Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, note que ao procurar por uma aresta substituta não necessariamente percorreremos todas as arestas reservas em $R_i$. Então nem sempre todas as arestas reservas de $R_i$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
 
-O Programa~\ref{prog:removeGD} apresenta uma primeira versão da rotina \texttt{removaGD}. Note que ele contém uma chamada à rotina \texttt{substituaAresta} que será explicada na próxima seção. Alguns ajustes em \texttt{removaGD} serão necessários devido à implementação da rotina \texttt{substituaAresta}. 
-Além disso, falta apresentar a estratégia usada para percorrer as arestas da floresta e reservas de forma eficiente. Isso também será descrito na próxima seção.
+O Programa~\ref{prog:removeGD} apresenta uma primeira versão da rotina \texttt{removaGD}. Note que ele contém uma chamada à rotina \texttt{substituaAresta} que será explicada Seção~\ref{sec:replace-edge}. Alguns ajustes em \texttt{removaGD} serão necessários devido à implementação da rotina \texttt{substituaAresta}. 
+Além disso, falta apresentar a estratégia usada para percorrer as arestas da floresta e reservas de forma eficiente. Isso será descrito nas Seções~\ref{sec:node-vertex}~e~\ref{sec:node-edge}.
 
 \begin{programruledcaption}{\texttt{removaGD($G$, $u$, $v$)} \label{prog:removeGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
@@ -1242,9 +1242,9 @@ resolver este problema de forma eficiente, já que uma árvore pode conter arest
     \textbf{se} nó.éNível $=$ verdadeiro \textbf{então}
         devolva nó
     \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasDeNível > 0 \textbf{então}
-        devolva \texttt{procureArestaDeNível(nó.filhoEsq)}
+        devolva \texttt{procureArestaDeNível(\textit{nó.filhoEsq})}
     \textbf{senão}
-        devolva \texttt{procureArestaDeNível(nó.filhoDir)}
+        devolva \texttt{procureArestaDeNível(\textit{nó.filhoDir})}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1366,9 +1366,9 @@ Essa rotina devolve um vértice que incide a uma das arestas reservas de nível 
     \textbf{se} nó.incideArestaReservaDeNível $=$ verdadeiro \textbf{então}
         devolva nó
     \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasReservasDeNível > 0 \textbf{então}
-        devolva \texttt{procureArestaDeNível(nó.filhoEsq)}
+        devolva \texttt{procureArestaDeNível(\textit{nó.filhoEsq})}
     \textbf{senão}
-        devolva \texttt{procureArestaDeNível(nó.filhoDir)}
+        devolva \texttt{procureArestaDeNível(\textit{nó.filhoDir})}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1427,16 +1427,14 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
  Em ambas as rotinas auxiliares, \texttt{atualizeIncideArestaReservaDeNível} apenas atualiza o atributo \textit{arestasReservasDeNível}, consumindo tempo $\Oh(1)$. O método \texttt{puxeParaRaiz} consome tempo amortizado $\Oh(\lg n)$, já que o percurso é proporcional à altura da árvore. Dessa forma, ambas as rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeArestasReservasDeNível} consomem tempo amortizado $\Oh(\lg n)$ em nossa implementação.
 Como essas tais rotinas auxiliares não fazem nenhuma modificação na floresta maximal do grafo, então todas as invariantes não mantidas. 
 
-\subsection{Remoção de arestas}
-\label{sec:code-edge-removal}
+\subsection{Segunda versão da rotina de adição de arestas}
+\label{sec:code-edge-addition-second-version}
 
-Como mencionado na Seção~\ref{sec:dynamic-graph-edge-removal}, encontramos duas situações ao removermos uma aresta $uv$ de um grafo $G$. A mais simples é quando a que queremos resolver é uma reserva, pois basta removermos da lista de adjacências de $G$. Porém, quando removemos uma aresta da floresta, podemos acabar quebrando ela em duas componentes, $T_u$ e $T_v$, e precisamos procurar uma aresta substituta que conecte as duas. O Programa~\ref{prog:removeGD} ilustra o método \texttt{removaGD}.
+Apresentado a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adição de arestas (\texttt{adicioneGD}), apresentado no Programa~\ref{prog:addGD-version2}. 
 
-Ao remover uma aresta $uv$ de nível $i$ de $G$, precisamos conferir se ela pertence à floresta $F_{\left\lceil \lg n \right\rceil}$ (linha $3$ do Programa~\ref{prog:removeGD}). Para isso, podemos utilizar um método auxiliar como em Programa~\ref{prog:existGD}, que retorna um booleano indicando se o nó $uv$ existe ou não.
-
-\begin{programruledcaption}{\texttt{existeNoGrafo(F, u, v)} \label{prog:existGD}}
+\begin{programruledcaption}{\texttt{adicioneGD($G$, $u$, $v$)} \label{prog:addGD-version2}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
-    \textbf{Saída}: Devolve um booleano indicando se a aresta $uv$ existe em $G$.
+    \textbf{Efeito}: Adiciona a aresta $uv$ no grafo $G$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1446,16 +1444,56 @@ Ao remover uma aresta $uv$ de nível $i$ de $G$, precisamos conferir se ela pert
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    devolva F.nó[u, v] $\neq \emptyset$ 
+    G.nível[u, v] := $\left\lceil \lg n \right\rceil$
+    \textbf{se} \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)} \textbf{então}
+        \texttt{adicioneLA($G.R_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $u$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $v$)}
+    \textbf{senão}
+        \texttt{adicioneFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Se $uv$ não é uma aresta da floresta, então ela é reserva e basta removê-la de $R_i$ (linha $8$ do Programa~\ref{prog:removeGD}) em tempo esperado $\Oh(1)$. Entretanto, quando removemos uma aresta $uv$, pode ocorrer o caso em que $u$ (ou $v$) não seja mais incidente a alguma outra aresta reserva, por isso precisamos atualizar o contador \textit{arestasReservasDeNível} tanto de $u$ quanto de $v$ chamando a rotina auxiliar \texttt{decrementeArestasReservasDeNível} do Programa~\ref{prog:decrementReserveEdgesCount-GD}.
+A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $4$ e $5$. Elas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} estejam corretas, visto que, ao adicionar uma aresta reserva, precisamos verificar se os vértices de suas pontas são, pela primeira vez, incidentes a uma aresta reserva. 
 
-Já para o caso em que $uv$ é uma aresta da floresta, precisamos removê-la das florestas $F_j$, $F_{j+1}, \ldots, F_{\left\lceil \lg n \right\rceil}$, para $i \leq j \leq \left\lceil \lg n \right\rceil$, onde $i$ é o nível de $uv$. Essa remoção é feita na linha $5$ chamando a rotina \texttt{removaFD}. Essa remoção é necessária devido à invariante~\ref{invariant2}, pois sabemos que $uv$ está somente nas florestas desses níveis. 
+\subsection{Segunda versão da rotina de remoção de arestas}
+\label{sec:code-edge-removal-second-version}
 
-O laço da linha $4$ no Programa~\ref{prog:removeGD} executa no pior dos casos O(lg$n$) vezes, e como \texttt{removaFD} consome tempo amortizado O(lg$n$), então as linhas $4$ e $5$ do código juntas possuem um consumo de tempo esperado $\Oh(n \lg 2^n)$. Como vimos que \texttt{removaLA} tem consumo esperado de tempo $\Oh(1)$ e \texttt{decrementeArestasReservasDeNível} consome tempo amortizado O(lg$n$), então o trecho do código que abrange as linhas 8 a 10 tem custo amortizado O(lg$n$). Por fim, veremos que a rotina auxiliar \texttt{substituaAresta} terá custo amortizado $\Oh(n \lg 2^n)$, concluindo-se então que \texttt{removaGD} consome tempo amortizado $\Oh(n \lg 2^n)$. Essa rotina auxiliar é a mais complexa do grafo dinâmico, e ela está descrita no descrita no Programa~\ref{prog:replaceGD}.
+Apresentado a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de remoção de arestas (\texttt{removaGD}), apresentado no Programa~\ref{prog:removeGD-version2}. 
+
+\begin{programruledcaption}{\texttt{removaGD($G$, $u$, $v$)} \label{prog:removeGD-version2}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
+    \noindent\textbf{Efeito}: Remove a aresta $uv$ do grafo $G$. 
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    i := G.nível[u, v]
+    nível[u, v] := NIL (*@\hfill $\triangleright$ marcamos uv como removida@*)
+    \textbf{se} uv $\in$ G.$F_{\left\lceil \lg n \right\rceil}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
+        \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+            \texttt{removaFD($G.F_j$, $u$, $v$)}
+        \texttt{substituaAresta($G$, $i$, $u$, $v$)}
+    \textbf{senão} (*@\hfill $\triangleright$ uv é aresta reserva@*)
+        \texttt{removaLA($G.R_i$, $u$, $v$)}
+        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $u$)}
+        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $v$)}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $9$ e $10$ a mais. Elas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} estejam corretas, visto que, ao remover uma aresta reserva, precisamos verificar se os vértices incidentes à ela ainda são incidentes a alguma outra. 
+
+Assim, falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir que consome tempo amortizado $\Oh(\lg^2 n)$. Consequentemente, \texttt{removaGD} também consome tempo amortizado $\Oh(\lg^2 n)$.
+
+\subsection{Rotina de substituição de aresta}
+\label{sec:replace-edge}
 
 \begin{programruledcaption}{\texttt{substituaAresta(G, i, u, v)} \label{prog:replaceGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
