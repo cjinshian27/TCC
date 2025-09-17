@@ -1165,7 +1165,7 @@ Sabemos, então, que o valor de \textit{éNível} sofre alteração quando ocorr
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Usando o mesmo exemplo do grafo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como \textit{arestasDeNível} é propagada das folhas da árvore até a raiz.
+Usando o mesmo exemplo do grafo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como \textit{arestasDeNível} é propagada das folhas até a raiz da árvore.
 
 \begin{figure}[H]
     \centering
@@ -1215,7 +1215,7 @@ Usando o mesmo exemplo do grafo da Figura~\ref{fig:euler-tour-balanced-tree} na 
 
 
     \end{tikzpicture}
-    \caption{Uma árvore binária balanceada contendo uma trilha Euleriana. Nós pintados em vermelho indicam que são arestas com o éNível verdadeiro. Embaixo de cada nó temos o contador arestasDeŃível. Note que o campo éNível não existe em vértices, somente em arestas.}
+    \caption{Uma floresta dinâmica $F_i$ onde nós pintados em vermelho indicam que são arestas com o éNível verdadeiro. Isso quer dizer que todas as arestas da floresta são de nível $i$ em nosso exemplo. Embaixo de cada nó temos o contador arestasDeŃível. Note que o campo éNível não existe em vértices, somente em arestas.}
     \label{fig:euler-tour-balanced-tree-is-level-propagation}
 \end{figure}
 
@@ -1244,12 +1244,12 @@ resolver este problema de forma eficiente, já que uma árvore pode conter arest
     \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasDeNível > 0 \textbf{então}
         devolva \texttt{procureArestaDeNível(nó.filhoEsq)}
     \textbf{senão}
-        devolva \texttt{procureArestaDeNível(nó.filhoDir)}
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
+\end{lstlisting}
+\vspace{-0.5\baselineskip}
 \end{programruledcaption}
+devolva \texttt{procureArestaDeNível(nó.filhoDir)}
 
-Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e assim as preservantes são preservadas. Se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, chamaremos \texttt{procureArestaDeNível} $\Oh(k \lg n)$ vezes. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
+Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, portanto, as preservantes são preservadas. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então \texttt{procureArestaDeNível} consome tempo $\Oh(k \lg n)$. Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
 
 \subsection{Nó vértice}
 \label{sec:node-vertex}
@@ -1287,6 +1287,60 @@ Além disso, manteremos um contador \textit{arestasReservasDeNível} para cada n
 \end{programruledcaption}
 
 \raggedbottom
+
+Usando o mesmo exemplo do grafo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como \textit{arestasReservasDeNível} é propagada das folhas até a raiz da árvore.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        inner sep=0pt]
+
+        \node[node, label=below:{5}] (ad) at (0, 0) {$ad$};
+        \node[node, label=below:{3}] (ab) at (-4.5, -1.5) {$ab$};
+        \node[node, label=below:{2}] (cd) at (4.5, -1.5) {$cd$};
+        \node[node, label=below:{2}] (dc) at (3, -3) {$dc$};
+        \node[node, fill=green!30, label=below:{1}] (dd) at (1.5, -4.5) {$dd$};
+        \node[node, fill=green!30, label=below:{1}] (cc) at (4.5, -4.5) {$cc$};
+        
+        
+        \node[node, label=below:{0}] (da) at (6, -3) {$da$};
+        \node[node, label=below:{0}] (ae) at (7.5, -4.5) {$ae$};
+        
+        
+        \node[node, label=below:{2}] (ea) at (-6, -3) {$ea$};
+        \node[node, fill=green!30, label=below:{1}] (ee) at (-7.5, -4.5) {$ee$};
+        \node[node, fill=green!30, label=below:{1}] (aa) at (-4.5, -4.5) {$aa$};
+
+
+        \node[node, fill=green!30, label=below:{1}] (bb) at (-3, -3) {$bb$};
+        \node[node, label=below:{0}] (ba) at (-1.5, -4.5) {$ba$};
+
+        
+
+        % tree edges (normal black edges)
+        \draw[edge] (ad) -- (ab) node[midway, below] {};
+        \draw[edge] (ad) -- (cd) node[midway, below] {};
+        \draw[edge] (cd) -- (dc) node[midway, below] {};
+        \draw[edge] (cd) -- (da) node[midway, below] {};
+        \draw[edge] (bb) -- (ba) node[midway, below] {};
+        \draw[edge] (ea) -- (ee) node[midway, below] {};
+        \draw[edge] (ea) -- (aa) node[midway, below] {};
+        \draw[edge] (dc) -- (dd) node[midway, below] {};
+        \draw[edge] (dc) -- (cc) node[midway, below] {};
+        \draw[edge] (da) -- (ae) node[midway, below] {};
+
+        \draw[edge] (ab) -- (ea) node[midway, below] {};
+        \draw[edge] (ab) -- (bb) node[midway, below] {};
+
+
+    \end{tikzpicture}
+    \caption{Uma floresta dinâmica $F_i$ onde nós pintados em verde indicam que são vértices com o incideArestaReservaDeNível verdadeiro. No nosso exemplo, então, todos os vértices são ponta de alguma aresta reserva de nível $i$. Embaixo de cada nó temos o contador arestasReservasDeŃível. Note que o campo incideArestaReservaDeNível não existe em arestas, somente em vértices.}
+    \label{fig:euler-tour-balanced-tree-reserve-edges-propagation}
+\end{figure}
 
 Note que o Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo constante $\Oh(1)$, pois envolve apenas atribuições de variáveis e comparações de igualdade.
 
