@@ -1402,7 +1402,7 @@ O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{inc
 
 Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \textit{incideArestaReservaDeNível} de um vértice $u$ para verdadeiro quando adicionamos um vértice $v$ na lista de adjacências de $u$ e $v$ é o primeiro elemento de sua lista de adjacências, pois isso indica que $u$ passa a ser incidente à aresta reserva $uv$.
 
-\begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível($F$, $L$, $u$)} \label{prog:incrementReserveEdgesCount-GD}}
+\begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível($F$, $R$, $u$)} \label{prog:incrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $R$.\\
     \noindent\textbf{Efeito}: Atualiza o campo \textit{incideArestaReservaDeNível} para verdadeiro se necessário.
     \vspace{-0.5\baselineskip}
