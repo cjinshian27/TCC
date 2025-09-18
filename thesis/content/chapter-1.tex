@@ -1424,13 +1424,13 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
 \end{programruledcaption}
 
 
- Em ambas as rotinas auxiliares, \texttt{atualizeIncideArestaReservaDeNível} apenas atualiza o atributo \textit{arestasReservasDeNível}, consumindo tempo $\Oh(1)$. O método \texttt{puxeParaRaiz} consome tempo amortizado $\Oh(\lg n)$, já que o percurso é proporcional à altura da árvore. Dessa forma, ambas as rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeArestasReservasDeNível} consomem tempo amortizado $\Oh(\lg n)$ em nossa implementação.
-Como essas tais rotinas auxiliares não fazem nenhuma modificação na floresta maximal do grafo, então todas as invariantes são mantidas. 
+ Em ambas as rotinas auxiliares, sabemos que \texttt{atualizeIncideArestaReservaDeNível} consome tempo $\Oh(1)$. O método \texttt{puxeParaRaiz} consome tempo amortizado $\Oh(\lg n)$, pois o percurso é proporcional à altura da árvore. Dessa forma, ambas as rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeArestasReservasDeNível} consomem tempo amortizado $\Oh(\lg n)$ em nossa implementação.
+Como essas tais rotinas auxiliares não fazem nenhuma modificação no grafo, então todas as invariantes são mantidas. 
 
 \subsection{Segunda versão da rotina de adição de arestas}
 \label{sec:code-edge-addition-second-version}
 
-Apresentado a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adição de arestas (\texttt{adicioneGD}), apresentado no Programa~\ref{prog:addGD-version2}. 
+Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adição de arestas (\texttt{adicioneGD}), apresentado no Programa~\ref{prog:addGD-version2}. 
 
 \begin{programruledcaption}{\texttt{adicioneGD($G$, $u$, $v$)} \label{prog:addGD-version2}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
@@ -1455,12 +1455,12 @@ Apresentado a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adi
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $4$ e $5$. Elas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} estejam corretas, visto que, ao adicionar uma aresta reserva, precisamos verificar se os vértices de suas pontas são, pela primeira vez, incidentes a uma aresta reserva. 
+A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $4$ e $5$. Tais linhas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} estejam corretas nos vértices $u$ e $v$, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ são, pela primeira vez, incidentes a alguma aresta reserva, que pode ser a $uv$. 
 
 \subsection{Segunda versão da rotina de remoção de arestas}
 \label{sec:code-edge-removal-second-version}
 
-Apresentado a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de remoção de arestas (\texttt{removaGD}), apresentado no Programa~\ref{prog:removeGD-version2}. 
+Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de remoção de arestas (\texttt{removaGD}), apresentado no Programa~\ref{prog:removeGD-version2}. 
 
 \begin{programruledcaption}{\texttt{removaGD($G$, $u$, $v$)} \label{prog:removeGD-version2}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
@@ -1488,9 +1488,9 @@ Apresentado a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de rem
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $9$ e $10$ a mais. Elas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} estejam corretas, visto que, ao remover uma aresta reserva, precisamos verificar se os vértices incidentes à ela ainda são incidentes a alguma outra. 
+A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $9$ e $10$ a mais. Tais linhas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} estejam corretas, visto que, ao remover uma aresta reserva, precisamos verificar se os vértices incidentes à ela ainda são incidentes a alguma outra. 
 
-Assim, falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir que consome tempo amortizado $\Oh(\lg^2 n)$. Consequentemente, \texttt{removaGD} também consome tempo amortizado $\Oh(\lg^2 n)$.
+Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir que consome tempo amortizado $\Oh(\lg^2 n)$. Consequentemente, \texttt{removaGD} também consome tempo amortizado $\Oh(\lg^2 n)$.
 
 \subsection{Rotina de substituição de aresta}
 \label{sec:replace-edge}
