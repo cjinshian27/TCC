@@ -1136,7 +1136,7 @@ Para cada nó do tipo aresta $uv$, armazenaremos um atributo booleano chamado \t
 
 Da mesma forma, uma aresta reserva $wx$ de nível $i$ vai ter este atributo definido como verdadeiro em $R_i$. Quando rebaixamos tal aresta reserva, ela passa a ser de nível $i-1$, pois ela estará em $R_{i-1}$. Assim, \textit{éNível} de $wx$ se torna verdadeiro em $R_{i-1}$.
 
-Sabemos, então, que o valor de \textit{éNível} de uma aresta sofre alteração quando a rebaixamos. Assim, para cada nó (seja ele vértice ou aresta) introduzimos um contador chamado \textit{arestasDeNível}, que armazena a quantidade de arestas em sua subárvore que têm o \textit{éNível} verdadeiro. A rotina auxiliar que atualiza este contador está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
+Sabemos, então, que o valor de \textit{éNível} de uma aresta sofre alteração quando a rebaixamos. Assim, em todos os nós do grafo introduziremos um contador chamado \textit{arestasDeNível}, que armazena a quantidade de arestas em sua subárvore que têm o \textit{éNível} verdadeiro. A rotina auxiliar que atualiza este contador está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeArestasDeNível(F, u, v)} \label{prog:updateIsLevelCount-GD}}
     \noindent\textbf{Entrada}: Recebe a aresta $uv$ da floresta $F$.\\
@@ -1256,7 +1256,7 @@ Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, porta
 
 Para cada nó do tipo vértice $u$ (ou $uu$), armazenaremos um booleano chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. 
 
-Além disso, manteremos um contador \textit{arestasReservasDeNível} para cada nó (seja ele vértice ou aresta), a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante as adições e remoções de arestas, e por isso precisamos de um método auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}.
+Além disso, manteremos um contador \textit{arestasReservasDeNível} em todos os nós do grafo, a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante as adições e remoções de arestas, e por isso precisamos de um método auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeArestasReservasDeNível(F, u)} \label{prog:updateReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$.
