@@ -1394,7 +1394,7 @@ O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{inc
         vérticeU := F.nó[u, u]
         \textbf{se} R[u] = $\emptyset$ \textbf{então} 
             \texttt{puxeParaRaiz($F$, \textit{vérticeU})}
-            vérticeU.incideArestaReservaDeNível = falso
+            vérticeU.incideArestaReservaDeNível := falso
             \texttt{atualizeIncideArestaReservaDeNível($F$, $u$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -1417,7 +1417,7 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
     vérticeU := F.nó[u, u]
     \textbf{se} |R[u]| = $1$ \textbf{então} 
         \texttt{puxeParaRaiz($F$, \textit{vérticeU})}
-        vérticeU.incideArestaReservaDeNível = verdadeiro
+        vérticeU.incideArestaReservaDeNível := verdadeiro
         \texttt{atualizeIncideArestaReservaDeNível($F$, $u$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
