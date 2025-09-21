@@ -1124,23 +1124,20 @@ Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma f
 \subsection{Nós das florestas}
 \label{sec:graph-nodes}
 
-Vimos na Seção~\ref{sec:euler-tour-trees} que uma sequência Euleriana é constituída de arestas \textit{uv} ou vértices \textit{uu}. 
-Como adotamos a técnica de Euler tour trees na implementação das nossas florestas dinâmicas, introduziremos uma estrutura chamada \textbf{nó do grafo}, que pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
+Vimos na Seção~\ref{sec:euler-tour-trees} que uma sequência Euleriana é constituída de arcos que representam arestas \textit{uv} ou vértices \textit{uu}. Como adotamos a técnica de Euler tour trees na implementação das nossas florestas dinâmicas, introduziremos uma estrutura chamada \textbf{nó das florestas}, que pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, usaremos um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
 
-Como representamos uma \textit{Euler tour tree} por uma árvore binária, para cada nó precisamos de apontadores para o filho esquerdo e filho direito do nó, além do pai. Em nossa implementação, denotamos por \textit{nó.filhoEsq}, \textit{nó.filhoDir} e \textit{nó.pai}, respectivamente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
+Como representamos uma \textit{Euler tour tree} por uma árvore binária, para cada nó precisamos de apontadores para o filho esquerdo e filho direito do nó. Em nossa implementação, denotamos por \textit{nó.filhoEsq} e \textit{nó.filhoDir}, respectivamente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
-\subsection{Nó aresta}
+\subsection{Nó de aresta}
 \label{sec:node-edge}
 
-Para cada nó do tipo aresta $uv$, armazenaremos um atributo booleano chamado \textit{éNível}, que indica se tal aresta pertence ao grafo de nível $i$. Toda vez que uma aresta $uv$ é inserida na floresta $F_L$ de $G$, $uv$ vai ter este atributo definido como verdadeiro nesta árvore. O atributo só se torna falso em $F_L$ quando rebaixamos o nível desta aresta para $L-1$. Entretanto, em $F_{L-1}$, o atributo é verdadeiro para $uv$, pois indica que $uv$ é de nível $L-1$ após o rebaixamento.
+Cada nó do tipo aresta $uv$ tem um atributo extra booleano chamado \textit{éNível}, que indica se tal aresta da floresta $F_i$ é de nível $i$. Toda vez que uma aresta $uv$ é inserida na floresta $F_L$ de $G$, o nó de $uv$ em $F_L$ vai ter este atributo definido como verdadeiro nesta árvore, pois ela recebe nível $L$. O atributo desse nó de $F_L$ se torna falso quando rebaixamos o nível desta aresta para $L-1$. Nesse momento, o nó de $uv$ em $F_{L-1}$ ficará com esse atributo verdadeiro para $uv$, pois $uv$ é de nível $L-1$ após o rebaixamento.
 
-Da mesma forma, uma aresta reserva $wx$ de nível $i$ vai ter este atributo definido como verdadeiro em $R_i$. Quando rebaixamos tal aresta reserva, ela passa a ser de nível $i-1$, pois ela estará em $R_{i-1}$. Assim, \textit{éNível} de $wx$ se torna verdadeiro em $R_{i-1}$.
-
-Sabemos, então, que o valor de \textit{éNível} de uma aresta sofre alteração quando a rebaixamos. Assim, em todos os nós do grafo introduziremos um contador chamado \textit{arestasDeNível}, que armazena a quantidade de arestas em sua subárvore que têm o \textit{éNível} verdadeiro. A rotina auxiliar que atualiza este contador está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
+Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para percorrermos as arestas de nível $i$ de uma componente de $F_i$ eficientemente, os nós da floresta $F_i$ armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de arestas em sua subárvore que têm o \textit{éNível} verdadeiro. Sempre que modificarmos a floresta, vamos acionar uma rotina auxiliar que atualiza este contador e que está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeArestasDeNível($F$, $u$, $v$)} \label{prog:updateIsLevelCount-GD}}
-    \noindent\textbf{Entrada}: Recebe a aresta $uv$ da floresta $F$.\\
-    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} da aresta $uv$.
+    \noindent\textbf{Entrada}: Recebe vértices $u$ e $v$ adjacentes da floresta $F$.\\
+    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do nó de aresta $uv$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1153,12 +1150,12 @@ Sabemos, então, que o valor de \textit{éNível} de uma aresta sofre alteraçã
     arestaUV := F.nó[u, v]
     c := 0
     \textbf{se} arestaUV.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} arestaUV.filhoEsq.éNível = verdadeiro \textbf{então}
+        \textbf{se} arestaUV.filhoEsq.éNível \textbf{então}
             c := c + 1
     \textbf{se} arestaUV.filhoDir $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} arestaUV.filhoDir.éNível = verdadeiro \textbf{então}
+        \textbf{se} arestaUV.filhoDir.éNível \textbf{então}
             c := c + 1
-    \textbf{se} arestaUV.éNível = verdadeiro \textbf{então}
+    \textbf{se} arestaUV.éNível \textbf{então}
         c := c + 1
     arestaUV.arestasDeNível := c
 \end{lstlisting}
@@ -1215,7 +1212,7 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
 
 
     \end{tikzpicture}
-    \caption{Uma floresta dinâmica $F_i$ onde nós pintados em vermelho indicam que são arestas com o éNível verdadeiro. Isso quer dizer que todas as arestas da floresta são de nível $i$ em nosso exemplo. Embaixo de cada nó temos o contador arestasDeŃível. Note que o campo éNível não existe em vértices, somente em arestas.}
+    \caption{Uma floresta dinâmica $F_i$ onde nós pintados em vermelho indicam que são arestas com o éNível verdadeiro. Isso quer dizer que todas as arestas da floresta são de nível $i$ em nosso exemplo. Embaixo de cada nó temos o valor do contador arestasDeNível.}
     \label{fig:euler-tour-balanced-tree-is-level-propagation}
 \end{figure}
 
@@ -1256,7 +1253,7 @@ Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, porta
 
 Para cada nó do tipo vértice $u$ (ou $uu$), armazenaremos um booleano chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. 
 
-Além disso, manteremos um contador \textit{arestasReservasDeNível} em todos os nós do grafo, a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante as adições e remoções de arestas, e por isso precisamos de um método auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}.
+Além disso, manteremos um contador \textit{arestasReservasDeNível} em todos os nós da floresta, a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante as adições e remoções de arestas, e por isso precisamos de um método auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeArestasReservasDeNível($F$, $u$)} \label{prog:updateReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$.
@@ -1274,12 +1271,12 @@ Além disso, manteremos um contador \textit{arestasReservasDeNível} em todos os
     vérticeU := F.nó[u, u]
     c := 0
     \textbf{se} vérticeU.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} vérticeU.filhoEsq.incideArestaReservaDeNível = verdadeiro \textbf{então}
+        \textbf{se} vérticeU.filhoEsq.incideArestaReservaDeNível  \textbf{então}
             c := c + 1
     \textbf{se} vérticeU.filhoDir $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} vérticeU.filhoDir.incideArestaReservaDeNível = verdadeiro \textbf{então}
+        \textbf{se} vérticeU.filhoDir.incideArestaReservaDeNível  \textbf{então}
             c := c + 1
-    \textbf{se} vérticeU.incideArestaReservaDeNível = verdadeiro \textbf{então}
+    \textbf{se} vérticeU.incideArestaReservaDeNível  \textbf{então}
         c := c + 1
     vérticeU.arestasReservasDeNível := c
     \end{lstlisting}
@@ -1417,7 +1414,7 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
     vérticeU := F.nó[u, u]
     \textbf{se} |R[u]| = $1$ \textbf{então} 
         \texttt{puxeParaRaiz($F$, \textit{vérticeU})}
-        vérticeU.incideArestaReservaDeNível := verdadeiro
+        vérticeU.incideArestaReservaDeNível :
         \texttt{atualizeIncideArestaReservaDeNível($F$, $u$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
