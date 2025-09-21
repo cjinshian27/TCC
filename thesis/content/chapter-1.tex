@@ -1126,7 +1126,7 @@ Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma f
 
 Vimos na Seção~\ref{sec:euler-tour-trees} que uma sequência Euleriana é constituída de arcos que representam arestas \textit{uv} ou vértices \textit{uu}. Como adotamos a técnica de Euler tour trees na implementação das nossas florestas dinâmicas, introduziremos uma estrutura chamada \textbf{nó das florestas}, que pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, usaremos um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
 
-Como representamos uma \textit{Euler tour tree} por uma árvore binária, para cada nó precisamos de apontadores para o filho esquerdo e filho direito do nó. Em nossa implementação, denotamos por \textit{nó.filhoEsq} e \textit{nó.filhoDir}, respectivamente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
+Como representamos uma Euler tour tree por uma árvore binária, para cada nó precisamos de apontadores para o filho esquerdo e filho direito do nó. Em nossa implementação, denotamos por \textit{nó.filhoEsq} e \textit{nó.filhoDir}, respectivamente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
 \subsection{Nó de aresta}
 \label{sec:node-edge}
@@ -1216,17 +1216,16 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
     \label{fig:euler-tour-balanced-tree-is-level-propagation}
 \end{figure}
 
-Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que as arestas $ab$ e $ba$ são a mesma aresta, mas elas existem por conta da sequência Euleriana. Assim, para evitar a duplicação do atributo \textit{éNível}, optamos por colocar este atributo como verdadeiro em arestas cujas pontas estão em ordem lexicográfica. Então, no nosso exemplo, arestas do tipo $ba$, $da$, $dc$ e $ea$ vão ter este atributo dado como falso. Se usássemos números em vez de letras nas pontas das arestas, então o atributo \textit{éNível} seria verdadeiro apenas em arestas com as pontas lidas em ordem crescente, como $12$, $23$, etc.  
+Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que os nós $\emph{ab}$ e $\emph{ba}$ representam a mesma aresta. Assim, para evitar a duplicação do atributo \textit{éNível}, optamos por colocar este atributo como verdadeiro nos nós de aresta cujos vértices estão em ordem lexicográfica. Então, no nosso exemplo, nós do tipo $\emph{ba}$, $\emph{da}$, $\emph{dc}$ e $\emph{ea}$ vão ter este atributo falso. 
 
-Note que o Programa~\ref{prog:updateIsLevelCount-GD} consome tempo constante $\Oh(1)$, pois envolve apenas atribuições de variáveis e comparações de igualdade.
+Note que o Programa~\ref{prog:updateIsLevelCount-GD} consome tempo constante, pois envolve apenas atribuições de variáveis e comparações.
 
-Lembre-se de que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, podemos acabar quebrando a componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, precisamos realizar o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para 
-resolver este problema de forma eficiente, já que uma árvore pode conter arestas de níveis diferentes, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}, que irá procurar apenas as arestas da floresta de nível $i$ no nosso exemplo.
+Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, quebramos uma componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, precisamos realizar o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para fazer isso de forma eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}, que procurará apenas as arestas da floresta de nível $i$.
 
 \begin{programruledcaption}{\texttt{procureArestaDeNível(\textit{nó})} \label{prog:findEdgesIsLevel-GD}}
-    \noindent\textbf{Entrada}: Recebe um nó do grafo.
+    \noindent\textbf{Entrada}: Recebe um nó de uma floresta com o contador \textit{arestasDeNível} $> 0$.
     \\
-    \noindent\textbf{Saída}: Devolve uma aresta com \textit{éNível} verdadeiro.
+    \noindent\textbf{Saída}: Devolve um nó de aresta com \textit{éNível} verdadeiro.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1246,7 +1245,7 @@ resolver este problema de forma eficiente, já que uma árvore pode conter arest
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a \textit{Euler tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Assim, se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então \texttt{procureArestaDeNível} é chamado  $\Oh(k \lg n)$ vezes.
+Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera a floresta, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Assim, se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então a busca por essas $k$ arestas custará tempo $\Oh(k \lg n)$.
 
 \subsection{Nó vértice}
 \label{sec:node-vertex}
@@ -1370,7 +1369,7 @@ Essa rotina devolve um vértice que incide a uma das arestas reservas de nível 
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a \textit{Euler tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
+Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo do Programa~\ref{prog:findReserveEdge-GD} é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
 
 O campo \textit{incideArestaReservaDeNível} de um vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reservas incidentes a $u$ no grafo. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível}.
 
