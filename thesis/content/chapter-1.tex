@@ -15,7 +15,7 @@ Como citado no Capítulo~1, o problema da conexidade em grafos dinâmicos visa c
 \section{Conexidade em florestas dinâmicas}
 \label{sec:dynamic-forest-connectivity}
 
-Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o algoritmo que foi proposto na Seção~2 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}. No Capítulo~2 da sua dissertação, Rodrigues descreve as rotinas principais de sua implementação, que se baseia em \textit{Euler tour trees}, e realiza uma análise minuciosa da complexidade de tempo de cada rotina de sua implementação. Levando isso em conta, optamos por não apresentar uma descrição detalhada desse mesmo algoritmo, e apenas explicar brevemente o que as rotinas principais fazem, ressaltando algumas diferenças da nossa implementação em código em relação à de Rodrigues.  
+Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o algoritmo que foi proposto na Seção~2 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}. No Capítulo~2 da sua dissertação, Rodrigues descreve as rotinas principais de sua implementação, que se baseia em Euler tour trees, e realiza uma análise minuciosa da complexidade de tempo de cada rotina de sua implementação. Levando isso em conta, optamos por não apresentar uma descrição detalhada desse mesmo algoritmo, e apenas explicar brevemente o que as rotinas principais fazem, ressaltando algumas diferenças da nossa implementação em código em relação à de Rodrigues.  
 
 O problema da conexidade em florestas dinâmicas pode ser considerado uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. A biblioteca que usaremos contém os seguintes métodos:
 
@@ -989,10 +989,10 @@ Além disso, falta apresentar a estratégia usada para percorrer as arestas da f
 \section{Estrutura interna do grafo dinâmico}
 \label{sec:dynamic-graph-implementation}
 
-\subsection{Euler Tour Trees}
+\subsection{Euler tour trees}
 \label{sec:euler-tour-trees}
 
-A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propõe o uso de Euler Tour Trees, que é uma técnica utilizada para representar uma árvore binária balanceada através de uma trilha Euleriana. Essa representação é obtida de uma árvore $T$ substituindo-se cada aresta por dois arcos em sentidos opostos e adicionando-se um laço a cada vértice, como pode ser visto na Figura~\ref{fig:euler-tour-trees}. O digrafo resultante é chamado de Euleriano, tendo as principais características como sendo um grafo conexo e possuir uma trilha que começa e termina num mesmo vértice, passando por todos os arcos do digrafo somente uma vez. Tal trilha é chamada de \textbf{trilha Euleriana}.
+A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propõe o uso de Euler tour trees, que é uma técnica utilizada para representar uma árvore. Essa representação é obtida de uma árvore $T$ substituindo-se cada aresta por dois arcos em sentidos opostos e adicionando-se um laço a cada vértice, como pode ser visto na Figura~\ref{fig:euler-tour-trees}. O digrafo resultante é Euleriano, tendo as principais características como sendo um grafo conexo e possuir uma trilha que começa e termina num mesmo vértice, passando por todos os arcos do digrafo somente uma vez. Tal trilha é chamada de \textbf{ciclo Euleriano}.
 
 \begin{figure}[H]
     \centering
@@ -1048,21 +1048,21 @@ A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} prop�
 \end{scope}
 
 \end{tikzpicture}
-    \caption{À esquerda, temos a árvore $T$ e, à direita, temos a trilha Euleriana de $T$.}
+    \caption{À esquerda, temos a árvore $T$ e, à direita, temos a ciclo Euleriano de $T$.}
     \label{fig:euler-tour-trees}
 \end{figure}
 
 \raggedbottom
 
-A representação da árvore $T$ é basicamente a sequência de arcos que forma uma trilha Euleriana do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, então o arco será escrito como $uu$. Assim, no exemplo da Figura~\ref{fig:euler-tour-trees}, uma possível trilha Euleriana poderia ser a seguinte: 
+A representação da árvore $T$ é basicamente a sequência de arcos que forma um ciclo Euleriano do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, então o arco será escrito como $uu$. Assim, no exemplo da Figura~\ref{fig:euler-tour-trees}, um possível ciclo Euleriano poderia ser o seguinte: 
 
 \begin{center}
     \textit{ee ea aa ab bb ba ad dd dc cc cd da ae}
 \end{center}
 
-Note que, embora tenhamos passado pelo mesmo vértice mais de uma vez, só escrevemos uma vez o laço quando passamos por ele pela primeira vez. Além disso, a sequência dos arcos pode mudar dependendo do vértice inicial e da ordem em que o vizinho de cada vértice é visitado. Uma tal sequência é chamada \textbf{sequência Euleriana}. 
+A sequência dos arcos pode mudar dependendo do vértice inicial e da ordem em que os vizinhos de cada vértice são visitados. Uma tal sequência é chamada \textbf{sequência Euleriana}. 
 
-Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euleriana em uma árvore binária balanceada. Usando o nosso exemplo do grafo da Figura~\ref{fig:euler-tour-trees}, podemos ilustrar uma possível árvore binária balanceada para ele na Figura~\ref{fig:euler-tour-balanced-tree}.
+Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euleriana em uma árvore binária balanceada, usando como chave a posição de cada elemento na sequência. Tomando como base o nosso exemplo da árvore da Figura~\ref{fig:euler-tour-trees}, podemos ilustrar uma possível árvore binária balanceada para ela na Figura~\ref{fig:euler-tour-balanced-tree}.
 
 \begin{figure}[H]
     \centering
@@ -1113,19 +1113,19 @@ Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euler
 
 
     \end{tikzpicture}
-    \caption{Uma árvore binária balanceada contendo uma trilha Euleriana do grafo da Figura~\ref{fig:euler-tour-trees}. Note que percorrer os nós da árvore no sentido \textit{inorder} obtemos a seguinte trilha Euleriana: \textit{ee ea aa ab bb ba ad dd dc cc cd da ae}.}
+    \caption{Uma árvore binária balanceada contendo uma ciclo Euleriano da árvore da Figura~\ref{fig:euler-tour-trees}. Note que se percorrermos os nós da árvore em \textit{inorder}, obtemos a seguinte sequência Euleriana: \textit{ee ea aa ab bb ba ad dd dc cc cd da ae}.}
     \label{fig:euler-tour-balanced-tree}
 \end{figure}
 
 \raggedbottom
 
-Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma floresta por uma coleção de árvores Eulerianas, pois assim as operações de consulta de conexidade e de alteração na árvore possuem consumo esperado $\Oh(\lg n)$ (amortizado em nossa implementação).
+Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma floresta pela coleção de árvores Eulerianas para cada componente da floresta. Assim, é possível implementar as operações de consulta de conexidade e de alteração na floresta com consumo esperado de tempo $\Oh(\lg n)$ (amortizado em nossa implementação), onde $n$ é o número de nós da floresta.
 
-\subsection{Nós do grafo}
+\subsection{Nós das florestas}
 \label{sec:graph-nodes}
 
 Vimos na Seção~\ref{sec:euler-tour-trees} que uma sequência Euleriana é constituída de arestas \textit{uv} ou vértices \textit{uu}. 
-Como adotamos a técnica de \textit{Euler Tour trees} na implementação das nossas florestas dinâmicas, introduziremos uma estrutura chamada \textbf{nó do grafo}, que pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
+Como adotamos a técnica de Euler tour trees na implementação das nossas florestas dinâmicas, introduziremos uma estrutura chamada \textbf{nó do grafo}, que pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, estaremos usando um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
 
 Como representamos uma \textit{Euler tour tree} por uma árvore binária, para cada nó precisamos de apontadores para o filho esquerdo e filho direito do nó, além do pai. Em nossa implementação, denotamos por \textit{nó.filhoEsq}, \textit{nó.filhoDir} e \textit{nó.pai}, respectivamente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
@@ -1249,7 +1249,7 @@ resolver este problema de forma eficiente, já que uma árvore pode conter arest
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Assim, se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então \texttt{procureArestaDeNível} é chamado  $\Oh(k \lg n)$ vezes.
+Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a \textit{Euler tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Assim, se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então \texttt{procureArestaDeNível} é chamado  $\Oh(k \lg n)$ vezes.
 
 \subsection{Nó vértice}
 \label{sec:node-vertex}
@@ -1373,7 +1373,7 @@ Essa rotina devolve um vértice que incide a uma das arestas reservas de nível 
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a \textit{Euler Tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
+Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a \textit{Euler tour tree} é balanceada, então o consumo esperado de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
 
 O campo \textit{incideArestaReservaDeNível} de um vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reservas incidentes a $u$ no grafo. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível}.
 
