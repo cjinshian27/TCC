@@ -920,10 +920,10 @@ Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, c
 Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, note que ao procurar por uma aresta substituta não necessariamente percorreremos todas as arestas reservas em $R_i$. Então nem sempre todas as arestas reservas de $R_i$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
 
 O Programa~\ref{prog:removeGD} apresenta uma primeira versão da rotina \texttt{removaGD}. Note que ele contém uma chamada à rotina \texttt{substituaAresta} que será explicada Seção~\ref{sec:replace-edge}. Alguns ajustes em \texttt{removaGD} serão necessários devido à implementação da rotina \texttt{substituaAresta}. 
-Além disso, falta apresentar a estratégia usada para percorrer as arestas da floresta e reservas de forma eficiente. Isso será descrito nas Seções~\ref{sec:node-vertex}~e~\ref{sec:node-edge}.
+Além disso, falta apresentar a estratégia usada para percorrer as arestas da floresta e reservas de forma eficiente. Isso será descrito nas Seções~\ref{sec:node-edge}~e~\ref{sec:node-vertex}.
 
 \begin{programruledcaption}{\texttt{removaGD($G$, $u$, $v$)} \label{prog:removeGD}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ adjacentes do grafo $G$. \\
     \noindent\textbf{Efeito}: Remove a aresta $uv$ do grafo $G$. 
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
