@@ -1133,7 +1133,7 @@ Como representamos uma Euler tour tree por uma árvore binária, para cada nó p
 
 Cada nó do tipo aresta $uv$ tem um atributo extra booleano chamado \textit{éNível}, que indica se tal aresta da floresta $F_i$ é de nível $i$. Toda vez que uma aresta $uv$ é inserida na floresta $F_L$ de $G$, o nó de $uv$ em $F_L$ vai ter este atributo definido como verdadeiro nesta árvore, pois ela recebe nível $L$. O atributo desse nó de $F_L$ se torna falso quando rebaixamos o nível desta aresta para $L-1$. Nesse momento, o nó de $uv$ em $F_{L-1}$ ficará com esse atributo verdadeiro para $uv$, pois $uv$ é de nível $L-1$ após o rebaixamento.
 
-Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para percorrermos as arestas de nível $i$ de uma componente de $F_i$ eficientemente, os nós da floresta $F_i$ armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de arestas em sua subárvore que têm o \textit{éNível} verdadeiro. Sempre que modificarmos a floresta, vamos acionar uma rotina auxiliar que atualiza este contador e que está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
+Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para percorrermos as arestas de nível $i$ de uma componente de $F_i$ eficientemente, os nós da floresta $F_i$ armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de arestas em sua subárvore que têm o \textit{éNível} verdadeiro. Sempre que modificarmos a floresta, vamos acionar uma rotina auxiliar que atualiza este contador e que está descrita no Programa~\ref{prog:updateIsLevelCount-GD}. Esta rotina consome tempo constante pois envolve apenas atribuições de variáveis e comparações.
 
 \begin{programruledcaption}{\texttt{atualizeArestasDeNível($F$, $u$, $v$)} \label{prog:updateIsLevelCount-GD}}
     \noindent\textbf{Entrada}: Recebe vértices $u$ e $v$ adjacentes da floresta $F$.\\
@@ -1149,12 +1149,10 @@ Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para per
     ]
     arestaUV := F.nó[u, v]
     c := 0
-    \textbf{se} arestaUV.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} arestaUV.filhoEsq.éNível \textbf{então}
-            c := c + 1
-    \textbf{se} arestaUV.filhoDir $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} arestaUV.filhoDir.éNível \textbf{então}
-            c := c + 1
+    \textbf{se} arestaUV.filhoEsq $\neq$ \texttt{NIL} \textbf{e} arestaUV.filhoEsq.éNível \textbf{então}
+        c := c + 1
+    \textbf{se} arestaUV.filhoDir $\neq$ \texttt{NIL} \textbf{e} arestaUV.filhoDir.éNível \textbf{então}
+        c := c + 1
     \textbf{se} arestaUV.éNível \textbf{então}
         c := c + 1
     arestaUV.arestasDeNível := c
@@ -1216,9 +1214,7 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
     \label{fig:euler-tour-balanced-tree-is-level-propagation}
 \end{figure}
 
-Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que os nós $\emph{ab}$ e $\emph{ba}$ representam a mesma aresta. Assim, para evitar a duplicação do atributo \textit{éNível}, optamos por colocar este atributo como verdadeiro nos nós de aresta cujos vértices estão em ordem lexicográfica. Então, no nosso exemplo, nós do tipo $\emph{ba}$, $\emph{da}$, $\emph{dc}$ e $\emph{ea}$ vão ter este atributo falso. 
-
-Note que o Programa~\ref{prog:updateIsLevelCount-GD} consome tempo constante, pois envolve apenas atribuições de variáveis e comparações.
+Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que os nós $\emph{ab}$ e $\emph{ba}$ representam a mesma aresta. Assim, para evitar a duplicação do atributo \textit{éNível}, optamos por colocar este atributo como verdadeiro somente nos nós de aresta cujos vértices estão em ordem lexicográfica. Então, no nosso exemplo, nós do tipo $\emph{ba}$, $\emph{da}$, $\emph{dc}$ e $\emph{ea}$ vão ter este atributo falso. 
 
 Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, quebramos uma componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, precisamos realizar o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para fazer isso de forma eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}, que procurará apenas as arestas da floresta de nível $i$.
 
@@ -1235,7 +1231,7 @@ Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta 
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{se} nó.éNível $=$ verdadeiro \textbf{então}
+    \textbf{se} nó.éNível \textbf{então}
         devolva nó
     \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasDeNível > 0 \textbf{então}
         devolva \texttt{procureArestaDeNível(\textit{nó.filhoEsq})}
@@ -1247,12 +1243,12 @@ Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta 
 
 Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera a floresta, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Assim, se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então a busca por essas $k$ arestas custará tempo $\Oh(k \lg n)$.
 
-\subsection{Nó vértice}
+\subsection{Nó de vértice}
 \label{sec:node-vertex}
 
-Para cada nó do tipo vértice $u$ (ou $uu$), armazenaremos um booleano chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os vértices $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. 
+Cada nó do tipo vértice $u$ (ou $uu$) possui um booleano extra chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os nós de vértice $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. 
 
-Além disso, manteremos um contador \textit{arestasReservasDeNível} em todos os nós da floresta, a fim de calcular a quantidade de vértices em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante as adições e remoções de arestas, e por isso precisamos de um método auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}.
+Todos os nós da floresta também terão um contador \textit{arestasReservasDeNível}, a fim de calcular a quantidade de nós em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante a adição e remoção de arestas, e para isso precisamos de uma rotina auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}, que também consome tempo constante. 
 
 \begin{programruledcaption}{\texttt{atualizeArestasReservasDeNível($F$, $u$)} \label{prog:updateReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$.
@@ -1269,12 +1265,10 @@ Além disso, manteremos um contador \textit{arestasReservasDeNível} em todos os
     ]
     vérticeU := F.nó[u, u]
     c := 0
-    \textbf{se} vérticeU.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} vérticeU.filhoEsq.incideArestaReservaDeNível  \textbf{então}
-            c := c + 1
-    \textbf{se} vérticeU.filhoDir $\neq$ \texttt{NIL} \textbf{então}
-        \textbf{se} vérticeU.filhoDir.incideArestaReservaDeNível  \textbf{então}
-            c := c + 1
+    \textbf{se} vérticeU.filhoEsq $\neq$ \texttt{NIL} \textbf{e} vérticeU.filhoEsq.incideArestaReservaDeNível  \textbf{então}
+        c := c + 1
+    \textbf{se} vérticeU.filhoDir $\neq$ \texttt{NIL} \textbf{e} vérticeU.filhoDir.incideArestaReservaDeNível  \textbf{então}
+        c := c + 1
     \textbf{se} vérticeU.incideArestaReservaDeNível  \textbf{então}
         c := c + 1
     vérticeU.arestasReservasDeNível := c
@@ -1337,9 +1331,6 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
     \caption{Uma floresta dinâmica $F_i$ onde nós pintados em verde indicam que são vértices com o incideArestaReservaDeNível verdadeiro. No nosso exemplo, então, todos os vértices são ponta de alguma aresta reserva de nível $i$. Embaixo de cada nó temos o contador arestasReservasDeŃível. Note que o campo incideArestaReservaDeNível não existe em arestas, somente em vértices.}
     \label{fig:euler-tour-balanced-tree-reserve-edges-propagation}
 \end{figure}
-
-Note que o Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo constante $\Oh(1)$, pois envolve apenas atribuições de variáveis e comparações de igualdade.
-
 
 Lembre-se de que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, podemos acabar quebrando a componente de $F_i$ em duas, $T_u$ e $T_v$. Após o rebaixamento das arestas de nível $i$ de $T_u$, precisamos procurar por uma aresta substituta. Note que precisamos buscar por uma aresta reserva de nível $i$, de modo que uma de suas pontas estejam em $T_u$ e outra em $T_v$, para que consigamos reconectar as duas componentes separadas. 
 
