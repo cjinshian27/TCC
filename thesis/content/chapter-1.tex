@@ -1234,9 +1234,9 @@ Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta 
     \textbf{se} nó.éNível \textbf{então}
         devolva nó
     \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasDeNível > 0 \textbf{então}
-        devolva \texttt{procureArestaDeNível(\textit{nó.filhoEsq})}
+        devolva \texttt{procureArestaDeNível($\emph{nó.filhoEsq}$)}
     \textbf{senão}
-        devolva \texttt{procureArestaDeNível(\textit{nó.filhoDir})}
+        devolva \texttt{procureArestaDeNível($\emph{nó.filhoDir}$)}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1336,11 +1336,11 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
 
 Lembre-se que, após rebaixarmos as arestas de nível $i$ de $T_u$ na etapa da remoção de uma aresta da floresta, precisamos procurar por uma aresta substituta. Para isso, precisamos buscar por uma aresta reserva de nível $i$, de modo que uma de suas pontas estejam em $T_u$ e outra em $T_v$, para que consigamos reconectar as duas componentes separadas. 
 
-Para resolver este problema de maneira eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaReservaDeNível}, que irá procurar um vértice que incide a uma das arestas reservas de nível $i$.
+Para resolver este problema de maneira eficiente, introduzimos um método auxiliar chamado \texttt{procureNóIncideArestaReservaDeNível}, que irá procurar um vértice que incide a uma das arestas reservas de nível $i$.
 Essa rotina devolve um vértice $u$ que incide a uma das arestas reservas de nível $i$. Assim, podemos percorrer em $R_i$ cada vizinho $v$ de $u$ para verificar se $uv$ liga $T_u$ a $T_v$. 
 
-\begin{programruledcaption}{\texttt{procureArestaReservaDeNível(\textit{nó})} \label{prog:findReserveEdge-GD}}
-    \noindent\textbf{Entrada}: Recebe um nó do grafo.
+\begin{programruledcaption}{\texttt{procureNóIncideArestaReservaDeNível(\textit{nó})} \label{prog:findReserveEdge-GD}}
+    \noindent\textbf{Entrada}: Recebe um nó da floresta.
     \\
     \noindent\textbf{Saída}: Devolve um vértice com \textit{incideArestaReservaDeNível} verdadeiro.
     \vspace{-0.5\baselineskip}
@@ -1355,14 +1355,14 @@ Essa rotina devolve um vértice $u$ que incide a uma das arestas reservas de ní
     \textbf{se} nó.incideArestaReservaDeNível \textbf{então}
         devolva nó
     \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasReservasDeNível > 0 \textbf{então}
-        devolva \texttt{procureArestaDeNível(\textit{nó.filhoEsq})}
+        devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{nó.filhoEsq}$)}
     \textbf{senão}
-        devolva \texttt{procureArestaDeNível(\textit{nó.filhoDir})}
+        devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{nó.filhoDir}$)}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera a floresta, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo do Programa~\ref{prog:findReserveEdge-GD} é $\Oh(\lg n)$ (amortizado em nossa implementação). Essa rotina auxiliar será usada em \texttt{substituaAresta}, que será apresentada mais à frente.
+Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera a floresta, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo do Programa~\ref{prog:findReserveEdge-GD} é $\Oh(\lg n)$ (amortizado em nossa implementação).
 
 O campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reservas que possuem como uma da suas pontas o vértice $u$. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível}.
 
@@ -1413,8 +1413,8 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
 \end{programruledcaption}
 
 
- Em ambas as rotinas auxiliares, o método \texttt{puxeParaRaiz} consome tempo amortizado $\Oh(\lg n)$, pois o levar um nó até a raiz da árvore é proporcional à altura da árvore. Já \texttt{atualizeIncideArestaReservaDeNível} consome tempo $\Oh(1)$. Dessa forma, ambas as rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeArestasReservasDeNível} consomem tempo amortizado $\Oh(\lg n)$ em nossa implementação.
-Como tais rotinas auxiliares não fazem nenhuma modificação no grafo, então todas as invariantes são mantidas. 
+ Em ambas as rotinas auxiliares, o método \texttt{puxeParaRaiz} consome tempo amortizado $\Oh(\lg n)$, pois o levar um nó até a raiz da árvore é proporcional à altura da árvore. Já o método \texttt{atualizeIncideArestaReservaDeNível} consome tempo $\Oh(1)$. Assim, ambas as rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeArestasReservasDeNível} consomem tempo amortizado $\Oh(\lg n)$ em nossa implementação.
+Como tais rotinas auxiliares não fazem nenhuma modificação nas florestas do grafo, então todas as invariantes são mantidas. 
 
 \subsection{Segunda versão da rotina de adição de arestas}
 \label{sec:code-edge-addition-second-version}
@@ -1498,29 +1498,28 @@ Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir qu
         escapeinside={(*@}{@*)},
     ]
     \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
-        $T_u$ := \texttt{árvore($F_j$.nó[u, u])}
-        $T_v$ := \texttt{árvore($F_j$.nó[v, v])}    
+        $T_u$ := \texttt{árvore($G.F_j.\textit{nó}[u, u]$)}
+        $T_v$ := \texttt{árvore($G.F_j.\textit{nó}[v, v]$)}    
         \textbf{se} |$T_u$| > |$T_v$| \textbf{então}
             u $\leftrightarrow$ v
             $T_u \leftrightarrow T_v$
-        \textbf{para} $xy$ $\in$ $T_u$ \textbf{$e$} G.nível[x, y] = j \textbf{faça} (*@\hfill $\triangleright$ rebaixa o nível das arestas de $T_u$ para j - 1@*)
-            G.nível[x, y] := j - 1
-            \texttt{adicioneFD($G.F_{j-1}$, $x$, $y$)}
-            arestaXY := $F_j$.nó[x, y]
-            \texttt{puxeParaRaiz(\textit{arestaXY})}
-            arestaXY.éNível := falso
-            \texttt{atualizeNívelDeAresta($F_j$, $x$, $y$)}
-        \textbf{para} $xy$ $\in G.R_j$ \textbf{$e$} x $\in T_u$ \textbf{faça} (*@\hfill $\triangleright$ procura aresta substituta que ligue $T_u$ a $T_v$@*)
-            \texttt{removaLA($G.R_j$, $x$, $y$)} 
-            \textbf{se} $y \in T_v$ \textbf{então} (*@\hfill $\triangleright$ achamos uma aresta xy substituta@*)
-                \textbf{para} k := j \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
-                    \texttt{adicioneFD($G.F_k$, $x$, $y$)}
-                \textbf{devolva}
-            \textbf{senão}
-                G.nível[x, y] := j - 1
-                \texttt{adicioneLA($G.R_{j-1}$, $x$, $y$)}
-                \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
-                \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
+        \textbf{enquanto} raiz($T_u$).arestasDeNível > 0 \textbf{faça} 
+            arestaXY := \texttt{procureArestaDeNível(raiz($T_u$))}
+            \texttt{rebaixeNívelDaAresta($G$, $\emph{arestaXY}$, j)}
+        \textbf{enquanto} raiz($T_u$).arestasReservasDeNível > 0     \textbf{faça}
+            vérticeX := \texttt{procureNóIncideArestaReservaDeNível(raiz($T_u$))}
+            x := vérticeX[1]
+            \textbf{para} $y \in G.R[x]$ \textbf{faça}
+                \texttt{removaLA($G.R_j$, $x$, $y$)} 
+                \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} 
+                    G.nível[x, y] := j - 1
+                    \texttt{adicioneLA($G.R_{j-1}$, $x$, $y$)}
+                    \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
+                    \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
+                \textbf{senão}
+                    \textbf{para} k := j \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+                        \texttt{adicioneFD($G.F_k$, $x$, $y$)}
+                    \textbf{devolva}
     \textbf{devolva} G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -1528,3 +1527,26 @@ Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir qu
 
 Para explicar o Programa~\ref{prog:replaceGD}, usaremos imagens para ilustrar o que está acontecendo em cada trecho do código.
 
+\begin{programruledcaption}{\texttt{rebaixeNívelDaAresta($G$, $\textit{nó}$, $l$)} \label{prog:decrease-edge-level}}
+    \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta e o nível $l$.\\
+    \textbf{Efeito}: Rebaixa o nível do nó de aresta.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    x := nó[1]
+    y := nó[2]
+    G.nível[x, y] := j - 1
+    \texttt{puxeParaRaiz($\emph{nó}$)}
+    nó.éNível := falso
+    \texttt{atualizeArestasDeNível($F_j$, $x$, $y$)}
+    \texttt{adicioneFD($G.F_{j-1}$, $x$, $y$)}
+
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
