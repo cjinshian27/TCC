@@ -1413,7 +1413,7 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
 \end{programruledcaption}
 
 
- Em ambas as rotinas auxiliares, o método \texttt{puxeParaRaiz} consome tempo amortizado $\Oh(\lg n)$, pois o levar um nó até a raiz da árvore é proporcional à altura da árvore. Já o método \texttt{atualizeIncideArestaReservaDeNível} consome tempo $\Oh(1)$. Assim, ambas as rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeArestasReservasDeNível} consomem tempo amortizado $\Oh(\lg n)$ em nossa implementação.
+ Em ambas as rotinas auxiliares, o método \texttt{puxeParaRaiz} consome tempo amortizado $\Oh(\lg n)$, pois o levar um nó até a raiz da árvore é proporcional a sua altura. Já o método \texttt{atualizeIncideArestaReservaDeNível} consome tempo $\Oh(1)$. Assim, ambas as rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeArestasReservasDeNível} consomem tempo amortizado $\Oh(\lg n)$ em nossa implementação.
 Como tais rotinas auxiliares não fazem nenhuma modificação nas florestas do grafo, então todas as invariantes são mantidas. 
 
 \subsection{Segunda versão da rotina de adição de arestas}
