@@ -1406,7 +1406,7 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
     vérticeU := F.nó[u, u]
     \textbf{se} |R[u]| = $1$ \textbf{então} 
         \texttt{puxeParaRaiz($F$, \textit{vérticeU})}
-        vérticeU.incideArestaReservaDeNível :
+        vérticeU.incideArestaReservaDeNível := verdadeiro
         \texttt{atualizeIncideArestaReservaDeNível($F$, $u$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
