@@ -1484,6 +1484,8 @@ Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir qu
 \subsection{Rotina de substituição de aresta}
 \label{sec:replace-edge}
 
+A rotina de substituição da aresta da floresta está descrita no Programa~\ref{prog:replaceGD}.
+
 \begin{programruledcaption}{\texttt{substituaAresta($G$, $i$, $u$, $v$)} \label{prog:replaceGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
     \noindent\textbf{Saída}: Devolve $G$ com a aresta substituta.
@@ -1525,10 +1527,15 @@ Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir qu
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Para explicar o Programa~\ref{prog:replaceGD}, usaremos imagens para ilustrar o que está acontecendo em cada trecho do código.
+Para explicar o Programa~\ref{prog:replaceGD}, descreveremos a função de cada trecho do código. Lembre-se que, ao removermos uma aresta $uv$ da floresta de nível $i$, precisamos procurar uma substituta partindo de $R_i$, e se não encontrarmos, passamos a buscar em $R_{i + 1}, \ldots, R_L$. A linha $1$ faz exatamente essa iteração sobre os níveis $i$ até $L$.
 
-\begin{programruledcaption}{\texttt{rebaixeNívelDaAresta($G$, $\textit{nó}$, $l$)} \label{prog:decrease-edge-level}}
-    \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta e o nível $l$.\\
+Nas linhas $2$ e $3$, obtemos as árvores $T_u$ e $T_v$, que foram derivadas da floresta $F_i$, já que uma componente desta foi quebrada em duas após a remoção de $uv$. O método auxiliar \texttt{árvore($\textit{nó}$)} apenas retorna a árvore que contém nó, e consome tempo amortizado $\Oh(\lg n)$ em nossa implementação. As linhas $4$ a $6$ garantem que $|T_u| < |T_v|$. 
+
+Das linhas $7$ a $9$, realizamos o processo de rebaixar todas arestas de $T_u$ de nível $i$. Na linha $7$, temos um laço \textit{while} que irá terminar quando rebaixarmos todas as arestas de nível $i$, isto é, quando o contador \textit{arestasDeNível} do nó da raiz de $T_u$ zerar. Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que irá retornar uma aresta de nível $i$, ou seja, que possui o \textit{éNível} verdadeiro. Para cada aresta retornada, rebaixamos-a chamando o método \texttt{rebaixeNívelDaAresta}, descrito no Programa~\ref{prog:decrease-edge-level}.
+
+
+\begin{programruledcaption}{\texttt{rebaixeNívelDaAresta($G$, $\textit{nó}$, $j$)} \label{prog:decrease-edge-level}}
+    \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta e o nível $j$.\\
     \textbf{Efeito}: Rebaixa o nível do nó de aresta.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -1550,3 +1557,5 @@ Para explicar o Programa~\ref{prog:replaceGD}, usaremos imagens para ilustrar o 
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
+
+No Programa~\ref{prog:decrease-edge-level}, basicamente atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. As assinaturas $\emph{nó[1]}$ e $\emph{nó[2]}$ representam as pontas do nó de aresta, que no nosso exemplo chamamos de $x$ e $y$. Além disso, precisamos atualizar o campo \textit{éNível} para falso porque $xy$ não é mais de nível $j$ em $F_j$. Assim, atualizamos o contador \textit{arestasDeNível} acionando \texttt{atualizeArestasDeNível}, e por fim adicionamos $xy$ em $F_{j-1}$, já que tal aresta foi rebaixada para o nível $j-1$. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$
