@@ -1568,7 +1568,7 @@ A linha $14$ remove a aresta reserva $xy$ de $R_j$, independentemente se tal are
 
 As linhas $15$ a $19$ englobam o caso em que os vértices $x$ e $y$ estão em $T_u$, isto é, quando \texttt{conectadosGD(G, x, y)} retorna verdadeiro. Isso quer dizer que $xy$ não é uma aresta substituta, e por isso precisamos rebaixá-la de $R_j$ para $R_{j-1}$, além de atualizar \texttt{incideArestaReservaDeNível} e \texttt{arestasReservasDeNível} de $x$ e de $y$ em $F_{j-1}$. 
 
-Veja que~\texttt{conectadosGD(G, x, y)} só devolverá falso quando $x$ está em $T_u$ e $y$ está em $T_v$, pois assim os dois vértices estariam em componentes separadas. Este caso, abordado nas linhas $20$ a $23$ do Programa~\ref{prog:replaceGD}, mostra que encontramos $xy$ como uma aresta substituta, e finalizamos o algoritmo conectando $T_u$ a $T_v$ de todas as florestas $F_k$, para $k = j, \cdots, L$, por conta da invariante~\ref{invariant2}.
+Veja que~\texttt{conectadosGD(G, x, y)} só devolverá falso quando $x$ está em $T_u$ e $y$ está em $T_v$, pois assim os dois vértices estariam em componentes separadas. Este caso, abordado nas linhas $20$ a $23$ do Programa~\ref{prog:replaceGD}, mostra que encontramos $xy$ como uma aresta substituta, e finalizamos o algoritmo conectando $T_u$ a $T_v$ de todas as florestas $F_k$, para $k = j, \ldots, L$, por conta da invariante~\ref{invariant2}.
 
 
 
