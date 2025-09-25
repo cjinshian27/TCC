@@ -1562,7 +1562,7 @@ No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de arest
 
 Já nas linhas $10$ a $23$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço \textit{while} que irá terminar quando não existir mais arestas reservas de nível $j$ (ou seja, o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ é zerado) ou quando achamos uma aresta substituta.  
 
-Na linha $11$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que irá retornar um nó de vertice $xx$ que incide uma das arestas reservas de nível $i$. Como tanto $\emph{nó[1]}$ quanto $\emph{nó[2]}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de $x$ na linha $13$, pois queremos testar se $xy$ é uma potencial aresta substituta.
+Na linha $11$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que irá retornar um nó de vertice $xx$ que incide uma das arestas reservas de nível $i$. Como tanto $\emph{nó[1]}$ quanto $\emph{nó[2]}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $13$, pois queremos testar se $xy$ é uma potencial aresta substituta.
 
 A linha $14$ remove a aresta reserva $xy$ de $R_j$, independentemente se tal aresta é substituta ou não. Se $xy$ não é substituta, então precisamos rebaixá-la para $R_{j-1}$, como visto na Seção~\ref{sec:dynamic-graph-edge-removal}. Se ela é substituta, então ela vai acabar se tornando uma aresta da floresta que conecta $T_u$ a $T_v$.
 
