@@ -935,7 +935,7 @@ Além disso, falta apresentar a estratégia usada para percorrer as arestas da f
         escapeinside={(*@}{@*)},
     ]
     i := G.nível[u, v]
-    nível[u, v] := NIL (*@\hfill $\triangleright$ marcamos uv como removida@*)
+    nível[u, v] := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
     \textbf{se} uv $\in$ G.$F_{\left\lceil \lg n \right\rceil}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
         \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
@@ -1127,7 +1127,7 @@ Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma f
 \subsection{Nós das florestas}
 \label{sec:graph-nodes}
 
-Vimos na Seção~\ref{sec:euler-tour-trees} que uma sequência Euleriana é constituída de arcos que representam arestas \textit{uv} ou vértices \textit{uu}. Como adotamos a técnica de Euler tour trees na implementação das nossas florestas dinâmicas, introduziremos uma estrutura chamada \textbf{nó das florestas}, que pode representar tanto um vértice da forma $uu$ (ou simplesmente $u$) quanto uma aresta da forma $uv$, $u \neq v$. Em nossa implementação, usaremos um mapa hash \textit{nó} para verificar se a entrada \{$u, v$\} existe ou não, retornando um booleano em tempo esperado $\Oh(1)$.
+Os nós das árvores de busca binária que representam as sequências Eulerianas das florestas, que são mantidas pelo nosso grafo, serão chamados de \textbf{nós das florestas}. Cada tal nó pode representar um vértice $u$ do grafo, se o elemento armazenado no nó for $uu$, ou pode representar uma aresta $uv$ do grafo, se o elemento armazenado no nó for $uv$ ou $vu$, com $u \neq v$. O primeiro tipo de nó é chamado de \textbf{nó de vértice} e o segundo, de \textbf{nó de aresta}. Em nossa implementação, usaremos um mapa hash \textit{nó} que armazena, para cada par de vértices $(u, v)$, um apontador para o nó do elemento $uv$ na floresta, se tal nó existe (ou \texttt{NIL} caso não exista).
 
 Como representamos uma Euler tour tree por uma árvore binária, para cada nó precisamos de apontadores para o filho esquerdo e filho direito do nó. Em nossa implementação, denotamos por \textit{nó.filhoEsq} e \textit{nó.filhoDir}, respectivamente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
@@ -1236,7 +1236,7 @@ Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta 
     ]
     \textbf{se} nó.éNível \textbf{então}
         devolva nó
-    \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasDeNível > 0 \textbf{então}
+    \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{e} nó.filhoEsq.arestasDeNível > 0 \textbf{então}
         devolva \texttt{procureArestaDeNível($\emph{nó.filhoEsq}$)}
     \textbf{senão}
         devolva \texttt{procureArestaDeNível($\emph{nó.filhoDir}$)}
@@ -1357,7 +1357,7 @@ Essa rotina devolve um vértice $u$ que incide a uma das arestas reservas de ní
     ]
     \textbf{se} nó.incideArestaReservaDeNível \textbf{então}
         devolva nó
-    \textbf{se} nó.filhoEsq $\neq$ NIL \textbf{e} nó.filhoEsq.arestasReservasDeNível > 0 \textbf{então}
+    \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{e} nó.filhoEsq.arestasReservasDeNível > 0 \textbf{então}
         devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{nó.filhoEsq}$)}
     \textbf{senão}
         devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{nó.filhoDir}$)}
@@ -1467,7 +1467,7 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de rem
         escapeinside={(*@}{@*)},
     ]
     i := G.nível[u, v]
-    nível[u, v] := NIL (*@\hfill $\triangleright$ marcamos uv como removida@*)
+    nível[u, v] := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
     \textbf{se} uv $\in$ G.$F_{\left\lceil \lg n \right\rceil}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
         \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
