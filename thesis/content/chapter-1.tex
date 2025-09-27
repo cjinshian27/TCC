@@ -1048,7 +1048,7 @@ A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} prop�
 \end{scope}
 
 \end{tikzpicture}
-    \caption{À esquerda, temos uma árvore $T$ e, à direita, temos o digrafo Euleriano correspondente a $T$.}
+    \caption{À esquerda, temos uma árvore $T$ e, à direita, temos o digrafo Euleriano de $T$.}
     \label{fig:euler-tour-trees}
 \end{figure}
 
@@ -1129,18 +1129,16 @@ Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma f
 
 Os nós das árvores de busca binária que representam as sequências Eulerianas das florestas, que são mantidas pelo nosso grafo, serão chamados de \textbf{nós das florestas}. Cada tal nó pode representar um vértice $u$ do grafo, se o elemento armazenado no nó for $uu$, ou pode representar uma aresta $uv$ do grafo, se o elemento armazenado no nó for $uv$ ou $vu$, com $u \neq v$. O primeiro tipo de nó é chamado de \textbf{nó de vértice} e o segundo, de \textbf{nó de aresta}. Em nossa implementação, usaremos um mapa hash \textit{nó} que armazena, para cada par de vértices $(u, v)$, um apontador para o nó do elemento $uv$ na floresta, se tal nó existe (ou \texttt{NIL} caso não exista).
 
-Como representamos uma Euler tour tree por uma árvore binária, cada nó possui apontadores para o filho esquerdo, filho direito e o pai do nó. Em nossa implementação, denotamos por \textit{nó.filhoEsq}, \textit{nó.filhoDir} e \textit{nó.pai}, respectivamente, tais apontadores. O motivo de usar um apontador para o pai do nó será discutido posteriormente. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
+Como representamos uma Euler tour tree por uma árvore binária, cada nó possui apontadores para o filho esquerdo, filho direito e o pai do nó. Em nossa implementação, denotamos tais apontadores por \textit{nó.filhoEsq}, \textit{nó.filhoDir} e \textit{nó.pai}, respectivamente. O motivo de usar um apontador para o pai do nó será discutido depois. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
 \subsection{Nó de aresta}
 \label{sec:node-edge}
 
-Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para percorrermos as arestas de nível $i$ de uma componente de $F_i$ eficientemente, os nós da floresta $F_i$ tem um atributo extra booleano chamado \textit{éNível}, que indica se tal aresta da floresta $F_i$ é de nível $i$. Toda vez que uma aresta $uv$ é inserida na floresta $F_L$ de $G$, o nó de $uv$ em $F_L$ vai ter este atributo definido como verdadeiro nesta árvore, pois ela recebe nível $L$. O atributo desse nó de $F_L$ se torna falso quando rebaixamos o nível desta aresta para $L-1$. Nesse momento, o nó de $uv$ em $F_{L-1}$ ficará com esse atributo verdadeiro para $uv$, pois $uv$ é de nível $L-1$ após o rebaixamento.
+Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para percorrermos as arestas de nível $i$ de uma componente de $F_i$ eficientemente, os nós da floresta $F_i$ tem um atributo extra booleano chamado \textit{éNível}, que indica se tal aresta da floresta $F_i$ é de nível $i$. Além disso, todos os nós da floresta armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de nós de arestas em sua subárvore que têm o \textit{éNível} verdadeiro. Sempre que modificarmos a floresta, vamos acionar uma rotina auxiliar que atualiza este contador e que está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
 
-Além disso, todos os nós da floresta armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de nós de arestas em sua subárvore que têm o \textit{éNível} verdadeiro. Sempre que modificarmos a floresta, vamos acionar uma rotina auxiliar que atualiza este contador e que está descrita no Programa~\ref{prog:updateIsLevelCount-GD}. Esta rotina consome tempo constante pois envolve apenas atribuições de variáveis e comparações.
-
-\begin{programruledcaption}{\texttt{atualizeArestasDeNível($F$, $u$, $v$)} \label{prog:updateIsLevelCount-GD}}
-    \noindent\textbf{Entrada}: Recebe vértices $u$ e $v$ adjacentes da floresta $F$.\\
-    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do nó de aresta $uv$.
+\begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{nó}$)} \label{prog:updateIsLevelCount-GD}}
+    \noindent\textbf{Entrada}: Recebe um nó de aresta.\\
+    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do nó e de seus ascendentes.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1150,15 +1148,43 @@ Além disso, todos os nós da floresta armazenam um contador chamado \textit{are
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    arestaUV := F.nó[u, v]
+    \textbf{enquanto} nó.pai $\neq$ \texttt{NIL} \textbf{faça}
+        c := 0
+        \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
+            c := c + \textit{nó.filhoEsq.arestasDeNível}
+        \textbf{se} nó.filhoDir $\neq$ \texttt{NIL} \textbf{então}
+            c := c + \textit{nó.filhoDir.arestasDeNível}
+        \textbf{se} nó.éNível \textbf{então}
+            c := c + 1
+        nó.arestasDeNível := c
+        nó := nó.pai
+\end{lstlisting}
+\vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD}, precisamos atualizar o contador \textit{arestasDeNível} do nó e o de seus ascendentes. Por isso, precisamos do campo \textit{pai} para percorrer até a raiz da árvore. Como a nossa implementação usa árvores \textit{splay}, então acionamos a operação \texttt{splay} no nó em questão e atualizamos este contador. como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD-splay}.
+
+\begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{nó}$)} \label{prog:updateIsLevelCount-GD-splay}}
+    \noindent\textbf{Entrada}: Recebe um nó de aresta.\\
+    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do nó e de seus ascendentes.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    \texttt{splay($\emph{nó}$)}
     c := 0
-    \textbf{se} arestaUV.filhoEsq $\neq$ \texttt{NIL} \textbf{e} arestaUV.filhoEsq.éNível \textbf{então}
+    \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
+        c := c + \textit{nó.filhoEsq.arestasDeNível}
+    \textbf{se} nó.filhoDir $\neq$ \texttt{NIL} \textbf{então}
+        c := c + \textit{nó.filhoDir.arestasDeNível}
+    \textbf{se} nó.éNível \textbf{então}
         c := c + 1
-    \textbf{se} arestaUV.filhoDir $\neq$ \texttt{NIL} \textbf{e} arestaUV.filhoDir.éNível \textbf{então}
-        c := c + 1
-    \textbf{se} arestaUV.éNível \textbf{então}
-        c := c + 1
-    arestaUV.arestasDeNível := c
+    nó.arestasDeNível := c
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
