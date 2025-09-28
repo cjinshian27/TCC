@@ -6,7 +6,7 @@
 
 \enlargethispage{.8\baselineskip}
 
-Na literatura, existe o problema de encontrar uma árvore geradora de custo mínimo (MST, de \textit{Minimum Spanning Tree}) para um dado grafo $G$ com $n$ vértices e $m$ arestas ponderadas. Como mencionado brevemente no Capítulo~\ref{cap:introducao}, o algoritmo de Kruskal é eficiente não só na criação da árvore geradora de custo mínimo, como também na consulta de teste de conectividade. Para este último, podemos aproveitar a estrutura do Union-Find para testar se dois vértices $u$ e $v$ estão conectados em, praticamente, tempo constante.
+Na literatura, existe um problema famoso que é encontrar uma árvore geradora de custo mínimo (MST, de \textit{Minimum Spanning Tree}) para um dado grafo $G$ com $n$ vértices e $m$ arestas ponderadas. Como mencionado brevemente no Capítulo~\ref{cap:introducao}, o algoritmo de Kruskal é eficiente não só na criação da árvore geradora de custo mínimo, como também na consulta de teste de conectividade. Para este último, podemos aproveitar a estrutura do Union-Find para testar se dois vértices $u$ e $v$ estão conectados em, praticamente, tempo constante.
 
 Apesar de o algoritmo de Prim ser eficiente para criação da MST de um grafo, a estrutura de dados usada dificulta a criação de uma rotina que teste a conectividade entre dois vértices do grafo, e por isso usaremos o algoritmo de Kruskal como referência a partir de agora.
 
