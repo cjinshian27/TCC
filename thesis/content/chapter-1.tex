@@ -1640,4 +1640,4 @@ Agora iremos explicar como a rotina \texttt{substituaAresta} consome tempo amort
 
 Vamos atribuir o custo de todos os rebaixamentos, tanto de uma aresta da floresta quanto de uma reserva, à inserção desta aresta. Assim, o custo das soma das linhas $7$ a $9$ e das linhas $14$ a $19$, onde ocorrem rebaixamento  de alguma aresta, é pago pela inserção dela. Como cada uma das $a$ arestas inseridas podem ser rebaixadas $\left\lceil \lg n \right\rceil$ vezes durante essa sequência de operações, e cada rebaixamento consome tempo amortizado $\Oh(\lg n)$, então o custo total gerado pelas inserções de arestas é $\Oh(a \lg^2 n)$. 
 
-Descontadas estas linhas, a rotina \texttt{substituaAresta} acaba tendo custo amortizado $\Oh(\lg^2 n)$
+Descontadas estas linhas, a rotina \texttt{substituaAresta} acaba tendo custo amortizado $\Oh(\lg^2 n)$, e então as $b$ remoções de arestas consomem tempo amortizado $\Oh(b \lg^2 n)$. Dessa forma, o custo total da sequência de $a + b$ operações é $\Oh((a + b)\lg^2 n)$, e assim \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ e, consequentemente, temos que \texttt{removaGD} também consome o mesmo tempo amortizado.
