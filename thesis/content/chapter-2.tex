@@ -2,19 +2,22 @@
 %("dica" para o editor de texto: este arquivo é parte de um documento maior)
 % para saber mais: https://tex.stackexchange.com/q/78101
 
-\chapter{Algoritmo decremental para MSF}
+\chapter{Algoritmo para MSF decremental}
 
 \enlargethispage{.8\baselineskip}
 
-\section{Definição}
-\label{sec:decremental-msf-definition}
 
-Implementar o algoritmo decremental para florestas geradoras maximais de custo mínimo (MSF, de \textit{Minimum spanning forest}) resume-se à construção da seguinte biblioteca de forma eficiente:
+
+\section{Biblioteca do MSF decremental}
+\label{sec:decremental-msf-library}
+
+Implementar o algoritmo decremental para florestas geradoras maximais de custo mínimo (MSF, de \textit{Minimum Spanning Forest}) resume-se à construção da seguinte biblioteca de forma eficiente:
 
 \begin{itemize}
     \item \texttt{\textbf{MSFDecremental(n)}}: contrói e devolve um grafo $G$ com $n$ vértices e sem arestas;
-    \item \texttt{\textbf{conectadosMSF(G, u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $MSF$ e falso caso contrário;
-    \item \texttt{\textbf{removaMSF(MSF, u, v)}}: remove a aresta $uv$ do grafo $G$.
+    \item \texttt{\textbf{conectadosMSF(G, u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
+    \item \texttt{\textbf{removaMSF(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
 \end{itemize} 
 
-Note que, diferente do algoritmo do grafo dinâmico anterior, apresentado na Seção~\ref{sec:dynamic-graph-routines}, 
+Note que, diferente do algoritmo do grafo dinâmico, apresentado na Seção~\ref{sec:dynamic-graph-routines}, não temos um \texttt{adicioneMSF} neste algoritmo, que vamos passar a chamar de \textbf{MSF decremental}, por questões de simplicidade. A versão totalmente dinâmica para florestas geradoras maximais de custo mínimo será estudada posteriormente na Seção~\ref{sec:fully-MSF}.
+
