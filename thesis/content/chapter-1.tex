@@ -99,11 +99,11 @@ Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, 
 Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave as pontas da aresta ($u$~e~$v$) e armazena o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash($n$)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuirmos o objeto devolvido a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
 \begin{itemize}
-    \item \textit{nível[u, v]} $\leftarrow$ $i$: armazena $i$ como o nível da aresta $uv$.
+    \item $\emph{nível[u, v]}$ $\leftarrow$ $i$: armazena $i$ como o nível da aresta $uv$.
     
-    \item \textit{nível[u, v]} $\leftarrow$ \texttt{NIL}: remove a aresta $uv$ do mapa hash.
+    \item $\emph{nível[u, v]}$ $\leftarrow$ \texttt{NIL}: remove a aresta $uv$ do mapa hash.
     
-    \item $x$ $\leftarrow$ \textit{nível[u, v]}: atribui o valor do nível da aresta $uv$ à variável $x$. 
+    \item $x$ $\leftarrow$ $\emph{nível[u, v]}$: atribui o valor do nível da aresta $uv$ à variável $x$. 
 \end{itemize}
 
 Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newGD}. 
@@ -284,7 +284,7 @@ O Programa~\ref{prog:addGD} ilustra uma primeira versão da rotina \texttt{adici
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    G.nível[u, v] := $\left\lceil \lg n \right\rceil$
+    G.$\emph{nível[u, v]}$ := $\left\lceil \lg n \right\rceil$
     \textbf{se} \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)} \textbf{então}
         \texttt{adicioneLA($G.R_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
     \textbf{senão}
@@ -934,8 +934,8 @@ Além disso, falta apresentar a estratégia usada para percorrer as arestas da f
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    i := G.nível[u, v]
-    nível[u, v] := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
+    i := G.$\emph{nível[u, v]}$
+    $\emph{nível[u, v]}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
     \textbf{se} uv $\in$ G.$F_{\left\lceil \lg n \right\rceil}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
         \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
@@ -1494,14 +1494,14 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adi
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    G.nível[u, v] := $\left\lceil \lg n \right\rceil$
+    G.$\emph{nível[u, v]}$ := $\left\lceil \lg n \right\rceil$
     \textbf{se} \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)} \textbf{então}
         \texttt{adicioneLA($G.R_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $u$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $v$)}
     \textbf{senão}
         \texttt{adicioneFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
-        arestaUV := G.F.nó[u, v]
+        arestaUV := G.$F_{\left\lceil \lg n \right\rceil}.\emph{nó[u, v]}$
         arestaUV.éNível := verdadeiro
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -1526,8 +1526,8 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos também ajustar o métod
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    i := G.nível[u, v]
-    nível[u, v] := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
+    i := G.$\emph{nível[u, v]}$
+    $\emph{nível[u, v]}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
     \textbf{se} uv $\in$ G.$F_{\left\lceil \lg n \right\rceil}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
         \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
@@ -1576,7 +1576,7 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
             \textbf{para} $y \in G.R[x]$ \textbf{faça}
                 \texttt{removaLA($G.R_j$, $x$, $y$)} 
                 \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} 
-                    G.nível[x, y] := j - 1
+                    G.$\emph{nível[x, y]}$ := j - 1
                     \texttt{adicioneLA($G.R_{j-1}$, $x$, $y$)}
                     \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
                     \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
@@ -1585,7 +1585,7 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
                         \texttt{adicioneFD($G.F_k$, $x$, $y$)}
                     \textbf{se} x > y \textbf{então}
                         x $\leftrightarrow$ y
-                        arestaXY := G.F.nó[x, y]
+                        arestaXY := G.$F_j$.$\emph{nó[x, y]}$
                         arestaXY.éNível := verdadeiro
                     \textbf{devolva}
     \end{lstlisting}
@@ -1615,7 +1615,7 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
     ]
     x := nó[1]
     y := nó[2]
-    G.nível[x, y] := j - 1
+    G.$\emph{nível[x, y]}$ := j - 1
     nó.éNível := falso
     \texttt{atualizeArestasDeNível($\emph{nó}$)}
     \texttt{adicioneFD($G.F_{j-1}$, $x$, $y$)}
