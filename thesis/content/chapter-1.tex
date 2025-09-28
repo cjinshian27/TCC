@@ -1483,7 +1483,7 @@ As rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeAresta
 Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adição de arestas (\texttt{adicioneGD}), apresentado no Programa~\ref{prog:addGD-version2}. Atualizamos os atributos desses nós que descrevemos para fazermos a remoção eficiente de arestas, cuja rotina será descrita também com ajustes na Seção~\ref{sec:code-edge-removal-second-version}. Note que o método \texttt{adicioneGD} continua tendo o mesmo consumo de tempo após esses ajustes. 
 
 \begin{programruledcaption}{\texttt{adicioneGD($G$, $u$, $v$)} \label{prog:addGD-version2}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, com $u < v$. \\
     \textbf{Efeito}: Adiciona a aresta $uv$ no grafo $G$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -1501,16 +1501,18 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adi
         \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $v$)}
     \textbf{senão}
         \texttt{adicioneFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
+        arestaUV := G.F.nó[u, v]
+        arestaUV.éNível := verdadeiro
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $4$ e $5$. Tais linhas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} estejam corretas nos vértices $u$ e $v$, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ são, pela primeira vez, incidentes a alguma aresta reserva, que pode ser a $uv$. 
+Podemos notar algumas diferenças entre as duas versões de \texttt{adicioneGD}. As linhas $4$ e $5$ são necessárias para que os campos \textit {incideArestaReservaDeNível} e \textit{arestasReservasDeNível} dos vértices $u$ e $v$ estejam corretos, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ não eram incidentes a alguma aresta reserva (que seria $uv$), mas passaram a ser. Já as linhas $8$ e $9$ definem o atributo \textit{éNível} da aresta $uv$ como verdadeiro, quando ela é aresta da floresta. 
 
 \subsection{Segunda versão da rotina de remoção de arestas}
 \label{sec:code-edge-removal-second-version}
 
-Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de remoção de arestas (\texttt{removaGD}), apresentado no Programa~\ref{prog:removeGD-version2}. 
+Apresentada a Seção~\ref{sec:node-vertex}, precisamos também ajustar o método de remoção de arestas (\texttt{removaGD}), apresentado no Programa~\ref{prog:removeGD-version2}. 
 
 \begin{programruledcaption}{\texttt{removaGD($G$, $u$, $v$)} \label{prog:removeGD-version2}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
