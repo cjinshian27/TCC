@@ -1189,7 +1189,9 @@ Como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD}, precisamos atuali
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como \textit{arestasDeNível} é propagada das folhas até a raiz da árvore.
+O Programa~\ref{prog:updateIsLevelCount-GD} consome tempo $\Oh(\lg n)$ e Programa~\ref{prog:updateIsLevelCount-GD-splay} consome tempo amortizado $\Oh(\lg n)$. Veja que ambos os programas não alteram a árvore e, portanto, todas as três invariantes são preservadas. 
+
+Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasDeNível} de cada nó na árvore. Na nossa implementação, os vértices são identificados por inteiros de $1$ a $n$ e, para uma aresta $uv$, usamos o atributo \textit{éNível} apenas para o nó de $uv$ com $u < v$.
 
 \begin{figure}[H]
     \centering
@@ -1239,18 +1241,18 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
 
 
     \end{tikzpicture}
-    \caption{Uma floresta dinâmica $F_i$ onde nós pintados em vermelho indicam que são arestas com o éNível verdadeiro. Isso quer dizer que todas as arestas da floresta são de nível $i$ em nosso exemplo. Embaixo de cada nó temos o valor do contador arestasDeNível.}
+    \caption{Árvore de uma das componentes da floresta $F_i$ onde nós pintados em vermelho indicam arestas de nível $i$, e logo possuem o atributo éNível verdadeiro. Embaixo de cada nó temos o valor do contador arestasDeNível.}
     \label{fig:euler-tour-balanced-tree-is-level-propagation}
 \end{figure}
 
 Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que os nós $\emph{ab}$ e $\emph{ba}$ representam a mesma aresta. Assim, para evitar a duplicação do atributo \textit{éNível}, optamos por colocar este atributo como verdadeiro somente nos nós de aresta cujos vértices estão em ordem lexicográfica. Então, no nosso exemplo, nós do tipo $\emph{ba}$, $\emph{da}$, $\emph{dc}$ e $\emph{ea}$ vão ter este atributo falso. 
 
-Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, quebramos uma componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, precisamos realizar o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para fazer isso de forma eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}, que procurará apenas as arestas da floresta de nível $i$.
+Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, quebramos uma componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, precisamos realizar o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para fazer isso de forma eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}. Esse método utiliza o atributo \textit{arestasDeNível} para encontrar, numa árvore da floresta $F_i$, um a um, os nós de arestas de nível $i$.
 
 \begin{programruledcaption}{\texttt{procureArestaDeNível(\textit{nó})} \label{prog:findEdgesIsLevel-GD}}
     \noindent\textbf{Entrada}: Recebe um nó de uma floresta com o contador \textit{arestasDeNível} $> 0$.
     \\
-    \noindent\textbf{Saída}: Devolve um nó de aresta com \textit{éNível} verdadeiro.
+    \noindent\textbf{Saída}: Devolve um nó de aresta da subárvore do nó com \textit{éNível} verdadeiro.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1274,6 +1276,8 @@ Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera a floresta, e, po
 
 \subsection{Nó de vértice}
 \label{sec:node-vertex}
+
+
 
 Cada nó do tipo vértice $u$ (ou $uu$) possui um booleano extra chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os nós de vértice $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. 
 
@@ -1307,7 +1311,7 @@ Todos os nós da floresta também guardarão um contador \textit{arestasReservas
 
 \raggedbottom
 
-Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como \textit{arestasReservasDeNível} é propagada das folhas até a raiz da árvore.
+Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasReservasDeNível} de cada nó na árvore. Na nossa implementação, os vértices são identificados por inteiros de $1$ a $n$ e, para uma aresta $uv$, usamos o atributo \textit{éNível} apenas para o nó de $uv$ com $u < v$.
 
 \begin{figure}[H]
     \centering
