@@ -12,7 +12,7 @@ Apesar de o algoritmo de Prim ser eficiente para criação da MST de um grafo, a
 
 Geralmente, usamos o algoritmo de Kruskal (e o de Prim também) em grafos que não sofrem adição ou remoção de arestas com o passar do tempo, visto que queremos saber apenas o custo da MST. Sendo assim, como em Kruskal não há suporte para alterações no grafo, toda vez que removemos uma aresta temos que reconstruir a MST correspondente ao grafo novo. Pelo fato de a ordenação das arestas de $G$ consumir $\Oh(m \lg m)$ e ser a parte mais custosa do algoritmo de Kruskal, então toda vez que removemos alguma aresta, o algoritmo terá que reordenar as arestas restantes e construir um novo MST para $G$.
 
-Sendo assim, para $k$ remoções de arestas, teremos que reordenar $k$ vezes, com o custo total sendo $\Oh(m \lg m) + \Oh((m - 1) \lg (m - 1)) + \ldots + \Oh((m - k) \lg (m - k))$, pois o número de arestas vai diminuindo com as remoções.
+Sendo assim, para $k$ remoções de arestas, teremos que ordenar $k$ vezes, com o custo total sendo $\Oh(m \lg m) + \Oh((m - 1) \lg (m - 1)) + \ldots + \Oh((m - k) \lg (m - k))$, pois o número de arestas vai diminuindo com as remoções.
 
 
 \section{Biblioteca da MSF decremental}
