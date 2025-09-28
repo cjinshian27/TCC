@@ -1241,7 +1241,7 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
 
 
     \end{tikzpicture}
-    \caption{Árvore de uma das componentes da floresta $F_i$ onde nós pintados em vermelho indicam arestas de nível $i$, e logo possuem o atributo éNível verdadeiro. Embaixo de cada nó temos o valor do contador arestasDeNível.}
+    \caption{Árvore de uma das componentes da floresta $F_i$, onde nós pintados em vermelho indicam arestas de nível $i$, e logo possuem o atributo éNível verdadeiro. Embaixo de cada nó temos o valor do contador arestasDeNível.}
     \label{fig:euler-tour-balanced-tree-is-level-propagation}
 \end{figure}
 
@@ -1277,9 +1277,7 @@ Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera a floresta, e, po
 \subsection{Nó de vértice}
 \label{sec:node-vertex}
 
-
-
-Cada nó do tipo vértice $u$ (ou $uu$) possui um booleano extra chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva e possui nível $2$, então os nós de vértice $u$ e $v$ em $F_2$ terão \textit{incideArestaReservaDeNível} como verdadeiro. 
+Para percorrermos as arestas reservas de nível $i$ incidentes a vértices da árvore $T_u$ em busca de uma aresta substituta, cada nó do tipo vértice $u$ (ou $uu$) possui um booleano chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva de nível $2$, então os nós de vértice $u$ e $v$ em $F_2$ terão o atributo \textit{incideArestaReservaDeNível} como verdadeiro. 
 
 Todos os nós da floresta também guardarão um contador \textit{arestasReservasDeNível}, a fim de calcular a quantidade de nós em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante a adição e remoção de arestas, e para isso precisamos de uma rotina auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}, que também consome tempo constante. 
 
