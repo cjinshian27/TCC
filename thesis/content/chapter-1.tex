@@ -1338,7 +1338,7 @@ Similarmente ao Programa~\ref{prog:updateIsLevelCount-GD-splay}, o Programa~\ref
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(\lg n)$ e o Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo amortizado $\Oh(\lg n)$. Como não há alteração do grafo, então as três invariantes são preservadas.
+O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(\lg n)$ e o Programa~\ref{prog:updateReserveEdgesCount-splay-GD} consome tempo amortizado $\Oh(\lg n)$. Como não há alteração do grafo, então as três invariantes são preservadas.
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasReservasDeNível} de cada nó na árvore.
 
@@ -1480,7 +1480,7 @@ As rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeAresta
 \subsection{Segunda versão da rotina de adição de arestas}
 \label{sec:code-edge-addition-second-version}
 
-Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adição de arestas (\texttt{adicioneGD}), apresentado no Programa~\ref{prog:addGD-version2}. 
+Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adição de arestas (\texttt{adicioneGD}), apresentado no Programa~\ref{prog:addGD-version2}. Atualizamos os atributos desses nós que descrevemos para fazermos a remoção eficiente de arestas, cuja rotina será descrita também com ajustes na Seção~\ref{sec:code-edge-removal-second-version}. Note que o método \texttt{adicioneGD} continua tendo o mesmo consumo de tempo após esses ajustes. 
 
 \begin{programruledcaption}{\texttt{adicioneGD($G$, $u$, $v$)} \label{prog:addGD-version2}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
