@@ -1583,6 +1583,10 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
                 \textbf{senão}
                     \textbf{para} k := j \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
                         \texttt{adicioneFD($G.F_k$, $x$, $y$)}
+                    \textbf{se} x > y \textbf{então}
+                        x $\leftrightarrow$ y
+                        arestaUV := G.F.nó[u, v]
+                        arestaUV.éNível := verdadeiro
                     \textbf{devolva}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -1612,9 +1616,8 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
     x := nó[1]
     y := nó[2]
     G.nível[x, y] := j - 1
-    \texttt{puxeParaRaiz($\emph{nó}$)}
     nó.éNível := falso
-    \texttt{atualizeArestasDeNível($G.F_j$, $x$, $y$)}
+    \texttt{atualizeArestasDeNível($\emph{nó}$)}
     \texttt{adicioneFD($G.F_{j-1}$, $x$, $y$)}
 
     \end{lstlisting}
