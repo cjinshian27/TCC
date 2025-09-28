@@ -15,8 +15,7 @@ Geralmente, usamos o algoritmo de Kruskal (e o de Prim também) em grafos que n�
 Sendo assim, para $k$ remoções de arestas, teremos que reordenar $k$ vezes, com o custo total sendo $\Oh(m \lg m) + \Oh((m - 1) \lg (m - 1)) + \ldots + \Oh((m - k) \lg (m - k))$, pois o número de arestas vai diminuindo com as remoções.
 
 
-
-\section{Biblioteca do MSF decremental}
+\section{Biblioteca da MSF decremental}
 \label{sec:decremental-msf-library}
 
 Implementar o algoritmo decremental para florestas geradoras maximais de custo mínimo (MSF, de \textit{Minimum Spanning Forest}) resume-se à construção da seguinte biblioteca de forma eficiente:
