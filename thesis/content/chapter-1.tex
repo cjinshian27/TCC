@@ -1247,7 +1247,7 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
 
 Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que os nós $\emph{ab}$ e $\emph{ba}$ representam a mesma aresta. Assim, para evitar a duplicação do atributo \textit{éNível}, optamos por colocar este atributo como verdadeiro somente nos nós de aresta cujos vértices estão em ordem lexicográfica. Então, no nosso exemplo, nós do tipo $\emph{ba}$, $\emph{da}$, $\emph{dc}$ e $\emph{ea}$ vão ter este atributo falso. 
 
-Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, quebramos uma componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, precisamos realizar o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para fazer isso de forma eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}. Esse método utiliza o atributo \textit{arestasDeNível} para encontrar, numa árvore da floresta $F_i$, um a um, os nós de arestas de nível $i$.
+Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, quebramos uma componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, precisamos realizar o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para fazer isso de forma eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}. Esse método utiliza o atributo \textit{arestasDeNível} para encontrar um a um, numa árvore da floresta $F_i$, os nós de arestas de nível $i$.
 
 \begin{programruledcaption}{\texttt{procureArestaDeNível(\textit{nó})} \label{prog:findEdgesIsLevel-GD}}
     \noindent\textbf{Entrada}: Recebe um nó de uma floresta com o contador \textit{arestasDeNível} $> 0$.
