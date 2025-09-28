@@ -1562,8 +1562,8 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
         escapeinside={(*@}{@*)},
     ]
     \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
-        $T_u$ := \texttt{árvore($G.F_j.\textit{nó}[u, u]$)}
-        $T_v$ := \texttt{árvore($G.F_j.\textit{nó}[v, v]$)}    
+        $T_u$ := \texttt{árvore($G.F_j.\emph{nó[u, u]}$)}
+        $T_v$ := \texttt{árvore($G.F_j.\emph{nó[v, v]}$)}    
         \textbf{se} |$T_u$| > |$T_v$| \textbf{então}
             u $\leftrightarrow$ v
             $T_u \leftrightarrow T_v$
