@@ -10,9 +10,23 @@ Na literatura, existe um problema famoso que é encontrar uma árvore geradora d
 
 Apesar de o algoritmo de Prim ser eficiente para criação da MST de um grafo, a estrutura de dados usada dificulta a criação de uma rotina que teste a conectividade entre dois vértices do grafo, e por isso usaremos o algoritmo de Kruskal como referência a partir de agora.
 
-Geralmente, usamos o algoritmo de Kruskal (e o de Prim também) em grafos que não sofrem adição ou remoção de arestas com o passar do tempo, visto que queremos saber apenas o custo da MST. Sendo assim, como em Kruskal não há suporte para alterações no grafo, toda vez que removemos uma aresta temos que reconstruir a MST correspondente ao grafo novo. Pelo fato de a ordenação das arestas de $G$ consumir $\Oh(m \lg m)$ e ser a parte mais custosa do algoritmo de Kruskal, então toda vez que removemos alguma aresta, o algoritmo terá que reordenar as arestas restantes e construir um novo MST para $G$.
+Geralmente, usamos o algoritmo de Kruskal (e o de Prim também) em grafos que não sofrem adição ou remoção de arestas com o passar do tempo, visto que queremos saber apenas o custo da MST. Sendo assim, como em Kruskal não há suporte para alterações no grafo, toda vez que removemos uma aresta temos que reconstruir a MST correspondente ao grafo novo. Pelo fato de a ordenação das $m$ arestas de $G$ consumir $\Oh(m \lg m)$ e ser a parte mais custosa do algoritmo de Kruskal, então sempre que removermos alguma aresta, o algoritmo terá que reordenar as arestas restantes e construir um novo MST para $G$.
 
-Sendo assim, para $k$ remoções de arestas, teremos que ordenar $k$ vezes, com o custo total sendo $\Oh(m \lg m) + \Oh((m - 1) \lg (m - 1)) + \ldots + \Oh((m - k) \lg (m - k))$, pois o número de arestas vai diminuindo com as remoções.
+Sendo assim, para $k$ remoções de arestas, teremos que ordenar $k$ vezes, com o custo total sendo $\Oh(m \lg m) + \Oh((m - 1) \lg (m - 1)) + \ldots + \Oh((m - k) \lg (m - k))$, pois o número de arestas vai diminuindo com as remoções. Assim, podemos expressar o custo total das remoções de cada uma das $m$ arestas no algoritmo de Kruskal pelo seguinte somatório:
+
+\begin{equation}
+    \sum_{k=1}^{m} k \lg k \approx \int_{1}^{m} x \lg x dx
+    \label{first-equation}
+\end{equation}
+onde podemos escrever a integral como
+
+\begin{equation}
+    \int_{1}^{m} x \lg x dx = \dfrac{m^2}{2}\lg m - m^2 + \dfrac{1}{4}.
+    \label{second-equation}
+\end{equation}
+Como o termo dominante em \ref{second-equation} é $\dfrac{m^2}{2}\lg m$, então temos que a remoção de cada uma das $m$ arestas possui um custo de tempo $\Oh(m^2 \lg m)$. 
+
+Como a remover arestas e ao mesmo tempo manter a MST de um grafo com as arestas restantes é ineficiente no algoritmo de Kruskal, iremos introduzir um algoritmo decremental para florestas geradoras maximais de custo mínimo (MSF, de \textit{Minimum Spanning Forest}). Iremos abreviar este algoritmo para \textbf{MSF decremental}, e o explicaremos mais em detalhes nas seções seguintes.
 
 
 \section{Biblioteca da MSF decremental}
