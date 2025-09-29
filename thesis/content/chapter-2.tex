@@ -24,10 +24,11 @@ onde podemos escrever a integral como
     \int_{1}^{m} x \lg x dx = \dfrac{m^2}{2}\lg m - m^2 + \dfrac{1}{4}.
     \label{second-equation}
 \end{equation}
-Como o termo dominante em \ref{second-equation} é $\dfrac{m^2}{2}\lg m$, então temos que a remoção de cada uma das $m$ arestas possui um custo de tempo $\Oh(m^2 \lg m)$. 
+Como o termo dominante em \ref{second-equation} é $\dfrac{m^2}{2}\lg m$, então temos que a remoção de todas as $m$ arestas possui um custo de tempo $\Oh(m^2 \lg m)$. 
 
-Como a remover arestas e ao mesmo tempo manter a MST de um grafo com as arestas restantes é ineficiente no algoritmo de Kruskal, iremos introduzir uma solução eficiente para este problema: o algoritmo decremental para florestas geradoras maximais de custo mínimo (MSF, de \textit{Minimum Spanning Forest}). Iremos abreviar este algoritmo para \textbf{MSF decremental}, e o explicaremos mais em detalhes nas seções seguintes.
+Como remover arestas e ao mesmo tempo manter a MST de um grafo com as arestas restantes é ineficiente no algoritmo de Kruskal, iremos introduzir uma solução eficiente para este problema: o algoritmo decremental para florestas geradoras maximais de custo mínimo (MSF, de \textit{Minimum Spanning Forest}), que está descrito na Seção 4 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}.
 
+Como o nome já sugere, o algoritmo suporta somente remoção de arestas quando se trata da alteração do grafo. A construção dele é baseada no algoritmo do grafo dinâmico apresentado na Seção~\ref{sec:dynamic-graph-creation}, com alguns ajustes a mais a serem feitos. Por questões de simplicidade, iremos abreviar este algoritmo para \textbf{MSF decremental}, e o descreveremos em mais detalhes nas seções seguintes.
 
 \section{Biblioteca da MSF decremental}
 \label{sec:decremental-msf-library}
