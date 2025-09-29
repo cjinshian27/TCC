@@ -1162,7 +1162,7 @@ Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para per
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD}, precisamos atualizar o contador \textit{arestasDeNível} do nó e o de seus ascendentes. Por isso, precisamos do campo \textit{pai} para percorrer até a raiz da árvore. Como a nossa implementação usa árvores \textit{splay}, então acionamos a operação \texttt{splay} no nó em questão e atualizamos este contador. como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD-splay}.
+Como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD}, precisamos atualizar o contador \textit{arestasDeNível} do nó e o de seus ascendentes. Por isso, precisamos do campo \textit{pai} para percorrer até a raiz da árvore. Como a nossa implementação usa árvores \textit{splay}, então acionamos a operação \texttt{splay} no nó em questão e atualizamos o seu contador, como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD-splay}.
 
 \begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{nó}$)} \label{prog:updateIsLevelCount-GD-splay}}
     \noindent\textbf{Entrada}: Recebe um nó de aresta.\\
