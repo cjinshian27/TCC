@@ -41,5 +41,11 @@ Implementar o algoritmo decremental para florestas geradoras maximais de custo m
     \item \texttt{\textbf{removaMSF(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
 \end{itemize} 
 
-Note que, diferente do algoritmo do grafo dinâmico, apresentado na Seção~\ref{sec:dynamic-graph-routines}, no MSF decremental não temos um método equivalente a \texttt{adicioneGD}, como mencionado no início. A versão totalmente dinâmica para florestas geradoras maximais de custo mínimo será estudada posteriormente na Seção~\ref{sec:fully-MSF}.
+Note que, diferente da biblioteca do algoritmo do grafo dinâmico, apresentada na Seção~\ref{sec:dynamic-graph-routines}, no MSF decremental não temos um método equivalente a \texttt{adicioneGD} disponível para o usuário. Em nossa implementação \cite{chung2025}, para a entrada de um grafo $G$ de $n$ vértices e $m$ arestas ponderadas, inicializamos um grafo de $n$ vértices isolados chamando \texttt{MSFDecremental(n)}, e em seguida ordenaremos essas $m$ arestas em ordem crescente de peso, usando uma biblioteca pronta do $\emph{C++}$, que consome tempo $\Oh(m \lg m)$. Em seguida, acionaremos \texttt{adicioneMSF}, que é uma rotina privada, e ela inserirá todas as $m$ arestas em ordem crescente de peso. 
+
+Para o usuário, então, só estarão disponíveis as rotinas \texttt{conectadosMSF} e \texttt{removaMSF} como consultas ao grafo. A versão totalmente dinâmica, que inclui a rotina \texttt{adicioneMSF} para o usuário, será estudada posteriormente na Seção~\ref{sec:fully-MSF}.
+
+O construtor \texttt{MSFDecremental} e a rotina \texttt{conectadosMSF} possuem, respectivamente, a mesma complexidade de tempo das rotinas \texttt{grafoDinâmico} e \texttt{conectadosGD} do algoritmo do grafo dinâmico. Por isso, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaAresta} implementada de maneira diferente do algoritmo do grafo dinâmico. 
+
+O objetivo de MSF decremental é suportar remoções de arestas e ainda manter a MST do grafo de forma eficiente. Isso traduz em remover uma aresta da floresta $F_i$, que irá quebrar uma componente de $F_i$ em duas, e achar, dentre todas as arestas reservas, uma substituta (se existir) que tenha o menor peso para reconectar as duas componentes separadas de $F_i$.
 
