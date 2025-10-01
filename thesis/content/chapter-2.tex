@@ -47,5 +47,5 @@ Para o usuário, então, só estarão disponíveis as rotinas \texttt{conectados
 
 O construtor \texttt{MSFDecremental} e a rotina \texttt{conectadosMSF} possuem, respectivamente, a mesma complexidade de tempo das rotinas \texttt{grafoDinâmico} e \texttt{conectadosGD} do algoritmo do grafo dinâmico. Por isso, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaAresta} implementada de maneira diferente do algoritmo do grafo dinâmico. 
 
-O objetivo de MSF decremental é suportar remoções de arestas e ainda manter a MST do grafo de forma eficiente. Isso traduz em remover uma aresta da floresta $F_i$, que irá quebrar uma componente de $F_i$ em duas, e achar, dentre todas as arestas reservas, uma substituta (se existir) que tenha o menor peso para reconectar as duas componentes separadas de $F_i$.
+O objetivo de MSF decremental é suportar remoções de arestas e ainda manter a MST do grafo de forma eficiente. Isso traduz em remover uma aresta da floresta $F_i$, que irá quebrar uma componente de $F_i$ em duas, e achar, dentre todas as arestas reservas, uma substituta (se existir) que tenha o menor peso para reconectar as duas componentes separadas de $F_i$. Assim, conseguimos manter a MST do grafo, sem ter que reconstruir o grafo inteiro com as arestas remanescentes.
 
