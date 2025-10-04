@@ -47,5 +47,47 @@ Para o usuário, então, só estarão disponíveis as rotinas \texttt{conectados
 
 O construtor \texttt{MSFDecremental} e a rotina \texttt{conectadosMSF} possuem, respectivamente, a mesma complexidade de tempo das rotinas \texttt{grafoDinâmico} e \texttt{conectadosGD} do algoritmo do grafo dinâmico. Por isso, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaAresta} implementada de maneira diferente do algoritmo do grafo dinâmico. 
 
-O objetivo de MSF decremental é suportar remoções de arestas e ainda manter a MST do grafo de forma eficiente. Isso traduz em remover uma aresta da floresta $F_i$, que irá quebrar uma componente de $F_i$ em duas, e achar, dentre todas as arestas reservas, uma substituta (se existir) que tenha o menor peso para reconectar as duas componentes separadas de $F_i$. Assim, conseguimos manter a MST do grafo, sem ter que reconstruir o grafo inteiro com as arestas remanescentes.
+Usaremos várias definições já apresentadas no algoritmo do grafo dinâmico, incluindo as mesmas invariantes apresentadas na Seção~\ref{sec:level-slicing}, os mesmos tipos de arestas da Seção~\ref{sec:dynamic-graph-edge-types} e nós das florestas apresentados nas Seções~\ref{sec:graph-nodes}. A seguir, apresentaremos as rotinas do MSF decremental e alguns ajustes a serem feitos já que estamos baseando nas rotinas da biblioteca do grafo dinâmico. 
 
+\subsection{Listas de Adjacências}
+\label{sec:adjancency-lists-min-heap}
+
+Na Seção~\ref{sec:dynamic-graph-edge-types}, apresentamos a biblioteca de \texttt{listasDeAdjacências}, onde usamos um mapa hash para inserir ou remover um vértice $v$ da lista de $u$, além de percorrer os vizinhos da lista de $u$. Na MSF Decremental, quando removemos uma aresta de nível $i$ da floresta $F_i$, uma componente desta será quebrada em duas, $T_u$ e $T_v$, como já vimos no grafo dinâmico. A diferença é que, no caso do MSF decremental, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Não podemos simplesmente percorrer todos os vizinhos $v$ de cada vértice $u$, verificar se $uv$ reconecta as componentes separadas e se é de menor peso dentre todas as substitutas, já que isso seria ineficiente.
+
+Assim, fica claro que precisamos percorrer as arestas reservas em ordem crescente de peso e testar se alguma é substituta. Por isso, em vez de usar um mapa hash para mapear os vizinhos das listas de adjacências de cada vértice, usaremos um min-heap. Na verdade, como estamos trabalhando com nós de vértice e nós de aresta, cada nó de vértice $u$ guardará um min-heap onde a chave dessa estrutura de dados será o peso do nó de aresta $uv$ e $v$ é o vizinho da lista de $u$. Nós de aresta também guardarão um min-heap, porém vazio. 
+
+
+
+\section{Rotinas da biblioteca da MSF decremental}
+
+\subsection{Criação do grafo}
+
+A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecrementalMSF}, é bem parecida com a do grafo dinâmico, descrita na Seção~\ref{sec:dynamic-graph-creation}. 
+
+\begin{programruledcaption}{\texttt{MSFDecremental($n$)} \label{prog:newDecrementalMSF}}
+    \noindent\textbf{Entrada}: Recebe o número $n$ de vértices do grafo. \\
+    \textbf{Saída}: Devolve um grafo $G$ com $n$ vértices e sem arestas.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+        $G.F_i$ := \texttt{florestaDinâmica($n$)}
+        $G.R_i$ := \texttt{listasDeAdjacênciasMinHeap($n$)}
+    G.nível := \texttt{novoMapaHash($n$)}
+    devolva G
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Apesar das semelhanças, o construtor das listas de adjacências agora é implementado de forma diferente. Agora estamos usando o método \texttt{listasDeAdjacênciasMinHeap}. Como estamos apenas construindo 
+
+Este método será descrito na Seção~\ref{sec:edge-addition-DecrementalMSF}. 
+
+\section{Adição de arestas}
+\label{sec:edge-addition-DecrementalMSF}
