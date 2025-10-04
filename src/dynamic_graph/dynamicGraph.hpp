@@ -110,8 +110,8 @@ class DynamicGraph{
 					if(this->forests[i]->areConnected(x, y)){
 						updateNodeLevels(x, y, i - 1);
 						this->adjacencyLists[i - 1]->add(x, y);
-						this->forests[i - 1]->increaseIncidentToReserveNodeCount(x);
-						this->forests[i - 1]->increaseIncidentToReserveNodeCount(y);
+						this->forests[i - 1]->increaseIncidentToReserveNodeCount(x, adjacencyLists[i-1]);
+						this->forests[i - 1]->increaseIncidentToReserveNodeCount(y, adjacencyLists[i-1]);
 					}
 					else{
 						for(unsigned int j = i; j <= this->maxLevel; ++j){
@@ -131,19 +131,15 @@ class DynamicGraph{
 				*/
 				for (Key & y : reserveNodesToBeRemoved) {
 					this->adjacencyLists[i]->remove(x, y);
-					
-					if(this->adjacencyLists[i]->adjList[y].empty()){
-						this->forests[i]->decreaseIncidentToReserveNodeCount(y);
-					}
+
+					this->forests[i]->decreaseIncidentToReserveNodeCount(y, adjacencyLists[i]);
 				}
 
 				/*
 				if x is not incident to any other node of level i, then
 				decrease the reserve node count
 				*/
-				if(this->adjacencyLists[i]->adjList[x].empty()){
-					this->forests[i]->decreaseIncidentToReserveNodeCount(x);
-				}
+				this->forests[i]->decreaseIncidentToReserveNodeCount(x, adjacencyLists[i]);
 			}
 		}
 	}
@@ -178,8 +174,8 @@ class DynamicGraph{
 
 			if(maxLevelForest->areConnected(u, v)){
 				this->adjacencyLists[this->maxLevel]->add(u, v);
-				maxLevelForest->increaseIncidentToReserveNodeCount(u);
-				maxLevelForest->increaseIncidentToReserveNodeCount(v);
+				maxLevelForest->increaseIncidentToReserveNodeCount(u, adjacencyLists[this->maxLevel]);
+				maxLevelForest->increaseIncidentToReserveNodeCount(v, adjacencyLists[this->maxLevel]);
 			} 
 			else{
 				maxLevelForest->link(u, v);
@@ -212,8 +208,8 @@ class DynamicGraph{
 			}	
 			else{
 				this->adjacencyLists[nodeLevel]->remove(u, v);
-				this->forests[nodeLevel]->decreaseIncidentToReserveNodeCount(u);
-				this->forests[nodeLevel]->decreaseIncidentToReserveNodeCount(v);
+				this->forests[nodeLevel]->decreaseIncidentToReserveNodeCount(u, adjacencyLists[nodeLevel]);
+				this->forests[nodeLevel]->decreaseIncidentToReserveNodeCount(v, adjacencyLists[nodeLevel]);
 			}
 		}
 

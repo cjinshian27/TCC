@@ -6,6 +6,7 @@
 
 #include "node.hpp"
 #include "tree.hpp"
+#include "adjacencyList.hpp"
 
 
 template<typename Key>
@@ -273,27 +274,31 @@ class Forest{
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		// decrease the reserveNodes count
-		void decreaseIncidentToReserveNodeCount(Key u){
+		void decreaseIncidentToReserveNodeCount(Key u, AdjacencyList<Key> * adjacencyLists){
 			
 			Node<Key> * nodeUU = mapNodes[u][u];
 			
 			// find() alread splays the given node
 			find(nodeUU);
 
-			nodeUU->isIncidentToReserveNode = false;
-			nodeUU->setReserveNodesCount();
+			if(adjacencyLists->adjList[u].empty()){
+				nodeUU->isIncidentToReserveNode = false;
+				nodeUU->setReserveNodesCount();
+			}
 		}
 		
 		// increase the reserveNodes count
-		void increaseIncidentToReserveNodeCount(Key u){
+		void increaseIncidentToReserveNodeCount(Key u, AdjacencyList<Key> * adjacencyLists){
 			
 			Node<Key> * nodeUU = mapNodes[u][u];
 
 			// find() alread splays the given node
 			find(nodeUU);
 
-			nodeUU->isIncidentToReserveNode = true;
-			nodeUU->setReserveNodesCount();
+			if(adjacencyLists->adjList[u].size() == 1){
+				nodeUU->isIncidentToReserveNode = true;
+				nodeUU->setReserveNodesCount();
+			}
 		}
 		
 		// return the node uu

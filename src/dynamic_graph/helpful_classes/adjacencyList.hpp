@@ -23,7 +23,7 @@ class AdjacencyList{
         	this->adjList[v].erase(u);
 		}
 		
-		// print the adjancecy list from each node
+		// print the adjacency list from each node
 		void print(){
 			for (const auto& pair : adjList) {
 				int vertex = pair.first;
