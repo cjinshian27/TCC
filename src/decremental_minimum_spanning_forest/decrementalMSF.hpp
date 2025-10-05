@@ -40,19 +40,17 @@ class DecrementalMSF{
 	// decrease the level of one edge in the tree containing u from i to i - 1
 	void decreaseNodeLevel(Tree<Key> * treeContainingU, unsigned int i){
 		
-		Node<Key> * nodeToSplay = treeContainingU->getNodeWithIsLevelTrue(treeContainingU->root);
+		Node<Key> * node = treeContainingU->getNodeWithIsLevelTrue(treeContainingU->root);
 		
-		this->forests[i]->splayNode(nodeToSplay);
-
-		treeContainingU->root->isLevel = false;
-		treeContainingU->root->setNodeLevelCount();
+		this->forests[i]->updateNodeIsLevel(node, false);
 		
-		Key u = treeContainingU->root->first;
-		Key v = treeContainingU->root->second;
+		Key u = node->first;
+		Key v = node->second;
 
 		updateEdgeLevel(u, v, i - 1);
-		
-		this->forests[i - 1]->link(u, v, nodeToSplay->weight);
+		this->forests[i - 1]->link(u, v, node->weight);
+		Node<Key> * nodeUV = this->forests[i - 1]->getNode(u, v);
+		this->forests[i - 1]->updateNodeIsLevel(nodeUV, true);
 	}	
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -123,6 +121,10 @@ class DecrementalMSF{
 					for(unsigned int j = i; j <= this->maxLevel; ++j){
 						this->forests[j]->link(x, y, nodeXYWeight);
 					}
+
+					Node<Key> * nodeXY = this->forests[i]->getNode(x, y);
+					this->forests[i]->updateNodeIsLevel(nodeXY, true);
+
 					nodeIsReplaced = true;
 				}
 
@@ -133,15 +135,13 @@ class DecrementalMSF{
 
 				/*
 				if y is not incident to any other edge of level i, then
-				decrease its reserve node count. Otherwise, we splay y
-				to update their min weight. 
+				decrease its reserve node count.
 				*/
 				this->forests[i]->decreaseIncidentToReserveNodeCount(nodeYY);
 
 				/*
 				if x is not incident to any other edge of level i, then
-				decrease its reserve node count. Otherwise, we splay x 
-				to update their min weight count. 
+				decrease its reserve node count.
 				*/
 				this->forests[i]->decreaseIncidentToReserveNodeCount(nodeXX);
 				
@@ -188,7 +188,9 @@ class DecrementalMSF{
 			} 
 			else{
 				maxLevelForest->link(u, v, weight);
-			} 
+				Node<Key> * nodeUV = maxLevelForest->getNode(u, v);
+				maxLevelForest->updateNodeIsLevel(nodeUV, true);
+			}
 		}
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
