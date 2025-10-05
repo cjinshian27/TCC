@@ -306,10 +306,21 @@ class Forest{
 			return this->mapNodes[u][u];
 		}
 
-		void updateEdgeNodeLevel(Key u, Key v){
+		Node<Key> * getEdgeNode(Key u, Key v){
+
+		}
+
+		void updateNodeIsLevelToTrue(Key u, Key v){
 			Node<Key> * nodeUV = this->mapNodes[u][v];
 			find(nodeUV);
 			nodeUV->isLevel = true;
+			nodeUV->setNodeLevelCount();
+		}
+
+		void updateNodeIsLevelToFalse(Key u, Key v){
+			Node<Key> * nodeUV = this->mapNodes[u][v];
+			find(nodeUV);
+			nodeUV->isLevel = false;
 			nodeUV->setNodeLevelCount();
 		}
 

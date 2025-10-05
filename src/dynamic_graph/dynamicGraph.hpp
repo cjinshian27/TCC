@@ -40,15 +40,13 @@ class DynamicGraph{
 		
 		Node<Key> * nodeToSplay = treeContainingU->getNodeWithIsLevelTrue(treeContainingU->root);
 		
-		this->forests[i]->splayNode(treeContainingU, nodeToSplay);
+		Key u = nodeToSplay->first;
+		Key v = nodeToSplay->second;
+		this->forests[i]->updateNodeIsLevelToFalse(u, v);
 
-		nodeToSplay->isLevel = 0;
-		nodeToSplay->setNodeLevelCount();
-		
-		Key u = treeContainingU->root->first;
-		Key v = treeContainingU->root->second;
 		updateNodeLevels(u, v, i - 1);
 		this->forests[i - 1]->link(u, v);
+		this->forests[i - 1]->updateNodeIsLevelToTrue(u, v);
 	}	
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -117,7 +115,7 @@ class DynamicGraph{
 						for(unsigned int j = i; j <= this->maxLevel; ++j){
 							this->forests[j]->link(x, y);
 						}
-						this->forests[i]->updateEdgeNodeLevel(x, y);
+						this->forests[i]->updateNodeIsLevelToTrue(x, y);
 
 						nodeIsReplaced = true;
 						break;
@@ -181,7 +179,7 @@ class DynamicGraph{
 			} 
 			else{
 				maxLevelForest->link(u, v);
-				maxLevelForest->updateEdgeNodeLevel(u,v);
+				maxLevelForest->updateNodeIsLevelToTrue(u, v);
 			} 
 		}
 
