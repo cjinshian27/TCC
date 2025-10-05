@@ -300,27 +300,11 @@ class Forest{
 				nodeUU->setReserveNodesCount();
 			}
 		}
-		
-		// return the node uu
-		Node<Key> * getVertexNode(Key u){
-			return this->mapNodes[u][u];
-		}
 
-		Node<Key> * getEdgeNode(Key u, Key v){
-
-		}
-
-		void updateNodeIsLevelToTrue(Key u, Key v){
+		void updateNodeIsLevel(Key u, Key v, bool isLevel){
 			Node<Key> * nodeUV = this->mapNodes[u][v];
 			find(nodeUV);
-			nodeUV->isLevel = true;
-			nodeUV->setNodeLevelCount();
-		}
-
-		void updateNodeIsLevelToFalse(Key u, Key v){
-			Node<Key> * nodeUV = this->mapNodes[u][v];
-			find(nodeUV);
-			nodeUV->isLevel = false;
+			nodeUV->isLevel = isLevel;
 			nodeUV->setNodeLevelCount();
 		}
 
