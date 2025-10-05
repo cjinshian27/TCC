@@ -143,7 +143,6 @@ class Forest{
 			
 			Tree<Key> * uv = new Tree<Key>(u, v, ++id, weight);
 			Tree<Key> * vu = new Tree<Key>(v, u, ++id, INT_MAX);
-			uv->root->isLevel = true;
 
 			this->mapNodes[{u, v}] = uv->root;
 			this->mapNodes[{v, u}] = vu->root;
@@ -160,7 +159,6 @@ class Forest{
 			
 			unsigned int n = vertices.size();
 			Tree<Key> * tree;
-			//std::cout << "first time" << '\n';
 			for(unsigned int i = 0; i < n; ++i){
 				tree = new Tree<Key>(vertices[i], vertices[i], ++id, INT_MAX);
 				
@@ -319,6 +317,12 @@ class Forest{
 				node->isIncidentToReserveNode = true;
 				node->setReserveNodesCount();
 			}
+		}
+
+		void updateNodeIsLevel(Node<Key> * node, bool isLevel){
+			find(node);
+			node->isLevel = isLevel;
+			node->setNodeLevelCount();
 		}
 		
 		// return the node uu
