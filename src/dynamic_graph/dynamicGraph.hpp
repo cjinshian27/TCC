@@ -117,6 +117,8 @@ class DynamicGraph{
 						for(unsigned int j = i; j <= this->maxLevel; ++j){
 							this->forests[j]->link(x, y);
 						}
+						this->forests[i]->updateEdgeNodeLevel(x, y);
+
 						nodeIsReplaced = true;
 						break;
 					}
@@ -179,6 +181,7 @@ class DynamicGraph{
 			} 
 			else{
 				maxLevelForest->link(u, v);
+				maxLevelForest->updateEdgeNodeLevel(u,v);
 			} 
 		}
 

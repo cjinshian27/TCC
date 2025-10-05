@@ -141,7 +141,7 @@ class Forest{
 			
 			Tree<Key> * uv = new Tree<Key>(u, v, ++id);
 			Tree<Key> * vu = new Tree<Key>(v, u, ++id);
-			uv->root->isLevel = true;
+			//uv->root->isLevel = true;
 
 			this->mapNodes[u][v] = uv->root;
 			this->mapNodes[v][u] = vu->root;
@@ -302,8 +302,15 @@ class Forest{
 		}
 		
 		// return the node uu
-		Node<Key> * getNode(Key u){
+		Node<Key> * getVertexNode(Key u){
 			return this->mapNodes[u][u];
+		}
+
+		void updateEdgeNodeLevel(Key u, Key v){
+			Node<Key> * nodeUV = this->mapNodes[u][v];
+			find(nodeUV);
+			nodeUV->isLevel = true;
+			nodeUV->setNodeLevelCount();
 		}
 
 		// splay a given node
