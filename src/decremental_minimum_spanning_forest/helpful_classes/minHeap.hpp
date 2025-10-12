@@ -97,6 +97,7 @@ class MinHeap {
             heapifyUp(index);
         }
 
+        // extracts the lighest edge in O(lg(n)) time
         std::pair<Key, int> extractMin(){
             std::pair<Key, int> extractedNeighbor = heap[0];
             remove(heap[0].first);
