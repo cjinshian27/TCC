@@ -57,6 +57,7 @@ class MinHeap {
             return heap.empty();
         }
 
+        // returns the heap size in O(1) time
         unsigned int size() {
             return heap.size();
         }
