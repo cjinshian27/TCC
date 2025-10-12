@@ -1448,9 +1448,7 @@ Essa rotina devolve um vértice $u$ que incide a uma das arestas reservas de ní
 
 Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo do Programa~\ref{prog:findReserveEdge-GD} é $\Oh(\lg n)$ (amortizado em nossa implementação).
 
-O campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reservas que possuem como uma da suas pontas o vértice $u$. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível}.
-
-O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para falso quando ele não tem mais elementos em sua lista de adjacências, isto é, quando não há mais nenhuma aresta reserva incidente nele. A assinatura \texttt{R[u]} retorna o conjunto de vizinhos da lista de adjacências de $u$.
+O campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reservas que possuem como uma da suas pontas o vértice $u$. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível}. O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para falso quando ele não tem mais elementos em sua lista de adjacências, isto é, quando não há mais nenhuma aresta reserva incidente nele. A assinatura \texttt{R[u]} retorna o conjunto de vizinhos da lista de adjacências de $u$.
 
 \begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível($F$, $R$, $u$)} \label{prog:decrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $R$.\\
@@ -1495,7 +1493,7 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
 \end{programruledcaption}
 
 
-As rotinas \texttt{decrementeArestasReservasDeNível} e \texttt{incrementeArestasReservasDeNível} consomem tempo $\Oh(\lg n)$, amortizado em nossa implementação. Como tais rotinas auxiliares não fazem nenhuma modificação nas florestas do grafo, então todas as invariantes são mantidas. 
+Os Programas~\ref{prog:decrementReserveEdgesCount-GD} e \ref{prog:incrementReserveEdgesCount-GD} consomem tempo $\Oh(\lg n)$, amortizado em nossa implementação. Como tais rotinas auxiliares não fazem nenhuma modificação nas florestas do grafo, então todas as invariantes são mantidas. 
 
 \subsection{Segunda versão da rotina de adição de arestas}
 \label{sec:code-edge-addition-second-version}
@@ -1527,7 +1525,7 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adi
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Podemos notar algumas diferenças entre as duas versões de \texttt{adicioneGD}. As linhas $4$ e $5$ são necessárias para que os campos \textit {incideArestaReservaDeNível} e \textit{arestasReservasDeNível} dos vértices $u$ e $v$ estejam corretos, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ não eram incidentes a alguma aresta reserva (que seria $uv$), mas passaram a ser. Já as linhas $8$ e $9$ definem o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro, quando ela é aresta da floresta.
+Podemos notar algumas diferenças entre as duas versões de \texttt{adicioneGD}. As linhas $4$ e $5$ são necessárias para que os campos \textit {incideArestaReservaDeNível} e \textit{arestasReservasDeNível} dos vértices $u$ e $v$ estejam corretos, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ não eram incidentes a alguma aresta reserva (que seria $uv$), mas passaram a ser. Já as linhas $8$ e $9$ definem o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro, quando ela é aresta da floresta. 
 
 \subsection{Segunda versão da rotina de remoção de arestas}
 \label{sec:code-edge-removal-second-version}
@@ -1606,13 +1604,13 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
                     \textbf{se} x > y \textbf{então}
                         x $\leftrightarrow$ y
                         arestaXY := G.$F_j$.$\emph{nó[x, y]}$
-                        arestaXY.éNível := verdadeiro
+                        \texttt{atualizeÉNível($\emph{arestaXY}$)}
                     \textbf{devolva}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Para explicar o Programa~\ref{prog:replaceGD}, descreveremos a função de cada trecho do código. Vamos assumir que estamos aplicando as operações de remoção em um grafo $G$ de $n$ vértices. Lembre-se que, ao removermos uma aresta $uv$ da floresta de nível $i$, precisamos procurar uma substituta partindo de $R_i$, e se não encontrarmos, passamos a buscar em $R_{i + 1}, \ldots, R_L$. A linha $1$ faz exatamente essa iteração sobre os níveis $i$ até $L$. Para evitarmos a confusão de usar $i$ ou $j$ (como está escrito no Programa~\ref{prog:replaceGD}), vamos usar $j$ para explicar cada trecho do código já que é ela que tá iterando sobre o intervalo $[i, \ldots, L]$. Então assumiremos que estamos removendo a $uv$ de nível $j$, para $j = i, \ldots , L$.
+Para explicar o Programa~\ref{prog:replaceGD}, descreveremos a função de cada trecho do código. Vamos assumir que estamos aplicando as operações de remoção em um grafo $G$ de $n$ vértices. Lembre-se que, ao removermos uma aresta $uv$ da floresta de nível $i$, precisamos procurar uma substituta partindo de $R_i$, e se não encontrarmos, passamos a buscar em $R_{i + 1}, \ldots, R_L$. A linha $1$ faz exatamente essa iteração sobre os níveis $i$ até $L$. Para evitarmos a confusão de usar $i$ ou $j$ (como está escrito no Programa~\ref{prog:replaceGD}), usaremos o ponteiro $j$ para explicar cada trecho do código já que é ele que está iterando sobre o intervalo $[i, \ldots, L]$. Então assumiremos que estamos removendo a $uv$ de nível $j$, para $j = i, \ldots , L$.
 
 Nas linhas $2$ e $3$, obtemos as árvores $T_u$ e $T_v$, que foram derivadas da floresta $F_j$, já que uma componente desta foi quebrada em duas após a remoção de $uv$. O método auxiliar \texttt{árvore($\textit{nó}$)} apenas retorna a árvore que contém nó, e consome tempo amortizado $\Oh(\lg n)$ em nossa implementação. As linhas $4$ a $6$ garantem que $|T_u| \leq |T_v|$. 
 
