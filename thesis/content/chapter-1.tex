@@ -1209,7 +1209,7 @@ Em nossa implementação, quando inserimos uma aresta $uv$ na floresta $F_L$ usa
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O Programa~\ref{prog:updateIsLevelCount-GD} consome tempo $\Oh(\lg n)$ e Programa~\ref{prog:updateIsLevelCount-GD-splay} consome tempo amortizado $\Oh(\lg n)$. Já o Programa~\ref{prog:updateIsLevel-GD}, em nossa implementação, consome tempo amortizado $\Oh(\lg n)$, já que ele aciona o Programa~\ref{prog:updateIsLevelCount-GD-splay}. Veja que estes três métodos não alteram alguma floresta do grafo e, portanto, todas as três invariantes são preservadas.
+O Programa~\ref{prog:updateIsLevelCount-GD} consome tempo $\Oh(\lg n)$ e Programa~\ref{prog:updateIsLevelCount-GD-splay} consome tempo amortizado $\Oh(\lg n)$. Já o Programa~\ref{prog:updateIsLevel-GD}, em nossa implementação, consome tempo amortizado $\Oh(\lg n)$, já que ele aciona o Programa~\ref{prog:updateIsLevelCount-GD-splay}. Veja que estes três métodos não alteram nenhuma floresta do grafo e, portanto, todas as três invariantes são preservadas.
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasDeNível} de cada nó na árvore. Na nossa implementação, os vértices são identificados por inteiros de $1$ a $n$ e, para uma aresta $uv$, usamos o atributo \textit{éNível} apenas para o nó de $uv$ com $u < v$.
 
