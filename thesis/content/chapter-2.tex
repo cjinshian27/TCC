@@ -12,10 +12,10 @@ Apesar de o algoritmo de Prim ser eficiente para criação da MST de um grafo, a
 
 Geralmente, usamos o algoritmo de Kruskal (e o de Prim também) em grafos que não sofrem adição ou remoção de arestas com o passar do tempo, visto que queremos saber apenas o custo da MST. Sendo assim, como em Kruskal não há suporte para alterações no grafo, toda vez que removemos uma aresta temos que reconstruir a MST correspondente ao grafo novo. Pelo fato de a ordenação das $m$ arestas de $G$ consumir $\Oh(m \lg m)$ e ser a parte mais custosa do algoritmo de Kruskal, então sempre que removermos alguma aresta, o algoritmo terá que reordenar as arestas restantes e construir um novo MST para $G$.
 
-Sendo assim, para $k$ remoções de arestas, teremos que ordenar $k$ vezes, com o custo total sendo $\Oh(m \lg m) + \Oh((m - 1) \lg (m - 1)) + \ldots + \Oh((m - k) \lg (m - k))$, pois o número de arestas vai diminuindo com as remoções. Assim, podemos expressar o custo total das remoções de cada uma das $m$ arestas no algoritmo de Kruskal pelo seguinte somatório:
+Sendo assim, para $k$ remoções de arestas, teremos que ordenar $k$ vezes, com o custo total sendo $\Oh(m \lg m) + \Oh((m - 1) \lg (m - 1)) + \ldots + \Oh((m - k) \lg (m - k))$, pois o número de arestas vai diminuindo com as remoções. Assim, se quisermos remover todas as $m$ arestas, podemos expressar o custo total das remoções no algoritmo de Kruskal pelo seguinte somatório:
 
 \begin{equation}
-    \sum_{k=1}^{m} k \lg k \approx \int_{1}^{m} x \lg x dx
+    \sum_{x=1}^{m} x \lg x \approx \int_{1}^{m} x \lg x dx
     \label{first-equation}
 \end{equation}
 onde podemos escrever a integral como
@@ -28,7 +28,7 @@ Como o termo dominante em \ref{second-equation} é $\dfrac{m^2}{2}\lg m$, então
 
 Como remover arestas e ao mesmo tempo manter a MST de um grafo com as arestas restantes é ineficiente no algoritmo de Kruskal, introduziremos uma solução eficiente para este problema: o algoritmo decremental para florestas geradoras maximais de custo mínimo (MSF, de \textit{Minimum Spanning Forest}), que está descrito na Seção 4 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}.
 
-Como o nome já sugere, o algoritmo decremental suporta apenas remoção de arestas quando se trata de alteração do grafo. A construção dele é baseada no algoritmo do grafo dinâmico apresentado na Seção~\ref{sec:dynamic-graph-creation}, com alguns ajustes extras a serem feitos. Por questões de simplicidade, abreviaremos o nome deste algoritmo para \textbf{MSF decremental}, e o descreveremos em mais detalhes nas seções seguintes.
+Como o nome já sugere, o algoritmo decremental suporta apenas remoção de arestas quando se trata de alteração do grafo. A construção dele é baseada no algoritmo do grafo dinâmico apresentado na Seção~\ref{sec:dynamic-graph-creation}, com alguns ajustes extras a serem feitos. Por questões de simplicidade, abreviaremos o nome do algoritmo decremental para \textbf{MSF decremental}, que vem do inglês \textit{Minimum Spanning Forests}, e o descreveremos em mais detalhes nas seções seguintes.
 
 \section{Biblioteca da MSF decremental}
 \label{sec:decremental-msf-library}
@@ -41,13 +41,13 @@ Implementar o algoritmo decremental para florestas geradoras maximais de custo m
     \item \texttt{\textbf{removaMSF(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
 \end{itemize} 
 
-Note que, diferente da biblioteca do algoritmo do grafo dinâmico, apresentada na Seção~\ref{sec:dynamic-graph-routines}, no MSF decremental não temos um método equivalente a \texttt{adicioneGD} disponível para o usuário. Em nossa implementação \cite{chung2025}, para a entrada de um grafo $G$ de $n$ vértices e $m$ arestas ponderadas, inicializamos um grafo de $n$ vértices isolados chamando \texttt{MSFDecremental(n)}, e em seguida ordenaremos essas $m$ arestas em ordem crescente de peso, usando uma biblioteca pronta do $\emph{C++}$, que consome tempo $\Oh(m \lg m)$. Em seguida, acionaremos \texttt{adicioneMSF}, que é uma rotina privada, e ela inserirá todas as $m$ arestas em ordem crescente de peso. 
+Note que, diferente da biblioteca do algoritmo do grafo dinâmico, apresentada na Seção~\ref{sec:dynamic-graph-routines}, no MSF decremental não temos um método equivalente a \texttt{adicioneGD} disponível para o usuário. Em nossa implementação \cite{chung2025}, para a entrada de um grafo $G$ de $n$ vértices e $m$ arestas ponderadas, inicializamos um grafo de $n$ vértices isolados chamando \texttt{MSFDecremental(n)}, e em seguida ordenaremos essas $m$ arestas em ordem crescente de peso, usando uma biblioteca pronta do $\emph{C++}$, que consome tempo esperado $\Oh(m \lg m)$. Em seguida, acionaremos \texttt{adicioneMSF}, que é uma rotina privada, e ela inserirá todas as $m$ arestas em ordem crescente de peso. 
 
 Para o usuário, então, só estarão disponíveis as rotinas \texttt{conectadosMSF} e \texttt{removaMSF} como consultas ao grafo. A versão totalmente dinâmica, que inclui a rotina \texttt{adicioneMSF} para o usuário, será estudada posteriormente na Seção~\ref{sec:fully-MSF}.
 
 O construtor \texttt{MSFDecremental} e a rotina \texttt{conectadosMSF} possuem, respectivamente, a mesma complexidade de tempo das rotinas \texttt{grafoDinâmico} e \texttt{conectadosGD} do algoritmo do grafo dinâmico. Por isso, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaAresta} implementada de maneira diferente do algoritmo do grafo dinâmico. 
 
-Usaremos várias definições já apresentadas no algoritmo do grafo dinâmico, incluindo as mesmas invariantes apresentadas na Seção~\ref{sec:level-slicing}, os mesmos tipos de arestas da Seção~\ref{sec:dynamic-graph-edge-types} e nós das florestas apresentados nas Seções~\ref{sec:graph-nodes}. A seguir, apresentaremos as rotinas do MSF decremental e alguns ajustes a serem feitos já que estamos baseando nas rotinas da biblioteca do grafo dinâmico. 
+Usaremos várias definições já apresentadas no algoritmo do grafo dinâmico, incluindo as mesmas invariantes apresentadas na Seção~\ref{sec:level-slicing}, os mesmos tipos de arestas da Seção~\ref{sec:dynamic-graph-edge-types} e nós das florestas apresentados na Seção~\ref{sec:graph-nodes}. A seguir, apresentaremos as rotinas do MSF decremental e alguns ajustes a serem feitos já que estamos baseando nas rotinas da biblioteca do grafo dinâmico. 
 
 \subsection{Listas de Adjacências}
 \label{sec:adjancency-lists-min-heap}
