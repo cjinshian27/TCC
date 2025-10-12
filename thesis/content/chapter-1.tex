@@ -1189,7 +1189,27 @@ Como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD}, precisamos atuali
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O Programa~\ref{prog:updateIsLevelCount-GD} consome tempo $\Oh(\lg n)$ e Programa~\ref{prog:updateIsLevelCount-GD-splay} consome tempo amortizado $\Oh(\lg n)$. Veja que ambos os programas não alteram a árvore e, portanto, todas as três invariantes são preservadas. 
+Em nossa implementação, quando inserimos uma aresta $uv$ na floresta $F_L$ usando o \texttt{adicioneGD}, por padrão o \textit{éNível} de $uv$ é falso. Por isso, precisamos de um método \texttt{atualizeÉNível}, que irá atualizar tal atributo de um nó de aresta para verdadeiro. Este método está descrito no Programa~\ref{prog:updateIsLevel-GD}.
+
+\begin{programruledcaption}{\texttt{atualizeÉNível($\emph{nó}$)} \label{prog:updateIsLevel-GD}}
+    \noindent\textbf{Entrada}: Recebe um nó de aresta.\\
+    \noindent\textbf{Efeito}: Atualiza o atributo \textit{éNível} do nó e o contador \textit{arestasDeNível}.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    nó.éNível := verdadeiro
+    \texttt{atualizeArestasDeNível($\emph{nó}$)}
+\end{lstlisting}
+\vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+O Programa~\ref{prog:updateIsLevelCount-GD} consome tempo $\Oh(\lg n)$ e Programa~\ref{prog:updateIsLevelCount-GD-splay} consome tempo amortizado $\Oh(\lg n)$. Já o Programa~\ref{prog:updateIsLevel-GD}, em nossa implementação, consome tempo amortizado $\Oh(\lg n)$, já que ele aciona o Programa~\ref{prog:updateIsLevelCount-GD-splay}. Veja que ambos os programas não alteram a árvore e, portanto, todas as três invariantes são preservadas. 
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasDeNível} de cada nó na árvore. Na nossa implementação, os vértices são identificados por inteiros de $1$ a $n$ e, para uma aresta $uv$, usamos o atributo \textit{éNível} apenas para o nó de $uv$ com $u < v$.
 
