@@ -73,12 +73,12 @@ Os métodos \texttt{remova}, \texttt{extraiaMínimo} e \texttt{insira} consomem 
 Com base na biblioteca do min-heap, podemos definir a biblioteca das listas de adjacências do MSF decremental. 
 
 \begin{itemize}
-    \item \texttt{\textbf{listasDeAdjacênciasMinHeap(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências;
-    \item \texttt{\textbf{adicioneLAMinHeap(R, u, v, p)}}: adiciona o vértice $u$ na lista de adjacências de $v$ em $R$ e vice-versa, além do peso $p$ de $uv$;
-    \item \texttt{\textbf{removaLAMinHeap(R, u, v)}}: remove o vértice $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
+    \item \texttt{\textbf{listasDeAdjacênciasMSF(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências;
+    \item \texttt{\textbf{adicioneLAMSF(R, u, v, p)}}: adiciona o vértice $u$ na lista de adjacências de $v$ em $R$ e vice-versa, além do peso $p$ de $uv$;
+    \item \texttt{\textbf{removaLAMSF(R, u, v)}}: remove o vértice $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
 \end{itemize} 
 
-A chamada ao método \texttt{adicioneLAMinHeap(R, u, v, p)} aciona \texttt{insira(u, v, p)} e \texttt{insira(v, u, p)}, consumindo tempo $\Oh(\lg n)$. Similarmente, uma chamada ao método \texttt{removaLAMinHeap(R, u, v)} aciona \texttt{remova(u, v)} e \texttt{remova(v, u)}, consumindo tempo $\Oh(\lg n)$.
+Uma chamada à rotina \texttt{adicioneLAMSF(R, u, v, p)} aciona \texttt{insira(MH, u, v, p)} e \texttt{insira(MH, v, u, p)}, consumindo tempo $\Oh(\lg n)$. Similarmente, uma chamada à rotina \texttt{removaLAMSF(R, u, v)} aciona \texttt{remova(MH, u, v)} e \texttt{remova(MH, v, u)}, consumindo também tempo $\Oh(\lg n)$.
 
 Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF decremental, e como essa mudança afetará o comportamento do método \texttt{substituaAresta} do MSF decremental.
 
