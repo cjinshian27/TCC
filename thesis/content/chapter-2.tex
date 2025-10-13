@@ -68,7 +68,9 @@ A biblioteca das listas de adjacências para MSF Decremental está descrita a se
 
 \end{itemize} 
 
-Os métodos \texttt{extraiMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap após inserirmos ou removermos um vizinho. Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF Decremental, e como essa mudança afetará o comportamento do método \texttt{substituaAresta} do MSF Decremental.
+Os métodos \texttt{extraiMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap após inserirmos ou removermos um vizinho. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso mínimo, como descreveremos mais à frente.
+
+Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF Decremental, e como essa mudança afetará o comportamento do método \texttt{substituaAresta} do MSF Decremental.
 
 \section{Rotinas da biblioteca da MSF decremental}
 
