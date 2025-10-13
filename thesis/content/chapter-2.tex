@@ -59,7 +59,7 @@ Assim, fica claro que precisamos percorrer as arestas reservas em ordem crescent
 A biblioteca das listas de adjacências para MSF Decremental está descrita a seguir. Vamos supor que estamos criando para um nó de vértice $v$. Assim, temos:
 
 \begin{itemize}
-    \item \texttt{\textbf{listasDeAdjacênciasMinHeap(n)}}: cria um min-heap vazio (em nossa implementação, usamos um vetor);
+    \item \texttt{\textbf{listasDeAdjacênciasMinHeap(n)}}: cria um min-heap vazio (em nossa implementação, criamos um vetor vazio);
     \item \texttt{\textbf{éVazio()}}: devolve verdadeiro se min-heap está vazio e falso caso contrário;
     \item \texttt{\textbf{tamanho()}}: retorna a quantidade de vizinhos de $v$ no min-heap;
     \item \texttt{\textbf{consulteMínimo()}} retorna um par $\{u, p\}$, onde $u$ é o vizinho de $v$ e $p$ é o menor peso dentre todas as arestas $uv$;
