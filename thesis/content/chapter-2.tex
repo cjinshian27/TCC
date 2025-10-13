@@ -47,7 +47,7 @@ Para o usuário, então, só estarão disponíveis as rotinas \texttt{conectados
 
 O construtor \texttt{MSFDecremental} e a rotina \texttt{conectadosMSF} possuem, respectivamente, a mesma complexidade de tempo das rotinas \texttt{grafoDinâmico} e \texttt{conectadosGD} do algoritmo do grafo dinâmico. Por isso, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaAresta} implementada de maneira diferente do algoritmo do grafo dinâmico. 
 
-Usaremos várias definições já apresentadas no algoritmo do grafo dinâmico, incluindo as mesmas invariantes apresentadas na Seção~\ref{sec:level-slicing}, os mesmos tipos de arestas da Seção~\ref{sec:dynamic-graph-edge-types} e nós das florestas apresentados na Seção~\ref{sec:graph-nodes}. A seguir, apresentaremos as rotinas do MSF decremental e alguns ajustes a serem feitos já que estamos baseando nas rotinas da biblioteca do grafo dinâmico. 
+Usaremos várias definições já apresentadas no algoritmo do grafo dinâmico, incluindo as mesmas invariantes apresentadas na Seção~\ref{sec:level-slicing}, os mesmos tipos de arestas da Seção~\ref{sec:dynamic-graph-edge-types} e nós das florestas apresentados na Seção~\ref{sec:graph-nodes}. A seguir, apresentaremos as rotinas do MSF decremental e alguns ajustes a serem feitos já que estamos nos baseando nas rotinas da biblioteca do grafo dinâmico. 
 
 \subsection{Listas de Adjacências}
 \label{sec:adjancency-lists-min-heap}
@@ -68,7 +68,7 @@ A biblioteca das listas de adjacências para MSF Decremental está descrita a se
 
 \end{itemize} 
 
-Os métodos \texttt{extraiMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap após inserirmos ou removermos um vizinho. Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF Decremental.
+Os métodos \texttt{extraiMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap após inserirmos ou removermos um vizinho. Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF Decremental, e como essa mudança afetará o comportamento do método \texttt{substituaAresta} do MSF Decremental.
 
 \section{Rotinas da biblioteca da MSF decremental}
 
