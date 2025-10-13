@@ -63,12 +63,12 @@ A biblioteca das listas de adjacências para MSF Decremental está descrita a se
     \item \texttt{\textbf{éVazio()}}: devolve verdadeiro se min-heap está vazio e falso caso contrário;
     \item \texttt{\textbf{tamanho()}}: retorna a quantidade de vizinhos de $v$ no min-heap;
     \item \texttt{\textbf{consulteMínimo()}} retorna um par $\{u, p\}$, onde $u$ é o vizinho de $v$ e $p$ é o menor peso dentre todas as arestas $uv$;
-    \item \texttt{\textbf{extraiMínimo()}}; remove o par $\{u, p\}$ do min-heap e retorna este par;
+    \item \texttt{\textbf{extraiaMínimo()}}; remove o par $\{u, p\}$ do min-heap e retorna este par;
     \item \texttt{\textbf{insira(u, p)}}; insere o vizinho $u$ e o peso $p$ da aresta reserva $uv$.
 
 \end{itemize} 
 
-Os métodos \texttt{extraiMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap após inserirmos ou removermos um vizinho. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso mínimo, como descreveremos mais à frente.
+Os métodos \texttt{extraiaMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap após inserirmos ou removermos um vizinho. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso mínimo, como descreveremos mais à frente.
 
 Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF Decremental, e como essa mudança afetará o comportamento do método \texttt{substituaAresta} do MSF Decremental.
 
