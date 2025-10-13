@@ -45,7 +45,7 @@ Note que, diferente da biblioteca do algoritmo do grafo dinâmico, apresentada n
 
 Para o usuário, então, só estarão disponíveis as rotinas \texttt{conectadosMSF} e \texttt{removaMSF} como consultas ao grafo. A versão totalmente dinâmica, que inclui a rotina \texttt{adicioneMSF} para o usuário, será estudada posteriormente na Seção~\ref{sec:fully-MSF}.
 
-O construtor \texttt{MSFDecremental} e a rotina \texttt{conectadosMSF} possuem, respectivamente, a mesma complexidade de tempo das rotinas \texttt{grafoDinâmico} e \texttt{conectadosGD} do algoritmo do grafo dinâmico. Por isso, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaAresta} implementada de maneira diferente do algoritmo do grafo dinâmico. 
+O construtor \texttt{MSFDecremental} e a rotina \texttt{conectadosMSF} possuem, respectivamente, a mesma complexidade de tempo das rotinas \texttt{grafoDinâmico} e \texttt{conectadosGD} do algoritmo do grafo dinâmico. Por isso, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaArestaMSF} implementada de maneira diferente do \texttt{substituaAresta} do grafo dinâmico. 
 
 Usaremos várias definições já apresentadas no algoritmo do grafo dinâmico, incluindo as mesmas invariantes apresentadas na Seção~\ref{sec:level-slicing}, os mesmos tipos de arestas da Seção~\ref{sec:dynamic-graph-edge-types} e nós das florestas apresentados na Seção~\ref{sec:graph-nodes}. A seguir, apresentaremos as rotinas do MSF decremental e alguns ajustes a serem feitos já que estamos nos baseando nas rotinas da biblioteca do grafo dinâmico. 
 
@@ -80,7 +80,7 @@ Com base na biblioteca do min-heap, podemos definir a biblioteca das listas de a
 
 Uma chamada à rotina \texttt{adicioneLAMSF(R, u, v, p)} aciona \texttt{insira(MH, u, v, p)} e \texttt{insira(MH, v, u, p)}, consumindo tempo $\Oh(\lg n)$. Similarmente, uma chamada à rotina \texttt{removaLAMSF(R, u, v)} aciona \texttt{remova(MH, u, v)} e \texttt{remova(MH, v, u)}, consumindo também tempo $\Oh(\lg n)$.
 
-Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF decremental, e como essa mudança afetará o comportamento do método \texttt{substituaAresta} do MSF decremental.
+Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF decremental, e como essa mudança afetará o comportamento do método \texttt{substituaArestaMSF} do MSF decremental.
 
 \section{Rotinas da biblioteca do MSF decremental}
 
