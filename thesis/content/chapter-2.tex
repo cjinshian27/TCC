@@ -59,13 +59,13 @@ Assim, fica claro que precisamos percorrer as arestas reservas em ordem crescent
 A biblioteca do min-heap está descrita a seguir.
 
 \begin{itemize}
-    \item \texttt{\textbf{MinHeap(n)}}: cria um min-heap vazio (em nossa implementação, criamos um vetor vazio);
-    \item \texttt{\textbf{éVazio()}}: devolve verdadeiro se min-heap está vazio e falso caso contrário;
-    \item \texttt{\textbf{tamanho()}}: retorna a quantidade de vizinhos de $v$ no min-heap;
-    \item \texttt{\textbf{remova(u, v)}}: remove o vizinho $v$ do min-heap de $u$;
-    \item \texttt{\textbf{consulteMínimo()}}: retorna um par $\{u, p\}$, onde $u$ é o vizinho de $v$ e $p$ é o menor peso dentre todas as arestas $uv$;
-    \item \texttt{\textbf{extraiaMínimo(v)}}: remove o par $\{u, p\}$ do min-heap de $v$ e retorna este par;
-    \item \texttt{\textbf{insira(u, v, p)}}: insere o vizinho $v$ no min-heap de $u$ e o peso $p$ da aresta reserva $uv$.
+    \item \texttt{\textbf{MinHeap(u)}}: cria um min-heap vazio para o vértice $u$ (em nossa implementação, criamos um vetor vazio);
+    \item \texttt{\textbf{éVazio(MH, u)}}: devolve verdadeiro se o min-heap MH de $u$ está vazio e falso caso contrário;
+    \item \texttt{\textbf{tamanho(MH, u)}}: retorna a quantidade de vizinhos no min-heap MH de $u$;
+    \item \texttt{\textbf{remova(MH, u, v)}}: remove o vizinho $v$ do min-heap MH de $u$;
+    \item \texttt{\textbf{consulteMínimo(MH, u)}}: retorna um par $\{v, p\}$ do min-heap MH, onde $v$ é o vizinho de $u$ e $p$ é o menor peso dentre todas as arestas $uv$;
+    \item \texttt{\textbf{extraiaMínimo(MH, u)}}: remove o par $\{v, p\}$ do min-heap MH de $u$, onde $v$ é o vizinho de $u$ e $p$ é o menor peso dentre todas as arestas $uv$, e retorna este par;
+    \item \texttt{\textbf{insira(MH, u, v, p)}}: insere o vizinho $v$ no min-heap MH de $u$ e o peso $p$ da aresta reserva $uv$.
 \end{itemize} 
 
 Os métodos \texttt{remova}, \texttt{extraiaMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap em ordem de peso após inserirmos ou removermos um vizinho. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso mínimo, como descreveremos mais à frente.
