@@ -30,7 +30,7 @@ Como remover arestas e ao mesmo tempo manter a MST de um grafo com as arestas re
 
 Como o nome já sugere, o algoritmo decremental suporta apenas remoção de arestas quando se trata de alteração do grafo. A construção dele é baseada no algoritmo do grafo dinâmico apresentado na Seção~\ref{sec:dynamic-graph-creation}, com alguns ajustes extras a serem feitos. Por questões de simplicidade, abreviaremos o nome do algoritmo decremental para \textbf{MSF decremental}, que vem do inglês \textit{Minimum Spanning Forests}, e o descreveremos em mais detalhes nas seções seguintes.
 
-\section{Biblioteca da MSF decremental}
+\section{Biblioteca do MSF decremental}
 \label{sec:decremental-msf-library}
 
 Implementar o algoritmo decremental para florestas geradoras maximais de custo mínimo (MSF, de \textit{Minimum Spanning Forest}) resume-se à construção da seguinte biblioteca de forma eficiente:
@@ -52,27 +52,37 @@ Usaremos várias definições já apresentadas no algoritmo do grafo dinâmico, 
 \subsection{Listas de Adjacências}
 \label{sec:adjancency-lists-min-heap}
 
-Na Seção~\ref{sec:dynamic-graph-edge-types}, apresentamos a biblioteca de \texttt{listasDeAdjacências}, onde usamos um mapa hash para inserir ou remover um vértice $v$ da lista de $u$, além de percorrer os vizinhos da lista de $u$. No algoritmo da MSF decremental, quando removemos uma aresta de nível $i$ da floresta $F_i$, uma componente desta será quebrada em duas, $T_u$ e $T_v$, da mesma forma que no algoritmo do grafo dinâmico. A diferença é que, no caso do MSF decremental, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Não podemos simplesmente percorrer todos os vizinhos $v$ de cada vértice $u$ em $T_u$, verificar se $uv$ reconecta as componentes separadas e se é de menor peso dentre todas as substitutas, já que isso seria ineficiente.
+Na Seção~\ref{sec:dynamic-graph-edge-types}, apresentamos a biblioteca de \texttt{listasDeAdjacências}, onde usamos um mapa hash para inserir ou remover um vértice $v$ da lista de $u$, além de percorrer os vizinhos da lista de $u$. No algoritmo do MSF decremental, quando removemos uma aresta de nível $i$ da floresta $F_i$, uma componente desta será quebrada em duas, $T_u$ e $T_v$, da mesma forma que no algoritmo do grafo dinâmico. A diferença é que, no caso do MSF decremental, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Não podemos simplesmente percorrer todos os vizinhos $v$ de cada vértice $u$ em $T_u$, verificar se $uv$ reconecta as componentes separadas e se é de menor peso dentre todas as substitutas, já que isso seria ineficiente.
 
 Assim, fica claro que precisamos percorrer as arestas reservas em ordem crescente de peso e testar se alguma é substituta. Por isso, em vez de usar um mapa hash para mapear os vizinhos das listas de adjacências de cada vértice, usaremos um min-heap. Na verdade, como estamos trabalhando com nós de vértice e de aresta, cada nó de vértice $u$ guardará um min-heap onde a chave dessa estrutura de dados será o peso do nó de aresta $uv$ e $v$ é o vizinho da lista de $u$. Nós de aresta também guardarão um min-heap, porém vazio. 
 
-A biblioteca das listas de adjacências para MSF decremental está descrita a seguir. Vamos supor que estamos criando para um nó de vértice $v$. Assim, temos:
+A biblioteca do min-heap está descrita a seguir.
 
 \begin{itemize}
-    \item \texttt{\textbf{listasDeAdjacênciasMinHeap(n)}}: cria um min-heap vazio (em nossa implementação, criamos um vetor vazio);
+    \item \texttt{\textbf{MinHeap(n)}}: cria um min-heap vazio (em nossa implementação, criamos um vetor vazio);
     \item \texttt{\textbf{éVazio()}}: devolve verdadeiro se min-heap está vazio e falso caso contrário;
     \item \texttt{\textbf{tamanho()}}: retorna a quantidade de vizinhos de $v$ no min-heap;
-    \item \texttt{\textbf{consulteMínimo()}} retorna um par $\{u, p\}$, onde $u$ é o vizinho de $v$ e $p$ é o menor peso dentre todas as arestas $uv$;
-    \item \texttt{\textbf{extraiaMínimo()}}; remove o par $\{u, p\}$ do min-heap e retorna este par;
-    \item \texttt{\textbf{insira(u, p)}}; insere o vizinho $u$ e o peso $p$ da aresta reserva $uv$.
-
+    \item \texttt{\textbf{remova(u, v)}}: remove o vizinho $v$ do min-heap de $u$;
+    \item \texttt{\textbf{consulteMínimo()}}: retorna um par $\{u, p\}$, onde $u$ é o vizinho de $v$ e $p$ é o menor peso dentre todas as arestas $uv$;
+    \item \texttt{\textbf{extraiaMínimo(v)}}: remove o par $\{u, p\}$ do min-heap de $v$ e retorna este par;
+    \item \texttt{\textbf{insira(u, v, p)}}: insere o vizinho $v$ no min-heap de $u$ e o peso $p$ da aresta reserva $uv$.
 \end{itemize} 
 
-Os métodos \texttt{extraiaMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap após inserirmos ou removermos um vizinho. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso mínimo, como descreveremos mais à frente.
+Os métodos \texttt{remova}, \texttt{extraiaMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap em ordem de peso após inserirmos ou removermos um vizinho. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso mínimo, como descreveremos mais à frente.
+
+Com base na biblioteca do min-heap, podemos definir a biblioteca das listas de adjacências do MSF decremental. 
+
+\begin{itemize}
+    \item \texttt{\textbf{listasDeAdjacênciasMinHeap(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências;
+    \item \texttt{\textbf{adicioneLAMinHeap(R, u, v, p)}}: adiciona o vértice $u$ na lista de adjacências de $v$ em $R$ e vice-versa, além do peso $p$ de $uv$;
+    \item \texttt{\textbf{removaLAMinHeap(R, u, v)}}: remove o vértice $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
+\end{itemize} 
+
+A chamada ao método \texttt{adicioneLAMinHeap(R, u, v, p)} aciona \texttt{insira(u, v, p)} e \texttt{insira(v, u, p)}, consumindo tempo $\Oh(\lg n)$. Similarmente, uma chamada ao método \texttt{removaLAMinHeap(R, u, v)} aciona \texttt{remova(u, v)} e \texttt{remova(v, u)}, consumindo tempo $\Oh(\lg n)$.
 
 Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF decremental, e como essa mudança afetará o comportamento do método \texttt{substituaAresta} do MSF decremental.
 
-\section{Rotinas da biblioteca da MSF decremental}
+\section{Rotinas da biblioteca do MSF decremental}
 
 \subsection{Criação do grafo}
 
