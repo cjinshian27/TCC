@@ -1131,11 +1131,13 @@ Como representamos uma Euler tour tree por uma árvore binária de busca, cada n
 \subsection{Nó de aresta}
 \label{sec:node-edge}
 
-Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para percorrermos as arestas de nível $i$ de uma componente de $F_i$ eficientemente, os nós da floresta $F_i$ tem um atributo extra booleano chamado \textit{éNível}, que indica se tal aresta da floresta $F_i$ é de nível $i$. Além disso, todos os nós da floresta armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de nós de arestas em sua subárvore que têm o \textit{éNível} verdadeiro. Sempre que modificarmos a floresta, vamos acionar uma rotina auxiliar que atualiza este contador e que está descrita no Programa~\ref{prog:updateIsLevelCount-GD}.
+Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para percorrermos as arestas de nível $i$ de uma componente de $F_i$ eficientemente, os nós da floresta $F_i$ têm um atributo extra booleano chamado \textit{éNível}, que indica se tal aresta da floresta $F_i$ é de nível $i$. 
 
-\begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{nó}$)} \label{prog:updateIsLevelCount-GD}}
-    \noindent\textbf{Entrada}: Recebe um nó de aresta.\\
-    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do nó e de seus ascendentes.
+Em nossa implementação, quando inserimos uma aresta $uv$ na floresta $F_L$ usando o \texttt{adicioneGD}, por padrão o \textit{éNível} de $uv$ é falso. Por isso, precisamos de um método \texttt{atualizeÉNível}, que irá manter o atributo \textit{éNível} com o valor correto. Assim, ao inserirmos $uv$ em $F_L$, este método atualizará tal atributo deste nó de aresta para verdadeiro. Quando rebaixamos tal aresta, precisamos atualizar este seu atributo para falso em $F_L$, pois isso indica que $uv$ deixou de ser de nível $L$. Este método está descrito no Programa~\ref{prog:updateIsLevel-GD}.
+
+\begin{programruledcaption}{\texttt{atualizeÉNível($p$, $b$)} \label{prog:updateIsLevel-GD}}
+    \noindent\textbf{Entrada}: Recebe um nó de aresta $p$ e um booleano $b$.\\
+    \noindent\textbf{Efeito}: Atualiza o atributo \textit{éNível} do nó e o contador \textit{arestasDeNível}.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1145,25 +1147,18 @@ Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para per
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{enquanto} nó.pai $\neq$ \texttt{NIL} \textbf{faça}
-        c := 0
-        \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
-            c := c + \textit{nó.filhoEsq.arestasDeNível}
-        \textbf{se} nó.filhoDir $\neq$ \texttt{NIL} \textbf{então}
-            c := c + \textit{nó.filhoDir.arestasDeNível}
-        \textbf{se} nó.éNível \textbf{então}
-            c := c + 1
-        nó.arestasDeNível := c
-        nó := nó.pai
+    \texttt{splay($p$)}
+    p.éNível := b
+    \texttt{atualizeArestasDeNível($p$)}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD}, precisamos atualizar o contador \textit{arestasDeNível} do nó e o de seus ascendentes. Por isso, precisamos do campo \textit{pai} para percorrer até a raiz da árvore. Como a nossa implementação usa árvores \textit{splay}, então acionamos a operação \texttt{splay} no nó em questão e atualizamos o seu contador, como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD-splay}.
+Além disso, todos os nós da floresta armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de nós de arestas em sua subárvore que têm o atributo \textit{éNível} verdadeiro. Sempre que modificarmos alguma das árvores binárias da floresta $F_i$, devemos manter este contador com o valor correto. Para isso, precisamos de um método auxiliar chamado \texttt{atualizeArestasDeNível}, descrito no Programa~\ref{prog:updateIsLevelCount-GD}.
 
-\begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{nó}$)} \label{prog:updateIsLevelCount-GD-splay}}
+\begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{nó}$)} \label{prog:updateIsLevelCount-GD}}
     \noindent\textbf{Entrada}: Recebe um nó de aresta.\\
-    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do nó e de seus ascendentes.
+    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do nó.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1173,7 +1168,6 @@ Como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD}, precisamos atuali
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \texttt{splay($\emph{nó}$)}
     c := 0
     \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
         c := c + \textit{nó.filhoEsq.arestasDeNível}
@@ -1186,27 +1180,9 @@ Como se pode ver no Programa~\ref{prog:updateIsLevelCount-GD}, precisamos atuali
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Em nossa implementação, quando inserimos uma aresta $uv$ na floresta $F_L$ usando o \texttt{adicioneGD}, por padrão o \textit{éNível} de $uv$ é falso. Por isso, precisamos de um método \texttt{atualizeÉNível}, que atualizará tal atributo de um nó de aresta para verdadeiro. Este método está descrito no Programa~\ref{prog:updateIsLevel-GD}.
+Na nossa implementação, a atualização deste contador é feito na operação \textit{splay} sempre que essa executa alguma rotação. Além disso, para alterar o atributo \textit{éNível} de um nó de aresta, acionamos a rotina do Programa~\ref{prog:updateIsLevel-GD}, que por sua vez usa a rotina do Programa~\ref{prog:updateIsLevelCount-GD}.
 
-\begin{programruledcaption}{\texttt{atualizeÉNível($\emph{nó}$)} \label{prog:updateIsLevel-GD}}
-    \noindent\textbf{Entrada}: Recebe um nó de aresta.\\
-    \noindent\textbf{Efeito}: Atualiza o atributo \textit{éNível} do nó e o contador \textit{arestasDeNível}.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    nó.éNível := verdadeiro
-    \texttt{atualizeArestasDeNível($\emph{nó}$)}
-\end{lstlisting}
-\vspace{-0.5\baselineskip}
-\end{programruledcaption}
-
-O Programa~\ref{prog:updateIsLevelCount-GD} consome tempo $\Oh(\lg n)$ e Programa~\ref{prog:updateIsLevelCount-GD-splay} consome tempo amortizado $\Oh(\lg n)$. Já o Programa~\ref{prog:updateIsLevel-GD}, em nossa implementação, consome tempo amortizado $\Oh(\lg n)$, já que ele aciona o Programa~\ref{prog:updateIsLevelCount-GD-splay}. Veja que estes três métodos não alteram nenhuma floresta do grafo e, portanto, todas as três invariantes são preservadas.
+O Programa~\ref{prog:updateIsLevel-GD} consome tempo amortizado $\Oh(\lg n)$. Veja que este método não altera a floresta $F_i$, altera apenas uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasDeNível} de cada nó na árvore. Na nossa implementação, os vértices são identificados por inteiros de $1$ a $n$ e, para uma aresta $uv$, usamos o atributo \textit{éNível} apenas para o nó de $uv$ com $u < v$.
 
