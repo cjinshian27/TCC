@@ -1157,7 +1157,7 @@ Em nossa implementação, quando inserimos uma aresta $uv$ na floresta $F_L$ usa
 Além disso, todos os nós da floresta armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de nós de arestas em sua subárvore que têm o atributo \textit{éNível} verdadeiro. Sempre que modificarmos alguma das árvores binárias da floresta $F_i$, devemos manter este contador com o valor correto. Para isso, precisamos de um método auxiliar chamado \texttt{atualizeArestasDeNível}, descrito no Programa~\ref{prog:updateIsLevelCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{p}$)} \label{prog:updateIsLevelCount-GD}}
-    \noindent\textbf{Entrada}: Recebe um nó de aresta $p$.\\
+    \noindent\textbf{Entrada}: Recebe um nó $p$.\\
     \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do p.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -1272,12 +1272,14 @@ A rotina \texttt{procureArestaDeNível} será usada na rotina \texttt{substituaA
 \subsection{Nó de vértice}
 \label{sec:node-vertex}
 
-Na rotina \texttt{substituaAresta}, para percorrermos as arestas reserva de nível $i$ incidentes a vértices da árvore $T_u$ em busca de uma aresta substituta, cada nó do tipo vértice $u$ (ou $uu$) possui um booleano chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva de nível $2$, então os nós de vértice $u$ e $v$ em $F_2$ terão o atributo \textit{incideArestaReservaDeNível} como verdadeiro. 
+Na rotina \texttt{substituaAresta}, para percorrermos as arestas reserva de nível $i$ incidentes a vértices da árvore $T_u$ em busca de uma aresta substituta, cada nó do tipo vértice $u$ (ou $uu$) possui um booleano chamado \textit{incideArestaReservaDeNível}, que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva de nível $2$, então os nós de vértice de $u$ e de $v$ em $F_2$ terão o atributo \textit{incideArestaReservaDeNível} como verdadeiro. 
 
-Todos os nós da floresta também guardarão um contador \textit{arestasReservasDeNível}, a fim de calcular a quantidade de nós em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante a adição e remoção de arestas, e para isso precisamos de uma rotina auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}. 
+Cada nó das florestas também guardará um contador \textit{arestasReservasDeNível}, que armazena a quantidade de nós em sua subárvore com o atributo \textit{incideArestaReservaDeNível} verdadeiro. Esse contador deve ser mantido atualizado quando é feita qualquer alteração em uma das árvores binárias que representam as florestas. Na nossa implementação, isso é feito na rotina \textit{splay}, sempre que essa executa uma rotação. 
 
-\begin{programruledcaption}{\texttt{atualizeArestasReservasDeNível($\emph{nó}$)} \label{prog:updateReserveEdgesCount-GD}}
-    \noindent\textbf{Entrada}: Recebe um nó de vértice.
+O método que mantém este contador se chama \texttt{atualizeArestasReservasDeNível} e está descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}. 
+
+\begin{programruledcaption}{\texttt{atualizeArestasReservasDeNível($p$)} \label{prog:updateReserveEdgesCount-GD}}
+    \noindent\textbf{Entrada}: Recebe um nó $p$.
     \\
     \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasReservasDeNível} do nó de vértice $u$.
     \vspace{-0.5\baselineskip}
@@ -1289,38 +1291,6 @@ Todos os nós da floresta também guardarão um contador \textit{arestasReservas
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{enquanto} p.pai $\neq$ \texttt{NIL} \textbf{faça}
-        c := 0
-        \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{então}
-            c := c + p.esq.arestasReservasDeNível
-        \textbf{se} p.dir $\neq$ \texttt{NIL} \textbf{então}
-            c := c + p.dir.arestasReservasDeNível
-        \textbf{se} p.incideArestaReservaDeNível  \textbf{então}
-            c := c + 1
-        p.arestasReservasDeNível := c
-        nó := p.pai
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
-
-\raggedbottom
-
-Similarmente ao Programa~\ref{prog:updateIsLevelCount-GD-splay}, o Programa~\ref{prog:updateReserveEdgesCount-GD} na nossa implementação também acionamos \texttt{splay}, mas neste caso atualizamos o atributo \textit{arestasReservasDeNível}, como se pode ver no Programa~\ref{prog:updateReserveEdgesCount-splay-GD}. 
-
-\begin{programruledcaption}{\texttt{atualizeArestasReservasDeNível($\emph{nó}$)} \label{prog:updateReserveEdgesCount-splay-GD}}
-    \noindent\textbf{Entrada}: Recebe um nó de vértice.
-    \\
-    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasReservasDeNível} do nó de vértice $u$.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    \texttt{splay($\emph{nó}$)}
     c := 0
     \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{então}
         c := c + p.esq.arestasReservasDeNível
