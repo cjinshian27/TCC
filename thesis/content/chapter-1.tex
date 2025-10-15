@@ -1303,7 +1303,7 @@ O método que mantém este contador se chama \texttt{atualizeArestasReservasDeN�
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(\lg n)$ e o Programa~\ref{prog:updateReserveEdgesCount-splay-GD} consome tempo amortizado $\Oh(\lg n)$. Como não há alteração do grafo, então as três invariantes são preservadas.
+O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(\lg n)$ em nossa implementação por conta das operações \textit{splay}. Como este método não altera a floresta $F_i$, altera apenas uma da árvores uma das árvores binárias que a representam, então as três invariantes são preservadas.
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasReservasDeNível} de cada nó na árvore.
 
