@@ -73,7 +73,7 @@ Por fim, para simplificar um pouco a notação, escreveremos $L = \left\lceil \l
 \subsection{Tipos de arestas do grafo}
 \label{sec:dynamic-graph-edge-types}
 
-% O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reservas em $R_i$. Caso não a encontremos, procuramos nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
+% O objetivo de fatiar o grafo em  $\left\lceil \lg n \right\rceil$ níveis é para caso uma aresta da floresta de nível $i$ for removida, não será mais necessário procurar exaustivamente por substitutas nos níveis menores que $i$. Assim, passamos a buscar a substituta inicialmente nas arestas reserva em $R_i$. Caso não a encontremos, procuramos nas listas de adjacências $R_{i+1}, R_{i+2}, \ldots, R_{\left\lceil \lg n \right\rceil}$. Se não existir uma aresta substituta em $R_j$, $i \leq j \leq  \left\lceil \lg n \right\rceil$, então rebaixaremos as arestas que exploramos em $R_j$ de nível $j$ para um nível inferior $j-1$, caso $j > 0$. 
 
 Quando realizamos uma chamada à função \texttt{adicioneGD($G$, $u$, $v$)}, é feita uma chamada à rotina \texttt{conectadosGD($G$, $u$, $v$)} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem na mesma componente de $G$, então a aresta $uv$ é inserida na floresta maximal $F_L$ que estamos mantendo, assim ligndo a árvore que contém $u$ com a que contém $v$ em $F_L$. Chamamos esse tipo de aresta de \textbf{aresta da floresta}.
 
@@ -403,7 +403,7 @@ Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente a
         \draw[reserve] (d) -- (h) node[midway, below] {};
 
     \end{tikzpicture}
-    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo, enquanto as vermelhas são arestas reservas. A aresta vermelha $uv$ tracejada é reserva e está prestes a ser removida.}
+    \caption{As arestas pretas são da floresta maximal $F_L$ do grafo, enquanto as vermelhas são arestas reserva. A aresta vermelha $uv$ tracejada é reserva e está prestes a ser removida.}
     \label{fig:graph_reserve_edge_removal}
 \end{figure}
 
@@ -706,9 +706,9 @@ Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de difer
 
 \raggedbottom
 
-Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos descobrir, se existir, uma aresta reserva que possa reconectá-las. Note que percorrer todas as arestas reservas para achar uma substituta que ligue $T_u$ a $T_v$ pode ser ineficiente quando temos muitas arestas reservas. Por isso, explicaremos como implementar essa busca por uma substituta de forma eficiente na Seção~\ref{sec:node-vertex}. 
+Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos descobrir, se existir, uma aresta reserva que possa reconectá-las. Note que percorrer todas as arestas reserva para achar uma substituta que ligue $T_u$ a $T_v$ pode ser ineficiente quando temos muitas arestas reserva. Por isso, explicaremos como implementar essa busca por uma substituta de forma eficiente na Seção~\ref{sec:node-vertex}. 
 
-Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas em $R_4$ que tenham uma das pontas em $T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. Caso não incida, a aresta tem duas pontas em $T_u$, pois $T_u$ é maximal em $F_4$, e logo a aresta não é uma substituta.  Então a rebaixamos para o nível $3$, ou seja, movemos de $R_4$ para $R_3$ as arestas  percorridas que não são substitutas e inserimos em $R_3$.
+Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reserva em $R_4$ que tenham uma das pontas em $T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. Caso não incida, a aresta tem duas pontas em $T_u$, pois $T_u$ é maximal em $F_4$, e logo a aresta não é uma substituta.  Então a rebaixamos para o nível $3$, ou seja, movemos de $R_4$ para $R_3$ as arestas  percorridas que não são substitutas e inserimos em $R_3$.
 
 \begin{figure}[H]
     \centering
@@ -808,7 +808,7 @@ Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reservas em $R_
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Representação da busca por uma aresta substituta em $R_4$. As arestas reservas de nível $4$ que estão tracejadas foram percorridas e estão prestes a ser removidas de $R_4$, pois foram rebaixadas para o nível $3$, com se pode ver em $R_3$.}
+    \caption{Representação da busca por uma aresta substituta em $R_4$. As arestas reserva de nível $4$ que estão tracejadas foram percorridas e estão prestes a ser removidas de $R_4$, pois foram rebaixadas para o nível $3$, com se pode ver em $R_3$.}
     \vspace{-1cm}
     \label{fig:example-replacement3}
 \end{figure}
@@ -917,10 +917,10 @@ Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, c
     \label{fig:example-replacement4}
 \end{figure}
 
-Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, note que ao procurar por uma aresta substituta não necessariamente percorreremos todas as arestas reservas em $R_i$. Então nem sempre todas as arestas reservas de $R_i$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
+Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, note que ao procurar por uma aresta substituta não necessariamente percorreremos todas as arestas reserva em $R_i$. Então nem sempre todas as arestas reserva de $R_i$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
 
 O Programa~\ref{prog:removeGD} apresenta uma primeira versão da rotina \texttt{removaGD}. Note que ele contém uma chamada à rotina \texttt{substituaAresta} que será explicada Seção~\ref{sec:replace-edge}. Alguns ajustes em \texttt{removaGD} serão necessários devido à implementação da rotina \texttt{substituaAresta}. 
-Em particular, essa rotina deve percorrer as arestas da floresta e as arestas reservas de maneira eficiente. Apresentaremos a estratégia usada para isso nas Seções~\ref{sec:node-edge}~e~\ref{sec:node-vertex}.
+Em particular, essa rotina deve percorrer as arestas da floresta e as arestas reserva de maneira eficiente. Apresentaremos a estratégia usada para isso nas Seções~\ref{sec:node-edge}~e~\ref{sec:node-vertex}.
 
 \begin{programruledcaption}{\texttt{removaGD($G$, $u$, $v$)} \label{prog:removeGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ adjacentes do grafo $G$. \\
@@ -1126,7 +1126,7 @@ Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma f
 
 Os nós das árvores de busca binária que representam as sequências Eulerianas que são mantidas pelo algoritmo serão chamados de \textbf{nós das florestas}. Cada tal nó pode representar um vértice $u$ do grafo, se o elemento armazenado no nó for $uu$, ou pode representar uma aresta $uv$ do grafo, se o elemento armazenado no nó for $uv$ ou $vu$, com $u \neq v$. O primeiro tipo de nó é chamado de \textbf{nó de vértice} e o segundo, de \textbf{nó de aresta}. Em nossa implementação, para cada floresta $F_i$, usaremos um mapa hash \textit{nó} que armazena, para cada par de vértices $(u, v)$, um apontador para o nó do elemento $uv$ na floresta $F_i$, se tal nó existe (ou \texttt{NIL} caso não exista).
 
-Como representamos uma Euler tour tree por uma árvore binária de busca, cada nó possui apontadores para o filho esquerdo, filho direito e o pai do nó. Em descrição de nossa implementação, para um nó $p$, denotamos tais apontadores por \textit{p.esq}, \textit{p.dir} e \textit{p.pai}, respectivamente. O motivo de usar um apontador para o pai do nó será discutido depois. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
+Como representamos uma Euler tour tree por uma árvore binária de busca, cada nó possui apontadores para o filho esquerdo, filho direito e o pai do p. Em descrição de nossa implementação, para um nó $p$, denotamos tais apontadores por \textit{p.esq}, \textit{p.dir} e \textit{p.pai}, respectivamente. O motivo de usar um apontador para o pai do nó será discutido depois. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
 \subsection{Nó de aresta}
 \label{sec:node-edge}
@@ -1156,9 +1156,9 @@ Em nossa implementação, quando inserimos uma aresta $uv$ na floresta $F_L$ usa
 
 Além disso, todos os nós da floresta armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de nós de arestas em sua subárvore que têm o atributo \textit{éNível} verdadeiro. Sempre que modificarmos alguma das árvores binárias da floresta $F_i$, devemos manter este contador com o valor correto. Para isso, precisamos de um método auxiliar chamado \texttt{atualizeArestasDeNível}, descrito no Programa~\ref{prog:updateIsLevelCount-GD}.
 
-\begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{nó}$)} \label{prog:updateIsLevelCount-GD}}
-    \noindent\textbf{Entrada}: Recebe um nó de aresta.\\
-    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do nó.
+\begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{p}$)} \label{prog:updateIsLevelCount-GD}}
+    \noindent\textbf{Entrada}: Recebe um nó de aresta $p$.\\
+    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do p.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1169,13 +1169,13 @@ Além disso, todos os nós da floresta armazenam um contador chamado \textit{are
         escapeinside={(*@}{@*)},
     ]
     c := 0
-    \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
-        c := c + \textit{nó.filhoEsq.arestasDeNível}
-    \textbf{se} nó.filhoDir $\neq$ \texttt{NIL} \textbf{então}
-        c := c + \textit{nó.filhoDir.arestasDeNível}
-    \textbf{se} nó.éNível \textbf{então}
+    \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{então}
+        c := c + \textit{p.esq.arestasDeNível}
+    \textbf{se} p.dir $\neq$ \texttt{NIL} \textbf{então}
+        c := c + \textit{p.dir.arestasDeNível}
+    \textbf{se} p.éNível \textbf{então}
         c := c + 1
-    nó.arestasDeNível := c
+    p.arestasDeNível := c
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1240,10 +1240,10 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
 
 Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que os nós $\emph{ab}$ e $\emph{ba}$ representam a mesma aresta. Assim, para evitar a duplicação do atributo \textit{éNível}, optamos por colocar este atributo como verdadeiro somente nos nós de aresta cujos vértices estão em ordem lexicográfica. Então, no nosso exemplo, nós do tipo $\emph{ba}$, $\emph{da}$, $\emph{dc}$ e $\emph{ea}$ vão ter este atributo falso. 
 
-Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$, quebramos uma componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, precisamos realizar o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para fazer isso de forma eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}. Esse método utiliza o atributo \textit{arestasDeNível} para encontrar um a um, numa árvore da floresta $F_i$, os nós de arestas de nível $i$.
+Lembre-se que a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$ quebra uma componente de $F_i$ em duas, $T_u$ e $T_v$. Sendo $T_u$ a menor das duas, a rotina \texttt{substituaAresta} realiza o rebaixamento das arestas de nível $i$ de $T_u$ para $i-1$. Para fazer isso de forma eficiente, introduzimos um método auxiliar chamado \texttt{procureArestaDeNível}. Esse método utiliza o atributo \textit{arestasDeNível} para encontrar um a um, numa árvore da floresta $F_i$, os nós de arestas de nível $i$.
 
-\begin{programruledcaption}{\texttt{procureArestaDeNível(\textit{nó})} \label{prog:findEdgesIsLevel-GD}}
-    \noindent\textbf{Entrada}: Recebe um nó de uma floresta com o contador \textit{arestasDeNível} $> 0$.
+\begin{programruledcaption}{\texttt{procureArestaDeNível($p$)} \label{prog:findEdgesIsLevel-GD}}
+    \noindent\textbf{Entrada}: Recebe um nó $p$ de uma floresta com o contador \textit{arestasDeNível} $> 0$.
     \\
     \noindent\textbf{Saída}: Devolve um nó de aresta da subárvore do nó com \textit{éNível} verdadeiro.
     \vspace{-0.5\baselineskip}
@@ -1255,22 +1255,24 @@ Lembre-se que, durante a remoção de uma aresta $uv$ de nível $i$ da floresta 
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{se} nó.éNível \textbf{então}
-        devolva nó
-    \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{e} nó.filhoEsq.arestasDeNível > 0 \textbf{então}
-        devolva \texttt{procureArestaDeNível($\emph{nó.filhoEsq}$)}
+    \textbf{se} p.éNível \textbf{então}
+        devolva p
+    \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{e} p.esq.arestasDeNível > 0 \textbf{então}
+        devolva \texttt{procureArestaDeNível($\emph{p.esq}$)}
     \textbf{senão}
-        devolva \texttt{procureArestaDeNível($\emph{nó.filhoDir}$)}
+        devolva \texttt{procureArestaDeNível($\emph{p.dir}$)}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação). Assim, se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então a busca por essas $k$ arestas custará tempo $\Oh(k \lg n)$.
+Veja que o Programa~\ref{prog:findEdgesIsLevel-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \textit{splay} no nó devolvido). Assim, se temos $k$ arestas de nível $i$ da árvore a serem rebaixadas, então a busca por essas $k$ arestas custará tempo $\Oh(k \lg n)$.
+
+A rotina \texttt{procureArestaDeNível} será usada na rotina \texttt{substituaAresta}, que será descrita na Seção~\ref{sec:replace-edge}.
 
 \subsection{Nó de vértice}
 \label{sec:node-vertex}
 
-Para percorrermos as arestas reservas de nível $i$ incidentes a vértices da árvore $T_u$ em busca de uma aresta substituta, cada nó do tipo vértice $u$ (ou $uu$) possui um booleano chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva de nível $2$, então os nós de vértice $u$ e $v$ em $F_2$ terão o atributo \textit{incideArestaReservaDeNível} como verdadeiro. 
+Na rotina \texttt{substituaAresta}, para percorrermos as arestas reserva de nível $i$ incidentes a vértices da árvore $T_u$ em busca de uma aresta substituta, cada nó do tipo vértice $u$ (ou $uu$) possui um booleano chamado \textit{incideArestaReservaDeNível} que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva de nível $2$, então os nós de vértice $u$ e $v$ em $F_2$ terão o atributo \textit{incideArestaReservaDeNível} como verdadeiro. 
 
 Todos os nós da floresta também guardarão um contador \textit{arestasReservasDeNível}, a fim de calcular a quantidade de nós em sua subárvore que tenham o booleano \textit{incideArestaReservaDeNível} verdadeiro. Esse contador é constantemente atualizado durante a adição e remoção de arestas, e para isso precisamos de uma rotina auxiliar \texttt{atualizeArestasReservasDeNível} descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}. 
 
@@ -1287,16 +1289,16 @@ Todos os nós da floresta também guardarão um contador \textit{arestasReservas
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{enquanto} nó.pai $\neq$ \texttt{NIL} \textbf{faça}
+    \textbf{enquanto} p.pai $\neq$ \texttt{NIL} \textbf{faça}
         c := 0
-        \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
-            c := c + nó.filhoEsq.arestasReservasDeNível
-        \textbf{se} nó.filhoDir $\neq$ \texttt{NIL} \textbf{então}
-            c := c + nó.filhoDir.arestasReservasDeNível
-        \textbf{se} nó.incideArestaReservaDeNível  \textbf{então}
+        \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{então}
+            c := c + p.esq.arestasReservasDeNível
+        \textbf{se} p.dir $\neq$ \texttt{NIL} \textbf{então}
+            c := c + p.dir.arestasReservasDeNível
+        \textbf{se} p.incideArestaReservaDeNível  \textbf{então}
             c := c + 1
-        nó.arestasReservasDeNível := c
-        nó := nó.pai
+        p.arestasReservasDeNível := c
+        nó := p.pai
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1320,13 +1322,13 @@ Similarmente ao Programa~\ref{prog:updateIsLevelCount-GD-splay}, o Programa~\ref
     ]
     \texttt{splay($\emph{nó}$)}
     c := 0
-    \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{então}
-        c := c + nó.filhoEsq.arestasReservasDeNível
-    \textbf{se} nó.filhoDir $\neq$ \texttt{NIL} \textbf{então}
-        c := c + nó.filhoDir.arestasReservasDeNível
-    \textbf{se} nó.incideArestaReservaDeNível  \textbf{então}
+    \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{então}
+        c := c + p.esq.arestasReservasDeNível
+    \textbf{se} p.dir $\neq$ \texttt{NIL} \textbf{então}
+        c := c + p.dir.arestasReservasDeNível
+    \textbf{se} p.incideArestaReservaDeNível  \textbf{então}
         c := c + 1
-    nó.arestasReservasDeNível := c
+    p.arestasReservasDeNível := c
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1393,8 +1395,8 @@ Após vermos esses campos extras que adicionamos nos nós da floresta, perceba q
 
 Lembre-se que, após rebaixarmos as arestas de nível $i$ de $T_u$ na etapa da remoção de uma aresta da floresta $F_i$, precisamos procurar por uma aresta substituta. Para isso, precisamos buscar por uma aresta reserva de nível $i$, de modo que uma de suas pontas esteja em $T_u$ e outra em $T_v$, para que consigamos reconectar as duas componentes separadas. 
 
-Para resolver este problema de maneira eficiente, introduzimos um método auxiliar chamado \texttt{procureNóIncideArestaReservaDeNível}, que procurará um vértice que incide em uma das arestas reservas de nível $i$.
-Essa rotina devolve um vértice $u$ que incide a uma das arestas reservas de nível $i$. Assim, podemos percorrer em $R_i$ cada vizinho $v$ de $u$ para verificar se $uv$ liga $T_u$ a $T_v$. 
+Para resolver este problema de maneira eficiente, introduzimos um método auxiliar chamado \texttt{procureNóIncideArestaReservaDeNível}, que procurará um vértice que incide em uma das arestas reserva de nível $i$.
+Essa rotina devolve um vértice $u$ que incide a uma das arestas reserva de nível $i$. Assim, podemos percorrer em $R_i$ cada vizinho $v$ de $u$ para verificar se $uv$ liga $T_u$ a $T_v$. 
 
 \begin{programruledcaption}{\texttt{procureNóIncideArestaReservaDeNível(\textit{nó})} \label{prog:findReserveEdge-GD}}
     \noindent\textbf{Entrada}: Recebe um nó da floresta com o contador \textit{arestasReservasDeNível} $> 0$.
@@ -1409,19 +1411,19 @@ Essa rotina devolve um vértice $u$ que incide a uma das arestas reservas de ní
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{se} nó.incideArestaReservaDeNível \textbf{então}
+    \textbf{se} p.incideArestaReservaDeNível \textbf{então}
         devolva nó
-    \textbf{se} nó.filhoEsq $\neq$ \texttt{NIL} \textbf{e} nó.filhoEsq.arestasReservasDeNível > 0 \textbf{então}
-        devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{nó.filhoEsq}$)}
+    \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{e} p.esq.arestasReservasDeNível > 0 \textbf{então}
+        devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{p.esq}$)}
     \textbf{senão}
-        devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{nó.filhoDir}$)}
+        devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{p.dir}$)}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
 Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo do Programa~\ref{prog:findReserveEdge-GD} é $\Oh(\lg n)$ (amortizado em nossa implementação).
 
-O campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reservas que possuem como uma da suas pontas o vértice $u$. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível}. O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para falso quando ele não tem mais elementos em sua lista de adjacências, isto é, quando não há mais nenhuma aresta reserva incidente nele. A assinatura \texttt{R[u]} retorna o conjunto de vizinhos da lista de adjacências de $u$.
+O campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reserva que possuem como uma da suas pontas o vértice $u$. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível}. O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para falso quando ele não tem mais elementos em sua lista de adjacências, isto é, quando não há mais nenhuma aresta reserva incidente nele. A assinatura \texttt{R[u]} retorna o conjunto de vizinhos da lista de adjacências de $u$.
 
 \begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível($F$, $R$, $u$)} \label{prog:decrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $R$.\\
@@ -1607,7 +1609,7 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
     x := nó[1]
     y := nó[2]
     G.$\emph{nível[x, y]}$ := j - 1
-    nó.éNível := falso
+    p.éNível := falso
     \texttt{atualizeArestasDeNível($\emph{nó}$)}
     \texttt{adicioneFD($G.F_{j-1}$, $x$, $y$)}
 
@@ -1617,9 +1619,9 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
 
 No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. As assinaturas $\emph{nó[1]}$ e $\emph{nó[2]}$ retornam os valores das duas pontas do nó (nesse caso de $xy$), que no nosso exemplo atribuímos às variáveis $x$ e $y$. Ademais, precisamos atualizar o campo \textit{éNível} para falso pois $xy$ não é mais de nível $j$ em $F_j$. Assim, atualizamos o contador \textit{arestasDeNível} de $xy$ acionando a rotina \texttt{atualizeArestasDeNível}, e por fim adicionamos $xy$ em $F_{j-1}$, já que tal aresta foi rebaixada para o nível $j-1$. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$. Se temos $k$ arestas de $T_u$ para rebaixar, as linhas $7$ a $9$ logo consomem tempo $\Oh(k \lg n)$.  
 
-Já nas linhas $10$ a $27$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço \textit{while} que terminará quando não existir mais arestas reservas de nível $j$ (ou seja, o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ é zerado) ou quando achamos uma aresta substituta.  
+Já nas linhas $10$ a $27$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço \textit{while} que terminará quando não existir mais arestas reserva de nível $j$ (ou seja, o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ é zerado) ou quando achamos uma aresta substituta.  
 
-Na linha $11$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide uma das arestas reservas de nível $i$. Como tanto $\emph{nó[1]}$ quanto $\emph{nó[2]}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $13$, pois queremos testar se $xy$ é uma potencial aresta substituta.
+Na linha $11$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide uma das arestas reserva de nível $i$. Como tanto $\emph{nó[1]}$ quanto $\emph{nó[2]}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $13$, pois queremos testar se $xy$ é uma potencial aresta substituta.
 
 A linha $14$ remove a aresta reserva $xy$ de $R_j$, independentemente se tal aresta é substituta ou não. Se $xy$ não é substituta, então precisamos rebaixá-la para $R_{j-1}$, como visto na Seção~\ref{sec:dynamic-graph-edge-removal}. Se ela é substituta, então ela vai acabar se tornando uma aresta da floresta de nível $j$ que conecta $T_u$ a $T_v$.
 
