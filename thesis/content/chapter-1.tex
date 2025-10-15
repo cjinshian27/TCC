@@ -1467,7 +1467,7 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adi
         \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $v$)}
     \textbf{senão}
         \texttt{adicioneFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
-        \texttt{atualizeÉNível($F_{\left\lceil \lg n \right\rceil}$, $u$, $v$, $\textbf{verdadeiro}$)}
+        \texttt{atualizeÉNível($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$, $\textbf{verdadeiro}$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1552,7 +1552,7 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
                         \texttt{adicioneFD($G.F_k$, $x$, $y$)}
                     \textbf{se} x > y \textbf{então}
                         x $\leftrightarrow$ y
-                    \texttt{atualizeÉNível($F_j$, $x$, $y$, $\textbf{verdadeiro}$)}
+                    \texttt{atualizeÉNível($G.F_j$, $x$, $y$, $\textbf{verdadeiro}$)}
                     \textbf{devolva}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -1590,9 +1590,9 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. As assinaturas $\emph{p[1]}$ e $\emph{p[2]}$ retornam os valores das duas pontas do nó $p$ (nesse caso de $xy$), que no nosso exemplo atribuímos às variáveis $x$ e $y$. Ademais, precisamos atualizar o campo \textit{éNível} para falso pois $xy$ não é mais de nível $j$ em $F_j$. Assim, atualizamos o contador \textit{arestasDeNível} de $xy$ acionando a rotina \texttt{atualizeArestasDeNível}, e por fim adicionamos $xy$ em $F_{j-1}$, já que tal aresta foi rebaixada para o nível $j-1$. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$. Se temos $k$ arestas de $T_u$ para rebaixar, as linhas $7$ a $9$ logo consomem tempo $\Oh(k \lg n)$.  
+No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. As assinaturas $\emph{p[1]}$ e $\emph{p[2]}$ retornam os valores das duas pontas do nó $p$ (nesse caso de $xy$), que no nosso exemplo atribuímos às variáveis $x$ e $y$. Ademais,  como rebaixamos $xy$ de $F_j$ para $F_{j - 1}$, então em $F_j$ atualizamos o seu atributo \textit{éNível} para falso, e em $F_{j-1}$ atualizamos este atributo para verdadeiro. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$.
 
-Já nas linhas $10$ a $26$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço \textit{while} que terminará quando não existir mais arestas reserva de nível $j$ (ou seja, o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ é zerado) ou quando achamos uma aresta substituta.  
+Voltando ao Programa~\ref{prog:replaceGD}, as linhas $10$ a $26$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço \textit{while} que terminará quando não existir mais arestas reserva de nível $j$ (ou seja, o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ é zerado) ou quando achamos uma aresta substituta.  
 
 Na linha $11$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide uma das arestas reserva de nível $i$. Como tanto $\emph{nó[1]}$ quanto $\emph{nó[2]}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $13$, pois queremos testar se $xy$ é uma potencial aresta substituta.
 
