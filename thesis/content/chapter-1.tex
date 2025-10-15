@@ -920,7 +920,7 @@ Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, c
 Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, note que ao procurar por uma aresta substituta não necessariamente percorreremos todas as arestas reservas em $R_i$. Então nem sempre todas as arestas reservas de $R_i$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
 
 O Programa~\ref{prog:removeGD} apresenta uma primeira versão da rotina \texttt{removaGD}. Note que ele contém uma chamada à rotina \texttt{substituaAresta} que será explicada Seção~\ref{sec:replace-edge}. Alguns ajustes em \texttt{removaGD} serão necessários devido à implementação da rotina \texttt{substituaAresta}. 
-Além disso, falta apresentar a estratégia usada para percorrer as arestas da floresta e reservas de forma eficiente. Isso será descrito nas Seções~\ref{sec:node-edge}~e~\ref{sec:node-vertex}.
+Em particular, essa rotina deve percorrer as arestas da floresta e as arestas reservas de maneira eficiente. Apresentaremos a estratégia usada para isso nas Seções~\ref{sec:node-edge}~e~\ref{sec:node-vertex}.
 
 \begin{programruledcaption}{\texttt{removaGD($G$, $u$, $v$)} \label{prog:removeGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ adjacentes do grafo $G$. \\
@@ -992,7 +992,7 @@ Além disso, falta apresentar a estratégia usada para percorrer as arestas da f
 \subsection{Euler tour trees}
 \label{sec:euler-tour-trees}
 
-A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propõe o uso de Euler tour trees, que é uma técnica utilizada para representar uma árvore. Essa representação é obtida de uma árvore $T$ substituindo-se cada aresta por dois arcos em sentidos opostos e adicionando-se um laço a cada vértice, como pode ser visto na Figura~\ref{fig:euler-tour-trees}. O digrafo resultante é Euleriano, ou seja, é conexo e o grau de entrada de cada vértice é igual ao grau de saída. Como consequência, cada componente uma trilha que começa e termina num mesmo vértice, passando por todos os arcos do digrafo somente uma vez. Tal trilha é chamada de \textbf{ciclo Euleriano}.
+A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propõe o uso de Euler tour trees, que é uma técnica utilizada para representar uma árvore. Essa representação é obtida de uma árvore $T$ substituindo-se cada aresta por dois arcos em sentidos opostos e adicionando-se um laço a cada vértice, como pode ser visto na Figura~\ref{fig:euler-tour-trees}. O digrafo resultante é Euleriano, ou seja, é conexo e o grau de entrada de cada vértice é igual ao grau de saída. Como consequência, há uma trilha que começa e termina num mesmo vértice, passando por todos os arcos do digrafo somente uma vez. Tal trilha é chamada de \textbf{ciclo Euleriano}.
 
 \begin{figure}[H]
     \centering
@@ -1055,17 +1055,14 @@ A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} prop�
 \raggedbottom
 
 A representação da árvore $T$ é basicamente a sequência de arcos que forma um ciclo Euleriano do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, então o arco será escrito como $uu$. Assim, no exemplo da Figura~\ref{fig:euler-tour-trees}, um possível ciclo Euleriano poderia ser o seguinte: 
-
-\setcounter{equation}{0}
-    
 \begin{equation}
-\textit{ee ea aa ab bb ba ad dd dc cc cd da ae}
+\textit{ee ea aa ab bb ba ad dd dc cc cd da ae}.
 \label{eq:euler-sequence}
 \end{equation}
 
 A sequência dos arcos obtida de $T$ pode mudar dependendo do vértice inicial e da ordem em que os vizinhos de cada vértice são visitados. Uma tal sequência é chamada \textbf{sequência Euleriana} de $T$. 
 
-Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euleriana em uma árvore binária balanceada, usando como chave a posição de cada elemento na sequência. Tomando como base o nosso exemplo da árvore da Figura~\ref{fig:euler-tour-trees} e sua sequência euleriana dada em~\ref{eq:euler-sequence}, podemos ilustrar uma possível árvore binária balanceada para ela na Figura~\ref{fig:euler-tour-balanced-tree}.
+Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euleriana em uma árvore binária balanceada, usando como chave a posição de cada elemento na sequência. Tomando como base o nosso exemplo da árvore da Figura~\ref{fig:euler-tour-trees} e sua sequência euleriana dada em~(\refeq{eq:euler-sequence}), podemos ilustrar uma possível árvore binária balanceada para ela na Figura~\ref{fig:euler-tour-balanced-tree}.
 
 \begin{figure}[H]
     \centering
@@ -1122,14 +1119,14 @@ Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euler
 
 \raggedbottom
 
-Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma floresta pela coleção de árvores para sequências eulerianas Eulerianas de cada componente da floresta. Assim, é possível implementar as operações de consulta de conexidade e de alteração na floresta com consumo esperado de tempo $\Oh(\lg n)$ (amortizado em nossa implementação), onde $n$ é o número de nós da floresta. O algoritmo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} armazena cada floresta $F_i$ com uma estrutura dessas.
+Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma floresta pela coleção de sequências Eulerianas de cada componente da floresta. Assim, é possível implementar as operações de consulta de conexidade e de alteração na floresta com consumo esperado de tempo $\Oh(\lg n)$ (amortizado em nossa implementação), onde $n$ é o número de nós da floresta. O algoritmo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} armazena cada floresta $F_i$ em uma estrutura dessas.
 
 \subsection{Nós das florestas}
 \label{sec:graph-nodes}
 
-Os nós das árvores de busca binária que representam as sequências Eulerianas das florestas, que são mantidas pelo nosso grafo, serão chamados de \textbf{nós das florestas}. Cada tal nó pode representar um vértice $u$ do grafo, se o elemento armazenado no nó for $uu$, ou pode representar uma aresta $uv$ do grafo, se o elemento armazenado no nó for $uv$ ou $vu$, com $u \neq v$. O primeiro tipo de nó é chamado de \textbf{nó de vértice} e o segundo, de \textbf{nó de aresta}. Em nossa implementação, usaremos um mapa hash \textit{nó} que armazena, para cada par de vértices $(u, v)$, um apontador para o nó do elemento $uv$ na floresta, se tal nó existe (ou \texttt{NIL} caso não exista).
+Os nós das árvores de busca binária que representam as sequências Eulerianas que são mantidas pelo algoritmo serão chamados de \textbf{nós das florestas}. Cada tal nó pode representar um vértice $u$ do grafo, se o elemento armazenado no nó for $uu$, ou pode representar uma aresta $uv$ do grafo, se o elemento armazenado no nó for $uv$ ou $vu$, com $u \neq v$. O primeiro tipo de nó é chamado de \textbf{nó de vértice} e o segundo, de \textbf{nó de aresta}. Em nossa implementação, para cada floresta $F_i$, usaremos um mapa hash \textit{nó} que armazena, para cada par de vértices $(u, v)$, um apontador para o nó do elemento $uv$ na floresta $F_i$, se tal nó existe (ou \texttt{NIL} caso não exista).
 
-Como representamos uma Euler tour tree por uma árvore binária, cada nó possui apontadores para o filho esquerdo, filho direito e o pai do nó. Em nossa implementação, denotamos tais apontadores por \textit{nó.filhoEsq}, \textit{nó.filhoDir} e \textit{nó.pai}, respectivamente. O motivo de usar um apontador para o pai do nó será discutido depois. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
+Como representamos uma Euler tour tree por uma árvore binária de busca, cada nó possui apontadores para o filho esquerdo, filho direito e o pai do nó. Em descrição de nossa implementação, para um nó $p$, denotamos tais apontadores por \textit{p.esq}, \textit{p.dir} e \textit{p.pai}, respectivamente. O motivo de usar um apontador para o pai do nó será discutido depois. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
 \subsection{Nó de aresta}
 \label{sec:node-edge}
