@@ -1128,18 +1128,24 @@ Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma f
 
 Os nós das árvores de busca binária que representam as sequências Eulerianas que são mantidas pelo algoritmo serão chamados de \textbf{nós das florestas}. Cada tal nó pode representar um vértice $u$ do grafo, se o elemento armazenado no nó for $uu$, ou pode representar uma aresta $uv$ do grafo, se o elemento armazenado no nó for $uv$ ou $vu$, com $u \neq v$. O primeiro tipo de nó é chamado de \textbf{nó de vértice} e o segundo, de \textbf{nó de aresta}. Em nossa implementação, para cada floresta $F_i$, usaremos um mapa hash \textit{nó} que armazena, para cada par de vértices $(u, v)$, um apontador para o nó do elemento $uv$ na floresta $F_i$, se tal nó existe (ou \texttt{NIL} caso não exista).
 
-Como representamos uma Euler tour tree por uma árvore binária de busca, cada nó possui apontadores para o filho esquerdo, filho direito e o pai do p. Em descrição de nossa implementação, para um nó $p$, denotamos tais apontadores por \textit{p.esq}, \textit{p.dir} e \textit{p.pai}, respectivamente. O motivo de usar um apontador para o pai do nó será discutido depois. A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
+Como representamos uma Euler tour tree por uma árvore binária de busca, cada nó $p$ possui apontadores para o filho esquerdo, filho direito e seu pai. Na descrição de nossa implementação, denotamos tais apontadores por \textit{p.esq}, \textit{p.dir} e \textit{p.pai}, respectivamente. Temos também um atributo \textit{tam} de $p$ que guarda o número de nós em sua subárvore. Tanto o apontador para o pai quanto o atributo \textit{tam} serão discutidos posteriormente. 
+
+Além disso, para extrairmos as pontas de um nó de aresta $p$ que representa $xy$, usamos a assinatura \textit{p.vértice1} e \textit{p.vértice2}, que guardam os valores  $x$ e $y$, respectivamente. Em nós de vértice $q$ que representam $xx$, \textit{q.vértice1} guarda o mesmo valor do \textit{q.vértice2}, ou seja, ambos armazenam $x$. Extrair as pontas dos nós será útil quando descrevermos o método \texttt{substituaAresta} na Seção~\ref{sec:replace-edge}. 
+
+A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
 \subsection{Nó de aresta}
 \label{sec:node-edge}
 
 Como já observamos, na floresta $F_i$, há arestas de nível $\leq i$. Para percorrermos as arestas de nível $i$ de uma componente de $F_i$ eficientemente, os nós da floresta $F_i$ têm um atributo extra booleano chamado \textit{éNível}, que indica se tal aresta da floresta $F_i$ é de nível $i$. 
 
-Em nossa implementação, quando inserimos uma aresta $uv$ na floresta $F_L$ usando o \texttt{adicioneGD}, por padrão o \textit{éNível} de $uv$ é falso. Por isso, precisamos de um método \texttt{atualizeÉNível}, que irá manter o atributo \textit{éNível} com o valor correto. Assim, ao inserirmos $uv$ em $F_L$, este método atualizará tal atributo deste nó de aresta para verdadeiro. Quando rebaixamos tal aresta, precisamos atualizar este seu atributo para falso em $F_L$, pois isso indica que $uv$ deixou de ser de nível $L$. Este método está descrito no Programa~\ref{prog:updateIsLevel-GD}.
+Além disso, todos os nós da floresta armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de nós de arestas em sua subárvore que têm o atributo \textit{éNível} verdadeiro. Sempre que modificarmos alguma das árvores binárias da floresta $F_i$, devemos manter este contador com o valor correto. Na nossa implementação, a atualização deste contador é feito na operação \textit{splay} sempre que essa executa alguma rotação.
+
+A rotina abaixo do Programa~\ref{prog:updateIsLevel-GD} é usada para alterar para $b$ o valor do atributo \textit{éNível} para uma aresta $uv$. Ela é acionada sempre que adicionamos uma aresta ao grafo, e também quando uma aresta é rebaixada. Tal rotina utiliza um método auxiliar chamado \textit{atualizeArestasDeNível}, descrito no Programa~\ref{prog:updateIsLevelCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeÉNível($F$, $u$, $v$, $b$)} \label{prog:updateIsLevel-GD}}
-    \noindent\textbf{Entrada}: Recebe uma floresta $F$, vértices $u$ e $v$ e um booleano $b$.\\
-    \noindent\textbf{Efeito}: Atualiza o atributo \textit{éNível} de $uv$ e o contador \textit{arestasDeNível}.
+    \noindent\textbf{Entrada}: Recebe uma floresta $F$, pontas $u$ e $v$ de uma aresta de $G$, e um booleano $b$.\\
+    \noindent\textbf{Efeito}: Atualiza o atributo \textit{éNível} do nó $uv$ da floresta $F$ e o contador \textit{arestasDeNível}.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1157,11 +1163,9 @@ Em nossa implementação, quando inserimos uma aresta $uv$ na floresta $F_L$ usa
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Além disso, todos os nós da floresta armazenam um contador chamado \textit{arestasDeNível}, com a quantidade de nós de arestas em sua subárvore que têm o atributo \textit{éNível} verdadeiro. Sempre que modificarmos alguma das árvores binárias da floresta $F_i$, devemos manter este contador com o valor correto. Para isso, precisamos de um método auxiliar chamado \texttt{atualizeArestasDeNível}, descrito no Programa~\ref{prog:updateIsLevelCount-GD}.
-
 \begin{programruledcaption}{\texttt{atualizeArestasDeNível($\emph{p}$)} \label{prog:updateIsLevelCount-GD}}
     \noindent\textbf{Entrada}: Recebe um nó $p$.\\
-    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} do p.
+    \noindent\textbf{Efeito}: Atualiza o contador \textit{arestasDeNível} de p.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1183,7 +1187,6 @@ Além disso, todos os nós da floresta armazenam um contador chamado \textit{are
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Na nossa implementação, a atualização deste contador é feito na operação \textit{splay} sempre que essa executa alguma rotação. Além disso, para alterar o atributo \textit{éNível} de um nó de aresta, acionamos a rotina do Programa~\ref{prog:updateIsLevel-GD}, que por sua vez usa a rotina do Programa~\ref{prog:updateIsLevelCount-GD}.
 
 O Programa~\ref{prog:updateIsLevel-GD} consome tempo amortizado $\Oh(\lg n)$. Veja que este método não altera a floresta $F_i$, altera apenas uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
 
@@ -1306,7 +1309,7 @@ O método que mantém este contador se chama \texttt{atualizeArestasReservasDeN�
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(\lg n)$ em nossa implementação por conta das operações \textit{splay}. Como este método não altera a floresta $F_i$, altera apenas uma da árvores uma das árvores binárias que a representam, então as três invariantes são preservadas.
+O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(1)$ em nossa implementação por conta das operações \textit{splay}. Como este método não altera a floresta $F_i$, altera apenas uma da árvores uma das árvores binárias que a representam, então as três invariantes são preservadas.
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasReservasDeNível} de cada nó na árvore.
 
@@ -1358,13 +1361,13 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
 
 
     \end{tikzpicture}
-    \caption{Árvore de uma das componentes da floresta $F_i$, onde nós pintados em verde indicam vértices com o atributo incideArestaReservaDeNível verdadeiro. No nosso exemplo, todos os vértices são ponta de alguma aresta reserva de nível $i$. Embaixo de cada nó temos o contador arestasReservasDeNível.}
+    \caption{Árvore de uma das componentes da floresta $F_i$, onde nós pintados em verde indicam nós de vértices com o atributo incideArestaReservaDeNível verdadeiro. No nosso exemplo, todos os vértices são ponta de alguma aresta reserva de nível $i$. Embaixo de cada nó temos o contador arestasReservasDeNível.}
     \label{fig:euler-tour-balanced-tree-reserve-edges-propagation}
 \end{figure}
 
 \raggedbottom
 
-Após vermos esses campos extras que adicionamos nos nós da floresta, perceba que o atributo \textit{éNível} existe em nó de vértice, porém vai ser sempre falso. Da mesma forma, o atributo \textit{incideArestaReservaDeNível} existe em nó de aresta, e vai ser sempre falso também. 
+Após vermos esses campos extras que adicionamos nos nós da floresta, perceba que o atributo \textit{éNível} existe em nós de vértice, porém vai ser sempre falso. Da mesma forma, o atributo \textit{incideArestaReservaDeNível} existe em nós de aresta, e vai ser sempre falso também. 
 
 Lembre-se que, após rebaixarmos as arestas de nível $i$ de $T_u$ na etapa da remoção de uma aresta da floresta $F_i$, precisamos procurar por uma aresta substituta. Para isso, precisamos buscar por uma aresta reserva de nível $i$, de modo que uma de suas pontas esteja em $T_u$ e outra em $T_v$, para que consigamos reconectar as duas componentes separadas. 
 
@@ -1573,7 +1576,7 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
 
 
 \begin{programruledcaption}{\texttt{rebaixeNívelDaAresta($G$, $p$, $j$)} \label{prog:decrease-edge-level}}
-    \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta $p$ e o nível $j$.\\
+    \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta $p$ que é raiz de uma árvore e o nível $j$.\\
     \textbf{Efeito}: Rebaixa o nível do nó de aresta.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -1584,8 +1587,8 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    x := p[1]
-    y := p[2]
+    x := p.vértice1
+    y := p.vértice2
     G.$\emph{nível[x, y]}$ := j - 1
     \texttt{atualizeÉNível($G.F_{j}$, $x$, $y$, \textbf{falso})}
     \texttt{adicioneFD($G.F_{j-1}$, $x$, $y$)}
@@ -1595,19 +1598,19 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. As assinaturas $\emph{p[1]}$ e $\emph{p[2]}$ retornam os valores das duas pontas do nó $p$ (nesse caso de $xy$), que no nosso exemplo atribuímos às variáveis $x$ e $y$. Ademais,  como rebaixamos $xy$ de $F_j$ para $F_{j - 1}$, então em $F_j$ atualizamos o seu atributo \textit{éNível} para falso, e em $F_{j-1}$ atualizamos este atributo para verdadeiro. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$.
+No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. Note que o nó $p$ é raiz de sua árvore pois foi feito uma splay neste nó antes. No nosso código, chamamos as duas pontas do nó de aresta $xy$ e atribuímos às variáveis $x$ e $y$. Ademais, como rebaixamos $xy$ de $F_j$ para $F_{j - 1}$, então em $F_j$ atualizamos o seu atributo \textit{éNível} para falso, e em $F_{j-1}$ atualizamos este atributo para verdadeiro. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$.
 
-Voltando ao Programa~\ref{prog:replaceGD}, as linhas $10$ a $26$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço \textit{while} que terminará quando não existir mais arestas reserva de nível $j$ (ou seja, o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ é zerado) ou quando achamos uma aresta substituta.  
+Voltando ao Programa~\ref{prog:replaceGD}, as linhas $10$ a $26$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço que terminará quando não existir mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver zerado) ou quando achamos uma aresta substituta.  
 
-Na linha $11$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide uma das arestas reserva de nível $i$. Como tanto $\emph{nó[1]}$ quanto $\emph{nó[2]}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $13$, pois queremos testar se $xy$ é uma potencial aresta substituta.
+Na linha $11$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide em uma das arestas reserva de nível $i$. Como tanto $\emph{nó.vértice1}$ quanto $\emph{nó.vértice2}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $13$, pois queremos testar se $xy$ é uma potencial aresta substituta.
 
-A linha $14$ remove a aresta reserva $xy$ de $R_j$, independentemente se tal aresta é substituta ou não. Se $xy$ não é substituta, então precisamos rebaixá-la para $R_{j-1}$, como visto na Seção~\ref{sec:dynamic-graph-edge-removal}. Se ela é substituta, então ela vai acabar se tornando uma aresta da floresta de nível $j$ que conecta $T_u$ a $T_v$.
+A linha $14$ remove a aresta reserva $xy$ de $R_j$, independentemente se tal aresta é substituta ou não, pois ou ela será rebaixada, ou será uma aresta substituta, que será incluída em $F_j$. Se $xy$ não é substituta, então ela é rebaixada para $R_{j-1}$, como visto na Seção~\ref{sec:dynamic-graph-edge-removal}. Se ela é substituta, então se tornará uma aresta da floresta de nível $j$ conectando $T_u$ a $T_v$.
 
 As linhas $15$ a $19$ englobam o caso em que os vértices $x$ e $y$ estão em $T_u$, isto é, quando \texttt{conectadosGD(G, x, y)} retorna verdadeiro. Isso quer dizer que $xy$ não é uma aresta substituta, e por isso precisamos rebaixá-la de $R_j$ para $R_{j-1}$, além de atualizar os atributos dos nós de vértice $x$ e $y$ em $F_{j-1}$ ao acionar \texttt{incideArestaReservaDeNível} e \texttt{arestasReservasDeNível}.
 
-Veja que~\texttt{conectadosGD(G, x, y)} só devolverá falso quando $x$ está em $T_u$ e $y$ está em $T_v$, pois assim os dois vértices estariam em componentes separadas da floresta. Este caso, abordado nas linhas $20$ a $26$ do Programa~\ref{prog:replaceGD}, mostra que encontramos $xy$ como uma aresta substituta, e finalizamos o algoritmo conectando $x$ de $T_u$ a $y$ de $T_v$ de todas as florestas $F_k$, para $k = j, \ldots, L$, por conta da invariante~\ref{invariant2}. Além disso, se a aresta substituta encontrada é de nível $j$, precisamos atualizar o atributo \textit{éNível} do nó desta aresta para verdadeiro quando a adicionamos na floresta $F_j$, como acontece na linha $25$.
+Veja que~\texttt{conectadosGD(G, x, y)} só devolverá falso quando $x$ está em $T_u$ e $y$ está em $T_v$, pois assim os dois vértices estariam em componentes separadas da floresta $F_j$. Este caso, abordado nas linhas $20$ a $26$ do Programa~\ref{prog:replaceGD}, mostra que encontramos $xy$ como uma aresta substituta, e finalizamos o algoritmo incluindo $xy$ em todas as florestas $F_k$, para $k = j, \ldots, L$, para manter a invariante~\ref{invariant2}. Além disso, se a aresta substituta encontrada é de nível $j$, precisamos atualizar o atributo \textit{éNível} do nó desta aresta em $F_j$ para verdadeiro quando a adicionamos na floresta $F_j$, como acontece na linha $25$.
 
-Agora iremos explicar como a rotina \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$. A amortização ocorre em uma sequência de $a$ inserções e $b$ remoções de arestas. Mostraremos que o custo total destas $a + b$ operações é $\Oh((a + b) \lg^2 n)$, o que resulta em um custo esperado amortizado por operação de $\Oh(\lg^2 n)$. 
+Agora iremos explicar por que a rotina \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$. A amortização ocorre em uma sequência de $a$ inserções e $b$ remoções de arestas. Mostraremos que o custo total destas $a + b$ operações é $\Oh((a + b) \lg^2 n)$, o que resulta em um custo amortizado por operação de $\Oh(\lg^2 n)$. 
 
 Vamos atribuir o custo de todos os rebaixamentos, tanto de uma aresta da floresta quanto de uma reserva, à inserção desta aresta. Assim, o custo das soma das linhas $7$ a $9$ e das linhas $14$ a $19$, onde ocorrem rebaixamento  de alguma aresta, é pago pela inserção dela. Como cada uma das $a$ arestas inseridas podem ser rebaixadas $\left\lceil \lg n \right\rceil$ vezes durante essa sequência de operações, e cada rebaixamento consome tempo amortizado $\Oh(\lg n)$, então o custo total gerado pelas inserções de $a$ arestas é $\Oh(a \lg^2 n)$. 
 
