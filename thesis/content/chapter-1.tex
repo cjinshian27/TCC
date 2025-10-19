@@ -937,8 +937,9 @@ Em particular, essa rotina deve percorrer as arestas da floresta e as arestas re
     ]
     i := G.$\emph{nível[u, v]}$
     $\emph{nível[u, v]}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
-    \textbf{se} uv $\in$ G.$F_{\left\lceil \lg n \right\rceil}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
-        \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+    L := G.nivelMax
+    \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
+        \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
         \texttt{substituaAresta($G$, $i$, $u$, $v$)}
     \textbf{senão} (*@\hfill $\triangleright$ uv é aresta reserva@*)
@@ -1461,19 +1462,20 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adi
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    G.$\emph{nível[u, v]}$ := $\left\lceil \lg n \right\rceil$
-    \textbf{se} \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)} \textbf{então}
-        \texttt{adicioneLA($G.R_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
-        \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $u$)}
-        \texttt{incrementeArestasReservasDeNível($G.F_{\left\lceil \lg n \right\rceil}$, $G.R_{\left\lceil \lg n \right\rceil}$, $v$)}
+    L := G.nivelMax
+    G.$\emph{nível[u, v]}$ := $L$
+    \textbf{se} \texttt{conectadosFD($G.F_{L}$, $u$, $v$)} \textbf{então}
+        \texttt{adicioneLA($G.R_{L}$, $u$, $v$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{L}$, $G.R_{L}$, $u$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{L}$, $G.R_{L}$, $v$)}
     \textbf{senão}
-        \texttt{adicioneFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
-        \texttt{atualizeÉNível($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$, $\textbf{verdadeiro}$)}
+        \texttt{adicioneFD($G.F_L$, $u$, $v$)}
+        \texttt{atualizeÉNível($G.F_L$, $u$, $v$, $\textbf{verdadeiro}$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Podemos notar algumas diferenças entre as duas versões de \texttt{adicioneGD}. As linhas $4$ e $5$ são necessárias para que os campos \textit {incideArestaReservaDeNível} e \textit{arestasReservasDeNível} dos vértices $u$ e $v$ estejam corretos, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ não eram incidentes a alguma aresta reserva (que seria $uv$), mas passaram a ser. Já as linhas $8$ e $9$ definem o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro, quando ela é aresta da floresta. 
+Podemos notar algumas diferenças entre as duas versões de \texttt{adicioneGD}. As linhas $5$ e $6$ são necessárias para que os campos \textit {incideArestaReservaDeNível} e \textit{arestasReservasDeNível} dos vértices $u$ e $v$ estejam corretos, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ não eram incidentes a alguma aresta reserva (que seria $uv$), mas passaram a ser. Já a linha $9$ define o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro em $F_L$, quando ela é aresta da floresta. 
 
 Atualizamos os atributos desses nós que descrevemos para fazermos a remoção eficiente de arestas, cuja rotina será descrita também com ajustes na Seção~\ref{sec:code-edge-removal-second-version}. Note que o método \texttt{adicioneGD} continua tendo o mesmo consumo de tempo após esses ajustes. 
 
@@ -1494,10 +1496,11 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos também ajustar o métod
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
+    L := G.nivelMax
     i := G.$\emph{nível[u, v]}$
     $\emph{nível[u, v]}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
-    \textbf{se} uv $\in$ G.$F_{\left\lceil \lg n \right\rceil}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
-        \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+    \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
+        \textbf{para} j := i \textbf{até} L \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
         \texttt{substituaAresta($G$, $i$, $u$, $v$)}
     \textbf{senão} (*@\hfill $\triangleright$ uv é aresta reserva@*)
@@ -1529,7 +1532,8 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{para} j := i \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+    L := G.nivelMax
+    \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
         $T_u$ := \texttt{árvore($G.F_j.\emph{nó[u, u]}$)}
         $T_v$ := \texttt{árvore($G.F_j.\emph{nó[v, v]}$)}    
         \textbf{se} |$T_u$| > |$T_v$| \textbf{então}
@@ -1549,7 +1553,7 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
                     \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
                     \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
                 \textbf{senão}
-                    \textbf{para} k := j \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+                    \textbf{para} k := j \textbf{até} $L$ \textbf{faça}
                         \texttt{adicioneFD($G.F_k$, $x$, $y$)}
                     \textbf{se} x > y \textbf{então}
                         x $\leftrightarrow$ y
