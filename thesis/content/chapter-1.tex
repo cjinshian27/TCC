@@ -66,9 +66,7 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     \item \label{invariant3} Cada componente da floresta $F_i$ possui no máximo $2^i$ vértices.
 \end{enumerate}
 
-Na Seção~\ref{sec:dynamic-graph-routines}, descreveremos com mais detalhes como as rotinas da biblioteca funcionam e como cada uma preserva as invariantes acima, de modo a manter a corretude do algoritmo durante toda a sua execução.
-
-Por fim, para simplificar um pouco a notação, escreveremos $L = \left\lceil \lg n \right\rceil$, isto é, $F_{\left\lceil \lg n \right\rceil}$ passa a ser escrita como $F_{L}$, da mesma forma que $G_L = G_{\left\lceil \lg n \right\rceil}$ e $R_L = R_{\left\lceil \lg n \right\rceil}$.
+Na Seção~\ref{sec:dynamic-graph-routines}, descreveremos com mais detalhes como as rotinas da biblioteca funcionam e como cada uma preserva as invariantes acima, de modo a manter a corretude do algoritmo durante toda a sua execução. Por fim, para simplificar um pouco a notação, escreveremos $L = \left\lceil \lg n \right\rceil$, isto é, $F_{\left\lceil \lg n \right\rceil}$ passa a ser escrita como $F_{L}$, da mesma forma que $G_L = G_{\left\lceil \lg n \right\rceil}$ e $R_L = R_{\left\lceil \lg n \right\rceil}$.
 
 \subsection{Tipos de arestas do grafo}
 \label{sec:dynamic-graph-edge-types}
@@ -94,7 +92,7 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
 
-Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, primeiro armazenamos o nível máximo do grafo, no caso o valor de $\left\lceil \lg n \right\rceil$, numa variável chamada $L$, onde podemos extrair e usar o valor do nível máximo chamando $G.L$. Em seguida, chamamos a rotina \texttt{grafoDinâmico($n$)}, que por sua vez chamará \texttt{florestaDinâmica($n$)}, criando $L$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências($n$)}, criando $L$ grafos com $n$ vértices representados por listas de adjacências. 
+Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, primeiro armazenamos o nível máximo do grafo, no caso o valor de $\left\lceil \lg n \right\rceil$, numa variável do grafo chamada \textit{nivelMax}, onde podemos extrair e usar o valor do nível máximo chamando \textit{G.nivelMax}. Em seguida, chamamos a rotina \texttt{grafoDinâmico($n$)}, que por sua vez chamará \texttt{florestaDinâmica($n$)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências($n$)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
 
 Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave as pontas da aresta ($u$~e~$v$) e armazena o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash($n$)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuirmos o objeto devolvido a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
@@ -120,8 +118,9 @@ Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newG
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    G.L := $\left\lceil \lg n \right\rceil$ 
-    \textbf{para} $i$ := $1$ \textbf{até} G.L \textbf{faça}
+    L := $\left\lceil \lg n \right\rceil$
+    G.nivelMax := L
+    \textbf{para} $i$ := $1$ \textbf{até} L \textbf{faça}
         $G.F_i$ := \texttt{florestaDinâmica($n$)}
         $G.R_i$ := \texttt{listasDeAdjacências($n$)}
     G.nível := \texttt{novoMapaHash($n$)}
@@ -149,7 +148,8 @@ Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta cham
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    devolva \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
+    L := G.nivelMax
+    devolva \texttt{conectadosFD($G.F_L$, $u$, $v$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -285,11 +285,12 @@ O Programa~\ref{prog:addGD} ilustra uma primeira versão da rotina \texttt{adici
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    G.$\emph{nível[u, v]}$ := $\left\lceil \lg n \right\rceil$
-    \textbf{se} \texttt{conectadosFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)} \textbf{então}
-        \texttt{adicioneLA($G.R_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
+    L := G.nivelMax
+    G.$\emph{nível[u, v]}$ := L
+    \textbf{se} \texttt{conectadosFD($G.F_L$, $u$, $v$)} \textbf{então}
+        \texttt{adicioneLA($G.R_L$, $u$, $v$)}
     \textbf{senão}
-        \texttt{adicioneFD($G.F_{\left\lceil \lg n \right\rceil}$, $u$, $v$)}
+        \texttt{adicioneFD($G.F_L$, $u$, $v$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -479,38 +480,37 @@ Agora, veremos em detalhes o motivo de não precisarmos procurar uma substituta 
     \begin{tikzpicture}[>=stealth, thick]
 
     % Big green circles g1 and g2
-    \node[draw, thick, green, circle, minimum size=5cm] (g1) at (-3,0) {};
-    \node[draw, thick, green, circle, minimum size=5cm] (g2) at (3,0) {};
+    \node[draw, thick, green, circle, minimum size=2.9cm] (g1) at (-3,0) {};
+    \node[draw, thick, green, circle, minimum size=2.9cm] (g2) at (3,0) {};
 
-    \draw[dotted, thick, gray] (-3,0) circle (2.6cm);
-    \draw[dotted, thick, gray] (3,0) circle (2.6cm);  
+    \draw[dotted, thick, gray] (-3,0) circle (1.6cm);
+    \draw[dotted, thick, gray] (3,0) circle (1.6cm);  
     
     % Labels for the circles
-    \node at (-3,-3) {$T_u$};
-    \node at (3, -3) {$T_v$};
+    \node at (-3,2) {$T_u$};
+    \node at (3,2) {$T_v$};
 
     % Straight green edge between g1 and g2
     \draw[thick, green] (g1) -- node[above] {$i$} (g2);
 
     % Small red circles inside g1
-    \node[draw, thick, red, circle, minimum size=2cm] (r11) at (-4,0.7) {};
-    \node[draw, thick, red, circle, minimum size=2cm] (r12) at (-2,-0.7) {};
+    \node[draw, thick, red, circle, minimum size=1.2cm] (r11) at (-3.4,0.6) {};
+    \node[draw, thick, red, circle, minimum size=1.2cm] (r12) at (-2.6,-0.5) {};
 
     % Small red circles inside g2
-    \node[draw, thick, red, circle, minimum size=2cm] (r21) at (2,1) {};
-    \node[draw, thick, red, circle, minimum size=2cm] (r22) at (4.2,0.1) {};
-    \node[draw, thick, red, circle, minimum size=2cm] (r23) at (2.5,-1.2) {};
+    \node[draw, thick, red, circle, minimum size=1.1cm] (r21) at (2.5, 0.6) {};
+    \node[draw, thick, red, circle, minimum size=1.1cm] (r22) at (3.7, 0.1) {};
+    \node[draw, thick, red, circle, minimum size=1.1cm] (r23) at (2.7,-0.6) {};
 
     % Curved red edge connecting one red circle in g1 with one in g2
-    \draw[thick, red] (r11.north east) to[bend left=20] node[pos=0.7, above] {$i-1$} (r21.north west);
+    \draw[thick, red] (r11.north east) to[bend left=20] node[pos=0.5, above] {$i-1$} (r21.north west);
 
     \end{tikzpicture}
-    \caption{Os círculos verdes representam as componentes da floresta $F_i$ do grafo $G_i$, enquanto os círculos vermelhos representam as componentes da floresta $F_{i-1}$ do grafo $G_{i-1}$. Note que a aresta reserva de nível $i-1$ mostrada não deveria existir, porque senão ela violaria a invariante~\ref{invariant1}. Portanto, tais arestas de nível $i-1$ ligando componentes de $F_i$ (como a aresta vermelha) não existem e só é necessário procurar arestas substitutas a partir de nível $i$ (como a aresta verde) para conectar as duas componentes $T_u$ e $T_v$.}
+    \caption{Os círculos verdes representam as componentes $T_u$ e $T_v$ da floresta $F_i$ do grafo $G_i$, enquanto os círculos vermelhos representam as componentes da floresta $F_{i-1}$ do grafo $G_{i-1}$. Note que a aresta reserva de nível $i-1$ mostrada não deveria existir, porque senão ela violaria a invariante~\ref{invariant1}. Portanto, tais arestas de nível $i-1$ ligando componentes de $F_i$ (como a aresta vermelha) não existem e só é necessário procurar arestas substitutas a partir de nível $i$ (como a aresta verde) para conectar $T_u$ e $T_v$.}
     \label{fig:why-not-search-in-less-or-equal-than-i}
 \end{figure}
 
 \raggedbottom
-
 A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement1}, temos um grafo $G$ de $n = 10$ vértices. Para facilitar, assumiremos que, até o momento, só houve inserções de arestas. 
 
 \begin{figure}[H]
