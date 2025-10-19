@@ -1368,11 +1368,10 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
 \raggedbottom
 
 Após vermos esses campos extras que adicionamos nos nós da floresta, perceba que o atributo \textit{éNível} existe em nós de vértice, porém vai ser sempre falso. Da mesma forma, o atributo \textit{incideArestaReservaDeNível} existe em nós de aresta, e vai ser sempre falso também. 
+ 
+No \texttt{substituaAresta} acionado na floresta $F_i$, após rebaixarmos as arestas de nível $i$ de $T_u$, precisamos procurar por uma aresta substituta. Para isso, precisamos buscar por uma aresta reserva de nível $i$, de modo que uma de suas pontas esteja em $T_u$ e outra em $T_v$, para que consigamos reconectar as duas componentes de $F_i$ separadas pela remoção de $uv$. 
 
-Lembre-se que, após rebaixarmos as arestas de nível $i$ de $T_u$ na etapa da remoção de uma aresta da floresta $F_i$, precisamos procurar por uma aresta substituta. Para isso, precisamos buscar por uma aresta reserva de nível $i$, de modo que uma de suas pontas esteja em $T_u$ e outra em $T_v$, para que consigamos reconectar as duas componentes separadas. 
-
-Para resolver este problema de maneira eficiente, introduzimos um método auxiliar chamado \texttt{procureNóIncideArestaReservaDeNível}, que procurará um vértice que incide em uma das arestas reserva de nível $i$.
-Essa rotina devolve um vértice $u$ que incide a uma das arestas reserva de nível $i$. Assim, podemos percorrer em $R_i$ cada vizinho $v$ de $u$ para verificar se $uv$ liga $T_u$ a $T_v$. 
+Para resolver este problema de maneira eficiente, usa-se uma estratégia semelhante à que usamos para buscar arestas de nível $i$ em $T_u$. Introduzimos um método auxiliar chamado \texttt{procureNóIncideArestaReservaDeNível}, que devolveria um vértice de $T_u$ que incide em uma das arestas reserva de nível $i$. Assim, podemos percorrer cada vizinho desse vértice em $R_i$ para verificar se a aresta entre eles liga $T_u$ a $T_v$. 
 
 \begin{programruledcaption}{\texttt{procureNóIncideArestaReservaDeNível($p$)} \label{prog:findReserveEdge-GD}}
     \noindent\textbf{Entrada}: Recebe um nó da floresta $p$ com o contador \textit{arestasReservasDeNível} $> 0$.
@@ -1397,7 +1396,7 @@ Essa rotina devolve um vértice $u$ que incide a uma das arestas reserva de nív
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo do Programa~\ref{prog:findReserveEdge-GD} é $\Oh(\lg n)$ (amortizado em nossa implementação).
+Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, o consumo de tempo do Programa~\ref{prog:findReserveEdge-GD} é $\Oh(\lg n)$ (amortizado em nossa implementação, que sempre aciona a rotina \texttt{splay} no nó devolvido).
 
 O campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reserva que possuem como uma da suas pontas o vértice $u$. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível}. 
 
@@ -1416,7 +1415,8 @@ O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{inc
         escapeinside={(*@}{@*)},
         ]
         vérticeU := F.nó[u, u]
-        \textbf{se} R[u] = $\emptyset$ \textbf{então} 
+        \textbf{se} R[u] = $\emptyset$ \textbf{então}
+            \texttt{splay($\emph{vérticeU}$)} 
             vérticeU.incideArestaReservaDeNível := falso
             \texttt{atualizeIncideArestaReservaDeNível($\emph{vérticeU}$)}
     \end{lstlisting}
@@ -1438,7 +1438,8 @@ Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \tex
         escapeinside={(*@}{@*)},
     ]
     vérticeU := F.nó[u, u]
-    \textbf{se} |R[u]| = $1$ \textbf{então} 
+    \textbf{se} |R[u]| = $1$ \textbf{então}
+        \texttt{splay($\emph{vérticeU}$)}
         vérticeU.incideArestaReservaDeNível := verdadeiro
         \texttt{atualizeIncideArestaReservaDeNível($\emph{vérticeU}$)}
     \end{lstlisting}
