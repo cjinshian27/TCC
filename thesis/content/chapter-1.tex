@@ -27,7 +27,7 @@ O problema da conexidade em florestas dinâmicas pode ser considerado uma simpli
 \end{itemize}
 
 
-A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que são de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. O nó em que a operação \textit{splay} é aplicada é trazido, por meio das tradicionais rotações usadas no balanceamento de árvores binárias de busca, para cima até chegar na raiz da árvore. Isso faz com que o custo de uma sequência de $m$ operações (inserção, remoção ou busca) em uma árvore \textit{splay} com $n$ nós seja $\Oh(m\lg n)$, ou seja, o custo amortizado por operação é $\Oh(\lg n)$. Como também já existe bastante literatura sobre árvores \textit{splay}~\cite[Lecture 12]{kozen}, e seu funcionamento interno não afeta a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
+A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficientes às rotinas acima é uma árvore binária de busca balanceada (ABBB). Dessa forma, a floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que são de natureza aleatória. Em nosso caso, utilizamos árvores \textit{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \textit{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \textit{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. O nó em que a operação \textit{splay} é aplicada é trazido, por meio das tradicionais rotações usadas no balanceamento de árvores binárias de busca, para cima até chegar na raiz da árvore. Isso faz com que o custo de uma sequência de $m$ operações (inserção, remoção ou busca) em uma árvore \textit{splay} com $n$ nós seja $\Oh(m\lg n)$, ou seja, o custo amortizado por operação é $\Oh(\lg n)$. Como também já existe bastante literatura sobre árvores \textit{splay}~\cite[Lecture 12]{kozen}, e seu funcionamento interno afeta muito pouco a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
 
 Nesse sentido, o resultado é uma implementação em que \texttt{florestaDinâmica(n)} tem custo $\Theta(n)$ e os demais métodos da biblioteca têm custo amortizado $\Oh(\lg n)$.
 
@@ -94,7 +94,7 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
 
-Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, chamamos a rotina \texttt{grafoDinâmico($n$)}, que por sua vez chamará \texttt{florestaDinâmica($n$)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências($n$)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
+Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, primeiro armazenamos o nível máximo do grafo, no caso o valor de $\left\lceil \lg n \right\rceil$, numa variável chamada $L$, onde podemos extrair e usar o valor do nível máximo chamando $G.L$. Em seguida, chamamos a rotina \texttt{grafoDinâmico($n$)}, que por sua vez chamará \texttt{florestaDinâmica($n$)}, criando $L$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências($n$)}, criando $L$ grafos com $n$ vértices representados por listas de adjacências. 
 
 Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave as pontas da aresta ($u$~e~$v$) e armazena o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash($n$)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuirmos o objeto devolvido a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
@@ -120,7 +120,8 @@ Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newG
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+    G.L := $\left\lceil \lg n \right\rceil$ 
+    \textbf{para} $i$ := $1$ \textbf{até} G.L \textbf{faça}
         $G.F_i$ := \texttt{florestaDinâmica($n$)}
         $G.R_i$ := \texttt{listasDeAdjacências($n$)}
     G.nível := \texttt{novoMapaHash($n$)}
