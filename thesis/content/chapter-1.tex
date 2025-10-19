@@ -1188,7 +1188,7 @@ A rotina abaixo do Programa~\ref{prog:updateIsLevel-GD} é usada para alterar pa
 \end{programruledcaption}
 
 
-O Programa~\ref{prog:updateIsLevel-GD} consome tempo amortizado $\Oh(\lg n)$. Veja que este método não altera a floresta $F_i$, altera apenas uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
+Como se pode ver, o Programa~\ref{prog:updateIsLevelCount-GD} consome tempo $\Oh(1)$. Já Programa~\ref{prog:updateIsLevel-GD} consome tempo amortizado $\Oh(\lg n)$ por conta da operação \textit{splay}. Veja que ambos os métodos não alteram a floresta $F_i$, altera apenas uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasDeNível} de cada nó na árvore. Na nossa implementação, os vértices são identificados por inteiros de $1$ a $n$ e, para uma aresta $uv$, usamos o atributo \textit{éNível} apenas para o nó de $uv$ com $u < v$.
 
@@ -1280,9 +1280,55 @@ A rotina \texttt{procureArestaDeNível} será usada na rotina \texttt{substituaA
 
 Na rotina \texttt{substituaAresta}, para percorrermos as arestas reserva de nível $i$ incidentes a vértices da árvore $T_u$ em busca de uma aresta substituta, cada nó do tipo vértice $u$ (ou $uu$) possui um booleano chamado \textit{incideArestaReservaDeNível}, que indica se $u$ é uma das pontas de alguma aresta reserva de nível $i$. Dessa forma, se $uv$ é aresta reserva de nível $2$, então os nós de vértice de $u$ e de $v$ em $F_2$ terão o atributo \textit{incideArestaReservaDeNível} como verdadeiro. 
 
-Cada nó das florestas também guardará um contador \textit{arestasReservasDeNível}, que armazena a quantidade de nós em sua subárvore com o atributo \textit{incideArestaReservaDeNível} verdadeiro. Esse contador deve ser mantido atualizado quando é feita qualquer alteração em uma das árvores binárias que representam as florestas. Na nossa implementação, isso é feito na rotina \textit{splay}, sempre que essa executa uma rotação. 
+Cada nó das florestas também guardará um contador \textit{arestasReservasDeNível}, que armazena a quantidade de nós em sua subárvore com o atributo \textit{incideArestaReservaDeNível} verdadeiro. Esse contador deve ser mantido atualizado quando é feita qualquer alteração em uma das árvores binárias que representam as florestas. Na nossa implementação, a atualização é feita na operação \textit{splay}, sempre que essa executa uma rotação. 
 
-O método que mantém este contador se chama \texttt{atualizeArestasReservasDeNível} e está descrito no Programa~\ref{prog:updateReserveEdgesCount-GD}. 
+O campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reserva que possuem como uma da suas pontas o vértice $u$. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível} chamando \texttt{atualizeArestasReservasDeNível}, descrito no Programa~\ref{prog:updateReserveEdgesCount-GD} abaixo.  
+
+O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para falso quando ele não tem mais elementos em sua lista de adjacências, isto é, quando não há mais nenhuma aresta reserva incidente nele. A assinatura \texttt{R[u]} retorna o conjunto de vizinhos da lista de adjacências de $u$.
+
+\begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível($F$, $R$, $u$)} \label{prog:decrementReserveEdgesCount-GD}}
+    \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $R$.\\
+    \noindent\textbf{Efeito}: Atualiza o campo \textit{incideArestaReservaDeNível} para falso se necessário.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+        ]
+        vérticeU := F.nó[u, u]
+        \textbf{se} R[u] = $\emptyset$ \textbf{então}
+            \texttt{splay($\emph{vérticeU}$)} 
+            vérticeU.incideArestaReservaDeNível := falso
+            \texttt{atualizeArestaReservaDeNível($\emph{vérticeU}$)}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para verdadeiro quando adicionamos um vértice $v$ na lista de adjacências de $u$ e $v$ é o primeiro elemento de sua lista de adjacências, pois isso indica que $u$ passa a ser incidente à aresta reserva $uv$.
+
+\begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível($F$, $R$, $u$)} \label{prog:incrementReserveEdgesCount-GD}}
+    \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $R$.\\
+    \noindent\textbf{Efeito}: Atualiza o campo \textit{incideArestaReservaDeNível} para verdadeiro se necessário.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    vérticeU := F.nó[u, u]
+    \textbf{se} |R[u]| = $1$ \textbf{então}
+        \texttt{splay($\emph{vérticeU}$)}
+        vérticeU.incideArestaReservaDeNível := verdadeiro
+        \texttt{atualizeArestaReservaDeNível($\emph{vérticeU}$)}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption} 
 
 \begin{programruledcaption}{\texttt{atualizeArestasReservasDeNível($p$)} \label{prog:updateReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um nó $p$.
@@ -1309,7 +1355,7 @@ O método que mantém este contador se chama \texttt{atualizeArestasReservasDeN�
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(1)$ em nossa implementação por conta das operações \textit{splay}. Como este método não altera a floresta $F_i$, altera apenas uma da árvores uma das árvores binárias que a representam, então as três invariantes são preservadas.
+O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(1)$. Já os Programas~\ref{prog:decrementReserveEdgesCount-GD} e \ref{prog:incrementReserveEdgesCount-GD} consomem tempo $\Oh(\lg n)$, amortizado em nossa implementação por conta das operações \textit{splay}. Como estes três métodos não alteram a floresta $F_i$, altera apenas uma da árvores uma das árvores binárias que a representam, então as três invariantes são preservadas. 
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasReservasDeNível} de cada nó na árvore.
 
@@ -1398,61 +1444,10 @@ Para resolver este problema de maneira eficiente, usa-se uma estratégia semelha
 
 Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, o consumo de tempo do Programa~\ref{prog:findReserveEdge-GD} é $\Oh(\lg n)$ (amortizado em nossa implementação, que sempre aciona a rotina \texttt{splay} no nó devolvido).
 
-O campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reserva que possuem como uma da suas pontas o vértice $u$. Portanto, mostraremos dois métodos que modificam este campo e atualizam o contador \textit{arestasReservasDeNível}. 
-
-O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para falso quando ele não tem mais elementos em sua lista de adjacências, isto é, quando não há mais nenhuma aresta reserva incidente nele. A assinatura \texttt{R[u]} retorna o conjunto de vizinhos da lista de adjacências de $u$.
-
-\begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível($F$, $R$, $u$)} \label{prog:decrementReserveEdgesCount-GD}}
-    \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $R$.\\
-    \noindent\textbf{Efeito}: Atualiza o campo \textit{incideArestaReservaDeNível} para falso se necessário.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-        ]
-        vérticeU := F.nó[u, u]
-        \textbf{se} R[u] = $\emptyset$ \textbf{então}
-            \texttt{splay($\emph{vérticeU}$)} 
-            vérticeU.incideArestaReservaDeNível := falso
-            \texttt{atualizeIncideArestaReservaDeNível($\emph{vérticeU}$)}
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
-
-Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para verdadeiro quando adicionamos um vértice $v$ na lista de adjacências de $u$ e $v$ é o primeiro elemento de sua lista de adjacências, pois isso indica que $u$ passa a ser incidente à aresta reserva $uv$.
-
-\begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível($F$, $R$, $u$)} \label{prog:incrementReserveEdgesCount-GD}}
-    \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $R$.\\
-    \noindent\textbf{Efeito}: Atualiza o campo \textit{incideArestaReservaDeNível} para verdadeiro se necessário.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    vérticeU := F.nó[u, u]
-    \textbf{se} |R[u]| = $1$ \textbf{então}
-        \texttt{splay($\emph{vérticeU}$)}
-        vérticeU.incideArestaReservaDeNível := verdadeiro
-        \texttt{atualizeIncideArestaReservaDeNível($\emph{vérticeU}$)}
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
-
-
-Os Programas~\ref{prog:decrementReserveEdgesCount-GD} e \ref{prog:incrementReserveEdgesCount-GD} consomem tempo $\Oh(\lg n)$, amortizado em nossa implementação. Como tais rotinas auxiliares não fazem nenhuma modificação nas florestas do grafo, então todas as invariantes são mantidas. 
-
-\subsection{Segunda versão da rotina de adição de arestas}
+\subsection{Versão completa da rotina de adição de arestas}
 \label{sec:code-edge-addition-second-version}
 
-Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adição de arestas (\texttt{adicioneGD}), apresentado no Programa~\ref{prog:addGD-version2}. 
+Nesta seção, apresentamos uma versão completa da rotina \texttt{adicioneGD} mostrada na Seção~\ref{prog:addGD}, para incorporar os atributos descritos nas seções anteriores.
 
 \begin{programruledcaption}{\texttt{adicioneGD($G$, $u$, $v$)} \label{prog:addGD-version2}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, com $u < v$. \\
@@ -1481,12 +1476,12 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos ajustar o método de adi
 
 Podemos notar algumas diferenças entre as duas versões de \texttt{adicioneGD}. As linhas $5$ e $6$ são necessárias para que os campos \textit {incideArestaReservaDeNível} e \textit{arestasReservasDeNível} dos vértices $u$ e $v$ estejam corretos, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ não eram incidentes a alguma aresta reserva (que seria $uv$), mas passaram a ser. Já a linha $9$ define o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro em $F_L$, quando ela é aresta da floresta. 
 
-Atualizamos os atributos desses nós que descrevemos para fazermos a remoção eficiente de arestas, cuja rotina será descrita também com ajustes na Seção~\ref{sec:code-edge-removal-second-version}. Note que o método \texttt{adicioneGD} continua tendo o mesmo consumo de tempo após esses ajustes. 
+Atualizamos os atributos desses nós que descrevemos para fazermos a remoção eficiente de arestas, cuja rotina será descrita também com ajustes na Seção~\ref{sec:code-edge-removal-second-version}. Note que o método \texttt{adicioneGD} do Programa~\ref{prog:addGD-version2} continua tendo o mesmo consumo de tempo do Programa~\ref{prog:addGD} após esses ajustes. 
 
-\subsection{Segunda versão da rotina de remoção de arestas}
+\subsection{Versão completa da rotina de remoção de arestas}
 \label{sec:code-edge-removal-second-version}
 
-Apresentada a Seção~\ref{sec:node-vertex}, precisamos também ajustar o método de remoção de arestas (\texttt{removaGD}), apresentado no Programa~\ref{prog:removeGD-version2}. 
+Nessa seção, apresentamos uma versão completa da rotina \texttt{removaGD} apresentada no Programa~\ref{prog:removeGD}, incorporando os atributos descritos na Seção~\ref{sec:node-vertex}. 
 
 \begin{programruledcaption}{\texttt{removaGD($G$, $u$, $v$)} \label{prog:removeGD-version2}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
@@ -1515,7 +1510,7 @@ Apresentada a Seção~\ref{sec:node-vertex}, precisamos também ajustar o métod
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $9$ e $10$ a mais. Tais linhas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} estejam corretas, visto que, ao remover uma aresta reserva, precisamos verificar se os vértices incidentes à ela ainda são incidentes a alguma outra. 
+A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $9$ e $10$ a mais. Tais linhas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} estejam corretos, visto que, ao remover uma aresta reserva, precisamos verificar se os vértices incidentes a ela ainda são incidentes a alguma outra aresta reserva de $R$.  
 
 Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir que consome tempo amortizado $\Oh(\lg^2 n)$. Consequentemente, \texttt{removaGD} também consumirá tempo amortizado $\Oh(\lg^2 n)$.
 
