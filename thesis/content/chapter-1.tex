@@ -124,7 +124,7 @@ Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newG
         $G.F_i$ := \texttt{florestaDinâmica($n$)}
         $G.R_i$ := \texttt{listasDeAdjacências($n$)}
     G.nível := \texttt{novoMapaHash($n$)}
-    devolva G
+    retorne G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -149,7 +149,7 @@ Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta cham
         escapeinside={(*@}{@*)},
     ]
     L := G.nivelMax
-    devolva \texttt{conectadosFD($G.F_L$, $u$, $v$)}
+    retorne \texttt{conectadosFD($G.F_L$, $u$, $v$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1262,11 +1262,11 @@ Lembre-se que a remoção de uma aresta $uv$ de nível $i$ da floresta $F_i$ que
         escapeinside={(*@}{@*)},
     ]
     \textbf{se} p.éNível \textbf{então}
-        devolva p
+        retorne p
     \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{e} p.esq.arestasDeNível > 0 \textbf{então}
-        devolva \texttt{procureArestaDeNível($\emph{p.esq}$)}
+        retorne \texttt{procureArestaDeNível($\emph{p.esq}$)}
     \textbf{senão}
-        devolva \texttt{procureArestaDeNível($\emph{p.dir}$)}
+        retorne \texttt{procureArestaDeNível($\emph{p.dir}$)}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1433,16 +1433,18 @@ Para resolver este problema de maneira eficiente, usa-se uma estratégia semelha
         escapeinside={(*@}{@*)},
     ]
     \textbf{se} p.incideArestaReservaDeNível \textbf{então}
-        devolva nó
+        retorne nó
     \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{e} p.esq.arestasReservasDeNível > 0 \textbf{então}
-        devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{p.esq}$)}
+        retorne \texttt{procureNóIncideArestaReservaDeNível($\emph{p.esq}$)}
     \textbf{senão}
-        devolva \texttt{procureNóIncideArestaReservaDeNível($\emph{p.dir}$)}
+        retorne \texttt{procureNóIncideArestaReservaDeNível($\emph{p.dir}$)}
 \end{lstlisting}
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
 Veja que o Programa~\ref{prog:findReserveEdge-GD} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, o consumo de tempo do Programa~\ref{prog:findReserveEdge-GD} é $\Oh(\lg n)$ (amortizado em nossa implementação, que sempre aciona a rotina \texttt{splay} no nó devolvido).
+
+A rotina \texttt{procureNóIncideArestaReservaDeNível} será usada na rotina \texttt{substituaAresta}, que será descrita na Seção~\ref{sec:replace-edge}.
 
 \subsection{Versão completa da rotina de adição de arestas}
 \label{sec:code-edge-addition-second-version}
@@ -1517,7 +1519,7 @@ Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir qu
 \subsection{Rotina de substituição de aresta}
 \label{sec:replace-edge}
 
-A rotina de substituição da aresta da floresta está descrita no Programa~\ref{prog:replaceGD}.
+A rotina de substituição da aresta \texttt{substituaAresta} está descrita no Programa~\ref{prog:replaceGD} abaixo, onde usaremos vários dos métodos auxiliares apresentados nas Seções~\ref{sec:node-edge} e \ref{sec:node-vertex}. Além disso, usaremos um método auxiliar chamado \texttt{rebaixeNívelDaAresta}, mas este será explicado no momento em que estivermos explicando cada trecho do código de \texttt{substituaAresta}.
 
 \begin{programruledcaption}{\texttt{substituaAresta($G$, $i$, $u$, $v$)} \label{prog:replaceGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
@@ -1533,17 +1535,21 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
     ]
     L := G.nivelMax
     \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
-        $T_u$ := \texttt{árvore($G.F_j.\emph{nó[u, u]}$)}
-        $T_v$ := \texttt{árvore($G.F_j.\emph{nó[v, v]}$)}    
-        \textbf{se} |$T_u$| > |$T_v$| \textbf{então}
+        $T_u$ := \texttt{splay($G.F_j.\emph{nó[u, u]}$)}  (*@\hfill $\triangleright$ torna o nó uu raiz de $T_u$@*)
+        $T_v$ := \texttt{splay($G.F_j.\emph{nó[v, v]}$)}  (*@\hfill $\triangleright$ torna o nó vv raiz de $T_v$@*)    
+        \textbf{se} $T_u$.tam > $T_v$.tam \textbf{então}
             u $\leftrightarrow$ v
             $T_u \leftrightarrow T_v$
-        \textbf{enquanto} raiz($T_u$).arestasDeNível > 0 \textbf{faça} 
-            arestaXY := \texttt{procureArestaDeNível(raiz($T_u$))}
-            \texttt{rebaixeNívelDaAresta($G$, $\emph{arestaXY}$, j)}
-        \textbf{enquanto} raiz($T_u$).arestasReservasDeNível > 0     \textbf{faça}
-            vérticeX := \texttt{procureNóIncideArestaReservaDeNível(raiz($T_u$))}
-            x := vérticeX[1]
+        \textbf{enquanto} $T_u$.arestasDeNível > 0 \textbf{faça} 
+            nóXY := \texttt{procureArestaDeNível($T_u$)}
+            \texttt{splay(\emph{nóXY})}
+            $T_u$ := nóXY
+            \texttt{rebaixeNívelDaAresta($G$, $\emph{nóXY}$, j)}
+        \textbf{enquanto} $T_u$.arestasReservasDeNível > 0     \textbf{faça}
+            nóXX := \texttt{procureNóIncideArestaReservaDeNível($T_u$)}
+            \texttt{splay($\emph{nóXX}$)}
+            $T_u$ := nóXX
+            x := nóXX.vértice1
             \textbf{para} $y \in G.R[x]$ \textbf{faça}
                 \texttt{removaLA($G.R_j$, $x$, $y$)} 
                 \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} 
@@ -1557,12 +1563,12 @@ A rotina de substituição da aresta da floresta está descrita no Programa~\ref
                     \textbf{se} x > y \textbf{então}
                         x $\leftrightarrow$ y
                     \texttt{atualizeÉNível($G.F_j$, $x$, $y$, $\textbf{verdadeiro}$)}
-                    \textbf{devolva}
+                    \textbf{retorne}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Para explicar o Programa~\ref{prog:replaceGD}, descreveremos a função de cada trecho do código. Vamos assumir que estamos aplicando as operações de remoção em um grafo $G$ de $n$ vértices. Lembre-se que, ao removermos uma aresta $uv$ da floresta de nível $i$, precisamos procurar uma substituta partindo de $R_i$, e se não encontrarmos, passamos a buscar em $R_{i + 1}, \ldots, R_L$. A linha $1$ faz exatamente essa iteração sobre os níveis $i$ até $L$. Para evitarmos a confusão de usar $i$ ou $j$ (como está escrito no Programa~\ref{prog:replaceGD}), usaremos o ponteiro $j$ para explicar cada trecho do código já que é ele que está iterando sobre o intervalo $[i, \ldots, L]$. Então assumiremos que estamos removendo a $uv$ de nível $j$, para $j = i, \ldots , L$.
+Para explicar o \texttt{substituaAresta} do Programa~\ref{prog:replaceGD}, descreveremos a função de cada trecho do código. Vamos assumir de início que estamos aplicando as operações de remoção em um grafo $G$ de $n$ vértices. Lembre-se que, ao removermos uma aresta $uv$ da floresta de nível $i$, precisamos procurar uma substituta partindo de $R_i$, e se não encontrarmos, passamos a buscar em $R_{i + 1}, \ldots, R_L$. A linha $1$ faz exatamente essa iteração sobre os níveis $i$ até $L$. Para evitarmos a confusão de usar $i$ ou $j$ (como está escrito no Programa~\ref{prog:replaceGD}), usaremos o ponteiro $j$ para explicar cada trecho do código já que é ele que está iterando sobre o intervalo $[i, \ldots, L]$. Então assumiremos que estamos removendo a $uv$ de nível $j$, para $j = i, \ldots , L$.
 
 Nas linhas $2$ e $3$, obtemos as árvores $T_u$ e $T_v$, que foram derivadas da floresta $F_j$, já que uma componente desta foi quebrada em duas após a remoção de $uv$. O método auxiliar \texttt{árvore($\textit{nó}$)} apenas retorna a árvore que contém nó, e consome tempo amortizado $\Oh(\lg n)$ em nossa implementação. As linhas $4$ a $6$ garantem que $|T_u| \leq |T_v|$. 
 
