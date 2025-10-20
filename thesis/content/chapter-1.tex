@@ -1476,7 +1476,7 @@ Nesta seção, apresentamos uma versão completa da rotina \texttt{adicioneGD} m
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Podemos notar algumas diferenças entre as duas versões de \texttt{adicioneGD}. As linhas $5$ e $6$ são necessárias para que os campos \textit {incideArestaReservaDeNível} e \textit{arestasReservasDeNível} dos vértices $u$ e $v$ estejam corretos, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ não eram incidentes a alguma aresta reserva (que seria $uv$), mas passaram a ser. Já a linha $9$ define o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro em $F_L$, quando ela é aresta da floresta. 
+Nesta versão final, veja que as linhas $5$ e $6$ são necessárias para que os campos \textit {incideArestaReservaDeNível} e \textit{arestasReservasDeNível} dos vértices $u$ e $v$ estejam corretos, pois ao adicionar uma aresta reserva $uv$, precisamos verificar se $u$ e $v$ não eram incidentes a alguma aresta reserva (que seria $uv$), mas passaram a ser. Já a linha $9$ define o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro em $F_L$, quando ela é aresta da floresta. 
 
 Atualizamos os atributos desses nós que descrevemos para fazermos a remoção eficiente de arestas, cuja rotina será descrita também com ajustes na Seção~\ref{sec:code-edge-removal-second-version}. Note que o método \texttt{adicioneGD} do Programa~\ref{prog:addGD-version2} continua tendo o mesmo consumo de tempo do Programa~\ref{prog:addGD} após esses ajustes. 
 
