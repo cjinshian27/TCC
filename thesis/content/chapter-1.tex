@@ -1130,7 +1130,7 @@ Os nós das árvores de busca binária que representam as sequências Eulerianas
 
 Como representamos uma Euler tour tree por uma árvore binária de busca, cada nó $p$ possui apontadores para o filho esquerdo, filho direito e seu pai. Na descrição de nossa implementação, denotamos tais apontadores por \textit{p.esq}, \textit{p.dir} e \textit{p.pai}, respectivamente. O motivo de usar o apontador para o pai é por conta da operação \texttt{splay} quando a aplicamos em algum nó.
 
-Além disso, para extrairmos as pontas de um nó de aresta $p$ que representa $xy$, usamos a assinatura \textit{p.vértice1} e \textit{p.vértice2}, que guardam os valores  $x$ e $y$, respectivamente. Em nós de vértice $q$ que representam $xx$, \textit{q.vértice1} guarda o mesmo valor do \textit{q.vértice2}, ou seja, ambos armazenam $x$. Extrair as pontas dos nós será útil quando descrevermos o método \texttt{substituaAresta} na Seção~\ref{sec:replace-edge}. 
+Além disso, para extrairmos as pontas de um nó de aresta $p$ que representa $xy$, usamos a assinatura \textit{p.vértice1} e \textit{p.vértice2}, que guardam os valores  $x$ e $y$, respectivamente. Em nós de vértice $q$ que representam $xx$, \textit{q.vértice1} guarda o mesmo valor do \textit{q.vértice2}, ou seja, ambos armazenam $x$. Extrair as pontas dos nós será importante como veremos em vários métodos posteriormente. 
 
 A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
