@@ -92,7 +92,7 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
 
-Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, primeiro armazenamos o nível máximo do grafo, no caso o valor de $\left\lceil \lg n \right\rceil$, numa variável do grafo chamada \textit{nivelMax}, onde podemos extrair e usar o valor do nível máximo chamando \textit{G.nivelMax}. Em seguida, chamamos a rotina \texttt{grafoDinâmico($n$)}, que por sua vez chamará \texttt{florestaDinâmica($n$)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências($n$)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
+Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, primeiro armazenamos o nível máximo do grafo, no caso o valor de $\left\lceil \lg n \right\rceil$, numa variável do grafo chamada \textit{nívelMax}, onde podemos extrair e usar o valor do nível máximo chamando \textit{G.nívelMax}. Em seguida, chamamos a rotina \texttt{grafoDinâmico($n$)}, que por sua vez chamará \texttt{florestaDinâmica($n$)}, criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências($n$)}, criando $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
 
 Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave as pontas da aresta ($u$~e~$v$) e armazena o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash($n$)} que devolve um mapa hash vazio para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuirmos o objeto devolvido a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
@@ -119,7 +119,7 @@ Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newG
         escapeinside={(*@}{@*)},
     ]
     L := $\left\lceil \lg n \right\rceil$
-    G.nivelMax := L
+    G.nívelMax := L
     \textbf{para} $i$ := $1$ \textbf{até} L \textbf{faça}
         $G.F_i$ := \texttt{florestaDinâmica($n$)}
         $G.R_i$ := \texttt{listasDeAdjacências($n$)}
@@ -148,7 +148,7 @@ Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta cham
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    L := G.nivelMax
+    L := G.nívelMax
     retorne \texttt{conectadosFD($G.F_L$, $u$, $v$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -285,7 +285,7 @@ O Programa~\ref{prog:addGD} ilustra uma primeira versão da rotina \texttt{adici
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    L := G.nivelMax
+    L := G.nívelMax
     G.$\emph{nível[u, v]}$ := L
     \textbf{se} \texttt{conectadosFD($G.F_L$, $u$, $v$)} \textbf{então}
         \texttt{adicioneLA($G.R_L$, $u$, $v$)}
@@ -937,7 +937,7 @@ Em particular, essa rotina deve percorrer as arestas da floresta e as arestas re
     ]
     i := G.$\emph{nível[u, v]}$
     $\emph{nível[u, v]}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
-    L := G.nivelMax
+    L := G.nívelMax
     \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
         \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
@@ -1463,7 +1463,7 @@ Nesta seção, apresentamos uma versão completa da rotina \texttt{adicioneGD} m
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    L := G.nivelMax
+    L := G.nívelMax
     G.$\emph{nível[u, v]}$ := $L$
     \textbf{se} \texttt{conectadosFD($G.F_{L}$, $u$, $v$)} \textbf{então}
         \texttt{adicioneLA($G.R_{L}$, $u$, $v$)}
@@ -1497,7 +1497,7 @@ Nessa seção, apresentamos uma versão completa da rotina \texttt{removaGD} apr
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    L := G.nivelMax
+    L := G.nívelMax
     i := G.$\emph{nível[u, v]}$
     $\emph{nível[u, v]}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
     \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
@@ -1519,7 +1519,7 @@ Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir qu
 \subsection{Rotina de substituição de aresta}
 \label{sec:replace-edge}
 
-A rotina de substituição da aresta \texttt{substituaAresta} está descrita no Programa~\ref{prog:replaceGD} abaixo, onde usaremos vários dos métodos auxiliares apresentados nas Seções~\ref{sec:node-edge} e \ref{sec:node-vertex}. Além disso, usaremos um método auxiliar chamado \texttt{rebaixeNívelDaAresta}, mas este será explicado no momento em que estivermos explicando cada trecho do código de \texttt{substituaAresta}.
+A rotina de substituição da aresta \texttt{substituaAresta} está descrita no Programa~\ref{prog:replaceGD} abaixo, onde usaremos vários dos métodos auxiliares apresentados nas Seções~\ref{sec:node-edge} e \ref{sec:node-vertex}. Além disso, usaremos dois métodos auxiliares chamados \texttt{rebaixeNívelDaAresta} e \texttt{procureSubstituta}, que serão explicados de maneira detalhada no momento em que estivermos explicando cada trecho do código de \texttt{substituaAresta}.
 
 \begin{programruledcaption}{\texttt{substituaAresta($G$, $i$, $u$, $v$)} \label{prog:replaceGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
@@ -1533,12 +1533,11 @@ A rotina de substituição da aresta \texttt{substituaAresta} está descrita no 
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    L := G.nivelMax
+    L := G.nívelMax
     \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
         $T_u$ := \texttt{splay($G.F_j.\emph{nó[u, u]}$)}  (*@\hfill $\triangleright$ torna o nó uu raiz de $T_u$@*)
         $T_v$ := \texttt{splay($G.F_j.\emph{nó[v, v]}$)}  (*@\hfill $\triangleright$ torna o nó vv raiz de $T_v$@*)    
         \textbf{se} $T_u$.tam > $T_v$.tam \textbf{então}
-            u $\leftrightarrow$ v
             $T_u \leftrightarrow T_v$
         \textbf{enquanto} $T_u$.arestasDeNível > 0 \textbf{faça} 
             nóXY := \texttt{procureArestaDeNível($T_u$)}
@@ -1551,18 +1550,7 @@ A rotina de substituição da aresta \texttt{substituaAresta} está descrita no 
             $T_u$ := nóXX
             x := nóXX.vértice1
             \textbf{para} $y \in G.R[x]$ \textbf{faça}
-                \texttt{removaLA($G.R_j$, $x$, $y$)} 
-                \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} 
-                    G.$\emph{nível[x, y]}$ := j - 1
-                    \texttt{adicioneLA($G.R_{j-1}$, $x$, $y$)}
-                    \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
-                    \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
-                \textbf{senão}
-                    \textbf{para} k := j \textbf{até} $L$ \textbf{faça}
-                        \texttt{adicioneFD($G.F_k$, $x$, $y$)}
-                    \textbf{se} x > y \textbf{então}
-                        x $\leftrightarrow$ y
-                    \texttt{atualizeÉNível($G.F_j$, $x$, $y$, $\textbf{verdadeiro}$)}
+                se \texttt{procureSubstituta($G$, $x$, $y$, $j$)} = \textbf{verdadeiro} \textbf{então} 
                     \textbf{retorne}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -1596,6 +1584,37 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
     \texttt{adicioneFD($G.F_{j-1}$, $x$, $y$)}
     \texttt{atualizeÉNível($G.F_{j - 1}$, $x$, $y$, \textbf{verdadeiro})}
 
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+\begin{programruledcaption}{\texttt{procureSubstituta($G$, $x$, $y$, $j$)} \label{prog:find-substitute}}
+    \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta $p$ que é raiz de uma árvore e o nível $j$.\\
+    \textbf{Efeito}: Rebaixa o nível do nó de aresta.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    \texttt{removaLA($G.R_j$, $x$, $y$)} 
+    \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ o nó xy não é substituta@*)
+        G.$\emph{nível[x, y]}$ := j - 1
+        \texttt{adicioneLA($G.R_{j-1}$, $x$, $y$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
+        \textbf{retorne falso}
+    \textbf{senão} (*@\hfill $\triangleright$ o nó xy é substituta@*)
+        L := G.nívelMax
+        \textbf{para} k := j \textbf{até} $L$ \textbf{faça}
+            \texttt{adicioneFD($G.F_k$, $x$, $y$)}
+        \textbf{se} x > y \textbf{então}
+            x $\leftrightarrow$ y
+        \texttt{atualizeÉNível($G.F_j$, $x$, $y$, $\textbf{verdadeiro}$)}
+        \textbf{retorne verdadeiro}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
