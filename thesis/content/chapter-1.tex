@@ -1284,7 +1284,7 @@ Cada nó das florestas também guardará um contador \textit{arestasReservasDeN�
 
 O campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ pode mudar de valor quando houver inserções e remoções de arestas reserva que possuem como uma da suas pontas o vértice $u$. Portanto, mostraremos dois métodos, \texttt{incrementeArestasReservasDeNível} e \texttt{decrementeArestasReservasDeNível}, que modificam este campo e atualizam o contador \textit{arestasReservasDeNível} chamando \texttt{atualizeArestasReservasDeNível}, descrito no Programa~\ref{prog:updateReserveEdgesCount-GD} abaixo.  
 
-O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para falso quando ele não tem mais elementos em sua lista de adjacências, isto é, quando não há mais nenhuma aresta reserva incidente nele. A assinatura \texttt{R[u]} retorna o conjunto de vizinhos da lista de adjacências de $u$.
+O método \texttt{decrementeArestasReservasDeNível} do Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para falso quando ele não tem mais elementos em sua lista de adjacências, isto é, quando não há mais nenhuma aresta reserva incidente nele. A assinatura \texttt{R[u]} retorna o conjunto de vizinhos da lista de adjacências de $u$.
 
 \begin{programruledcaption}{\texttt{decrementeArestasReservasDeNível($F$, $R$, $u$)} \label{prog:decrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $R$.\\
@@ -1307,7 +1307,7 @@ O Programa~\ref{prog:decrementReserveEdgesCount-GD} atualiza o campo \textit{inc
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Já o Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para verdadeiro quando adicionamos um vértice $v$ na lista de adjacências de $u$ e $v$ é o primeiro elemento de sua lista de adjacências, pois isso indica que $u$ passa a ser incidente à aresta reserva $uv$.
+Já o método \texttt{incrementeArestasReservasDeNível} do Programa~\ref{prog:incrementReserveEdgesCount-GD} atualiza o atributo \textit{incideArestaReservaDeNível} de um nó de vértice $u$ para verdadeiro quando adicionamos um vértice $v$ na lista de adjacências de $u$ e $v$ é o primeiro elemento de sua lista de adjacências, pois isso indica que $u$ passa a ser incidente à aresta reserva $uv$.
 
 \begin{programruledcaption}{\texttt{incrementeArestasReservasDeNível($F$, $R$, $u$)} \label{prog:incrementReserveEdgesCount-GD}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$ da floresta $F$ e uma lista de adjacências $R$.\\
