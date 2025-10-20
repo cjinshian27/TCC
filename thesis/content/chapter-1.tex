@@ -1519,7 +1519,7 @@ Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir qu
 \subsection{Rotina de substituição de aresta}
 \label{sec:replace-edge}
 
-A rotina de substituição da aresta \texttt{substituaAresta} está descrita no Programa~\ref{prog:replaceGD} abaixo, onde usaremos vários dos métodos auxiliares apresentados nas Seções~\ref{sec:node-edge} e \ref{sec:node-vertex}. Além disso, usaremos dois métodos auxiliares chamados \texttt{rebaixeNívelDaAresta} e \texttt{procureSubstituta}, que serão explicados de maneira detalhada no momento em que estivermos explicando cada trecho do código de \texttt{substituaAresta}.
+A rotina de substituição da aresta \texttt{substituaAresta} está descrita no Programa~\ref{prog:replaceGD} abaixo, onde usaremos vários dos métodos auxiliares apresentados nas Seções~\ref{sec:node-edge} e \ref{sec:node-vertex}. Além disso, usaremos dois métodos auxiliares chamados \texttt{rebaixeNívelDaAresta} e \texttt{testeSubstituta}, que serão explicados de maneira detalhada no momento em que estivermos explicando cada trecho do código de \texttt{substituaAresta}.
 
 \begin{programruledcaption}{\texttt{substituaAresta($G$, $i$, $u$, $v$)} \label{prog:replaceGD}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
@@ -1550,7 +1550,7 @@ A rotina de substituição da aresta \texttt{substituaAresta} está descrita no 
             $T_u$ := nóXX
             x := nóXX.vértice1
             \textbf{para} $y \in G.R_j[x]$ \textbf{faça}
-                se \texttt{procureSubstituta($G$, $x$, $y$, $j$)} = \textbf{verdadeiro} \textbf{então} 
+                se \texttt{testeSubstituta($G$, $x$, $y$, $j$)} = \textbf{verdadeiro} \textbf{então} 
                     \textbf{retorne}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
@@ -1593,11 +1593,11 @@ Voltando ao Programa~\ref{prog:replaceGD}, nas linhas $12$ a $19$ procuramos por
 
 Na linha $13$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide em uma das arestas reserva de nível $i$. Depois, acionamos \texttt{splay} em $xx$ e atualizamos $T_u$. Como tanto $\emph{nó.vértice1}$ quanto $\emph{nó.vértice2}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $17$, pois queremos testar se $xy$ é uma potencial aresta substituta.
 
-Para isso, chamamos o método auxiliar \texttt{procureSubstituta} na linha $18$, descrito no Programa~\ref{prog:find-substitute}. Como o nome sugere, o método procura uma aresta substituta $xy$, devolvendo verdadeiro se existir uma e falso caso contrário. Quando o método devolve verdadeiro, chegamos na linha $19$ do Programa~\ref{prog:replaceGD}, terminando o algoritmo. Caso contrário, continuamos percorrendo os vizinhos $y$ da lista de adjacências de $x$ e chamando o mesmo método várias vezes.
+Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $18$, descrito no Programa~\ref{prog:find-substitute}. Como o nome sugere, o método testa se $xy$ é uma substituta, devolvendo verdadeiro se existir uma e falso caso contrário. Quando o método devolve verdadeiro, chegamos na linha $19$ do Programa~\ref{prog:replaceGD}, terminando o algoritmo. Caso contrário, continuamos percorrendo os vizinhos $y$ da lista de adjacências de $x$ e chamando o mesmo método várias vezes.
 
-\begin{programruledcaption}{\texttt{procureSubstituta($G$, $x$, $y$, $j$)} \label{prog:find-substitute}}
-    \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta $p$ que é raiz de uma árvore e o nível $j$.\\
-    \textbf{Efeito}: Rebaixa o nível do nó de aresta.
+\begin{programruledcaption}{\texttt{testeSubstituta($G$, $x$, $y$, $j$)} \label{prog:find-substitute}}
+    \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ do nó $xy$ e o nível $j$.\\
+    \textbf{Saída}: Devolve verdadeiro se o nó $xy$ é substituta e falso caso contrário.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
