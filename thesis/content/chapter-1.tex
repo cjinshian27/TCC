@@ -1541,7 +1541,7 @@ A rotina de substituição da aresta \texttt{substituaAresta} está descrita no 
             $T_u \leftrightarrow T_v$
         \textbf{enquanto} $T_u$.arestasDeNível > 0 \textbf{faça} 
             nóXY := \texttt{procureArestaDeNível($T_u$)}
-            \texttt{splay(\emph{nóXY})}
+            \texttt{splay($\emph{nóXY}$)}
             $T_u$ := nóXY
             \texttt{rebaixeNívelDaAresta($G$, $\emph{nóXY}$, j)}
         \textbf{enquanto} $T_u$.arestasReservasDeNível > 0     \textbf{faça}
