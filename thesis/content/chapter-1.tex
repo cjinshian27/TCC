@@ -1549,7 +1549,7 @@ A rotina de substituição da aresta \texttt{substituaAresta} está descrita no 
             \texttt{splay($\emph{nóXX}$)}
             $T_u$ := nóXX
             x := nóXX.vértice1
-            \textbf{para} $y \in G.R[x]$ \textbf{faça}
+            \textbf{para} $y \in G.R_j[x]$ \textbf{faça}
                 se \texttt{procureSubstituta($G$, $x$, $y$, $j$)} = \textbf{verdadeiro} \textbf{então} 
                     \textbf{retorne}
     \end{lstlisting}
@@ -1558,12 +1558,11 @@ A rotina de substituição da aresta \texttt{substituaAresta} está descrita no 
 
 Para explicar o \texttt{substituaAresta} do Programa~\ref{prog:replaceGD}, descreveremos a função de cada trecho do código. Vamos assumir de início que estamos aplicando as operações de remoção em um grafo $G$ de $n$ vértices. Lembre-se que, ao removermos uma aresta $uv$ da floresta de nível $i$, precisamos procurar uma substituta partindo de $R_i$, e se não encontrarmos, passamos a buscar em $R_{i + 1}, \ldots, R_L$. A linha $2$ faz exatamente essa iteração sobre os níveis $i$ até $L$. Para evitarmos a confusão de usar $i$ ou $j$ (como está escrito no Programa~\ref{prog:replaceGD}), usaremos o ponteiro $j$ para explicar cada trecho do código já que é ele que está iterando sobre o intervalo $[i, \ldots, L]$. Então assumiremos que estamos removendo a $uv$ de nível $j$, para $j = i, \ldots , L$.
 
-Nas linhas $3$ e $4$, obtemos as árvores $T_u$ e $T_v$, que foram derivadas da floresta $F_j$, já que uma componente desta foi quebrada em duas após a remoção de $uv$. As operações \texttt{splay} puxam os nós $u$ e $v$ para raiz de $T_u$ e $T_v$, respectivamente. As linhas $5$ e $6$ garantem que $|T_u| \leq |T_v|$ como já discutido na Seção~\ref{sec:dynamic-graph-edge-removal}. O atributo \textit{tam}, que existe em todos os nós da floresta, guarda o número de nós em sua subárvore. Com isso conseguimos saber o tamanho de $T_u$ e de $T_v$.
+Nas linhas $3$ e $4$, obtemos as árvores $T_u$ e $T_v$, que foram derivadas da floresta $F_j$, já que uma componente desta foi quebrada em duas após a remoção de $uv$. As operações \texttt{splay} puxam os nós $u$ e $v$ para raiz de $T_u$ e $T_v$, respectivamente. As linhas $5$ e $6$ garantem que $|T_u| \leq |T_v|$ como já discutido na Seção~\ref{sec:dynamic-graph-edge-removal}. O atributo \textit{tam}, que existe em todos os nós da floresta, guarda o número de nós na subárvore de cada nó. Com isso conseguimos obter o tamanho de $T_u$ e de $T_v$ facilmente.
 
-Das linhas $7$ a $9$, realizamos o processo de rebaixar todas arestas de $T_u$ de nível $j$. Na linha $7$, temos um laço \textit{while} que terminará quando rebaixarmos todas as arestas de nível $j$, isto é, quando o contador \textit{arestasDeNível} do nó raiz de $T_u$ zerar. Para obter a raiz de $T_u$, usamos um outro mapa hash chamado \texttt{raiz}, que mapeia cada árvore ao seu respectivo nó raiz. Então \texttt{raiz(T)} retorna o nó raiz da árvore $T$, e tal mapeamento consome tempo esperado constante.
+Das linhas $7$ a $11$, realizamos o processo de rebaixar todas arestas de $T_u$ de nível $j$. Na linha $7$, temos um laço que terminará quando rebaixarmos todas as arestas de nível $j$, isto é, quando o contador \textit{arestasDeNível} do nó raiz de $T_u$ estiver zerado. 
 
-Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que retornará um nó de aresta de nível $j$, ou seja, que possui o \textit{éNível} verdadeiro. Para cada nó de aresta retornado, rebaixamos-o chamando o método \texttt{rebaixeNívelDaAresta}, descrito no Programa~\ref{prog:decrease-edge-level}.
-
+Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que retornará um nó de aresta de nível $j$, ou seja, que possui o \textit{éNível} verdadeiro. Para cada nó de aresta retornado, acionamos \texttt{splay} nele e atualizamos $T_u$, e, em seguida, rebaixamos-o chamando o método \texttt{rebaixeNívelDaAresta}, descrito no Programa~\ref{prog:decrease-edge-level}.
 
 \begin{programruledcaption}{\texttt{rebaixeNívelDaAresta($G$, $p$, $j$)} \label{prog:decrease-edge-level}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta $p$ que é raiz de uma árvore e o nível $j$.\\
@@ -1587,6 +1586,14 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
+
+No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. Note que o nó $p$ é raiz de sua árvore pois foi feito uma splay neste nó antes. No nosso código, chamamos as duas pontas do nó de aresta $xy$ e atribuímos às variáveis $x$ e $y$. Ademais, como rebaixamos $xy$ de $F_j$ para $F_{j - 1}$, então em $F_j$ atualizamos o seu atributo \textit{éNível} para falso, e em $F_{j-1}$ atualizamos este atributo para verdadeiro. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$.
+
+Voltando ao Programa~\ref{prog:replaceGD}, nas linhas $12$ a $19$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço que terminará quando não existir mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver zerado) ou quando achamos uma aresta substituta.  
+
+Na linha $13$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide em uma das arestas reserva de nível $i$. Depois, acionamos \texttt{splay} em $xx$ e atualizamos $T_u$. Como tanto $\emph{nó.vértice1}$ quanto $\emph{nó.vértice2}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $17$, pois queremos testar se $xy$ é uma potencial aresta substituta.
+
+Para isso, chamamos o método auxiliar \texttt{procureSubstituta} na linha $18$, descrito no Programa~\ref{prog:find-substitute}. Como o nome sugere, o método procura uma aresta substituta $xy$, devolvendo verdadeiro se existir uma e falso caso contrário. Quando o método devolve verdadeiro, chegamos na linha $19$ do Programa~\ref{prog:replaceGD}, terminando o algoritmo. Caso contrário, continuamos percorrendo os vizinhos $y$ da lista de adjacências de $x$ e chamando o mesmo método várias vezes.
 
 \begin{programruledcaption}{\texttt{procureSubstituta($G$, $x$, $y$, $j$)} \label{prog:find-substitute}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta $p$ que é raiz de uma árvore e o nível $j$.\\
@@ -1619,17 +1626,11 @@ Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que 
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. Note que o nó $p$ é raiz de sua árvore pois foi feito uma splay neste nó antes. No nosso código, chamamos as duas pontas do nó de aresta $xy$ e atribuímos às variáveis $x$ e $y$. Ademais, como rebaixamos $xy$ de $F_j$ para $F_{j - 1}$, então em $F_j$ atualizamos o seu atributo \textit{éNível} para falso, e em $F_{j-1}$ atualizamos este atributo para verdadeiro. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$.
+No Programa~\ref{prog:find-substitute}, a linha $1$ remove a aresta reserva $xy$ de $R_j$, independentemente se tal aresta é substituta ou não, pois ou ela será rebaixada, ou será uma aresta substituta, que será incluída em $F_j$. Se $xy$ não é substituta, então ela é rebaixada para $R_{j-1}$, como visto na Seção~\ref{sec:dynamic-graph-edge-removal}. Se ela é substituta, então se tornará uma aresta da floresta de nível $j$ conectando $T_u$ a $T_v$.
 
-Voltando ao Programa~\ref{prog:replaceGD}, as linhas $10$ a $26$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço que terminará quando não existir mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver zerado) ou quando achamos uma aresta substituta.  
+As linhas $2$ a $7$ englobam o caso em que os vértices $x$ e $y$ estão em $T_u$, isto é, quando \texttt{conectadosGD(G, x, y)} retorna verdadeiro. Isso quer dizer que $xy$ não é uma aresta substituta, e por isso precisamos rebaixá-la de $R_j$ para $R_{j-1}$, além de atualizar os atributos dos nós de vértice $x$ e $y$ em $F_{j-1}$ ao acionar \texttt{incideArestaReservaDeNível} e \texttt{arestasReservasDeNível}. Devolvemos falso porque, neste caso, $xy$ não é aresta substituta.
 
-Na linha $11$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide em uma das arestas reserva de nível $i$. Como tanto $\emph{nó.vértice1}$ quanto $\emph{nó.vértice2}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $13$, pois queremos testar se $xy$ é uma potencial aresta substituta.
-
-A linha $14$ remove a aresta reserva $xy$ de $R_j$, independentemente se tal aresta é substituta ou não, pois ou ela será rebaixada, ou será uma aresta substituta, que será incluída em $F_j$. Se $xy$ não é substituta, então ela é rebaixada para $R_{j-1}$, como visto na Seção~\ref{sec:dynamic-graph-edge-removal}. Se ela é substituta, então se tornará uma aresta da floresta de nível $j$ conectando $T_u$ a $T_v$.
-
-As linhas $15$ a $19$ englobam o caso em que os vértices $x$ e $y$ estão em $T_u$, isto é, quando \texttt{conectadosGD(G, x, y)} retorna verdadeiro. Isso quer dizer que $xy$ não é uma aresta substituta, e por isso precisamos rebaixá-la de $R_j$ para $R_{j-1}$, além de atualizar os atributos dos nós de vértice $x$ e $y$ em $F_{j-1}$ ao acionar \texttt{incideArestaReservaDeNível} e \texttt{arestasReservasDeNível}.
-
-Veja que~\texttt{conectadosGD(G, x, y)} só devolverá falso quando $x$ está em $T_u$ e $y$ está em $T_v$, pois assim os dois vértices estariam em componentes separadas da floresta $F_j$. Este caso, abordado nas linhas $20$ a $26$ do Programa~\ref{prog:replaceGD}, mostra que encontramos $xy$ como uma aresta substituta, e finalizamos o algoritmo incluindo $xy$ em todas as florestas $F_k$, para $k = j, \ldots, L$, para manter a invariante~\ref{invariant2}. Além disso, se a aresta substituta encontrada é de nível $j$, precisamos atualizar o atributo \textit{éNível} do nó desta aresta em $F_j$ para verdadeiro quando a adicionamos na floresta $F_j$, como acontece na linha $25$.
+Veja que~\texttt{conectadosGD(G, x, y)} só devolverá falso quando $x$ está em $T_u$ e $y$ está em $T_v$, pois assim os dois vértices estariam em componentes separadas da floresta $F_j$. Este caso, abordado nas linhas $8$ a $15$ do Programa~\ref{prog:find-substitute}, mostra que encontramos $xy$ como uma aresta substituta, e finalizamos o algoritmo incluindo $xy$ em todas as florestas $F_k$, para $k = j, \ldots, L$, para manter a invariante~\ref{invariant2}. Além disso, se a aresta substituta encontrada é de nível $j$, precisamos atualizar o atributo \textit{éNível} do nó desta aresta em $F_j$ para verdadeiro quando a adicionamos na floresta $F_j$, como acontece na linha $25$. Por fim, devolvemos verdadeiro pois achamos uma aresta substituta.
 
 Agora iremos explicar por que a rotina \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$. A amortização ocorre em uma sequência de $a$ inserções e $b$ remoções de arestas. Mostraremos que o custo total destas $a + b$ operações é $\Oh((a + b) \lg^2 n)$, o que resulta em um custo amortizado por operação de $\Oh(\lg^2 n)$. 
 
