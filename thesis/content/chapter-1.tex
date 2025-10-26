@@ -1536,8 +1536,8 @@ A rotina de substituição da aresta \texttt{substituaAresta} está descrita no 
     ]
     L := $\dotvar{G}{nívelMax}$
     \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
-        $T_u$ := \texttt{splay($G.F_j.\emph{nó[u, u]}$)}  (*@\hfill $\triangleright$ torna o nó uu raiz de $T_u$@*)
-        $T_v$ := \texttt{splay($G.F_j.\emph{nó[v, v]}$)}  (*@\hfill $\triangleright$ torna o nó vv raiz de $T_v$@*)    
+        $T_u$ := \texttt{splay($G.F_j.\emph{nó}[u, u]$)}  (*@\hfill $\triangleright$ torna o nó $uu$ raiz de $T_u$@*)
+        $T_v$ := \texttt{splay($G.F_j.\emph{nó}[v, v]$)}  (*@\hfill $\triangleright$ torna o nó $vv$ raiz de $T_v$@*)    
         \textbf{se} $T_u$.tam > $T_v$.tam \textbf{então}
             $T_u \leftrightarrow T_v$
         \textbf{enquanto} $T_u$.arestasDeNível > 0 \textbf{faça} 
