@@ -1587,15 +1587,15 @@ Nas linhas $7$ a $11$, realizamos o processo de rebaixar arestas de $T_u$ de ní
 
 No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. Note que o nó $p$ é raiz de sua árvore pois foi feito um splay neste nó antes da chamada a \texttt{rebaixeNívelDaAresta}, na linha $9$ do Programa~\ref{prog:replaceGD}. Ademais, como rebaixamos $xy$ de $F_j$ para $F_{j - 1}$, então em $F_j$ atualizamos o seu atributo \textit{éNível} para falso, e em $F_{j-1}$ atualizamos este atributo para verdadeiro. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$.
 
-Voltando ao Programa~\ref{prog:replaceGD}, nas linhas $12$ a $19$ procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço que terminará quando não existir mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver zerado) ou quando achamos uma aresta substituta.  
+Voltando ao Programa~\ref{prog:replaceGD}, nas linhas $12$ a $19$, procuramos por uma aresta substituta de nível $j$. Similarmente à linha $7$, a linha $10$ é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta.  
 
-Na linha $13$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide em uma das arestas reserva de nível $i$. Depois, acionamos \texttt{splay} em $xx$ e atualizamos $T_u$. Como tanto $\emph{nó.vértice1}$ quanto $\emph{nó.vértice2}$ retornam $x$ para um nó de vértice $xx$, escolhemos o primeiro para podermos percorrer todos os vizinhos $y$ de lista de adjacências de $x$ na linha $17$, pois queremos testar se $xy$ é uma potencial aresta substituta.
+Na linha $13$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vertice $xx$ que incide em alguma aresta reserva de nível $j$. Depois, acionamos \texttt{splay} em $xx$ e atualizamos $T_u$. Na linha $16$, obtemos o vértice $x$ do nó $xx$ e percorremos todos os vizinhos $y$ de de $x$ na lista de adjacências na linha $17$, pois queremos testar se $xy$ é uma aresta substituta.
 
-Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $18$, descrito no Programa~\ref{prog:find-substitute}. Como o nome sugere, o método testa se $xy$ é uma substituta, devolvendo verdadeiro se $xy$ for uma substituta e falso caso contrário. Quando o método devolve verdadeiro, chegamos na linha $19$ do Programa~\ref{prog:replaceGD}, terminando o algoritmo. Caso contrário, continuamos percorrendo os vizinhos $y$ da lista de adjacências de $x$ e chamando o mesmo método várias vezes.
+Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $18$, descrito no Programa~\ref{prog:find-substitute}. Como o nome sugere, o método testa se $xy$ é uma aresta substituta, devolvendo verdadeiro se $xy$ for e falso caso contrário. Quando o método devolve verdadeiro, chegamos à linha $19$ do Programa~\ref{prog:replaceGD}, terminando o algoritmo. Caso contrário, continuamos percorrendo os vizinhos $y$ da lista de adjacências de $x$ e chamando o mesmo método várias vezes.
 
 \begin{programruledcaption}{\texttt{testeSubstituta($G$, $x$, $y$, $j$)} \label{prog:find-substitute}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ do nó $xy$ e o nível $j$.\\
-    \textbf{Saída}: Devolve verdadeiro se o nó $xy$ é substituta e falso caso contrário.
+    \textbf{Saída}: Devolve verdadeiro se a aresta $xy$ é substituta e falso caso contrário.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -1606,13 +1606,13 @@ Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $18$, d
         escapeinside={(*@}{@*)},
     ]
     \texttt{removaLA($G.R_j$, $x$, $y$)} 
-    \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ o nó xy não é substituta@*)
+    \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta xy não é substituta@*)
         $\dotvarm{G}{nível}{x, y}$ := j - 1
         \texttt{adicioneLA($G.R_{j-1}$, $x$, $y$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
         \textbf{retorne falso}
-    \textbf{senão} (*@\hfill $\triangleright$ o nó xy é substituta@*)
+    \textbf{senão} (*@\hfill $\triangleright$ a aresta xy é substituta@*)
         L := $\dotvar{G}{nívelMax}$
         \textbf{para} k := j \textbf{até} $L$ \textbf{faça}
             \texttt{adicioneFD($G.F_k$, $x$, $y$)}
@@ -1626,7 +1626,7 @@ Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $18$, d
 
 No Programa~\ref{prog:find-substitute}, a linha $1$ remove a aresta reserva $xy$ de $R_j$, independentemente se tal aresta é substituta ou não, pois ou ela será rebaixada, ou será uma aresta substituta, que será incluída em $F_j$. Se $xy$ não é substituta, então ela é rebaixada para $R_{j-1}$, como visto na Seção~\ref{sec:dynamic-graph-edge-removal}. Se ela é substituta, então se tornará uma aresta da floresta de nível $j$ conectando $T_u$ a $T_v$.
 
-As linhas $2$ a $7$ englobam o caso em que os vértices $x$ e $y$ estão em $T_u$, isto é, quando \texttt{conectadosGD(G, x, y)} retorna verdadeiro. Isso quer dizer que $xy$ não é uma aresta substituta, e por isso precisamos rebaixá-la de $R_j$ para $R_{j-1}$, além de atualizar os atributos dos nós de vértice $x$ e $y$ em $F_{j-1}$ ao acionar \texttt{incideArestaReservaDeNível} e \texttt{arestasReservasDeNível}. Devolvemos falso porque, neste caso, $xy$ não é aresta substituta.
+As linhas $2$ a $7$ englobam o caso em que os vértices $x$ e $y$ estão em $T_u$, isto é, quando \texttt{conectadosGD(G, x, y)} retorna verdadeiro. Isso quer dizer que $xy$ não é uma aresta substituta, e por isso precisamos rebaixá-la de $R_j$ para $R_{j-1}$, além de atualizar os atributos dos nós de vértice $x$ e $y$ em $F_{j-1}$ ao acionar \texttt{incrementeArestasReservasDeNível}. Devolvemos falso porque, neste caso, $xy$ não é aresta substituta.
 
 Veja que~\texttt{conectadosGD(G, x, y)} só devolverá falso quando $x$ está em $T_u$ e $y$ está em $T_v$, pois assim os dois vértices estariam em componentes separadas da floresta $F_j$. Este caso, abordado nas linhas $8$ a $15$ do Programa~\ref{prog:find-substitute}, mostra que encontramos $xy$ como uma aresta substituta, e finalizamos o algoritmo incluindo $xy$ em todas as florestas $F_k$, para $k = j, \ldots, L$, para manter a invariante~\ref{invariant2}. Além disso, se a aresta substituta encontrada é de nível $j$, precisamos atualizar o atributo \textit{éNível} do nó desta aresta em $F_j$ para verdadeiro quando a adicionamos na floresta $F_j$, como acontece na linha $14$. Por fim, devolvemos verdadeiro pois, neste caso, achamos uma aresta substituta.
 
