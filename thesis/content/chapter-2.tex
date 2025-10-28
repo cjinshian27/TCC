@@ -173,3 +173,101 @@ O método \texttt{conectadosMSF}, que está descrito abaixo, é igual ao \texttt
 
 Da mesma forma que em \texttt{conectadosGD}, a rotina \texttt{conectadosMSF} também consome tempo amortizado $\Oh(\lg n)$. Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação neles. Isso implica que as três invariantes são mantidas. 
 
+\subsection{Remoção de arestas na MSF decremental}
+\label{sec:decremental-MSF-edge-removal}
+
+A remoção de arestas também é semelhante à do algoritmo de conexidade em grafos dinâmicos. A diferença é que a busca por alguma aresta substituta agora é por ordem de peso das arestas reserva. Quando removemos uma aresta $uv$ da floresta, procuramos por alguma substituta de peso mínimo global dentre todas as reserva, de modo a manter o peso da MST do grafo e ainda conectar as duas componentes separadas devido à remoção de $uv$. 
+
+A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement-msf1}, temos um grafo $G$ de $n = 10$ vértices. Para facilitar, assumiremos que, até o momento, só houve inserções de arestas. 
+
+\begin{figure}[H]
+    \centering
+
+    \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $4$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+        [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {$u$};
+        \node[node] (a) at (-3,4) {$a$};
+        \node[node] (b) at (-5,2) {$b$};
+        \node[node] (c) at (-3,0) {$c$};
+        \node[node] (v) at (2,2) {$v$};
+        \node[node] (d) at (3,3.7) {$d$};
+        \node[node] (e) at (3,0.3) {$e$};
+        \node[node] (f) at (5,0.3) {$f$};
+        \node[node] (g) at (6, 2) {$g$};
+        \node[node] (h) at (5, 3.7) {$h$};
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
+        % reserve edges (normal red edges)
+        
+        \draw[removed] (u) -- (v) node[midway, below] {};
+        \draw[reserve] (a) -- (d) node[midway, below] {};
+        \draw[reserve] (c) -- (v) node[midway, below] {};
+        \draw[reserve] (b) -- (u) node[midway, below] {};
+        \draw[reserve] (c) -- (u) node[midway, below] {};
+        \draw[reserve] (d) -- (f) node[midway, below] {};
+        \draw[reserve] (d) -- (h) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \vspace{1cm}
+        \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $3$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+            [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {$u$};
+            \node[node] (a) at (-3,4) {$a$};
+            \node[node] (b) at (-5,2) {$b$};
+            \node[node] (c) at (-3,0) {$c$};
+            \node[node] (v) at (2,2) {$v$};
+            \node[node] (d) at (3,3.7) {$d$};
+            \node[node] (e) at (3,0.3) {$e$};
+            \node[node] (f) at (5,0.3) {$f$};
+            \node[node] (g) at (6, 2) {$g$};
+            \node[node] (h) at (5, 3.7) {$h$};
+            
+            %\draw[edge] (a) -- (u) node[midway, below] {};
+            %\draw[edge] (a) -- (b) node[midway, below] {};
+            %\draw[edge] (b) -- (c) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \caption{Um grafo $G$ de 10 vértices, onde as arestas pretas são da floresta $F_4$, enquanto as vermelhas são reservas. A aresta $uv$ está prestes a ser removida. A floresta $F_{4}$ de $G$ de cima contém todas as arestas pretas recém-inseridas e as arestas vermelhas estão em $R_4$. A floresta de baixo é a $F_{3}$, com os vértices isolados, e $R_3$ também não tem nenhuma aresta.}
+    \vspace{-1cm}
+    \label{fig:example-replacement-msf1}
+\end{figure}
