@@ -112,12 +112,12 @@ A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecr
     \texttt{ordene($E$)} (*@\hfill $\triangleright$ ordena as arestas do conjunto $E$ em ordem crescente@*)
     \textbf{para cada aresta} ($u$, $v$, $p$) \textbf{em} $E$ \textbf{faça}
         \texttt{adicioneMSF}($G$, $u$, $v$, $p$)
-    devolva G
+    \textbf{retorne} G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Podemos notar algumas diferenças quando comparamos o método \texttt{MSFDecremental} com o \texttt{grafoDinâmico}. Na MSF decremental, ordenamos arestas do conjunto $E$ em ordem crescente e inserimos uma a uma chamando \texttt{adicioneMSF}, que está descrito abaixo.
+Podemos notar algumas diferenças quando comparamos o construtor \texttt{MSFDecremental} com o \texttt{grafoDinâmico}. Na MSF decremental, ordenamos arestas do conjunto $E$ em ordem crescente e inserimos uma a uma chamando \texttt{adicioneMSF}, que está descrito abaixo.
 
 \begin{programruledcaption}{\texttt{adicioneMSF($G$, $u$, $v$, $p$)} \label{prog:addMSF}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, com $u < v$, e o peso $p$ da aresta $uv$. \\
