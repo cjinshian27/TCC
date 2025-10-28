@@ -176,38 +176,15 @@ Da mesma forma que em \texttt{conectadosGD}, a rotina \texttt{conectadosMSF} tam
 \subsection{Remoção de arestas na MSF decremental}
 \label{sec:decremental-MSF-edge-removal}
 
-A remoção de arestas também é semelhante à do algoritmo de conexidade em grafos dinâmicos. A diferença é que a busca por alguma aresta substituta, feita na \texttt{substituaArestaMSF} agora, é dada por ordem crescente de peso das arestas reserva. Quando removemos uma aresta $uv$ de nível $i$ em $F_i$, procuramos por alguma reserva de peso mínimo global dentre todas as reserva dm $R_i$, e testamos se ela é uma substituta. Se não, a rebaixamos para $R_{i-1}$ e buscamos a próxima de peso mínimo global em $R_i$. Assim, quando achamos uma substituta, conseguimos manter o peso da MST do grafo e ainda reconectar as duas componentes separadas devido à remoção de $uv$. 
+A remoção de arestas também é semelhante à do algoritmo de conexidade em grafos dinâmicos. A diferença é que a busca por alguma aresta substituta, feita na \texttt{substituaArestaMSF} agora, é dada por ordem crescente de peso das arestas reserva. 
 
-O método \texttt{removaMSF} está descrito abaixo. Como se pode ver, não há alterações em sua estrutura se comparado com \texttt{removaGD} exceto na mudança de nomes de alguns métodos.
+Quando removemos uma aresta $uv$ de nível $i$ em $F_i$, quebramos uma componente desta floresta em $T_u$ e $T_v$, com $|T_u| \leq |T_v|$, e rebaixamos todas as arestas de $T_u$, da mesma forma como fazíamos antes em \texttt{substituaAresta}. Porém, agora procuramos por alguma reserva de peso mínimo dentre todas as reserva em $R_i$, e testamos se ela é uma substituta. Se não, a rebaixamos para $R_{i-1}$ e buscamos a próxima de peso mínimo em $R_i$. Assim, quando achamos uma substituta, conseguimos manter o peso da MST do grafo e ainda reconectar as duas componentes separadas devido à remoção de $uv$. 
 
-\begin{programruledcaption}{\texttt{removaMSF($G$, $u$, $v$)} \label{prog:removeGD-version-msf}}
-    \noindent\textbf{Entrada}: Recebe dois vértices adjacentes $u$ e $v$ do grafo $G$. \\
-    \noindent\textbf{Efeito}: Remove a aresta $uv$ do grafo $G$. 
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    L := $\dotvar{G}{nívelMax}$
-    i := $\dotvarm{G}{nível}{u,v}$
-    $\dotvarm{G}{nível}{u,v}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos $uv$ como removida@*)
-    \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ $uv$ é aresta da floresta@*)
-        \textbf{para} j := i \textbf{até} L \textbf{faça}
-            \texttt{removaFD($G.F_j$, $u$, $v$)}
-        \texttt{substituaArestaMSF($G$, $i$, $u$, $v$)}
-    \textbf{senão} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
-        \texttt{removaLAMSF($G.R_i$, $u$, $v$)}
-        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $u$)}
-        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $v$)}
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
+Para facilitar o entendimento da substituição de aresta na MSF decremental, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement-msf1}, temos um grafo ponderado $G$ de $n = 10$ vértices. Para facilitar, assumiremos que, até o momento, só houve inserções de arestas. 
 
-A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement-msf1}, temos um grafo $G$ de $n = 10$ vértices. Para facilitar, assumiremos que, até o momento, só houve inserções de arestas. 
+Temos também que $n = 10$ e $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só acontecem no nível $L$, no momento, em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
+
+\tikzset{weight/.style={font=\small, inner sep=1pt, fill=white}}
 
 \begin{figure}[H]
     \centering
@@ -244,24 +221,23 @@ A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma séri
         \node at (-3,-1.1) {$T_u$};
         \node at (4,-1.1) {$T_v$};
 
-        % tree edges (normal black edges)
-        \draw[edge] (a) -- (u) node[midway, below] {};
-        \draw[edge] (a) -- (b) node[midway, below] {};
-        \draw[edge] (b) -- (c) node[midway, below] {};
-        \draw[edge] (v) -- (d) node[midway, below] {};
-        \draw[edge] (v) -- (f) node[midway, below] {};
-        \draw[edge] (v) -- (e) node[midway, below] {};
-        \draw[edge] (f) -- (g) node[midway, below] {};
-        \draw[edge] (g) -- (h) node[midway, below] {};
+        \draw[edge] (a) -- (u) node[midway, above, weight] {1};
+        \draw[edge] (a) -- (b) node[midway, above, weight] {2};
+        \draw[edge] (b) -- (c) node[midway, above, weight] {3};
+        \draw[edge] (v) -- (d) node[pos=0.45, above, yshift=-2pt, weight] {4}; % adjusted
+        \draw[edge] (v) -- (f) node[midway, above, weight] {5};
+        \draw[edge] (v) -- (e) node[midway, above, yshift=-3pt, weight] {6}; % adjusted
+        \draw[edge] (f) -- (g) node[midway, above, yshift=-3pt, weight] {7}; % adjusted
+        \draw[edge] (g) -- (h) node[midway, below, yshift=3pt, weight] {8}; % adjusted
+
         % reserve edges (normal red edges)
-        
-        \draw[removed] (u) -- (v) node[midway, below] {};
-        \draw[reserve] (a) -- (d) node[midway, below] {};
-        \draw[reserve] (c) -- (v) node[midway, below] {};
-        \draw[reserve] (b) -- (u) node[midway, below] {};
-        \draw[reserve] (c) -- (u) node[midway, below] {};
-        \draw[reserve] (d) -- (f) node[midway, below] {};
-        \draw[reserve] (d) -- (h) node[midway, below] {};
+        \draw[removed] (u) -- (v) node[midway, above, weight] {9};
+        \draw[reserve] (a) -- (d) node[midway, above, yshift=0pt, weight] {14};
+        \draw[reserve] (c) -- (v) node[pos=0.6, below, yshift=-1pt, weight] {15}; % adjusted
+        \draw[reserve] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
+        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=2pt, weight] {13}; % adjusted
+        \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
 
         \end{tikzpicture}
     \end{minipage}
@@ -296,7 +272,235 @@ A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma séri
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Um grafo $G$ de 10 vértices, onde as arestas pretas são da floresta $F_4$, enquanto as vermelhas são reservas. A aresta $uv$ está prestes a ser removida. A floresta $F_{4}$ de $G$ de cima contém todas as arestas pretas recém-inseridas e as arestas vermelhas estão em $R_4$. A floresta de baixo é a $F_{3}$, com os vértices isolados, e $R_3$ também não tem nenhuma aresta.}
+    \caption{Um grafo ponderado $G$ de 10 vértices, onde as arestas pretas são da floresta $F_4$, enquanto as vermelhas são reservas. A aresta $uv$ está prestes a ser removida. A floresta $F_{4}$ de $G$ de cima contém todas as arestas pretas recém-inseridas e as arestas vermelhas estão em $R_4$. A floresta de baixo é a $F_{3}$, com os vértices isolados, e $R_3$ também não tem nenhuma aresta.}
     \vspace{-1cm}
     \label{fig:example-replacement-msf1}
 \end{figure}
+
+O próximo passo é rebaixar o nível de todas as arestas de nível~$4$ em $T_u$ para o nível~$3$. Dessa forma, as arestas de $T_u$ passam a estar em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement-msf2}, pois agora elas passam a ser de nível $3$.  
+
+\begin{figure}[H]
+    \centering
+
+    \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $4$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+        [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {$u$};
+        \node[node] (a) at (-3,4) {$a$};
+        \node[node] (b) at (-5,2) {$b$};
+        \node[node] (c) at (-3,0) {$c$};
+        \node[node] (v) at (2,2) {$v$};
+        \node[node] (d) at (3,3.7) {$d$};
+        \node[node] (e) at (3,0.3) {$e$};
+        \node[node] (f) at (5,0.3) {$f$};
+        \node[node] (g) at (6, 2) {$g$};
+        \node[node] (h) at (5, 3.7) {$h$};
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        \draw[edge] (a) -- (u) node[midway, above, weight] {1};
+        \draw[edge] (a) -- (b) node[midway, above, weight] {2};
+        \draw[edge] (b) -- (c) node[midway, above, weight] {3};
+        \draw[edge] (v) -- (d) node[pos=0.45, above, yshift=-2pt, weight] {4}; % adjusted
+        \draw[edge] (v) -- (f) node[midway, above, weight] {5};
+        \draw[edge] (v) -- (e) node[midway, above, yshift=-3pt, weight] {6}; % adjusted
+        \draw[edge] (f) -- (g) node[midway, above, yshift=-3pt, weight] {7}; % adjusted
+        \draw[edge] (g) -- (h) node[midway, below, yshift=3pt, weight] {8}; % adjusted
+
+        % reserve edges (normal red edges)
+        \draw[reserve] (a) -- (d) node[midway, above, yshift=0pt, weight] {14};
+        \draw[reserve] (c) -- (v) node[pos=0.6, below, yshift=-1pt, weight] {15}; % adjusted
+        \draw[reserve] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
+        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=2pt, weight] {13}; % adjusted
+        \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \vspace{1cm}
+        \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $3$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+            [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {$u$};
+            \node[node] (a) at (-3,4) {$a$};
+            \node[node] (b) at (-5,2) {$b$};
+            \node[node] (c) at (-3,0) {$c$};
+            \node[node] (v) at (2,2) {$v$};
+            \node[node] (d) at (3,3.7) {$d$};
+            \node[node] (e) at (3,0.3) {$e$};
+            \node[node] (f) at (5,0.3) {$f$};
+            \node[node] (g) at (6, 2) {$g$};
+            \node[node] (h) at (5, 3.7) {$h$};
+            
+            \draw[edge] (a) -- (u) node[midway, above, weight] {1};
+            \draw[edge] (a) -- (b) node[midway, above, weight] {2};
+            \draw[edge] (b) -- (c) node[midway, above, weight] {3};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \caption{Representação da remoção da aresta $uv$ em $G$. As arestas de nível $4$ de $T_u$ foram rebaixadas para o nível $3$, o que pode ser visto na floresta $F_{3}$.}
+    \vspace{-1cm}
+    \label{fig:example-replacement-msf2}
+\end{figure}
+
+Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos encontrar, se existir, uma aresta reserva que possa reconectá-las. Note que agora precisamos percorrer as arestas reserva em ordem de peso. Entretanto, percorrer todas as arestas reservas de $R_4$ e selecionar a de menor peso é ineficiente, e por isso explicaremos como implementar essa busca por uma aresta substituta de menor peso na Seção~\ref{sec:forest-node-adjustments}.
+
+Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em ordem de peso em $R_4$ que tenham uma das pontas em~$T_u$. Assim, olhamos para as arestas reserva, que não são substitutas, em $R_4$ nesta ordem: $df$ (peso $10$), $dh$ (peso $11$), $bu$ (peso $12$), $uc$ (peso $13$). Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. Caso não incida, a aresta tem duas pontas em $T_u$, pois $F_4$ era maximal antes da remoção de $uv$, e logo a aresta não é uma substituta.  Então a rebaixamos para o nível $3$, ou seja, movemos de $R_4$ para $R_3$ as arestas  percorridas que não são substitutas.
+
+\begin{figure}[H]
+    \centering
+
+    \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $4$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+        [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed},
+        reserveremoved/.style={red, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {$u$};
+        \node[node] (a) at (-3,4) {$a$};
+        \node[node] (b) at (-5,2) {$b$};
+        \node[node] (c) at (-3,0) {$c$};
+        \node[node] (v) at (2,2) {$v$};
+        \node[node] (d) at (3,3.7) {$d$};
+        \node[node] (e) at (3,0.3) {$e$};
+        \node[node] (f) at (5,0.3) {$f$};
+        \node[node] (g) at (6, 2) {$g$};
+        \node[node] (h) at (5, 3.7) {$h$};
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        \draw[edge] (a) -- (u) node[midway, above, weight] {1};
+        \draw[edge] (a) -- (b) node[midway, above, weight] {2};
+        \draw[edge] (b) -- (c) node[midway, above, weight] {3};
+        \draw[edge] (v) -- (d) node[pos=0.45, above, yshift=-2pt, weight] {4}; % adjusted
+        \draw[edge] (v) -- (f) node[midway, above, weight] {5};
+        \draw[edge] (v) -- (e) node[midway, above, yshift=-3pt, weight] {6}; % adjusted
+        \draw[edge] (f) -- (g) node[midway, above, yshift=-3pt, weight] {7}; % adjusted
+        \draw[edge] (g) -- (h) node[midway, below, yshift=3pt, weight] {8}; % adjusted
+
+        % reserve edges (normal red edges)
+        \draw[reserve] (a) -- (d) node[midway, above, yshift=0pt, weight] {14};
+        \draw[reserve] (c) -- (v) node[pos=0.6, below, yshift=-1pt, weight] {15}; % adjusted
+        
+        \draw[reserveremoved] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
+        \draw[reserveremoved] (c) -- (u) node[pos=0.4, above, yshift=2pt, weight] {13}; % adjusted
+        \draw[reserveremoved] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
+        \draw[reserveremoved] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \vspace{1cm}
+        \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $3$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+            [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {$u$};
+            \node[node] (a) at (-3,4) {$a$};
+            \node[node] (b) at (-5,2) {$b$};
+            \node[node] (c) at (-3,0) {$c$};
+            \node[node] (v) at (2,2) {$v$};
+            \node[node] (d) at (3,3.7) {$d$};
+            \node[node] (e) at (3,0.3) {$e$};
+            \node[node] (f) at (5,0.3) {$f$};
+            \node[node] (g) at (6, 2) {$g$};
+            \node[node] (h) at (5, 3.7) {$h$};
+            
+            \draw[edge] (a) -- (u) node[midway, above, weight] {1};
+            \draw[edge] (a) -- (b) node[midway, above, weight] {2};
+            \draw[edge] (b) -- (c) node[midway, above, weight] {3};
+                    \draw[reserve] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
+        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=2pt, weight] {13}; % adjusted
+        \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \caption{Representação da busca por uma aresta substituta em $R_4$. As arestas reserva de nível $4$ que estão tracejadas foram percorridas e estão prestes a ser removidas de $R_4$, pois foram rebaixadas para o nível $3$, como se pode ver em $R_3$.}
+    \vspace{-1cm}
+    \label{fig:example-replacement-msf3}
+\end{figure}
+
+
+
+O método \texttt{removaMSF} está descrito abaixo. Como se pode ver, não há alterações em sua estrutura se comparado com \texttt{removaGD}, exceto na mudança de nomes de alguns métodos.
+
+\begin{programruledcaption}{\texttt{removaMSF($G$, $u$, $v$)} \label{prog:removeGD-version-msf}}
+    \noindent\textbf{Entrada}: Recebe dois vértices adjacentes $u$ e $v$ do grafo $G$. \\
+    \noindent\textbf{Efeito}: Remove a aresta $uv$ do grafo $G$. 
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    L := $\dotvar{G}{nívelMax}$
+    i := $\dotvarm{G}{nível}{u,v}$
+    $\dotvarm{G}{nível}{u,v}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos $uv$ como removida@*)
+    \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ $uv$ é aresta da floresta@*)
+        \textbf{para} j := i \textbf{até} L \textbf{faça}
+            \texttt{removaFD($G.F_j$, $u$, $v$)}
+        \texttt{substituaArestaMSF($G$, $i$, $u$, $v$)}
+    \textbf{senão} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
+        \texttt{removaLAMSF($G.R_i$, $u$, $v$)}
+        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $u$)}
+        \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $v$)}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+O método \texttt{substituaArestaMSF} será descrito mais em frente, mas veremos que ele consome tempo amortizado $\Oh(\lg^2 n)$, e assim \texttt{removaMSF} também irá consumir tempo amortizado $\Oh(\lg^2 n)$.
+
+\subsection{Ajustes em nós da floresta}
+\label{sec:forest-node-adjustments}
