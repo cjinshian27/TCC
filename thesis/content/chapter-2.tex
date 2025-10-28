@@ -103,7 +103,9 @@ A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecr
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \textbf{para} $i$ := $1$ \textbf{até} $\left\lceil \lg n \right\rceil$ \textbf{faça}
+    L := $\left\lceil \lg n \right\rceil$
+    $\dotvar{G}{nívelMax}$ := L
+    \textbf{para} $i$ := $1$ \textbf{até} $L$ \textbf{faça}
         $G.F_i$ := \texttt{florestaDinâmica($n$)}
         $G.R_i$ := \texttt{listasDeAdjacênciasMinHeap($n$)}
     G.nível := \texttt{novoMapaHash($n$)}
