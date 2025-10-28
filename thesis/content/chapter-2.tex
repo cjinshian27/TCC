@@ -92,8 +92,8 @@ Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descre
 A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecrementalMSF}, é bem parecida com a do grafo dinâmico, descrita na Seção~\ref{sec:dynamic-graph-creation}. 
 
 \begin{programruledcaption}{\texttt{MSFDecremental($n$, $E$)} \label{prog:newDecrementalMSF}}
-    \noindent\textbf{Entrada}: Recebe o número $n$ de vértices do grafo. \\
-    \textbf{Saída}: Devolve um grafo $G$ com $n$ vértices e sem arestas.
+    \noindent\textbf{Entrada}: Recebe o número $n$ de vértices do grafo e um conjunto de arestas $E$. \\
+    \textbf{Saída}: Devolve um grafo $G$ com $n$ vértices e $m$ arestas ponderadas.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
