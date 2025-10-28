@@ -1500,12 +1500,12 @@ Nessa seção, apresentamos uma versão completa da rotina \texttt{removaGD} apr
     ]
     L := $\dotvar{G}{nívelMax}$
     i := $\dotvarm{G}{nível}{u,v}$
-    $\dotvarm{G}{nível}{u,v}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos uv como removida@*)
-    \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ uv é aresta da floresta@*)
+    $\dotvarm{G}{nível}{u,v}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos $uv$ como removida@*)
+    \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ $uv$ é aresta da floresta@*)
         \textbf{para} j := i \textbf{até} L \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
         \texttt{substituaAresta($G$, $i$, $u$, $v$)}
-    \textbf{senão} (*@\hfill $\triangleright$ uv é aresta reserva@*)
+    \textbf{senão} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
         \texttt{removaLA($G.R_i$, $u$, $v$)}
         \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $u$)}
         \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $v$)}
