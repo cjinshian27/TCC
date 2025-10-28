@@ -108,7 +108,7 @@ A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecr
     \textbf{para} $i$ := $1$ \textbf{até} $L$ \textbf{faça}
         $G.F_i$ := \texttt{florestaDinâmica($n$)}
         $G.R_i$ := \texttt{listasDeAdjacênciasMinHeap($n$)}
-    G.nível := \texttt{novoMapaHash($n$)}
+    $\dotvar{G}{nível}$ := \texttt{novoMapaHash($n$)}
     \texttt{ordene($E$)} (*@\hfill $\triangleright$ ordena as arestas do conjunto $E$ em ordem crescente@*)
     \textbf{para cada aresta} ($u$, $v$, $p$) \textbf{em} $E$ \textbf{faça}
         \texttt{adicioneMSF}($G$, $u$, $v$, $p$)
