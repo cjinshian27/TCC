@@ -176,7 +176,9 @@ Da mesma forma que em \texttt{conectadosGD}, a rotina \texttt{conectadosMSF} tam
 \subsection{Remoção de arestas na MSF decremental}
 \label{sec:decremental-MSF-edge-removal}
 
-A remoção de arestas também é semelhante à do algoritmo de conexidade em grafos dinâmicos. A diferença é que a busca por alguma aresta substituta agora é por ordem de peso das arestas reserva. Quando removemos uma aresta $uv$ da floresta, procuramos por alguma substituta de peso mínimo global dentre todas as reserva, de modo a manter o peso da MST do grafo e ainda reconectar as duas componentes separadas devido à remoção de $uv$. 
+A remoção de arestas também é semelhante à do algoritmo de conexidade em grafos dinâmicos. A diferença é que a busca por alguma aresta substituta, feita na \texttt{substituaArestaMSF} agora, é dada por ordem crescente de peso das arestas reserva. Quando removemos uma aresta $uv$ da floresta, procuramos por alguma reserva de peso mínimo global dentre todas as reserva dm $R_i$, e testamos se ela é uma substituta. Se não, a rebaixamos para $R_{i-1}$ e buscamos a próxima de peso mínimo global de $R_i$. Assim, quando achamos uma substituta, conseguimos manter o peso da MST do grafo e ainda reconectar as duas componentes separadas devido à remoção de $uv$. 
+
+O método \texttt{removaMSF} está descrito abaixo. Como se pode ver, não há alterações em sua estrutura além da mudança de nomes de alguns métodos.
 
 \begin{programruledcaption}{\texttt{removaMSF($G$, $u$, $v$)} \label{prog:removeGD-version-msf}}
     \noindent\textbf{Entrada}: Recebe dois vértices adjacentes $u$ e $v$ do grafo $G$. \\
