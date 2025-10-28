@@ -142,7 +142,7 @@ Podemos notar algumas diferenças quando comparamos o método \texttt{MSFDecreme
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como mencionado antes, a rotina \texttt{adicioneMSF} é acionada exclusivamente em \texttt{MSFDecremental}. Além disso, a única diferença entre a \texttt{adicioneMSF} e a \texttt{adicioneGD} que vimos é que, na primeira, estamos guardando o peso das arestas quando as inserimos no grafo. Portanto, da mesma forma que em \texttt{adicioneGD}, as três invariantes são preservadas já que estamos sempre inserindo arestas com nível $\left\lceil \lg n \right\rceil$ e as florestas inferiores não são afetadas com a inserção.
+Como mencionado antes, a rotina \texttt{adicioneMSF} é acionada exclusivamente em \texttt{MSFDecremental}. Além disso, a única diferença entre a \texttt{adicioneMSF} e a \texttt{adicioneGD} que vimos é que, na primeira, estamos guardando o peso das arestas quando as inserimos no grafo. Portanto, ambas consomem o mesmo tempo amortizado $\Oh(\lg n)$ e as três invariantes são preservadas ao acionar \texttt{adicioneMSF}, já que estamos sempre inserindo arestas com nível $\left\lceil \lg n \right\rceil$ em $F_L$ e as florestas de níveis inferiores não são afetadas com a inserção.
 
 \section{Adição de arestas}
 \label{sec:edge-addition-DecrementalMSF}
