@@ -146,5 +146,30 @@ Podemos notar algumas diferenças quando comparamos o método \texttt{MSFDecreme
 
 Como mencionado antes, a rotina \texttt{adicioneMSF} é acionada exclusivamente em \texttt{MSFDecremental}. Além disso, a única diferença entre a \texttt{adicioneMSF} e a \texttt{adicioneGD} que vimos é que, na primeira, estamos guardando o peso das arestas quando as inserimos no grafo. Portanto, ambas consomem o mesmo tempo amortizado $\Oh(\lg n)$ e as três invariantes são preservadas ao acionar \texttt{adicioneMSF}, já que estamos sempre inserindo arestas com nível $\left\lceil \lg n \right\rceil$ em $F_L$ e as florestas de níveis inferiores não são afetadas com a inserção.
 
-\section{Adição de arestas}
-\label{sec:edge-addition-DecrementalMSF}
+\subsection{Consultas de conexidade na MSF decremental}
+\label{sec:connectivity-test-MSF}
+
+O corpo do método \texttt{conectadosMSF}, que está descrito abaixo, é igual ao do \texttt{conectadosGD}. Mudamos somente o nome para ficar coerente com os nomes dos métodos da biblioteca da MSF decremental. 
+
+\begin{programruledcaption}{\texttt{conectadosMSF($G$, $u$, $v$)} \label{prog:connectedMSF}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
+    \textbf{Saída}: Devolve um booleano indicando se $u$ e $v$ estão conectados em $G$.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    L := $\dotvar{G}{nívelMax}$
+    retorne \texttt{conectadosFD($G.F_L$, $u$, $v$)}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+\raggedbottom
+
+Da mesma forma que em \texttt{conectadosGD}, a rotina \texttt{conectadosMSF} também consome tempo amortizado $\Oh(\lg n)$. Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação neles. Isso implica que as três invariantes são mantidas. 
+
