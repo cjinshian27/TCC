@@ -469,7 +469,7 @@ Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em 
     \label{fig:example-replacement-msf3}
 \end{figure}
 
-Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$, de peso $14$. Como ela conecta $T_u$ a $T_v$, chamamos \texttt{adicioneFD($F_4$, a, d)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para os níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement-msf4} ilustra essa etapa do algoritmo. 
+Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$, de peso $14$. Como ela conecta $T_u$ a $T_v$, chamamos \texttt{adicioneFD($F_4$, $a$, $d$, $14$)} e $ad$ passa a ser uma aresta da floresta de peso $14$, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para os níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement-msf4} ilustra essa etapa do algoritmo. 
 
 \begin{figure}[H]
     \centering
