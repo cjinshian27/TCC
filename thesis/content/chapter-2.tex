@@ -46,7 +46,7 @@ Implementar o algoritmo decremental para florestas geradoras maximais de custo m
 
 Note que, diferente da biblioteca do algoritmo de conexidade em grafos dinâmicos, apresentada na Seção~\ref{sec:dynamic-graph-routines}, na MSF decremental não temos um método equivalente a \texttt{adicioneGD} disponível para o usuário. Em nossa implementação \cite{chung2025}, para criarmos um grafo $G$ de $n$ vértices e $m$ arestas ponderadas dadas no conjunto $E$, chamamos \texttt{MSFDecremental($n$, $E$)}, onde inserimos $n$ vértices isolados e, em seguida, ordenamos e inserimos essas $m$ arestas em ordem crescente de peso, usando uma biblioteca pronta do $\emph{C++}$, que consome tempo esperado $\Oh(n \lg n)$. Estas $m$ arestas são inseridas uma a uma acionando \texttt{adicioneMSF(u, v, w)}, onde $u$ e $v$ são pontas da aresta e $w$ é o peso dela.
 
-A rotina \texttt{adicioneMSF} fica dentro do construtor e só é acionada dentro dele. Por ser uma rotina privada, ou seja, não está disponível para o usuário, após a inserção destas arestas, não é permitido mais operações de inserção, somente de remoção de arestas. Para o usuário, então, só estarão disponíveis as rotinas \texttt{conectadosMSF} e \texttt{removaMSF} como consultas ao grafo. A versão totalmente dinâmica, que inclui a rotina \texttt{adicioneMSF} para o usuário, será estudada posteriormente na Seção~\ref{sec:fully-MSF}.
+A rotina \texttt{adicioneMSF} é acionada somente dentro do construtor. Por ser uma rotina privada, ou seja, não está disponível para o usuário, após a inserção destas arestas, não é permitido mais operações de inserção, somente de remoção de arestas. Para o usuário, então, só estarão disponíveis as rotinas \texttt{conectadosMSF} e \texttt{removaMSF} como consultas ao grafo. A versão totalmente dinâmica, que inclui a rotina \texttt{adicioneMSF} para o usuário, será estudada posteriormente na Seção~\ref{sec:fully-MSF}.
 
 O construtor \texttt{MSFDecremental}, devido à ordenação de arestas, possui consumo de tempo $\Oh(n \lg n)$. Já a rotina \texttt{conectadosMSF} possui consumo de tempo amortizado $\Oh(\lg n)$, a mesma do \texttt{conectadosGD}. Como estes dois métodos são muito parecidos com os do algoritmo de conexidade em grafos dinâmicos, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaArestaMSF} implementada de maneira diferente do \texttt{substituaAresta} do algoritmo de conexidade em grafos dinâmicos. 
 
@@ -107,14 +107,42 @@ A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecr
         $G.F_i$ := \texttt{florestaDinâmica($n$)}
         $G.R_i$ := \texttt{listasDeAdjacênciasMinHeap($n$)}
     G.nível := \texttt{novoMapaHash($n$)}
+    \texttt{ordene($E$)} (*@\hfill $\triangleright$ ordena as arestas do conjunto $E$ em ordem crescente@*)
+    \textbf{para cada aresta} ($u$, $v$, $p$) \textbf{em} $E$ \textbf{faça}
+        \texttt{adicioneMSF}($G$, $u$, $v$, $p$)
     devolva G
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Apesar das semelhanças, o construtor das listas de adjacências agora é implementado de forma diferente. Agora estamos usando o método \texttt{listasDeAdjacênciasMinHeap}. Como estamos apenas construindo 
+Podemos notar algumas diferenças quando comparamos o método \texttt{MSFDecremental} com o \texttt{grafoDinâmico}. Na MSF decremental, ordenamos arestas do conjunto $E$ em ordem crescente e inserimos uma a uma chamando \texttt{adicioneMSF}, que está descrito abaixo.
 
-Este método será descrito na Seção~\ref{sec:edge-addition-DecrementalMSF}. 
+\begin{programruledcaption}{\texttt{adicioneMSF($G$, $u$, $v$, $p$)} \label{prog:addMSF}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, com $u < v$. \\
+    \textbf{Efeito}: Adiciona a aresta $uv$ no grafo $G$.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    L := $\dotvar{G}{nívelMax}$
+    $\dotvarm{G}{nível}{u,v}$ := $L$
+    \textbf{se} \texttt{conectadosFD($G.F_{L}$, $u$, $v$)} \textbf{então} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
+        \texttt{adicioneLAMSF($G.R_{L}$, $u$, $v$, $p$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{L}$, $G.R_{L}$, $u$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{L}$, $G.R_{L}$, $v$)}
+    \textbf{senão}
+        \texttt{adicioneFD($G.F_L$, $u$, $v$, $p$)}
+        \texttt{atualizeÉNível($G.F_L$, $u$, $v$, $\textbf{verdadeiro}$)}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+O método \texttt{adicioneMSF} é acionado exclusivamente em \texttt{MSFDecremental}. Dessa forma, 
 
 \section{Adição de arestas}
 \label{sec:edge-addition-DecrementalMSF}
