@@ -48,16 +48,16 @@ Note que, diferente da biblioteca do algoritmo de conexidade em grafos dinâmico
 
 A rotina \texttt{adicioneMSF} fica dentro do construtor e só é acionada dentro dele. Por ser uma rotina privada, ou seja, não está disponível para o usuário, após a inserção destas arestas, não é permitido mais operações de inserção, somente de remoção de arestas. Para o usuário, então, só estarão disponíveis as rotinas \texttt{conectadosMSF} e \texttt{removaMSF} como consultas ao grafo. A versão totalmente dinâmica, que inclui a rotina \texttt{adicioneMSF} para o usuário, será estudada posteriormente na Seção~\ref{sec:fully-MSF}.
 
-O construtor \texttt{MSFDecremental}, devido à ordenação de arestas, possui consumo de tempo $\Oh(n \lg n)$. Já a rotina \texttt{conectadosMSF} possui consumo de tempo amortizado $\Oh(\lg n)$, a mesma do \texttt{conectadosGD}. Como estes dois métodos são muito parecidos com os do algoritmo de conexidade em grafos dinâmicos, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaArestaMSF} implementada de maneira diferente do \texttt{substituaAresta} do grafo dinâmico. 
+O construtor \texttt{MSFDecremental}, devido à ordenação de arestas, possui consumo de tempo $\Oh(n \lg n)$. Já a rotina \texttt{conectadosMSF} possui consumo de tempo amortizado $\Oh(\lg n)$, a mesma do \texttt{conectadosGD}. Como estes dois métodos são muito parecidos com os do algoritmo de conexidade em grafos dinâmicos, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaArestaMSF} implementada de maneira diferente do \texttt{substituaAresta} do algoritmo de conexidade em grafos dinâmicos. 
 
 Usaremos várias definições já apresentadas no algoritmo do grafo dinâmico, incluindo as mesmas invariantes apresentadas na Seção~\ref{sec:level-slicing}, os mesmos tipos de arestas da Seção~\ref{sec:dynamic-graph-edge-types} e nós das florestas apresentados na Seção~\ref{sec:graph-nodes}. A seguir, apresentaremos as rotinas da MSF decremental e alguns ajustes a serem feitos. 
 
 \subsection{Listas de adjacências}
 \label{sec:adjancency-lists-min-heap}
 
-Na Seção~\ref{sec:dynamic-graph-edge-types}, apresentamos a biblioteca de \texttt{listasDeAdjacências}, onde usamos um mapa hash para inserir ou remover um vértice $v$ da lista de $u$, além de percorrer os vizinhos da lista de $u$. No algoritmo da MSF decremental, quando removemos uma aresta de nível $i$ da floresta $F_i$, uma componente desta será quebrada em duas, $T_u$ e $T_v$, da mesma forma que no algoritmo do grafo dinâmico. A diferença é que, no caso da MSF decremental, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Não podemos simplesmente percorrer todos os vizinhos $v$ de cada vértice $u$ em $T_u$, verificar se $uv$ reconecta as componentes separadas e se é de menor peso dentre todas as substitutas, já que isso seria ineficiente.
+Na Seção~\ref{sec:dynamic-graph-edge-types}, apresentamos a biblioteca de \texttt{listasDeAdjacências}, onde usamos um mapa hash para inserir ou remover um vértice $v$ da lista de $u$, além de percorrer os vizinhos da lista de $u$. No algoritmo da MSF decremental, quando removemos uma aresta de nível $i$ da floresta $F_i$, uma componente desta será quebrada em duas, $T_u$ e $T_v$, da mesma forma que no algoritmo de conexidade em grafos dinâmicos. A diferença é que, no caso da MSF decremental, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a~$T_v$. Não podemos simplesmente percorrer todos os vizinhos $v$ de cada vértice $u$ em $T_u$, verificar se $uv$ reconecta as componentes separadas e se é de menor peso dentre todas as substitutas, já que isso seria ineficiente.
 
-Assim, fica claro que precisamos percorrer as arestas reservas em ordem crescente de peso e testar se alguma é substituta. Por isso, em vez de usar um mapa hash para mapear os vizinhos das listas de adjacências de cada vértice, usaremos um min-heap. Na verdade, como estamos trabalhando com nós de vértice e de aresta, cada nó de vértice $u$ guardará um min-heap onde a chave dessa estrutura de dados será o peso do nó de aresta $uv$ e $v$ é o vizinho da lista de $u$. Nós de aresta também guardarão um min-heap, porém vazio. 
+Assim, fica claro que seria bom percorrer as arestas reservas em ordem crescente de peso e testar se alguma é substituta nesta ordem. Por isso, em vez de usar um mapa hash para mapear os vizinhos das listas de adjacências de cada vértice, usaremos um min-heap. Na verdade, como estamos trabalhando com nós de vértice e de aresta, cada nó de vértice $u$ guardará um min-heap com os vizinhos de $u$, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$. Nós de aresta também guardarão um min-heap, porém vazio. 
 
 A biblioteca do min-heap está descrita a seguir.
 
@@ -66,24 +66,24 @@ A biblioteca do min-heap está descrita a seguir.
     \item \texttt{\textbf{éVazio(MH, u)}}: devolve verdadeiro se o min-heap MH de $u$ está vazio e falso caso contrário;
     \item \texttt{\textbf{tamanho(MH, u)}}: retorna a quantidade de vizinhos no min-heap MH de $u$;
     \item \texttt{\textbf{remova(MH, u, v)}}: remove o vizinho $v$ do min-heap MH de $u$;
-    \item \texttt{\textbf{consulteMínimo(MH, u)}}: retorna um par $\{v, p\}$ do min-heap MH, onde $v$ é o vizinho de $u$ e $p$ é o menor peso dentre todas as arestas $uv$;
-    \item \texttt{\textbf{extraiaMínimo(MH, u)}}: remove o par $\{v, p\}$ do min-heap MH de $u$, onde $v$ é o vizinho de $u$ e $p$ é o menor peso dentre todas as arestas $uv$, e retorna este par;
-    \item \texttt{\textbf{insira(MH, u, v, p)}}: insere o vizinho $v$ no min-heap MH de $u$ e o peso $p$ da aresta reserva $uv$.
+    \item \texttt{\textbf{consulteMínimo(MH, u)}}: retorna um par $\{v, p\}$ do min-heap MH de $u$, onde $v$ é um vizinho de $u$ com chave mínima $p$;
+    \item \texttt{\textbf{extraiaMínimo(MH, u)}}: remove o par $\{v, p\}$ do min-heap MH de $u$, onde $v$ é o vizinho de $u$ com chave mínima $p$;
+    \item \texttt{\textbf{insira(MH, u, v, p)}}: insere o vizinho $v$ no min-heap MH de $u$, onde $p$ é sua chave, ou seja, é o peso da aresta $uv$.
 \end{itemize} 
 
-Os métodos \texttt{remova}, \texttt{extraiaMínimo} e \texttt{insira} consomem tempo O($\lg n)$, visto que precisamos ajustar a posição dos vizinhos de $v$ no min-heap em ordem de peso após inserirmos ou removermos um vizinho. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso mínimo, como descreveremos mais à frente.
+Os métodos \texttt{remova}, \texttt{extraiaMínimo} e \texttt{insira} consomem tempo O($\lg n)$ usando uma implementação tradicional de heap sort de Thomas H. Cormen et al. \cite{clrs}. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso mínimo, como descreveremos mais à frente.
 
 Com base na biblioteca do min-heap, podemos definir a biblioteca das listas de adjacências da MSF decremental. 
 
 \begin{itemize}
     \item \texttt{\textbf{listasDeAdjacênciasMSF(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências;
-    \item \texttt{\textbf{adicioneLAMSF(R, u, v, p)}}: adiciona o vértice $u$ na lista de adjacências de $v$ em $R$ e vice-versa, além do peso $p$ de $uv$;
+    \item \texttt{\textbf{adicioneLAMSF(R, u, v, p)}}: adiciona o vértice $u$ na lista de adjacências de $v$ em $R$ e vice-versa, considerando que o peso de $uv$ é $p$;
     \item \texttt{\textbf{removaLAMSF(R, u, v)}}: remove o vértice $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
 \end{itemize} 
 
 Uma chamada à rotina \texttt{adicioneLAMSF(R, u, v, p)} aciona \texttt{insira(MH, u, v, p)} e \texttt{insira(MH, v, u, p)}, consumindo tempo $\Oh(\lg n)$. Similarmente, uma chamada à rotina \texttt{removaLAMSF(R, u, v)} aciona \texttt{remova(MH, u, v)} e \texttt{remova(MH, v, u)}, consumindo também tempo $\Oh(\lg n)$.
 
-Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo do grafo dinâmico e MSF decremental, e como essa mudança afetará o comportamento do método \texttt{substituaArestaMSF} da MSF decremental.
+Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo de conexidade em grafos dinâmicos e na MSF decremental, e como essa mudança afetará o comportamento do método \texttt{substituaArestaMSF} da MSF decremental.
 
 \section{Rotinas da biblioteca da MSF decremental}
 
@@ -91,7 +91,7 @@ Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descre
 
 A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecrementalMSF}, é bem parecida com a do grafo dinâmico, descrita na Seção~\ref{sec:dynamic-graph-creation}. 
 
-\begin{programruledcaption}{\texttt{MSFDecremental($n$)} \label{prog:newDecrementalMSF}}
+\begin{programruledcaption}{\texttt{MSFDecremental($n$, $E$)} \label{prog:newDecrementalMSF}}
     \noindent\textbf{Entrada}: Recebe o número $n$ de vértices do grafo. \\
     \textbf{Saída}: Devolve um grafo $G$ com $n$ vértices e sem arestas.
     \vspace{-0.5\baselineskip}
