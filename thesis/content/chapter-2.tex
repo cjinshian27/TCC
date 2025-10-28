@@ -117,7 +117,7 @@ A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecr
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Podemos notar algumas diferenças quando comparamos o construtor \texttt{MSFDecremental} com o \texttt{grafoDinâmico}. Na MSF decremental, além de inicializarmos $L$ listas de adjacências e $L$ florestas dinâmicas, ordenamos arestas do conjunto $E$ em ordem crescente e inserimos uma a uma chamando \texttt{adicioneMSF}, que está descrito abaixo.
+Podemos notar algumas diferenças quando comparamos o construtor \texttt{MSFDecremental} com o \texttt{grafoDinâmico}. Na MSF decremental, além de inicializarmos $\left\lceil \lg n \right\rceil$ listas de adjacências e $\left\lceil \lg n \right\rceil$ florestas dinâmicas, ordenamos arestas do conjunto $E$ em ordem crescente e inserimos uma a uma chamando \texttt{adicioneMSF}, que está descrito abaixo.
 
 \begin{programruledcaption}{\texttt{adicioneMSF($G$, $u$, $v$, $p$)} \label{prog:addMSF}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, com $u < v$, e o peso $p$ da aresta $uv$. \\
