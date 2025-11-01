@@ -947,7 +947,7 @@ Em particular, essa rotina deve percorrer as arestas da floresta e as arestas re
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-
+Note que esta rotina consome $\Oh(\lg^2 n)$ mais o tempo do \texttt{substituaAresta}, que será descrito mais adiante.
 
 
 
@@ -1479,7 +1479,7 @@ Nesta seção, apresentamos uma versão completa da rotina \texttt{adicioneGD} m
 
 Nesta versão final, veja que as linhas $5$ e $6$ são necessárias para que o campo \textit{incideArestaReservaDeNível}, assim como o campo de todos os nós da floresta dos vértices $u$ e $v$ estejam corretos. Já a linha $9$ define o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro em $F_L$, quando ela é aresta da floresta, e atualiza o campo \textit{arestasDeNível} de todos os nós da floresta.
 
-Atualizamos os atributos desses nós que descrevemos para fazermos a remoção eficiente de arestas, cuja rotina será descrita também com ajustes na Seção~\ref{sec:code-edge-removal-second-version}. Note que o método \texttt{adicioneGD} do Programa~\ref{prog:addGD-version2} continua tendo o mesmo consumo de tempo do Programa~\ref{prog:addGD} após esses ajustes. 
+Atualizamos os atributos desses nós que descrevemos para fazermos a remoção eficiente de arestas, cuja rotina será descrita também com ajustes na Seção~\ref{sec:code-edge-removal-second-version}. Note que o método \texttt{adicioneGD} do Programa~\ref{prog:addGD-version2} continua tendo o mesmo consumo de tempo do Programa~\ref{prog:addGD} após esses ajustes, ou seja, $\Oh(\lg n)$ amortizado. 
 
 \subsection{Versão completa da rotina de remoção de arestas}
 \label{sec:code-edge-removal-second-version}
@@ -1515,7 +1515,7 @@ Nessa seção, apresentamos uma versão completa da rotina \texttt{removaGD} apr
 
 A diferença entre as duas versões de \texttt{removaGD} é que a segunda tem as linhas $10$ e $11$ a mais. Tais linhas são necessárias para que o campo \textit{incideArestaReservaDeNível} e o contador \textit{arestasReservasDeNível} dos nós estejam corretos, visto que, ao remover uma aresta reserva, precisamos verificar se os vértices incidentes a ela ainda são incidentes a alguma outra aresta reserva de $R$.  
 
-Agora falta descrever a rotina \texttt{substituaAresta}, que veremos a seguir que consome tempo amortizado $\Oh(\lg^2 n)$. Consequentemente, \texttt{removaGD} também consumirá tempo amortizado $\Oh(\lg^2 n)$.
+Agora falta descrever a rotina \texttt{substituaAresta}. Da mesma forma que a primeira versão, nesta segunda versão \texttt{removaGD} também consumirá tempo amortizado $\Oh(\lg^2 n)$ mais o custo do \texttt{substituaAresta}.
 
 \subsection{Rotina de substituição de aresta}
 \label{sec:replace-edge}
