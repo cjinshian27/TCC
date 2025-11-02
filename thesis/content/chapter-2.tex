@@ -40,7 +40,7 @@ Implementar o algoritmo decremental para florestas geradoras maximais de custo m
 
 \begin{itemize}
     \item \texttt{\textbf{MSFDecremental(n, E)}}: contrói e devolve um grafo ponderado $G$ com $n$ vértices e as arestas ponderadas dadas no conjunto $E$;
-    \item \texttt{\textbf{extraiaPesoMSF(G, u, v)}}: devolve o peso da MSF do grafo ponderado $G$;
+    \item \texttt{\textbf{extraiaPesoMSF(G)}}: devolve o peso da MSF do grafo ponderado $G$;
     \item \texttt{\textbf{removaMSF(G, u, v)}}: remove a aresta $uv$ do grafo ponderado $G$.
 \end{itemize} 
 
@@ -163,14 +163,14 @@ Como citado antes, a rotina \texttt{adicioneMSF} é acionada apenas em \texttt{M
 
 Para \texttt{adicioneMSF}, a invariante~\ref{invariant11} é preservada para o nível $i = \left\lceil \lg n \right\rceil$. Como estamos inserindo arestas de nível $\left\lceil \lg n \right\rceil$ em $F_{\left\lceil \lg n \right\rceil}$, então as florestas de níveis inferiores não são afetadas, mantendo-se, assim, as invariantes~\ref{invariant22} e \ref{invariant33} também.
 
-\subsection{Consultas de conexidade na MSF decremental}
+\subsection{Consulta de peso da MSF decremental}
 \label{sec:connectivity-test-MSF}
 
-A rotina \texttt{conectadosMSF}, descrita abaixo, é igual a \texttt{conectadosGD}. Mudamos apenas o seu nome para ficar coerente com os nomes dos métodos da biblioteca da MSF decremental. 
+A rotina \texttt{extraiaPesoMSF}, que devolve o peso da MSF do grafo $G$, está descrita abaixo. 
 
-\begin{programruledcaption}{\texttt{conectadosMSF($G$, $u$, $v$)} \label{prog:connectedMSF}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$. \\
-    \textbf{Saída}: Devolve um booleano indicando se $u$ e $v$ estão conectados em $G$.
+\begin{programruledcaption}{\texttt{extraiaPesoMSF($G$)} \label{prog:extract-weight-MSF}}
+    \noindent\textbf{Entrada}: Recebe o grafo $G$. \\
+    \textbf{Saída}: Devolve o peso da MSF de $G$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -180,15 +180,14 @@ A rotina \texttt{conectadosMSF}, descrita abaixo, é igual a \texttt{conectadosG
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    L := $\dotvar{G}{nívelMax}$
-    retorne \texttt{conectadosFD($G.F_L$, $u$, $v$)}
+    \textbf{retorne} $\dotvar{G}{pesoMSF}$
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
 \raggedbottom
 
-Da mesma forma que em \texttt{conectadosGD}, a rotina \texttt{conectadosMSF} também consome tempo amortizado $\Oh(\lg n)$. Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas e listas de adjacências, já que não há nenhuma modificação neles. Isso implica que as três invariantes são mantidas. 
+É fácil ver que \texttt{extraiaPesoMSF} consome tempo $\Oh(1)$. Além disso, como não estamos alterando as MSFs de $G$, então as três invariantes são preservadas.
 
 \subsection{Remoção de arestas na MSF decremental}
 \label{sec:decremental-MSF-edge-removal}
