@@ -198,7 +198,7 @@ Quando removemos uma aresta $uv$ de nível $i$ em $F_i$, quebramos uma component
 
 Para facilitar o entendimento da substituição de aresta na MSF decremental, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement-msf1}, temos um grafo ponderado $G$ e assumiremos que, até o momento, só houve inserções de arestas. 
 
-Assim, temos um grafo $G$ de $n = 10$ vértices. Sabemos que $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só ocorrem no nível $L$ em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
+No nosso exemplo, $G$ tem $n = 10$ vértices. Sabemos que $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só ocorrem no nível $L$ em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
 
 \tikzset{weight/.style={font=\small, inner sep=1pt, fill=white}}
 
@@ -250,10 +250,11 @@ Assim, temos um grafo $G$ de $n = 10$ vértices. Sabemos que $\left\lceil \lg 10
         \draw[removed] (u) -- (v) node[midway, above, weight] {9};
         \draw[reserve] (a) -- (d) node[midway, above, yshift=0pt, weight] {14};
         \draw[reserve] (c) -- (v) node[pos=0.6, below, yshift=-1pt, weight] {15}; % adjusted
-        \draw[reserve] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
-        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=2pt, weight] {13}; % adjusted
+        \draw[reserve] (b) -- (u) node[midway, above, xshift=15pt, yshift = -2pt, weight] {12};
+        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
         \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
         \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserve] (a) -- (c) node[midway, above, yshift=10pt, weight] {16};
 
         \end{tikzpicture}
     \end{minipage}
@@ -342,10 +343,11 @@ O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nív
         % reserve edges (normal red edges)
         \draw[reserve] (a) -- (d) node[midway, above, yshift=0pt, weight] {14};
         \draw[reserve] (c) -- (v) node[pos=0.6, below, yshift=-1pt, weight] {15}; % adjusted
-        \draw[reserve] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
-        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=2pt, weight] {13}; % adjusted
+        \draw[reserve] (b) -- (u) node[midway, above, xshift=15pt, yshift = -2pt, weight] {12};
+        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
         \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
         \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserve] (a) -- (c) node[midway, above, yshift=10pt, weight] {16};
 
         \end{tikzpicture}
     \end{minipage}
@@ -437,11 +439,12 @@ Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em 
         % reserve edges (normal red edges)
         \draw[reserve] (a) -- (d) node[midway, above, yshift=0pt, weight] {14};
         \draw[reserve] (c) -- (v) node[pos=0.6, below, yshift=-1pt, weight] {15}; % adjusted
+        \draw[reserve] (a) -- (c) node[midway, above, yshift=10pt, weight] {16};
         
-        \draw[reserveremoved] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
-        \draw[reserveremoved] (c) -- (u) node[pos=0.4, above, yshift=2pt, weight] {13}; % adjusted
-        \draw[reserveremoved] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
-        \draw[reserveremoved] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserveremoved] (b) -- (u) node[midway, above, xshift=15pt, yshift = -2pt, weight] {12};
+        \draw[reserveremoved] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
+        \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
 
         \end{tikzpicture}
     \end{minipage}
@@ -474,9 +477,8 @@ Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em 
             \draw[edge] (a) -- (b) node[midway, above, weight] {2};
             \draw[edge] (b) -- (c) node[midway, above, weight] {3};
                     \draw[reserve] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
-        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=2pt, weight] {13}; % adjusted
-        \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
-        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
+
 
         \end{tikzpicture}
     \end{minipage}
@@ -485,7 +487,7 @@ Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em 
     \label{fig:example-replacement-msf3}
 \end{figure}
 
-Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$, de peso $14$. Como ela conecta $T_u$ a $T_v$, chamamos \texttt{adicioneFD($F_4$, $a$, $d$, $14$)} e $ad$ passa a ser uma aresta da floresta de peso $14$, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para os níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement-msf4} ilustra essa etapa do algoritmo. 
+Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$, de peso $14$. Como ela conecta $T_u$ a $T_v$, chamamos \texttt{adicioneFD($F_4$, $a$, $d$, $14$)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para os níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement-msf4} ilustra essa etapa do algoritmo. 
 
 \begin{figure}[H]
     \centering
@@ -535,7 +537,9 @@ Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$,
         % reserve edges (normal red edges)
         \draw[edge] (a) -- (d) node[midway, above, yshift=0pt, weight] {14};
         \draw[reserve] (c) -- (v) node[pos=0.6, below, yshift=-1pt, weight] {15}; % adjusted
-
+        \draw[reserve] (a) -- (c) node[midway, above, yshift=0pt, weight] {16};
+        \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
 
         \end{tikzpicture}
     \end{minipage}
@@ -568,9 +572,8 @@ Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$,
             \draw[edge] (a) -- (b) node[midway, above, weight] {2};
             \draw[edge] (b) -- (c) node[midway, above, weight] {3};
                     \draw[reserve] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
-        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=2pt, weight] {13}; % adjusted
-        \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
-        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
+
 
         \end{tikzpicture}
     \end{minipage}
