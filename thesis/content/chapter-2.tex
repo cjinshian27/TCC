@@ -691,7 +691,7 @@ Por isso, fica claro que precisamos de um método que atualize \textit{pesoMíni
 
 Como se pode ver, o Programa~\ref{prog:updateMinWeight} consome tempo $\Oh(1)$. Além disso, ele não altera a floresta $F_i$, altera somente uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
 
-Para entendermos como estes dois campos extras aparecem em cada nó da árvore, usaremos um exemplo de um grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas, como se pode ver na Figura~\ref{fig:generic-graph-example-1}. 
+Para entendermos como estes dois campos extras aparecem em cada nó da floresta, usaremos um exemplo de um grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas, como se pode ver na Figura~\ref{fig:generic-graph-example-1}. A Figura~\ref{fig:euler-tour-balanced-field-propagation-1} mostra estes campos nos nós da floresta MSF de $G$.
 
 \begin{figure}[H]
     \centering
@@ -722,7 +722,6 @@ Para entendermos como estes dois campos extras aparecem em cada nó da árvore, 
     \caption{Grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas. Arestas pretas são da floresta e formam a MSF de $G$, enquanto as vermelhas são arestas reserva.}
     \label{fig:generic-graph-example-1}
 \end{figure}
-
 
 \begin{figure}[H]
     \centering
@@ -772,6 +771,6 @@ Para entendermos como estes dois campos extras aparecem em cada nó da árvore, 
 
 
     \end{tikzpicture}
-    \caption{Árvore de uma das componentes da floresta $F_i$, onde arestas pretas são da floresta e as vermelhas são arestas reserva.}
+    \caption{Árvore da única componente da floresta $F_L$ do grafo $G$ da Figura~\ref{fig:generic-graph-example-1}, onde embaixo de cada nó contém um par de números. O primeiro número indica o atributo \textit{peso} do nó, enquanto o segundo número indica o \textit{pesoMínimo} na subárvore do nó}.
     \label{fig:euler-tour-balanced-field-propagation-1}
 \end{figure}
