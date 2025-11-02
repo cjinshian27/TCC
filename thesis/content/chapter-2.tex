@@ -651,3 +651,92 @@ O método \texttt{substituaArestaMSF}, que é uma versão ajustada de \texttt{su
 
 \subsection{Ajustes em nós da floresta}
 \label{sec:forest-node-adjustments}
+
+No algoritmo de conexidade em grafos dinâmicos, vimos que os nós da floresta guardam dois campos, \textit{incideArestaReservaDeNível} e \textit{éNível}, além de dois contadores, \textit{arestasDeNível} e \textit{arestasReservasDeNível}. Mostramos também alguns métodos que atualizam estes campos e que usam estes campos para realizar a busca eficiente de arestas reserva quando procuramos por alguma aresta substituta.
+
+Para o algoritmo da MSF decremental, além destes campos apresentados, precisaremos de dois campos extras para cada nó da floresta: \textit{peso} e \textit{pesoMínimo}. O primeiro campo indica o peso de um nó de aresta (nós de vértice guardam neste campo o valor $\infty$). O segundo campo guarda o peso mínimo dentre todas as arestas reserva em cada $R_i$, pois é assim que conseguimos extrair a aresta reserva de peso mínimo quando estamos buscando uma substituta. 
+
+Para entendermos como estes dois campos extras aparecem em cada nó da árvore, usaremos um exemplo de um grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas, como se pode ver na Figura~\ref{fig:generic-graph-example-1}. 
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        inner sep=0pt]
+
+        \node[node] (a) at (0,0) {$a$};
+        \node[node] (b) at (1.5,1.5) {$b$};
+        \node[node] (c) at (3,0) {$c$};
+        \node[node] (d) at (1.5,-1.5) {$d$};
+        \node[node] (e) at (-1.5,-1.5) {$e$};
+
+        \draw[edge] (a) -- (b) node[midway, above, weight] {1};;
+        \draw[edge] (c) -- (d) node[midway, above, weight] {2};;
+        \draw[edge] (d) -- (a) node[midway, above, weight] {3};;
+        \draw[edge] (a) -- (e) node[midway, above, weight] {4};;
+
+        \draw[reserve] (e) -- (d) node[midway, above, weight] {5};
+        \draw[reserve] (b) -- (c) node[midway, above, weight] {6};
+        \draw[reserve] (a) -- (c) node[midway, above, weight] {7};
+
+
+    \end{tikzpicture}
+    \caption{Grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas. Arestas pretas são da floresta e formam a MSF de $G$, enquanto as vermelhas são arestas reserva.}
+    \label{fig:generic-graph-example-1}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        inner sep=0pt]
+
+        \node[node, label=below:{5}] (ad) at (0, 0) {$ad$};
+        \node[node, label=below:{3}] (ab) at (-4.5, -1.5) {$ab$};
+        \node[node, label=below:{2}] (cd) at (4.5, -1.5) {$cd$};
+        \node[node, label=below:{2}] (dc) at (3, -3) {$dc$};
+        \node[node, label=below:{1}] (dd) at (1.5, -4.5) {$dd$};
+        \node[node, label=below:{1}] (cc) at (4.5, -4.5) {$cc$};
+        
+        
+        \node[node, label=below:{0}] (da) at (6, -3) {$da$};
+        \node[node, label=below:{0}] (ae) at (7.5, -4.5) {$ae$};
+        
+        
+        \node[node, label=below:{2}] (ea) at (-6, -3) {$ea$};
+        \node[node, label=below:{1}] (ee) at (-7.5, -4.5) {$ee$};
+        \node[node, label=below:{1}] (aa) at (-4.5, -4.5) {$aa$};
+
+
+        \node[node, label=below:{1}] (bb) at (-3, -3) {$bb$};
+        \node[node, label=below:{0}] (ba) at (-1.5, -4.5) {$ba$};
+
+        
+
+        % tree edges (normal black edges)
+        \draw[edge] (ad) -- (ab) node[midway, below] {};
+        \draw[edge] (ad) -- (cd) node[midway, below] {};
+        \draw[edge] (cd) -- (dc) node[midway, below] {};
+        \draw[edge] (cd) -- (da) node[midway, below] {};
+        \draw[edge] (bb) -- (ba) node[midway, below] {};
+        \draw[edge] (ea) -- (ee) node[midway, below] {};
+        \draw[edge] (ea) -- (aa) node[midway, below] {};
+        \draw[edge] (dc) -- (dd) node[midway, below] {};
+        \draw[edge] (dc) -- (cc) node[midway, below] {};
+        \draw[edge] (da) -- (ae) node[midway, below] {};
+
+        \draw[edge] (ab) -- (ea) node[midway, below] {};
+        \draw[edge] (ab) -- (bb) node[midway, below] {};
+
+
+    \end{tikzpicture}
+    \caption{Árvore de uma das componentes da floresta $F_i$, onde arestas pretas são da floresta e as vermelhas são arestas reserva.}
+    \label{fig:euler-tour-balanced-field-propagation-1}
+\end{figure}
