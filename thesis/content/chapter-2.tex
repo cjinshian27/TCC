@@ -198,7 +198,7 @@ Quando removemos uma aresta $uv$ de nível $i$ em $F_i$, quebramos uma component
 
 Para facilitar o entendimento da substituição de aresta na MSF decremental, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement-msf1}, temos um grafo ponderado $G$ e assumiremos que, até o momento, só houve inserções de arestas. 
 
-Assim, temos um grafo $G$ de $n = 10$ vértices. Sabemos que $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só ocorrem no nível $L$, no momento, em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
+Assim, temos um grafo $G$ de $n = 10$ vértices. Sabemos que $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só ocorrem no nível $L$ em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
 
 \tikzset{weight/.style={font=\small, inner sep=1pt, fill=white}}
 
