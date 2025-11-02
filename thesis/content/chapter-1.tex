@@ -917,7 +917,7 @@ Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, c
     \label{fig:example-replacement4}
 \end{figure}
 
-Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, note que ao procurar por uma aresta substituta não necessariamente percorreremos todas as arestas reserva em $R_i$. Então nem sempre todas as arestas reserva de $R_i$ incidentes a $T_u$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
+Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, $T_u$ e $T_v$, com $|T_u| \leq |T_v|$, note que ao procurar por uma aresta substituta não necessariamente percorreremos todas as arestas reserva em $R_i$ incidentes a $T_u$. Então nem sempre todas as arestas reserva de $R_i$ incidentes a $T_u$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
 
 O Programa~\ref{prog:removeGD} apresenta uma primeira versão da rotina \texttt{removaGD}. Ela contém uma chamada à rotina \texttt{substituaAresta} que será explicada Seção~\ref{sec:replace-edge}. Alguns ajustes em \texttt{removaGD} serão necessários devido à implementação da rotina \texttt{substituaAresta}. 
 Em particular, essa rotina deve percorrer as arestas da floresta e as arestas reserva de maneira eficiente. Apresentaremos a estratégia usada para isso nas Seções~\ref{sec:node-edge}~e~\ref{sec:node-vertex}.
@@ -997,6 +997,8 @@ Para explicar a rotina \texttt{substituaAresta}, precisamos saber mais detalhes 
 
 A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propõe o uso de Euler tour trees, que é uma técnica utilizada para representar uma árvore. Essa representação é obtida de uma árvore $T$ substituindo-se cada aresta por dois arcos em sentidos opostos e adicionando-se um laço a cada vértice, como pode ser visto na Figura~\ref{fig:euler-tour-trees}. 
 
+O digrafo resultante de $T$ é Euleriano, ou seja, é conexo e o grau de entrada de cada vértice é igual ao grau de saída. Consequentemente, há uma trilha que começa e termina num mesmo vértice, passando por todos os arcos do digrafo somente uma vez. Tal trilha é chamada de \textbf{ciclo Euleriano}.
+
 \begin{figure}[H]
     \centering
 \begin{tikzpicture}[scale=0.6, thick, node distance=2cm,
@@ -1056,8 +1058,6 @@ A Seção~2.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} prop�
 \end{figure}
 
 \raggedbottom
-
-O digrafo resultante de $T$ é Euleriano, ou seja, é conexo e o grau de entrada de cada vértice é igual ao grau de saída. Consequentemente, há uma trilha que começa e termina num mesmo vértice, passando por todos os arcos do digrafo somente uma vez. Tal trilha é chamada de \textbf{ciclo Euleriano}.
 
 A representação da árvore $T$ é basicamente a sequência de arcos que forma um ciclo Euleriano do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, então o arco será escrito como $uu$. Assim, no exemplo da Figura~\ref{fig:euler-tour-trees}, um possível ciclo Euleriano poderia ser o seguinte: 
 \begin{equation}
