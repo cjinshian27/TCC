@@ -608,7 +608,7 @@ A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma séri
 
 Temos também que $n = 10$ e $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só acontecem no nível $L$, no momento, em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
 
-O próximo passo é rebaixar o nível de todas as arestas de nível~$4$ em $T_u$ para o nível~$3$. Dessa forma, as arestas de $T_u$ passam a estar em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement2}, pois agora elas passam a ser de nível $3$.  
+O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nível~$3$. Dessa forma, as arestas de $T_u$ passam a estar em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement2}, pois agora elas passam a ser de nível $3$.  
 
 Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de diferentes níveis em uma mesma floresta. Assim, percorrer todas as arestas de $T_u$ e selecionar apenas as de nível~$i$ para rebaixar pode se tornar demorado quando o grafo possui uma grande quantidade de vértices. A forma como o algoritmo procura as arestas de nível $i$ de $T_u$ será descrita de maneira mais detalhada na Seção~\ref{sec:node-edge}. No momento, só precisamos entender como este rebaixamento funciona.
 
