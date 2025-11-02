@@ -40,7 +40,7 @@ Implementar o algoritmo decremental para florestas geradoras maximais de custo m
 
 \begin{itemize}
     \item \texttt{\textbf{MSFDecremental(n, E)}}: contrói e devolve um grafo ponderado $G$ com $n$ vértices e as arestas ponderadas dadas no conjunto $E$;
-    \item \texttt{\textbf{extraiaPesoMSF(G)}}: devolve o peso da MSF do grafo ponderado $G$;
+    \item \texttt{\textbf{consultePesoMSF(G)}}: devolve o peso da MSF do grafo ponderado $G$;
     \item \texttt{\textbf{removaMSF(G, u, v)}}: remove a aresta $uv$ do grafo ponderado $G$.
 \end{itemize} 
 
@@ -97,7 +97,7 @@ A partir deste momento, usaremos estas três invariantes e mostraremos como elas
 
 \subsection{Criação do grafo}
 
-O construtor \texttt{MSFDecremental} é bem parecido com o do grafo dinâmico, descrito na Seção~\ref{sec:dynamic-graph-creation}. Além das variáveis de classe existentes que criamos para o grafo $G$ no algoritmo de conexidade em grafos dinâmicos, armazenaremos o peso da MSF decremental numa variável chamada \textit{pesoMSF}, que será simplesmente retornada quando consultarmos o peso da MSF decremental corrente chamando \texttt{extraiaPesoMSF}.
+O construtor \texttt{MSFDecremental} é bem parecido com o do grafo dinâmico, descrito na Seção~\ref{sec:dynamic-graph-creation}. Além das variáveis de classe existentes que criamos para o grafo $G$ no algoritmo de conexidade em grafos dinâmicos, armazenaremos o peso da MSF decremental numa variável chamada \textit{pesoMSF}, que será simplesmente retornada quando consultarmos o peso da MSF decremental corrente chamando \texttt{consultePesoMSF}.
 
 Também incluiremos um atributo do grafo chamado \textit{peso}, que é um mapa hash que armazena o peso das arestas. Para armazenar o peso $w$ de uma aresta $uv$, basta chamarmos $ \dotvar{G}{peso[u, v]} \leftarrow w$. O atributo \textit{peso} será fundamental para recalcular a variável \textit{pesoMSF} no decorrer das remoções do grafo.
 
@@ -168,9 +168,9 @@ Para \texttt{adicioneMSF}, a invariante~\ref{invariant11} é preservada para o n
 \subsection{Consulta de peso da MSF decremental}
 \label{sec:connectivity-test-MSF}
 
-A rotina \texttt{extraiaPesoMSF}, que devolve o peso da MSF do grafo $G$, está descrita abaixo.     
+A rotina \texttt{consultePesoMSF}, que devolve o peso da MSF do grafo $G$, está descrita abaixo.     
 
-\begin{programruledcaption}{\texttt{extraiaPesoMSF($G$)} \label{prog:extract-weight-MSF}}
+\begin{programruledcaption}{\texttt{consultePesoMSF($G$)} \label{prog:extract-weight-MSF}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$. \\
     \textbf{Saída}: Devolve o peso da MSF de $G$.
     \vspace{-0.5\baselineskip}
@@ -189,7 +189,7 @@ A rotina \texttt{extraiaPesoMSF}, que devolve o peso da MSF do grafo $G$, está 
 
 \raggedbottom
 
-É fácil ver que \texttt{extraiaPesoMSF} consome tempo $\Oh(1)$. Além disso, como não estamos alterando as MSFs de $G$, então as três invariantes são preservadas.
+É fácil ver que \texttt{consultePesoMSF} consome tempo $\Oh(1)$. Além disso, como não estamos alterando as MSFs de $G$, então as três invariantes são preservadas.
 
 \subsection{Remoção de arestas na MSF decremental}
 \label{sec:decremental-MSF-edge-removal}
