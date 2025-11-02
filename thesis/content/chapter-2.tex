@@ -387,7 +387,7 @@ O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nív
 
 Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos encontrar, se existir, uma aresta reserva que possa reconectá-las. Note que agora precisamos percorrer as arestas reserva em ordem de peso. Entretanto, percorrer todas as arestas reserva de $R_4$ incidentes a $T_u$ e selecionar a de menor peso é ineficiente, e por isso explicaremos como implementar essa busca por uma aresta substituta de menor peso na Seção~\ref{sec:forest-node-adjustments}.
 
-Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em ordem de peso em $R_4$ que tenham uma das pontas em~$T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. No nosso exemplo, olhamos para as arestas reserva em $R_4$, antes de encontrarmos a substituta, nesta ordem: $df$ (peso $10$), $dh$ (peso $11$), $bu$ (peso $12$), $uc$ (peso~$13$). Veja  que as rebaixamos para $R_3$ por não serem substitutas.
+Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em ordem de peso em $R_4$ que tenham uma das pontas em~$T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. No nosso exemplo, olhamos para as arestas reserva em $R_4$, antes de encontrarmos a substituta, nesta ordem: $bu$ (peso $12$) e $uc$ (peso~$13$). Veja  que as rebaixamos para $R_3$ por não serem substitutas.
 
 \begin{figure}[H]
     \centering
