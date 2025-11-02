@@ -59,7 +59,7 @@ Na Seção~\ref{sec:dynamic-graph-edge-types}, apresentamos a biblioteca de \tex
 
 Assim, fica claro que seria bom percorrer as arestas reservas em ordem crescente de peso e testar se alguma é substituta nesta ordem. Por isso, em vez de usar um mapa hash para armazenar os vizinhos de cada vértice, usaremos um min-heap. Na verdade, como estamos trabalhando com nós de vértice e de aresta, cada nó de vértice $u$ guardará um min-heap com os vizinhos de $u$ em $R_i$, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$. Nós de aresta também guardarão um min-heap, porém vazio. 
 
-Os métodos principais (remoção, inserção e extração da chave mínima) que usamos no min-heap consomem tempo O($\lg n)$ usando uma implementação tradicional de heap, como a descrita no Capítulo 6 de Thomas H. Cormen et al. \cite{clrs}. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso mínimo, como descreveremos mais à frente.
+Os métodos principais (remoção, inserção e extração da chave mínima) que usamos no min-heap consomem tempo O($\lg n)$ usando uma implementação tradicional de heap, como a descrita no Capítulo 6 de Thomas H. Cormen et al. \cite{clrs}. O resto dos métodos consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso, como descreveremos mais à frente.
 
 Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo de conexidade em grafos dinâmicos e na MSF decremental, e como essa mudança afetará o comportamento do método \texttt{substituaArestaMSF} da MSF decremental.
 
@@ -166,7 +166,7 @@ Para \texttt{adicioneMSF}, a invariante~\ref{invariant11} é preservada para o n
 \subsection{Consulta de peso da MSF decremental}
 \label{sec:connectivity-test-MSF}
 
-A rotina \texttt{extraiaPesoMSF}, que devolve o peso da MSF do grafo $G$, está descrita abaixo. 
+A rotina \texttt{extraiaPesoMSF}, que devolve o peso da MSF do grafo $G$, está descrita abaixo.     
 
 \begin{programruledcaption}{\texttt{extraiaPesoMSF($G$)} \label{prog:extract-weight-MSF}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$. \\
@@ -194,11 +194,11 @@ A rotina \texttt{extraiaPesoMSF}, que devolve o peso da MSF do grafo $G$, está 
 
 A remoção de arestas também é semelhante à do algoritmo de conexidade em grafos dinâmicos. A diferença é que a busca por alguma aresta substituta, feita na \texttt{substituaArestaMSF} agora, é dada por ordem crescente de peso das arestas reserva. 
 
-Quando removemos uma aresta $uv$ de nível $i$ em $F_i$, quebramos uma componente desta floresta em $T_u$ e $T_v$, com $|T_u| \leq |T_v|$, e rebaixamos todas as arestas de $T_u$, da mesma forma como fazíamos antes em \texttt{substituaAresta}. Porém, agora procuramos por alguma reserva de peso mínimo dentre todas as reserva em $R_i$, e testamos se ela é uma substituta. Se não, a rebaixamos para $R_{i-1}$ e buscamos a próxima de peso mínimo em $R_i$. Assim, quando achamos uma substituta, conseguimos manter o peso da MST do grafo e ainda reconectar as duas componentes separadas devido à remoção de $uv$. 
+Quando removemos uma aresta $uv$ de nível $i$ em $F_i$, quebramos uma componente desta floresta em $T_u$ e $T_v$, com $|T_u| \leq |T_v|$, e rebaixamos todas as arestas de $T_u$, da mesma forma como fazíamos antes em \texttt{substituaAresta}. Porém, agora buscamos alguma aresta reserva de peso dentre todas as arestas reserva em $R_i$ incidente a $T_u$, e testamos se ela é uma substituta. Se não é, a rebaixamos para $R_{i-1}$ e buscamos a próxima de peso em $R_i$ incidente a $T_u$. Assim, quando achamos uma substituta, conseguimos manter o peso da MSF do grafo e ainda reconectar as duas componentes separadas devido à remoção de $uv$. 
 
-Para facilitar o entendimento da substituição de aresta na MSF decremental, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement-msf1}, temos um grafo ponderado $G$ de $n = 10$ vértices. Para facilitar, assumiremos que, até o momento, só houve inserções de arestas. 
+Para facilitar o entendimento da substituição de aresta na MSF decremental, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement-msf1}, temos um grafo ponderado $G$ e assumiremos que, até o momento, só houve inserções de arestas. 
 
-Temos também que $n = 10$ e $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só acontecem no nível $L$, no momento, em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
+Assim, temos um grafo $G$ de $n = 10$ vértices. Sabemos que $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só ocorrem no nível $L$, no momento, em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
 
 \tikzset{weight/.style={font=\small, inner sep=1pt, fill=white}}
 
