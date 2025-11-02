@@ -616,7 +616,7 @@ Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$,
 
 
 
-A partir dessas imagens, fica fácil perceber que o método \texttt{removaMSF}, descrito abaixo, não há alterações em sua estrutura se comparado com \texttt{removaGD}, exceto na mudança de nomes de alguns métodos.
+A partir dessas imagens, percebe-se que o método \texttt{removaMSF}, descrito abaixo, é bem semelhante ao método \texttt{removaGD}, exceto que no primeiro precisamos recalcular o peso da MSF de $G$ quando removemos uma aresta da floresta.
 
 \begin{programruledcaption}{\texttt{removaMSF($G$, $u$, $v$)} \label{prog:removeGD-version-msf}}
     \noindent\textbf{Entrada}: Recebe dois vértices adjacentes $u$ e $v$ do grafo $G$. \\
@@ -634,6 +634,8 @@ A partir dessas imagens, fica fácil perceber que o método \texttt{removaMSF}, 
     i := $\dotvarm{G}{nível}{u,v}$
     $\dotvarm{G}{nível}{u,v}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos $uv$ como removida@*)
     \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ $uv$ é aresta da floresta@*)
+        w := $\dotvar{G}{peso[u][v]}$
+        $\dotvar{G}{pesoMSF}$ := $\dotvar{G}{pesoMSF}$ - $w$
         \textbf{para} j := i \textbf{até} L \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
         \texttt{substituaArestaMSF($G$, $i$, $u$, $v$)}
@@ -645,7 +647,7 @@ A partir dessas imagens, fica fácil perceber que o método \texttt{removaMSF}, 
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O método \texttt{substituaArestaMSF}, que é uma versão ajustada de \texttt{substituaAresta}, será descrito mais em frente. Veremos que ele consome tempo amortizado $\Oh(\lg^2 n)$, e assim \texttt{removaMSF} também irá consumir tempo amortizado $\Oh(\lg^2 n)$.
+O método \texttt{substituaArestaMSF}, que é uma versão ajustada de \texttt{substituaAresta}, será descrito mais adiante. Por enquanto, sabemos que \texttt{removaMSF} consome tempo $\Oh(\lg^2 n)$ mais o custo de \texttt{substituaArestaMSF}.
 
 \subsection{Ajustes em nós da floresta}
 \label{sec:forest-node-adjustments}
