@@ -40,7 +40,7 @@ Implementar o algoritmo decremental para florestas geradoras maximais de custo m
 
 \begin{itemize}
     \item \texttt{\textbf{MSFDecremental(n, E)}}: contrói e devolve um grafo ponderado $G$ com $n$ vértices e as arestas ponderadas dadas em $E$;
-    \item \texttt{\textbf{custoMSF(G, u, v)}}: devolve o custo da MSF do grafo ponderado $G$;
+    \item \texttt{\textbf{extraiaCustoMSF(G, u, v)}}: devolve o custo da MSF do grafo ponderado $G$;
     \item \texttt{\textbf{removaMSF(G, u, v)}}: remove a aresta $uv$ do grafo ponderado $G$.
 \end{itemize} 
 
@@ -82,7 +82,11 @@ O método \texttt{extraiaMinLAMSF} também consome tempo $\Oh(\lg n)$, já que e
 
 \subsection{Criação do grafo}
 
-A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecrementalMSF}, é bem parecida com a do grafo dinâmico, descrita na Seção~\ref{sec:dynamic-graph-creation}. 
+O construtor \texttt{MSFDecremental} é bem parecido com o do grafo dinâmico, descrito na Seção~\ref{sec:dynamic-graph-creation}. Além das variáveis de classe existentes que criamos para o grafo $G$ no algoritmo de conexidade em grafos dinâmicos, armazenaremos o custo da MSF decremental numa variável chamada \textit{pesoMSF}, que será simplesmente retornada quando consultarmos o peso da MSF decremental corrente chamando \texttt{extraiaCustoMSF}.
+
+Também incluiremos um atributo do grafo chamado \textit{peso}, que é um mapa hash que armazena o peso das arestas. Para armazenar o peso $p$ de uma aresta $uv$, basta chamarmos $ \dotvar{G}{peso[u, v]} \leftarrow p$. O atributo \textit{peso} será fundamental para recalcular a variável \textit{pesoMSF} no decorrer das remoções do grafo.
+
+Dessa forma, podemos apresentar o construtor da MSF decremental no Programa~\ref{prog:newDecrementalMSF}.
 
 \begin{programruledcaption}{\texttt{MSFDecremental($n$, $E$)} \label{prog:newDecrementalMSF}}
     \noindent\textbf{Entrada}: Recebe o número $n$ de vértices do grafo e um conjunto de arestas $E$. \\
@@ -98,10 +102,12 @@ A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecr
     ]
     L := $\left\lceil \lg n \right\rceil$
     $\dotvar{G}{nívelMax}$ := L
+    $G.pesoMSF$ := 0
     \textbf{para} $i$ := $1$ \textbf{até} $L$ \textbf{faça}
         $G.F_i$ := \texttt{florestaDinâmica($n$)}
         $G.R_i$ := \texttt{listasDeAdjacênciasMinHeap($n$)}
     $\dotvar{G}{nível}$ := \texttt{novoMapaHash($n$)}
+    $\dotvar{G}{peso}$ := \texttt{novoMapaHash($n$)}
     \texttt{ordene($E$)} (*@\hfill $\triangleright$ ordena as arestas do conjunto $E$ em ordem crescente@*)
     \textbf{para cada aresta} ($u$, $v$, $p$) \textbf{em} $E$ \textbf{faça}
         \texttt{adicioneMSF}($G$, $u$, $v$, $p$)
@@ -110,7 +116,7 @@ A rotina \texttt{MSFDecremental}, como se pode ver no Programa~\ref{prog:newDecr
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Podemos notar algumas diferenças quando comparamos o construtor \texttt{MSFDecremental} com o \texttt{grafoDinâmico}. Na MSF decremental, além de inicializarmos $\left\lceil \lg n \right\rceil$ listas de adjacências e $\left\lceil \lg n \right\rceil$ florestas dinâmicas, ordenamos arestas do conjunto $E$ em ordem crescente e inserimos uma a uma chamando \texttt{adicioneMSF}, que está descrito abaixo.
+Podemos notar algumas diferenças quando comparamos o construtor \texttt{MSFDecremental} com o \texttt{grafoDinâmico}. Na MSF decremental, além de inicializarmos $\left\lceil \lg n \right\rceil$ listas de adjacências e $\left\lceil \lg n \right\rceil$ florestas dinâmicas, ordenamos as arestas do conjunto $E$ em ordem crescente de peso e inserimos uma a uma chamando \texttt{adicioneMSF}, que está descrito abaixo.
 
 \begin{programruledcaption}{\texttt{adicioneMSF($G$, $u$, $v$, $p$)} \label{prog:addMSF}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, com $u < v$, e o peso $p$ da aresta $uv$. \\
@@ -126,18 +132,20 @@ Podemos notar algumas diferenças quando comparamos o construtor \texttt{MSFDecr
     ]
     L := $\dotvar{G}{nívelMax}$
     $\dotvarm{G}{nível}{u,v}$ := $L$
+    $\dotvar{G}{peso[u, v]}$ := p
     \textbf{se} \texttt{conectadosFD($G.F_{L}$, $u$, $v$)} \textbf{então} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
         \texttt{adicioneLAMSF($G.R_{L}$, $u$, $v$, $p$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{L}$, $G.R_{L}$, $u$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{L}$, $G.R_{L}$, $v$)}
     \textbf{senão}
-        \texttt{adicioneFD($G.F_L$, $u$, $v$, $p$)}
+        $\dotvar{G}{pesoMSF}$ := $\dotvar{G}{pesoMSF}$ + p
+        \texttt{adicioneFD($G.F_L$, $u$, $v$)}
         \texttt{atualizeÉNível($G.F_L$, $u$, $v$, $\textbf{verdadeiro}$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como citada antes, a rotina \texttt{adicioneMSF} é acionada exclusivamente em \texttt{MSFDecremental}. Ademais, a única diferença entre a \texttt{adicioneMSF} e a \texttt{adicioneGD} que vimos é que, na primeira, estamos guardando o peso das arestas quando as inserimos no grafo. Portanto, \texttt{adicioneMSF} também consome tempo amortizado $\Oh(\lg n)$ e as três invariantes são preservadas ao acionar \texttt{adicioneMSF}, já que estamos sempre inserindo arestas com nível $\left\lceil \lg n \right\rceil$ em $F_L$ e as florestas de níveis inferiores não são afetadas com a inserção.
+Como citado antes, a rotina \texttt{adicioneMSF} é acionada exclusivamente em \texttt{MSFDecremental}. Ademais, a única diferença entre a \texttt{adicioneMSF} e a \texttt{adicioneGD} que vimos é que, na primeira, estamos guardando o peso das arestas quando as inserimos no grafo. Portanto, \texttt{adicioneMSF} também consome tempo amortizado $\Oh(\lg n)$ e as três invariantes são preservadas ao acionar \texttt{adicioneMSF}, já que estamos sempre inserindo arestas com nível $\left\lceil \lg n \right\rceil$ em $F_L$ e as florestas de níveis inferiores não são afetadas com a inserção.
 
 \subsection{Consultas de conexidade na MSF decremental}
 \label{sec:connectivity-test-MSF}
