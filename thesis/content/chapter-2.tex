@@ -691,7 +691,7 @@ Por isso, fica claro que precisamos de um método que atualize \textit{pesoMíni
 
 Como se pode ver, o Programa~\ref{prog:updateMinWeight} consome tempo $\Oh(1)$. Além disso, ele não altera a floresta $F_i$, altera somente uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
 
-Para entendermos como estes dois campos extras aparecem em cada nó da floresta, usaremos um exemplo de um grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas, como se pode ver na Figura~\ref{fig:generic-graph-example-1}. A Figura~\ref{fig:euler-tour-balanced-field-propagation-1} mostra estes campos nos nós da floresta MSF de $G$.
+Para entendermos como estes dois campos extras aparecem em cada nó da floresta, usaremos um exemplo de um grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas, como se pode ver na Figura~\ref{fig:generic-graph-example-1}. A Figura~\ref{fig:euler-tour-balanced-field-propagation-1} mostra estes campos nos nós da floresta $F_L$ de $G$.
 
 \begin{figure}[H]
     \centering
@@ -732,25 +732,25 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
         removed/.style={black, thick, dashed}, 
         inner sep=0pt]
 
-        \node[node, label=below:{5}] (ad) at (0, 0) {$ad$};
-        \node[node, label=below:{3}] (ab) at (-4.5, -1.5) {$ab$};
-        \node[node, label=below:{2}] (cd) at (4.5, -1.5) {$cd$};
-        \node[node, label=below:{2}] (dc) at (3, -3) {$dc$};
-        \node[node, label=below:{1}] (dd) at (1.5, -4.5) {$dd$};
-        \node[node, label=below:{1}] (cc) at (4.5, -4.5) {$cc$};
+        \node[node, label=below:{(3, 5)}] (ad) at (0, 0) {$ad$};
+        \node[node, label=below:{(1, 5)}] (ab) at (-4.5, -1.5) {$ab$};
+        \node[node, label=below:{(2, 5)}] (cd) at (4.5, -1.5) {$cd$};
+        \node[node, label=below:{(2, 5)}] (dc) at (3, -3) {$dc$};
+        \node[node, label=below:{($\infty$, $5$)}] (dd) at (1.5, -4.5) {$dd$};
+        \node[node, label=below:{($\infty$, $6$)}] (cc) at (4.5, -4.5) {$cc$};
         
         
-        \node[node, label=below:{0}] (da) at (6, -3) {$da$};
-        \node[node, label=below:{0}] (ae) at (7.5, -4.5) {$ae$};
+        \node[node, label=below:{(3, $\infty$)}] (da) at (6, -3) {$da$};
+        \node[node, label=below:{(4, $\infty$)}] (ae) at (7.5, -4.5) {$ae$};
         
         
-        \node[node, label=below:{2}] (ea) at (-6, -3) {$ea$};
-        \node[node, label=below:{1}] (ee) at (-7.5, -4.5) {$ee$};
-        \node[node, label=below:{1}] (aa) at (-4.5, -4.5) {$aa$};
+        \node[node, label=below:{(4, 5)}] (ea) at (-6, -3) {$ea$};
+        \node[node, label=below:{($\infty$, 5)}] (ee) at (-7.5, -4.5) {$ee$};
+        \node[node, label=below:{($\infty$, 7)}] (aa) at (-4.5, -4.5) {$aa$};
 
 
-        \node[node, label=below:{1}] (bb) at (-3, -3) {$bb$};
-        \node[node, label=below:{0}] (ba) at (-1.5, -4.5) {$ba$};
+        \node[node, label=below:{($\infty$, 6)}] (bb) at (-3, -3) {$bb$};
+        \node[node, label=below:{(1, $\infty$)}] (ba) at (-1.5, -4.5) {$ba$};
 
         
 
@@ -771,6 +771,6 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
 
 
     \end{tikzpicture}
-    \caption{Árvore da única componente da floresta $F_L$ do grafo $G$ da Figura~\ref{fig:generic-graph-example-1}, onde embaixo de cada nó contém um par de números. O primeiro número indica o atributo \textit{peso} do nó, enquanto o segundo número indica o \textit{pesoMínimo} na subárvore do nó}.
+    \caption{Árvore da única componente da floresta $F_L$ do grafo $G$ da Figura~\ref{fig:generic-graph-example-1}, onde embaixo de cada nó contém um par de números. O primeiro número indica o atributo \textit{peso} do nó, enquanto o segundo número indica o \textit{pesoMínimo} na subárvore do nó.}
     \label{fig:euler-tour-balanced-field-propagation-1}
 \end{figure}
