@@ -827,7 +827,7 @@ A versão completa do método \texttt{adicioneMSF} está descrita abaixo. Apesar
     $\dotvar{G}{peso[u, v]}$ := p
     \textbf{se} \texttt{conectadosFD($G.F_{L}$, $u$, $v$)} \textbf{então} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
         \texttt{adicioneLAMSF($G.R_{L}$, $u$, $v$, $w$)}
-        \texttt{atualizePesoMínimo($G.F_{L}$ $G.R_{L}$, $u$)}
+        \texttt{atualizePesoMínimo($G.F_{L}$, $G.R_{L}$, $u$)}
         \texttt{atualizePesoMínimo($G.F_{L}$, $G.R_{L}$, $v$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{L}$, $G.R_{L}$, $u$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{L}$, $G.R_{L}$, $v$)}
@@ -871,7 +871,7 @@ A versão completa do método \texttt{removaMSF} está descrita abaixo.
         \texttt{substituaArestaMSF($G$, $i$, $u$, $v$)}
     \textbf{senão} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
         \texttt{removaLAMSF($G.R_i$, $u$, $v$)}
-        \texttt{atualizePesoMínimo($G.F_{i}$ $G.R_{i}$, $u$)}
+        \texttt{atualizePesoMínimo($G.F_{i}$, $G.R_{i}$, $u$)}
         \texttt{atualizePesoMínimo($G.F_{i}$, $G.R_{i}$, $v$)}
         \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $u$)}
         \texttt{decrementeArestasReservasDeNível($G.F_i$, $G.R_i$, $v$)}
