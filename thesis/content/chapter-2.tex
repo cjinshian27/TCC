@@ -164,7 +164,7 @@ Podemos notar algumas diferenças quando comparamos o construtor \texttt{MSFDecr
 Como citado antes, a rotina \texttt{adicioneMSF} é acionada apenas em \texttt{MSFDecremental}. Ademais, a única diferença entre a \texttt{adicioneMSF} e a \texttt{adicioneGD} que vimos é que, na primeira, estamos guardando o peso das arestas quando as inserimos no grafo. Portanto, \texttt{adicioneMSF} também consome tempo amortizado $\Oh(\lg n)$.
 
 
-Para \texttt{adicioneMSF}, a invariante~\ref{invariant11} é preservada para o nível $i = \left\lceil \lg n \right\rceil$. Como estamos inserindo arestas de nível $\left\lceil \lg n \right\rceil$ em $F_{\left\lceil \lg n \right\rceil}$, então as florestas de níveis inferiores não são afetadas, mantendo-se, assim, as invariantes~\ref{invariant22} e \ref{invariant33} também.
+Para \texttt{adicioneMSF}, a invariante~\ref{invariant11} é preservada para o nível $i = \left\lceil \lg n \right\rceil$, já que estamos inserindo as arestas da floresta em ordem crescente de peso. Como estamos inserindo arestas de nível $\left\lceil \lg n \right\rceil$ em $F_{\left\lceil \lg n \right\rceil}$, então as florestas de níveis inferiores não são afetadas, mantendo-se, assim, as invariantes~\ref{invariant22} e \ref{invariant33} também.
 
 \subsection{Consulta de peso da MSF decremental}
 \label{sec:connectivity-test-MSF}
