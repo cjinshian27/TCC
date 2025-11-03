@@ -932,7 +932,7 @@ A linha $13$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMí
 Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta substituta que reconecta $T_u$ a $T_v$. Para isso, chamamos \texttt{testeSubstitutaMSF}, descrita abaixo.
 
 \begin{programruledcaption}{\texttt{testeSubstitutaMSF($G$, $x$, $y$, $w$, $j$)} \label{prog:find-substitute-MSF}}
-    \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ do nó $xy$, o peso $w$ de $xy$ e o nível $j$.\\
+    \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ da aresta $xy$, o peso $w$ de $xy$ e o nível $j$.\\
     \textbf{Saída}: Devolve verdadeiro se a aresta $xy$ é substituta e falso caso contrário.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -944,8 +944,6 @@ Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta s
         escapeinside={(*@}{@*)},
     ]
     \texttt{removaLAMSF($G.R_j$, $x$, $y$)}
-    nóXX := G.$F_j$.nó[x, x] 
-    nóYY := G.$F_j$.nó[y, y] 
     \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $x$)}
     \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $y$)}
     \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta xy não é substituta@*)
