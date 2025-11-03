@@ -969,4 +969,6 @@ Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta s
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que a rotina \texttt{testeSubstitutaMSF} agora recebe o peso $w$ da aresta $xy$ que estamos testando. Portanto, as únicas modificações desta rotina em relação à \texttt{testeSubstituta} é que, na primeira, precisamos atualizar a variável \textit{pesoMSF} de $G$ quando encontramos uma aresta substituta, além de chamar os devidos métodos auxiliares (acionamos \texttt{removaLAMSF} e \texttt{adicioneLAMSF} em vez de \texttt{removaLA} e \texttt{adicioneLA}). Assim, \texttt{testeSubstitutaMSF} continua tendo o mesmo consumo de tempo amortizado de \texttt{testeSubstituta}, que é $\Oh(\lg^2 n)$.
+Veja que a rotina \texttt{testeSubstitutaMSF} agora recebe o peso $w$ da aresta $xy$ que estamos testando. Portanto, as únicas modificações desta rotina em relação à \texttt{testeSubstituta} é que, na primeira, precisamos atualizar a variável \textit{pesoMSF} de $G$ quando encontramos uma aresta substituta, além de chamar os devidos métodos auxiliares (acionamos \texttt{removaLAMSF} e \texttt{adicioneLAMSF} em vez de \texttt{removaLA} e \texttt{adicioneLA}). Além disso, como estamos rebaixando arestas reserva, então precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice afetados, acionando \texttt{atualizePesoMínimo} nas linhas $3$, $4$, $11$ e $12$.
+
+Assim, \texttt{testeSubstitutaMSF} continua tendo o mesmo consumo de tempo amortizado de \texttt{testeSubstituta}, que é $\Oh(\lg^2 n)$.
