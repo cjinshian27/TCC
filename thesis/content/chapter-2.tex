@@ -663,8 +663,8 @@ Como o peso de cada aresta ponderada nunca muda após a sua inserção, então n
 
 Por isso, fica claro que precisamos de um método que atualize \textit{pesoMínimo}. Na nossa implementação, a atualização deste atributo é feita na operação \texttt{splay}, sempre que essa executa uma rotação. O método \texttt{atualizePesoMínimo} está descrito abaixo.
 
-\begin{programruledcaption}{\texttt{atualizePesoMínimo($\emph{p}$)} \label{prog:updateMinWeight}}
-    \noindent\textbf{Entrada}: Recebe um nó $p$.\\
+\begin{programruledcaption}{\texttt{atualizePesoMínimo($R$, $\emph{p}$)} \label{prog:updateMinWeight}}
+    \noindent\textbf{Entrada}: Recebe um nó $p$ e as listas de adjacências $R$.\\
     \noindent\textbf{Efeito}: Atualiza o atributo \textit{pesoMínimo} de $p$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
