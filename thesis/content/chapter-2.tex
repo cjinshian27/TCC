@@ -124,7 +124,7 @@ Dessa forma, podemos apresentar o construtor da MSF decremental no Programa~\ref
         $G.R_i$ := \texttt{listasDeAdjacênciasMinHeap($n$)}
     $\dotvar{G}{nível}$ := \texttt{novoMapaHash($n$)}
     $\dotvar{G}{peso}$ := \texttt{novoMapaHash($n$)}
-    \texttt{ordene($E$)} (*@\hfill $\triangleright$ ordena as arestas do conjunto $E$ em ordem crescente@*)
+    \texttt{ordene($E$)} (*@\hfill $\triangleright$ ordena as arestas do conjunto $E$ em ordem crescente de peso@*)
     \textbf{para cada aresta} ($u$, $v$, $w$) \textbf{em} $E$ \textbf{faça}
         \texttt{adicioneMSF}($G$, $u$, $v$, $w$)
     \textbf{retorne} G
@@ -664,8 +664,8 @@ Como o peso de cada aresta ponderada nunca muda após a sua inserção, então n
 Por isso, fica claro que precisamos de um método que atualize \textit{pesoMínimo}. Na nossa implementação, a atualização deste atributo é feita na operação \texttt{splay}, sempre que essa executa uma rotação. O método \texttt{atualizePesoMínimo} está descrito abaixo.
 
 \begin{programruledcaption}{\texttt{atualizePesoMínimo($R$, $\emph{p}$)} \label{prog:updateMinWeight}}
-    \noindent\textbf{Entrada}: Recebe um nó $w$ e as listas de adjacências $R$.\\
-    \noindent\textbf{Efeito}: Atualiza o atributo \textit{pesoMínimo} de $w$.
+    \noindent\textbf{Entrada}: Recebe um nó $p$ e as listas de adjacências $R$.\\
+    \noindent\textbf{Efeito}: Atualiza o atributo \textit{pesoMínimo} de $p$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -777,8 +777,8 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
 
 A seguir, temos o método \texttt{procureNóIncideArestaDePesoMínimo}, descrito no Programa~\ref{prog:findMinWeightEdge}. Este método, como o nome sugere, procura e retorna o nó de vértice que incide a uma aresta reserva de peso mínimo. Ele será utilizado no método \texttt{substituaArestaMSF}, que descreveremos na Seção~\ref{sec:replaceMSF}.
 
-\begin{programruledcaption}{\texttt{procureNóIncideArestaDePesoMínimo($R$, $w$)} \label{prog:findMinWeightEdge}}
-    \noindent\textbf{Entrada}: Recebe um nó $w$ de uma floresta com o  \textit{arestasReservasDeNível} $> 0$ e as listas de adjacências $R$.
+\begin{programruledcaption}{\texttt{procureNóIncideArestaDePesoMínimo($R$, $p$)} \label{prog:findMinWeightEdge}}
+    \noindent\textbf{Entrada}: Recebe um nó $p$ de uma floresta com o atributo \textit{arestasReservasDeNível} $> 0$ e as listas de adjacências $R$.
     \\
     \noindent\textbf{Saída}: Devolve um nó de vértice incidente a uma aresta reserva de peso mínimo.
     \vspace{-0.5\baselineskip}
