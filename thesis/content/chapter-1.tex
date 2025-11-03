@@ -130,7 +130,7 @@ Dessa forma, podemos apresentar o construtor do grafo no Programa~\ref{prog:newG
 
 Como ambos \texttt{florestaDinâmica($n$)} e \texttt{listasDeAdjacências($n$)} consomem tempo $\Oh(n)$, então \texttt{grafoDinâmico($n$)} consome tempo $\Oh(n \lg n)$, pois estamos criando $\left\lceil \lg n \right\rceil$ florestas dinâmicas e listas de adjacências. Além disso, é fácil de ver que, ao final, as três invariantes valem.
 
-\subsection{Consultas de conexidade no grafo dinâmico}
+\subsection{Consultas de conexidade}
 \label{sec:dynamic-graph-connectivity-queries}
 
 Para testar a conexidade entre dois vértices $u$ e $v$ no grafo $G$, basta chamarmos \texttt{conectadosGD($G$, $u$, $v$)}, que por sua vez aciona \texttt{conectadosFD($F_L$, $u$, $v$)}, pois $F_L$ é uma floresta maximal de $G$ pelo invariante \ref{invariant1}. O Programa~\ref{prog:connectedGD} mostra essa rotina.
@@ -167,7 +167,7 @@ Além disso, a rotina de consulta não altera o nosso grafo, incluindo florestas
 
 
 
-\subsection{Inserções de arestas no grafo dinâmico}
+\subsection{Inserções de arestas}
 
 Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma aresta $uv$ no grafo $G$ chamando a rotina \texttt{adicioneGD($G$, $u$, $v$)} e, em seguida, testamos a conexidade de $u$ e $v$ chamando a rotina \texttt{conectadosGD($G$, $u$, $v$)}, e, dependendo do resultado, $uv$ pode ser inserida como aresta reserva ou como aresta da floresta. Assumindo que a aresta $uv$ não exista em $G$ no momento de sua inserção, temos dois cenários:
 
@@ -356,7 +356,7 @@ A invariante \ref{invariant1} se mantém para o nível $i = \left\lceil \lg n \r
 
 
 
-\subsection{Remoção de arestas no grafo dinâmico}
+\subsection{Remoção de arestas}
 \label{sec:dynamic-graph-edge-removal}
 
 A remoção de arestas se divide em dois casos: remoção de uma aresta reserva ou remoção de uma aresta da floresta.
