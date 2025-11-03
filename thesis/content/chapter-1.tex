@@ -1642,4 +1642,4 @@ Isso quer dizer que a inserção da aresta $e$ vai pagar por cada execução das
 
 Desconsiderando, então, estas linhas onde ocorrem rebaixamento de aresta, na linha $2$ do Programa~\ref{prog:replaceGD}, cada iteração  acaba tendo custo amortizado $\Oh(\lg n)$ nas linhas restantes. Como a linha $2$ pode ser executada em no máximo $\Oh(\lg n)$ vezes, então temos que \texttt{substituaAresta} possui tempo amortizado $\Oh(\lg^2 n)$ por operação de remoção. Sendo assim, as $b$ remoções de arestas consomem tempo amortizado $\Oh(b \lg^2 n)$. 
 
-Dessa forma, concluímos que o custo total da sequência de $a + b$ operações é  $\Oh((a + b)\lg^2 n)$, e assim \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação. Consequentemente, temos que \texttt{removaGD} também consome o mesmo tempo amortizado por operação.
+Dessa forma, concluímos que o custo total da sequência de $a + b$ operações é  $\Oh((a + b)\lg^2 n)$, e assim \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação. Consequentemente, temos que \texttt{removaGD} também consome o mesmo tempo amortizado por operação de remoção.
