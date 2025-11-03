@@ -681,7 +681,7 @@ Por isso, fica claro que precisamos de um método que atualize \textit{pesoMíni
     \textbf{se} p.dir $\neq$ \texttt{NIL} \textbf{e} \textit{p.dir.pesoMínimo} < c \textbf{então}
         c := \textit{p.dir.pesoMínimo}
     \textbf{se} R[p] $\neq \emptyset$  \textbf{então}
-        (v, w) := \texttt{consulteMinLAMSF(R, u)}
+        (v, w) := \texttt{consulteMinLAMSF(R, p)}
         \textbf{se} w < c \textbf{então}
             c := w
     p.pesoMínimo := c
@@ -774,3 +774,37 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
     \caption{Árvore da única componente da floresta $F_L$ do grafo $G$ da Figura~\ref{fig:generic-graph-example-1}, onde embaixo de cada nó contém um par de números. O primeiro número indica o atributo \textit{peso} do nó, enquanto o segundo número indica o atributo \textit{pesoMínimo}, calculado através dos nós em sua subárvore.}
     \label{fig:euler-tour-balanced-field-propagation-1}
 \end{figure}
+
+A seguir, temos o método \texttt{procureNóIncideArestaDePesoMínimo}, descrito no Programa~\ref{prog:findMinWeightEdge}. Este método, como o nome sugere, procura e retorna o nó de vértice que incide a uma aresta reserva de peso mínimo. Ele será utilizado no método \texttt{substituaArestaMSF}, que descreveremos na Seção~\ref{sec:replaceMSF}
+
+\begin{programruledcaption}{\texttt{procureNóIncideArestaDePesoMínimo($R$, $p$)} \label{prog:findMinWeightEdge}}
+    \noindent\textbf{Entrada}: Recebe um nó $p$ de uma floresta com o  \textit{arestasReservasDeNível} $> 0$ e as listas de adjacências $R$.
+    \\
+    \noindent\textbf{Saída}: Devolve um nó de vértice incidente a uma aresta reserva de peso mínimo.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    c := $\infty$
+    \textbf{se} R[p] $\neq \emptyset$ \textbf{então}
+        (v, w) := \texttt{consulteMinLAMSF}(R, p)
+        c := w
+    \textbf{se} c $\neq \infty$ \textbf{e} p.pesoMínimo = c \textbf{então}
+        retorne p
+    \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{e} p.esq.pesoMínimo = c \textbf{então}
+        retorne \texttt{procureNóIncideArestaDePesoMínimo($R$, $\emph{p.esq}$)}
+    \textbf{senão}
+        retorne \texttt{procureNóIncideArestaDePesoMínimo($R$, $\emph{p.dir}$)}
+\end{lstlisting}
+\vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \texttt{splay} no nó devolvido). 
+
+\subsection{Rotina de substituição de aresta da MSF decremental}
+\label{sec:replaceMSF}
