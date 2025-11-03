@@ -839,7 +839,7 @@ A versão completa do método \texttt{adicioneMSF} está descrita abaixo. Apesar
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Quando inserimos uma aresta reserva $uv$ em $R_L$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_L$. Isso porque se o peso de $uv$ é o menor dentre todas as arestas reserva inseridas até o momento, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso de $uv$. 
+Quando inserimos uma aresta reserva $uv$ em $R_L$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_L$, como se pode ver nas linhas $6$ e $7$. Isso porque se o peso de $uv$ é o menor dentre todas as arestas reserva inseridas até o momento, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso de $uv$. 
 
 Veja que a complexidade de tempo da versão final de \texttt{adicioneMSF} continua sendo $\Oh(\lg n)$. 
 
@@ -879,7 +879,7 @@ A versão completa do método \texttt{removaMSF} está descrita abaixo.
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Quando removemos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restates, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso. 
+Quando removemos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$, como se pode ver nas linhas $12$ e $13$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restates, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso. 
 
 Veja que a complexidade de tempo da versão final de \texttt{removaMSF} continua sendo $\Oh(\lg^2 n)$ mais o custo da rotina \texttt{substituaArestaMSF}, que será descrita na seção seguinte.
 
