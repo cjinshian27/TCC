@@ -775,7 +775,7 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
     \label{fig:euler-tour-balanced-field-propagation-1}
 \end{figure}
 
-A seguir, temos o método \texttt{procureNóIncideArestaDePesoMínimo}, descrito no Programa~\ref{prog:findMinWeightEdge}. Este método, como o nome sugere, procura e retorna o nó de vértice que incide a uma aresta reserva de peso mínimo. Ele será utilizado no método \texttt{substituaArestaMSF}, que descreveremos na Seção~\ref{sec:replaceMSF}
+A seguir, temos o método \texttt{procureNóIncideArestaDePesoMínimo}, descrito no Programa~\ref{prog:findMinWeightEdge}. Este método, como o nome sugere, procura e retorna o nó de vértice que incide a uma aresta reserva de peso mínimo. Ele será utilizado no método \texttt{substituaArestaMSF}, que descreveremos na Seção~\ref{sec:replaceMSF}.
 
 \begin{programruledcaption}{\texttt{procureNóIncideArestaDePesoMínimo($R$, $p$)} \label{prog:findMinWeightEdge}}
     \noindent\textbf{Entrada}: Recebe um nó $p$ de uma floresta com o  \textit{arestasReservasDeNível} $> 0$ e as listas de adjacências $R$.
@@ -809,3 +809,72 @@ Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portant
 \subsection{Rotina de substituição de aresta}
 \label{sec:replaceMSF}
 
+Para descrever a rotina \texttt{substituaArestaMSF}, que está descrita no Programa~\ref{prog:replaceMSF} abaixo, usaremos vários dos métodos auxiliares já apresentados, além da Seção~\ref{sec:forest-node-adjustments}, onde adicionamos campos novos aos nós das florestas, que serão fundamentais para que \texttt{substituaArestaMSF} funcione corretamente e de forma eficiente.Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que contém um pequeno ajuste em relação ao \texttt{substituaAresta} que vimos anteriormente. 
+
+\begin{programruledcaption}{\texttt{substituaArestaMSF($G$, $i$, $u$, $v$)} \label{prog:replaceMSF}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
+    \noindent\textbf{Efeito}: Adiciona uma aresta substituta no grafo, se ela existir.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    L := $\dotvar{G}{nívelMax}$
+    \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
+        $T_u$ := \texttt{splay($G.F_j.\emph{nó}[u, u]$)}  (*@\hfill $\triangleright$ torna o nó $uu$ raiz de $T_u$@*)
+        $T_v$ := \texttt{splay($G.F_j.\emph{nó}[v, v]$)}  (*@\hfill $\triangleright$ torna o nó $vv$ raiz de $T_v$@*)    
+        \textbf{se} $T_u$.tam > $T_v$.tam \textbf{então}
+            $T_u \leftrightarrow T_v$
+        \textbf{enquanto} $T_u$.arestasDeNível > 0 \textbf{faça} 
+            nóXY := \texttt{procureArestaDeNível($T_u$)}
+            \texttt{splay($\emph{nóXY}$)}
+            $T_u$ := nóXY
+            \texttt{rebaixeNívelDaAresta($G$, $\emph{nóXY}$, j)}
+        \textbf{enquanto} $T_u$.arestasReservasDeNível > 0     \textbf{faça}
+            nóXX := \texttt{procureNóIncideArestaDePesoMínimo($R_j$, $T_u$)}
+            \texttt{splay($\emph{nóXX}$)}
+            $T_u$ := nóXX
+            (x, x) := nóXX.vértices
+            (y, w) := \texttt{extraiaMinLAMSF($R_j$, $x$)} 
+            ($x$, $x$) := \textit{nóXX.vértices}
+            se \texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \textbf{então} 
+                \textbf{retorne}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+
+\begin{programruledcaption}{\texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \label{prog:find-substitute-MSF}}
+    \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ do nó $xy$ e o nível $j$.\\
+    \textbf{Saída}: Devolve verdadeiro se a aresta $xy$ é substituta e falso caso contrário.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    \texttt{removaLAMSF($G.R_j$, $x$, $y$)} 
+    \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta xy não é substituta@*)
+        $\dotvarm{G}{nível}{x, y}$ := j - 1
+        \texttt{adicioneLA($G.R_{j-1}$, $x$, $y$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
+        \textbf{retorne falso}
+    \textbf{senão} (*@\hfill $\triangleright$ a aresta xy é substituta@*)
+        L := $\dotvar{G}{nívelMax}$
+        \textbf{para} k := j \textbf{até} $L$ \textbf{faça}
+            \texttt{adicioneFD($G.F_k$, $x$, $y$)}
+        \textbf{se} x > y \textbf{então}
+            x $\leftrightarrow$ y
+        \texttt{atualizeÉNível($G.F_j$, $x$, $y$, $\textbf{verdadeiro}$)}
+        \textbf{retorne verdadeiro}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
