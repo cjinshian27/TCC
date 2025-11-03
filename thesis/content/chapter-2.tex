@@ -166,7 +166,7 @@ Como citado antes, a rotina \texttt{adicioneMSF} é acionada apenas em \texttt{M
 
 Para \texttt{adicioneMSF}, a invariante~\ref{invariant11} é preservada para o nível $i = \left\lceil \lg n \right\rceil$, já que estamos inserindo as arestas da floresta em ordem crescente de peso. Como estamos inserindo arestas de nível $\left\lceil \lg n \right\rceil$ em $F_{\left\lceil \lg n \right\rceil}$, então as florestas de níveis inferiores não são afetadas, mantendo-se, assim, as invariantes~\ref{invariant22} e \ref{invariant33} também.
 
-\subsection{Consulta de peso da MSF decremental}
+\subsection{Consulta de peso}
 \label{sec:connectivity-test-MSF}
 
 A rotina \texttt{consultePesoMSF}, que devolve o peso da MSF do grafo $G$, está descrita abaixo.     
@@ -192,7 +192,7 @@ A rotina \texttt{consultePesoMSF}, que devolve o peso da MSF do grafo $G$, está
 
 É fácil ver que \texttt{consultePesoMSF} consome tempo $\Oh(1)$. Além disso, como não estamos alterando as florestas do grafo $G$, então as três invariantes são preservadas.
 
-\subsection{Remoção de arestas na MSF decremental}
+\subsection{Remoção de arestas}
 \label{sec:decremental-MSF-edge-removal}
 
 A remoção de arestas também é semelhante à do algoritmo de conexidade em grafos dinâmicos. A diferença é que a busca por alguma aresta substituta, feita na \texttt{substituaArestaMSF} agora, é dada por ordem crescente de peso das arestas reserva. 
@@ -806,5 +806,6 @@ A seguir, temos o método \texttt{procureNóIncideArestaDePesoMínimo}, descrito
 
 Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \texttt{splay} no nó devolvido). 
 
-\subsection{Rotina de substituição de aresta da MSF decremental}
+\subsection{Rotina de substituição de aresta}
 \label{sec:replaceMSF}
+
