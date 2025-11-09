@@ -805,12 +805,14 @@ A seguir, o Programa~\ref{prog:findMinWeightEdge} apresenta o método \texttt{pr
 
 % Na linha $3$ do Programa~\ref{prog:findMinWeightEdge}, estamos interessados em saber o tipo de nó da floresta comparando os valores das pontas deste nó. Se forem iguais, temos um nó de vértice e podemos verificar se a chave mínima do min-heap dele é igual ao valor do seu campo \textit{pesoMínimo}, como temos na linha $6$. Se for, simplesmente retornamos o nó $p$. Se não for, percorremos a subárvore esquerda ou a subárvore direita do nó dependendo de onde o valor do campo \textit{pesoMínimo} da raiz está vindo. 
 
-Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \texttt{splay} no nó devolvido). 
+Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portanto, as invariantes são preservadas. 
+
+% Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \texttt{splay} no nó devolvido). 
 
 \subsection{Versão completa da rotina de adição de arestas}
 \label{sec:addMSF-finalVersion}
 
-A versão completa do método \texttt{adicioneMSF} está descrita abaixo. 
+A versão completa do método \texttt{adicioneMSF} está descrita abaixo. Ao inserirmos uma aresta reserva $uv$ em $R_L$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_L$, como se pode ver nas linhas $6$ e $7$. Isso porque se o peso de $uv$ é o menor dentre todas as arestas reserva inseridas em $R_L$ até o momento, o campo \textit{pesoMínimo} de $u$ e de $v$ então passa a ser o peso de $uv$. Assim, a complexidade de tempo da versão final de \texttt{adicioneMSF} permanece sendo $\Oh(\lg n)$.
 
 \begin{programruledcaption}{\texttt{adicioneMSF($G$, $u$, $v$, $w$)} \label{prog:addMSF-final-version}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, com $u < v$, e o peso $w$ da aresta $uv$. \\
@@ -841,9 +843,6 @@ A versão completa do método \texttt{adicioneMSF} está descrita abaixo.
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Quando inserimos uma aresta reserva $uv$ em $R_L$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_L$, como se pode ver nas linhas $6$ e $7$. Isso porque se o peso de $uv$ é o menor dentre todas as arestas reserva inseridas em $R_i$ até o momento, então o atributo \textit{pesoMínimo} de $u$ e de $v$ passa a ser o peso de $uv$. 
-
- Veja que a complexidade de tempo da versão final de \texttt{adicioneMSF} continua sendo  $\Oh(\lg n)$, e as três invariantes também permanecem preservadas.
 
 \subsection{Versão completa da rotina de remoção de arestas}
 \label{sec:removeMSF-finalVersion}
@@ -881,9 +880,7 @@ A versão completa do método \texttt{removaMSF} está descrita abaixo.
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Quando removemos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$, como se pode ver nas linhas $12$ e $13$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restantes, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso em $R_i$. 
-
-Veja que a complexidade de tempo da versão final de \texttt{removaMSF} continua sendo $\Oh(\lg^2 n)$ mais o custo da rotina \texttt{substituaArestaMSF}, que será descrita na seção seguinte.
+Ao removermos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$, como se pode ver nas linhas $12$ e $13$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restantes, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso em $R_i$. Assim, veja que a complexidade de tempo da versão final de \texttt{removaMSF} continua sendo $\Oh(\lg^2 n)$ mais o custo da rotina \texttt{substituaArestaMSF}, que será descrita na seção seguinte.
 
 \subsection{Rotina de substituição de aresta}
 \label{sec:replaceMSF}
