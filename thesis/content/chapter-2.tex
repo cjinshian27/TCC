@@ -700,11 +700,11 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
         removed/.style={black, thick, dashed}, 
         inner sep=0pt]
 
-        \node[node] (a) at (0,0) {$a$};
-        \node[node] (b) at (1.5,1.5) {$b$};
-        \node[node] (c) at (3,0) {$c$};
-        \node[node] (d) at (1.5,-1.5) {$d$};
-        \node[node] (e) at (-1.5,-1.5) {$e$};
+        \node[node] (a) at (0,1.5) {$a$};
+        \node[node] (b) at (4,1.5) {$b$};
+        \node[node] (c) at (4,-0.7) {$c$};
+        \node[node] (d) at (1.5,-0.7) {$d$};
+        \node[node] (e) at (-1.5,-0.7) {$e$};
 
         \draw[edge] (a) -- (b) node[midway, above, weight] {1};;
         \draw[edge] (c) -- (d) node[midway, above, weight] {2};;
@@ -805,9 +805,7 @@ A seguir, o Programa~\ref{prog:findMinWeightEdge} apresenta o método \texttt{pr
 
 % Na linha $3$ do Programa~\ref{prog:findMinWeightEdge}, estamos interessados em saber o tipo de nó da floresta comparando os valores das pontas deste nó. Se forem iguais, temos um nó de vértice e podemos verificar se a chave mínima do min-heap dele é igual ao valor do seu campo \textit{pesoMínimo}, como temos na linha $6$. Se for, simplesmente retornamos o nó $p$. Se não for, percorremos a subárvore esquerda ou a subárvore direita do nó dependendo de onde o valor do campo \textit{pesoMínimo} da raiz está vindo. 
 
-Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portanto, as invariantes são preservadas. 
-
-% Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \texttt{splay} no nó devolvido). 
+Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \texttt{splay} no nó devolvido). 
 
 \subsection{Versão completa da rotina de adição de arestas}
 \label{sec:addMSF-finalVersion}
