@@ -488,7 +488,7 @@ Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em 
     \label{fig:example-replacement-msf3}
 \end{figure}
 
-Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$, de peso $14$. Como ela conecta $T_u$ a $T_v$, chamamos \texttt{adicioneFD($F_4$, $a$, $d$, $14$)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para os níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement-msf4} ilustra essa etapa do algoritmo. 
+Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$, de peso $14$. Como ela conecta $T_u$ a $T_v$, chamamos \texttt{adicioneFD($F_4$, $a$, $d$)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para os níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement-msf4} ilustra essa etapa do algoritmo. 
 
 \begin{figure}[H]
     \centering
@@ -578,7 +578,7 @@ Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$,
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Representação do grafo com a aresta substituta $ad$ por ser a de menor peso em $R_4$ que conecta $T_u$ a $T_v$ em $F_4$, tornando-se uma aresta da floresta.}
+    \caption{Representação do grafo com a aresta substituta $ad$ por ser a de menor peso em $R_4$ que conecta $T_u$ a $T_v$, tornando-se uma aresta da floresta $F_4$.}
     \vspace{-1cm}
     \label{fig:example-replacement-msf4}
 \end{figure}
