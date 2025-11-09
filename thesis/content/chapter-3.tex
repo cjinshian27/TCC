@@ -140,9 +140,16 @@ Além disso, se $R$ é uma subárvore de $S$, isto é, $\partial_{(S, \partial_{
     \label{fig:top-tree-cluster-of-cluster}
 \end{figure}
 
-Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vértice entre eles e se $A \cup B$ é um cluster, como podemos ver na Figura~\ref{fig:clusters-formation-cases}
+Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vértice entre eles e se $A \cup B$ é um cluster, como podemos ver na Figura~\ref{fig:clusters-formation-cases}. Assim, definimos uma top tree $\mathcal{T}$ do par ($T$, $\partial T$) como sendo uma árvore binária que respeita o seguinte:
 
- \begin{figure}[H]
+\begin{itemize}
+    \item Os vértices de $\mathcal{T}$ são clusters de ($T$, $\partial T$);
+    \item As folhas de $\mathcal{T}$ são as arestas de $T$;
+    \item Se $S$ é pai de $A$ e de $B$ em $\mathcal{T}$, então $S = A \cup B$ e $A$ e $B$ são vizinhos;
+    \item a raiz de $\mathcal{T}$ é a própria árvore $T$.
+\end{itemize}
+
+\begin{figure}[H]
     \centering
 \begin{tikzpicture}[scale=1.2,
     every node/.style={circle, draw, inner sep=2pt},
@@ -197,6 +204,6 @@ Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vér
 \node at (4.6, -3) {4};
 
 \end{tikzpicture}
-\caption{Representação da união de dois clusters $A$ e $B$ formando um cluster $C$, e seus quatro diferentes casos. Os vértices pretos são vértices da fronteira de $C$ após a união de $A$ e $B$. Já os vértices brancos são vértices da fronteira de $A$ e de $B$, mas que não tornaram vértices da fronteira de $C$ após a união.}
+\caption{Representação da união de dois clusters $A$ e $B$ formando um cluster $C$, e seus quatro diferentes casos. Os vértices pretos são vértices da fronteira de $C$ após a união de $A$ e $B$. Já os vértices brancos são vértices da fronteira de $A$ e de $B$, mas que não tornaram vértices da fronteira de $C$ após a união. A linha tracejada é o caminho do cluster (\textit{cluster path}) formada entre os vértices da fronteira de $C$.}
     \label{fig:clusters-formation-cases}
 \end{figure}
