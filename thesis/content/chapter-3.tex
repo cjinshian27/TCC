@@ -75,7 +75,7 @@ Assim, dado ($T$, $\partial T$), qualquer subárvore $S$ de $T$ tem um conjunto 
 
         % \draw[dashed, thick, red] (e) -- (a) -- (d) -- cycle;
     \end{tikzpicture}
-    \caption{Representação de uma árvore $T$ de $5$ vértices. Os vértices pintados em vermelho são vértices da fronteira de $T$, ou seja, formam o conjunto $\partial T$. A região demarcada em vermelho representa a subárvore $S$ contendo os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Neste exemplo, note que os vértices da fronteira de $S$ são $a$ e $d$.}
+    \caption{Representação de uma árvore $T$ de $5$ vértices. Os vértices pintados em vermelho são vértices da fronteira de $T$. A região demarcada em vermelho representa a subárvore $S$ contendo os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Neste exemplo, note que os vértices da fronteira de $S$ são $a$ e $d$.}
     \label{fig:top-tree-subtree-option1}
 \end{figure}
 
@@ -136,6 +136,67 @@ Além disso, se $R$ é uma subárvore de $S$, isto é, $\partial_{(S, \partial_{
 
         % \draw[dashed, thick, red] (e) -- (a) -- (d) -- cycle;
     \end{tikzpicture}
-    \caption{Representação de uma árvore $T$ de $5$ vértices. Os vértices pintados em vermelho são vértices da fronteira de $T$, ou seja, formam o conjunto $\partial T$. A região demarcada em vermelho representa a subárvore $S$ de $T$, e é cluster de $T$, contendo os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Já a região demarcada em verde representa a subárvore $R$ de $S$ contendo os vértices $a$ e $d$ e a aresta $ad$, e é cluster de $S$ e de $T$.}
+    \caption{Representação de uma árvore $T$ de $5$ vértices. Os vértices pintados em vermelho são vértices da fronteira de $T$. A região demarcada em vermelho representa a subárvore $S$ de $T$, e é cluster de $T$, contendo os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Já a região demarcada em verde representa a subárvore $R$ de $S$ contendo os vértices $a$ e $d$ e a aresta $ad$, e é cluster de $S$ e de $T$.}
     \label{fig:top-tree-cluster-of-cluster}
+\end{figure}
+
+Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vértice entre eles e se $A \cup B$ é um cluster, como podemos ver na Figura~\ref{fig:clusters-formation-cases}
+
+ \begin{figure}[H]
+    \centering
+\begin{tikzpicture}[scale=1.2,
+    every node/.style={circle, draw, inner sep=2pt},
+    boundary/.style={fill=black},
+    internal/.style={fill=white},
+    edge/.style={thick},
+    dashededge/.style={thick, dashed}
+]
+
+% (1)
+\node[boundary] (a1) at (0,0) {};
+\node[internal] (b1) at (1.2,0) {};
+\node[boundary] (c1) at (2.4,0) {};
+
+\draw[edge, bend left=30] (a1) to (b1);
+\draw[edge, bend right=30] (a1) to (b1);
+\draw[edge, bend left=30] (b1) to (c1);
+\draw[edge, bend right=30] (b1) to (c1);
+\draw[dashededge] (a1) -- (c1);
+\node at (1.2, -0.8) {1};
+
+% (2)
+\node[boundary] (a2) at (4,0) {};
+\node[boundary] (b2) at (5.2,0) {};
+
+\draw[edge, bend left=35] (a2) to (b2);
+\draw[edge, bend right=35] (a2) to (b2);
+\draw[edge, in=290, out=20, looseness=20] (b2) to (b2);
+\draw[dashededge] (a2) -- (b2);
+\node at (4.6, -0.8) {2};
+
+% (3)
+\node[boundary] (a3) at (0,-2.2) {};
+\node[internal] (b3) at (1.2,-2.2) {};
+\node[boundary] (c3) at (2.4,-2.2) {};
+
+\draw[edge, bend left=30] (a3) to (b3);
+\draw[edge, bend right=30] (a3) to (b3);
+\draw[edge, bend left=35] (b3) to (c3);
+\draw[edge, bend right=35] (b3) to (c3);
+\draw[dashededge] (a3) -- (c3);
+\node at (1.2, -3) {3};
+
+% (4)
+\node[boundary] (a4) at (4,-2.2) {};
+\node[internal] (b4) at (4.6,-1.6) {};
+\node[internal] (c4) at (5.2,-2.2) {};
+
+\draw[edge, bend left=25] (a4) to (b4);
+\draw[edge, bend right=25] (a4) to (c4);
+\draw[edge, bend left=25] (b4) to (c4);
+\node at (4.6, -3) {4};
+
+\end{tikzpicture}
+\caption{Representação da união de dois clusters e quatro diferentes casos.}
+    \label{fig:clusters-formation-cases}
 \end{figure}
