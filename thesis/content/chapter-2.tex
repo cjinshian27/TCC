@@ -889,12 +889,6 @@ Veja que a complexidade de tempo da versão final de \texttt{removaMSF} continua
 
 Para descrever a rotina \texttt{substituaArestaMSF}, descrita no Programa~\ref{prog:replaceMSF}, usaremos vários dos métodos auxiliares já apresentados, além de alguns métodos e campos novos adicionados aos nós das florestas, como vimos na Seção~\ref{sec:forest-node-adjustments}. Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que é uma versão ajustada da rotina \texttt{testeSubstituta} que vimos antes. 
 
-Veja que já vimos as linhas $1$ a $11$ do Programa~\ref{prog:replaceMSF}, pois elas são exatamente iguais a esse mesmo trecho do código do Programa~\ref{prog:replaceGD}. Isso quer dizer que o rebaixamento de arestas da floresta acontece da mesma forma que no algoritmo de conexidade em grafos dinâmicos. O que muda é somente a forma como procuramos por alguma aresta substituta.
-
-Sendo assim, explicaremos o código da linha $12$ em diante. A linha $12$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
-
-A linha $13$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos um nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $17$, onde obtemos um par ($y$, $w$). 
-
 \begin{programruledcaption}{\texttt{substituaArestaMSF($G$, $i$, $u$, $v$)} \label{prog:replaceMSF}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
     \noindent\textbf{Efeito}: Adiciona uma aresta substituta de peso mínimo em $G$, se ela existir.
@@ -930,10 +924,16 @@ A linha $13$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMí
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta substituta que reconecta $T_u$ a $T_v$. Para isso, chamamos \texttt{testeSubstitutaMSF}, descrita abaixo.
+Veja que já vimos as linhas $1$ a $11$ do Programa~\ref{prog:replaceMSF}, pois elas são exatamente iguais a esse mesmo trecho do código do Programa~\ref{prog:replaceGD}. Isso quer dizer que o rebaixamento de arestas da floresta acontece da mesma forma que no algoritmo de conexidade em grafos dinâmicos. O que muda é somente a forma como procuramos por alguma aresta substituta.
 
-\begin{programruledcaption}{\texttt{testeSubstitutaMSF($G$, $x$, $y$, $w$, $j$)} \label{prog:find-substitute-MSF}}
-    \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ da aresta $xy$, o peso $w$ de $xy$ e o nível $j$.\\
+Sendo assim, explicaremos o código da linha $12$ em diante. A linha $12$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
+
+A linha $13$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos um nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $17$, onde obtemos um par ($y$, $w$). 
+
+Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta substituta que reconecta $T_u$ a $T_v$. Para isso, na linha $18$ chamamos \texttt{testeSubstitutaMSF}, descrita no Programa~\ref{prog:find-substitute-MSF}.
+
+\begin{programruledcaption}{\texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \label{prog:find-substitute-MSF}}
+    \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ da aresta $xy$ e o nível $j$.\\
     \textbf{Saída}: Devolve verdadeiro se a aresta $xy$ é substituta e falso caso contrário.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -949,6 +949,7 @@ Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta s
     \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $y$)}
     \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta xy não é substituta@*)
         $\dotvarm{G}{nível}{x, y}$ := j - 1
+        w := $\dotvarm{G}{peso}{x, y}$
         \texttt{adicioneLAMSF($G.R_{j-1}$, $x$, $y$, $w$)}
         \texttt{atualizePesoMínimo($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
         \texttt{atualizePesoMínimo($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
