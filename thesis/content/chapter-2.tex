@@ -893,6 +893,7 @@ Veja que já vimos as linhas $1$ a $11$ do Programa~\ref{prog:replaceMSF}, pois 
 
 Sendo assim, explicaremos o código da linha $12$ em diante. A linha $12$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
 
+A linha $13$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos um nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $17$, onde obtemos um par ($y$, $w$). 
 
 \begin{programruledcaption}{\texttt{substituaArestaMSF($G$, $i$, $u$, $v$)} \label{prog:replaceMSF}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
@@ -928,8 +929,6 @@ Sendo assim, explicaremos o código da linha $12$ em diante. A linha $12$, como 
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
-
-A linha $13$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos o nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $17$, onde obtemos um par ($y$, $w$). 
 
 Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta substituta que reconecta $T_u$ a $T_v$. Para isso, chamamos \texttt{testeSubstitutaMSF}, descrita abaixo.
 
