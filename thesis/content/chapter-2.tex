@@ -885,7 +885,12 @@ Veja que a complexidade de tempo da versão final de \texttt{removaMSF} continua
 \subsection{Rotina de substituição de aresta}
 \label{sec:replaceMSF}
 
-Para descrever a rotina \texttt{substituaArestaMSF}, descrita no Programa~\ref{prog:replaceMSF}, usaremos vários dos métodos auxiliares já apresentados, além dos campos novos adicionados aos nós das florestas, mostrados na Seção~\ref{sec:forest-node-adjustments}. Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que é uma versão ajustada da rotina \texttt{substituaAresta} que vimos antes. 
+Para descrever a rotina \texttt{substituaArestaMSF}, descrita no Programa~\ref{prog:replaceMSF}, usaremos vários dos métodos auxiliares já apresentados, além de alguns métodos e campos novos adicionados aos nós das florestas, como vimos na Seção~\ref{sec:forest-node-adjustments}. Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que é uma versão ajustada da rotina \texttt{testeSubstituta} que vimos antes. 
+
+Veja que já vimos as linhas $1$ a $11$ do Programa~\ref{prog:replaceMSF}, pois elas são exatamente iguais a esse mesmo trecho do código do Programa~\ref{prog:replaceGD}. Isso quer dizer que o rebaixamento de arestas da floresta acontece da mesma forma que no algoritmo de conexidade em grafos dinâmicos. O que muda é somente a forma como procuramos por alguma aresta substituta.
+
+Sendo assim, explicaremos o código da linha $12$ em diante. A linha $12$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
+
 
 \begin{programruledcaption}{\texttt{substituaArestaMSF($G$, $i$, $u$, $v$)} \label{prog:replaceMSF}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
@@ -921,10 +926,6 @@ Para descrever a rotina \texttt{substituaArestaMSF}, descrita no Programa~\ref{p
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
-
-Veja que já vimos as linhas $1$ a $11$ do Programa~\ref{prog:replaceMSF}, pois elas são exatamente igual a esse mesmo trecho do código do Programa~\ref{prog:replaceGD}. Isso quer dizer que o rebaixamento de arestas da floresta acontece da mesma forma que no algoritmo de conexidade em grafos dinâmicos. O que muda é somente a forma como procuramos por alguma aresta substituta.
-
-Sendo assim, explicaremos o código da linha $12$ em diante. A linha $12$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
 
 A linha $13$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos o nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $17$, onde obtemos um par ($y$, $w$). 
 
