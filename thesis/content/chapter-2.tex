@@ -803,16 +803,14 @@ A seguir, temos o método \texttt{procureNóIncideArestaDePesoMínimo}, descrito
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Na linha $3$ do Programa~\ref{prog:findMinWeightEdge}, estamos interessados em saber o tipo de nó da floresta comparando os valores das pontas deste nó. Se forem iguais, temos um nó de vértice e podemos verificar se a chave mínima do min-heap dele é igual ao valor do seu campo \textit{pesoMínimo}, como temos na linha $6$. Se for, simplesmente retornamos o nó $p$. Se não for, percorremos a subárvore esquerda do nó caso o seu filho esquerdo tenha o mesmo valor do campo \textit{pesoMínimo} da raiz, ou a subárvore direita caso o seu filho direito tenha o mesmo valor do campo \textit{pesoMínimo} da raiz. 
+Na linha $3$ do Programa~\ref{prog:findMinWeightEdge}, estamos interessados em saber o tipo de nó da floresta comparando os valores das pontas deste nó. Se forem iguais, temos um nó de vértice e podemos verificar se a chave mínima do min-heap dele é igual ao valor do seu campo \textit{pesoMínimo}, como temos na linha $6$. Se for, simplesmente retornamos o nó $p$. Se não for, percorremos a subárvore esquerda ou a subárvore direita do nó dependendo de onde o valor do campo \textit{pesoMínimo} da raiz está vindo. 
 
 Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \texttt{splay} no nó devolvido). 
 
 \subsection{Versão completa da rotina de adição de arestas}
 \label{sec:addMSF-finalVersion}
 
-A versão completa do método \texttt{adicioneMSF} está descrita abaixo. Apesar deste método não estar disponível para o usuário, é importante entender os ajustes realizados, visto que eles serão necessários para o funcionamento correto do método \texttt{substituaArestaMSF}. 
-
-Quando inserimos uma aresta reserva $uv$ em $R_L$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_L$, como se pode ver nas linhas $6$ e $7$ do Programa~\ref{prog:addMSF-final-version}. Isso porque se o peso de $uv$ é o menor dentre todas as arestas reserva inseridas em $R_i$ até o momento, então o atributo \textit{pesoMínimo} de $u$ e de $v$ passa a ser o peso de $uv$. 
+A versão completa do método \texttt{adicioneMSF} está descrita abaixo. Quando inserimos uma aresta reserva $uv$ em $R_L$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_L$, como se pode ver nas linhas $6$ e $7$ do Programa~\ref{prog:addMSF-final-version}. Isso porque se o peso de $uv$ é o menor dentre todas as arestas reserva inseridas em $R_i$ até o momento, então o atributo \textit{pesoMínimo} de $u$ e de $v$ passa a ser o peso de $uv$. 
 
 \begin{programruledcaption}{\texttt{adicioneMSF($G$, $u$, $v$, $w$)} \label{prog:addMSF-final-version}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, com $u < v$, e o peso $w$ da aresta $uv$. \\
@@ -843,7 +841,7 @@ Quando inserimos uma aresta reserva $uv$ em $R_L$, precisamos atualizar o atribu
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que a complexidade de tempo da versão final de \texttt{adicioneMSF} continua sendo $\Oh(\lg n)$, e as três invariantes também permanecem preservadas.
+ Embora este método não esteja disponível para o usuário, é importante entender os ajustes realizados, visto que eles serão necessários para o funcionamento correto do método \texttt{substituaArestaMSF}. Veja que a complexidade de tempo da versão final de \texttt{adicioneMSF} continua sendo  $\Oh(\lg n)$, e as três invariantes também permanecem preservadas.
 
 \subsection{Versão completa da rotina de remoção de arestas}
 \label{sec:removeMSF-finalVersion}
@@ -887,11 +885,11 @@ Veja que a complexidade de tempo da versão final de \texttt{removaMSF} continua
 \subsection{Rotina de substituição de aresta}
 \label{sec:replaceMSF}
 
-Para descrever a rotina \texttt{substituaArestaMSF}, que está descrita no Programa~\ref{prog:replaceMSF} abaixo, usaremos vários dos métodos auxiliares já apresentados, além da Seção~\ref{sec:forest-node-adjustments}, onde adicionamos campos novos aos nós das florestas, que serão fundamentais para que a rotina \texttt{substituaArestaMSF} funcione corretamente e de forma eficiente. Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que contém um pequeno ajuste em relação ao \texttt{substituaAresta} que vimos anteriormente. 
+Para descrever a rotina \texttt{substituaArestaMSF}, descrita no Programa~\ref{prog:replaceMSF}, usaremos vários dos métodos auxiliares já apresentados, além dos campos novos adicionados aos nós das florestas, mostrados na Seção~\ref{sec:forest-node-adjustments}. Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que é uma versão ajustada da rotina \texttt{substituaAresta} que vimos antes. 
 
 \begin{programruledcaption}{\texttt{substituaArestaMSF($G$, $i$, $u$, $v$)} \label{prog:replaceMSF}}
     \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
-    \noindent\textbf{Efeito}: Adiciona uma aresta substituta no grafo, se ela existir.
+    \noindent\textbf{Efeito}: Adiciona uma aresta substituta de peso mínimo em $G$, se ela existir.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
