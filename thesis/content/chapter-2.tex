@@ -295,9 +295,7 @@ No nosso exemplo, $G$ tem $n = 10$ vértices. Sabemos que $\left\lceil \lg 10 \r
     \label{fig:example-replacement-msf1}
 \end{figure}
 
-O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nível~$3$. Dessa forma, as arestas de $T_u$ passam a estar em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement-msf2}, pois agora elas passam a ser de nível $3$.  
-
-Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos encontrar, se existir, uma aresta reserva que possa reconectá-las. Note que agora precisamos percorrer as arestas reserva em ordem de peso. Entretanto, percorrer todas as arestas reserva de $R_4$ incidentes a $T_u$ e selecionar a de menor peso é ineficiente. Isso porque, se a aresta de peso mínimo não é uma substituta, teremos que buscar a próxima de menor peso e fazer esse processo novamente, o que acaba comprometendo com a performance do algoritmo. Por isso, explicaremos como implementar essa busca por uma aresta substituta de menor peso na Seção~\ref{sec:forest-node-adjustments}.
+O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nível~$3$. Dessa forma, as arestas de $T_u$ passam a estar em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement-msf2}, pois agora elas passam a ser de nível $3$. Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos encontrar, se existir, uma aresta reserva que possa reconectá-las. Note que agora precisamos percorrer as arestas reserva em ordem de peso. Entretanto, percorrer todas as arestas reserva de $R_4$ incidentes a $T_u$ e selecionar a de menor peso é ineficiente. Isso porque, se a aresta de peso mínimo não é uma substituta, teremos que buscar a próxima de menor peso e fazer esse processo novamente, o que acaba comprometendo com a performance do algoritmo. Por isso, explicaremos como implementar essa busca por uma aresta substituta de menor peso na Seção~\ref{sec:forest-node-adjustments}.
 
 \begin{figure}[H]
     \centering
@@ -653,13 +651,13 @@ O método \texttt{substituaArestaMSF}, que é uma versão ajustada de \texttt{su
 \subsection{Ajustes em nós das florestas}
 \label{sec:forest-node-adjustments}
 
-No algoritmo de conexidade em grafos dinâmicos, vimos que os nós da floresta guardam dois campos, \textit{incideArestaReservaDeNível} e \textit{éNível}, além de dois contadores, \textit{arestasDeNível} e \textit{arestasReservasDeNível}. Mostramos também alguns métodos que atualizam estes campos e que usam estes campos para realizar a busca eficiente de arestas reserva quando procuramos por alguma aresta substituta.
+No algoritmo de conexidade em grafos dinâmicos, vimos que os nós da floresta guardam dois campos, \textit{incideArestaReservaDeNível} e \textit{éNível}, além de dois contadores, \textit{arestasDeNível} e \textit{arestasReservasDeNível}. Mostramos também alguns métodos que atualizam e utilizam estes campos para realizar a busca eficiente de uma aresta substituta.
 
 Para o algoritmo da MSF decremental, além destes campos apresentados, precisaremos de dois campos extras para cada nó da floresta: \textit{peso} e \textit{pesoMínimo}. O primeiro campo armazena o peso de um nó de aresta (nós de vértice guardam $\infty$ neste campo). Na floresta $F_i$, cada nó de vértice sabe facilmente o peso mínimo de uma aresta reserva de $R_i$ incidente nele. Assim, o campo \textit{pesoMínimo} de cada nó $p$ de floresta guarda o peso mínimo de uma aresta reserva de $R_i$ incidente a algum vértice cujo nó está na subárvore de $p$.
 
-Como o peso de cada aresta ponderada nunca muda, então não precisamos atualizar o seu peso. Entretanto, à medida que vamos removendo arestas da floresta $F_i$, quebramos alguma componente dela em duas e precisamos buscar alguma aresta substituta para reconectar as duas componentes separadas. Assim, quando procuramos por alguma aresta substituta em $R_i$, podemos neste processo rebaixar algumas arestas de $R_i$ para $R_{i-1}$ e o \textit{pesoMínimo} dos nós em $F_i$ e em $F_{i-1}$ precisa ser atualizado. Se em $R_i$ encontrarmos uma substituta, ela se tornará uma aresta da floresta $F_i$ e precisamos também atualizar o \textit{pesoMínimo} de alguns nós em $F_i$, que agora será o peso mínimo dentre as arestas reserva restantes em $R_i$.
+Como o peso de cada aresta ponderada nunca muda, então não precisamos atualizar o seu peso. Entretanto, à medida que vamos removendo arestas da floresta $F_i$, quebramos alguma componente dela em duas e precisamos buscar alguma aresta substituta para reconectar as duas componentes separadas. Assim, quando procuramos por alguma aresta substituta em $R_i$, podemos neste processo rebaixar algumas arestas de $R_i$ para $R_{i-1}$ e o \textit{pesoMínimo} dos nós em $F_i$ e em $F_{i-1}$ precisa ser atualizado. Se em $R_i$ acharmos uma substituta, ela se tornará uma aresta da floresta $F_i$ e precisamos também atualizar o \textit{pesoMínimo} de alguns nós em $F_i$, que agora será o peso mínimo dentre as arestas reserva restantes em $R_i$.
 
-Por isso, fica claro que precisamos de um método que atualize o campo \textit{pesoMínimo} dos nós. Para isso, criamos o método \texttt{atualizePesoMínimo}, que está descrito abaixo. Na nossa implementação, ele é usado em métodos quando estamos fazendo alguma alteração em $R_i$, como também é usado ao acionarmos as operações \texttt{splay}, sempre que essa executa uma rotação. 
+Por isso, fica claro que precisamos de um método que atualize o campo \textit{pesoMínimo} dos nós. Para isso, criamos o método \texttt{atualizePesoMínimo}, que está descrito abaixo. Na nossa implementação, ele é usado em métodos quando estamos fazendo alguma alteração em $R_i$, e também é usado ao acionarmos as operações \texttt{splay}, sempre que essa executa uma rotação. 
 
 \begin{programruledcaption}{\texttt{atualizePesoMínimo($F$, $R$, $u$)} \label{prog:updateMinWeight}}
     \noindent\textbf{Entrada}: Recebe um vértice $u$, as listas de adjacências $R$ e a floresta $F$.\\
@@ -771,11 +769,11 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
 
 
     \end{tikzpicture}
-    \caption{Árvore da única componente da floresta $F_L$ do grafo $G$ da Figura~\ref{fig:generic-graph-example-1}, onde embaixo de cada nó contém um par de números. O primeiro número indica o atributo \textit{peso} do nó, enquanto o segundo número indica o atributo \textit{pesoMínimo}, calculado através dos nós em sua subárvore.}
+    \caption{Árvore da única componente da floresta $F_L$ do grafo $G$ da Figura~\ref{fig:generic-graph-example-1}, onde embaixo de cada nó há um par de números. O primeiro número indica o atributo \textit{peso} do nó, enquanto o segundo número indica o atributo \textit{pesoMínimo}, calculado através dos nós em sua subárvore.}
     \label{fig:euler-tour-balanced-field-propagation-1}
 \end{figure}
 
-A seguir, temos o método \texttt{procureNóIncideArestaDePesoMínimo}, descrito no Programa~\ref{prog:findMinWeightEdge}. Este método, como o nome sugere, procura e retorna o nó de vértice que incide a uma aresta reserva de peso mínimo. Ele será utilizado no método \texttt{substituaArestaMSF}, que descreveremos na Seção~\ref{sec:replaceMSF}.
+A seguir, temos o método \texttt{procureNóIncideArestaDePesoMínimo}, descrito no Programa~\ref{prog:findMinWeightEdge}. Este método, como o nome sugere, procura e retorna o nó de vértice que incide em uma aresta reserva de peso mínimo. Ele será utilizado no método \texttt{substituaArestaMSF}, que descreveremos na Seção~\ref{sec:replaceMSF}.
 
 \begin{programruledcaption}{\texttt{procureNóIncideArestaDePesoMínimo($R$, $p$)} \label{prog:findMinWeightEdge}}
     \noindent\textbf{Entrada}: Recebe um nó $p$ de uma floresta com o atributo \textit{arestasReservasDeNível} $> 0$ e as listas de adjacências $R$.
@@ -791,12 +789,13 @@ A seguir, temos o método \texttt{procureNóIncideArestaDePesoMínimo}, descrito
         escapeinside={(*@}{@*)},
     ]
     c := $\infty$
-    \textbf{se} R[p] $\neq \emptyset$ \textbf{então}
+    (x, y) := p.vértices
+    \textbf{se} $x$ = $y$ \textbf{e} R[x] $\neq \emptyset$ \textbf{então} (*@\hfill $\triangleright$ verificamos se $p$ é um nó de vértice@*)
         ($v$, $w$) := \texttt{consulteMinLAMSF}($R$, $p$)
         c := w
     \textbf{se} c $\neq \infty$ \textbf{e} p.pesoMínimo = c \textbf{então}
         retorne p
-    \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{e} p.esq.pesoMínimo = c \textbf{então}
+    \textbf{se} p.esq $\neq$ \texttt{NIL} \textbf{e} p.esq.pesoMínimo = p.pesoMínimo \textbf{então}
         retorne \texttt{procureNóIncideArestaDePesoMínimo($R$, $\emph{p.esq}$)}
     \textbf{senão}
         retorne \texttt{procureNóIncideArestaDePesoMínimo($R$, $\emph{p.dir}$)}
@@ -825,7 +824,7 @@ A versão completa do método \texttt{adicioneMSF} está descrita abaixo. Apesar
     ]
     L := $\dotvar{G}{nívelMax}$
     $\dotvarm{G}{nível}{u,v}$ := $L$
-    $\dotvar{G}{peso[u, v]}$ := p
+    $\dotvar{G}{peso[u, v]}$ := $w$
     \textbf{se} \texttt{conectadosFD($G.F_{L}$, $u$, $v$)} \textbf{então} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
         \texttt{adicioneLAMSF($G.R_{L}$, $u$, $v$, $w$)}
         \texttt{atualizePesoMínimo($G.F_{L}$, $G.R_{L}$, $u$)}
@@ -840,9 +839,9 @@ A versão completa do método \texttt{adicioneMSF} está descrita abaixo. Apesar
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Quando inserimos uma aresta reserva $uv$ em $R_L$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_L$, como se pode ver nas linhas $6$ e $7$. Isso porque se o peso de $uv$ é o menor dentre todas as arestas reserva inseridas até o momento, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso de $uv$. 
+Quando inserimos uma aresta reserva $uv$ em $R_L$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_L$, como se pode ver nas linhas $6$ e $7$. Isso porque se o peso de $uv$ é o menor dentre todas as arestas reserva inseridas até o momento, então o atributo \textit{pesoMínimo} de $u$ e de $v$ passa a ser o peso de $uv$. 
 
-Veja que a complexidade de tempo da versão final de \texttt{adicioneMSF} continua sendo $\Oh(\lg n)$. 
+Veja que a complexidade de tempo da versão final de \texttt{adicioneMSF} continua sendo $\Oh(\lg n)$, e as três invariantes também permanecem preservadas.
 
 \subsection{Versão completa da rotina de remoção de arestas}
 \label{sec:removeMSF-finalVersion}
@@ -880,7 +879,7 @@ A versão completa do método \texttt{removaMSF} está descrita abaixo.
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Quando removemos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$, como se pode ver nas linhas $12$ e $13$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restates, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso. 
+Quando removemos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$, como se pode ver nas linhas $12$ e $13$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restantes, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso. 
 
 Veja que a complexidade de tempo da versão final de \texttt{removaMSF} continua sendo $\Oh(\lg^2 n)$ mais o custo da rotina \texttt{substituaArestaMSF}, que será descrita na seção seguinte.
 
