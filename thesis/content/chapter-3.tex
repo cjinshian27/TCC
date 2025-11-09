@@ -173,7 +173,7 @@ Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vér
 
 % (2)
 \node[boundary] (a2) at (4,0) {};
-\node[boundary] (b2) at (5.2,0) {};
+\node[internal] (b2) at (5.2,0) {};
 
 \draw[edge, bend left=35] (a2) to (b2);
 \draw[edge, bend right=35] (a2) to (b2);
@@ -182,25 +182,20 @@ Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vér
 \node at (4.6, -0.8) {2};
 
 % (3)
-\node[boundary] (a3) at (0,-2.2) {};
-\node[internal] (b3) at (1.2,-2.2) {};
-\node[boundary] (c3) at (2.4,-2.2) {};
+\node[boundary] (a3) at (0.5,-2.2) {};
+\node[boundary] (b3) at (1.7,-2.2) {};
 
 \draw[edge, bend left=30] (a3) to (b3);
 \draw[edge, bend right=30] (a3) to (b3);
-\draw[edge, bend left=35] (b3) to (c3);
-\draw[edge, bend right=35] (b3) to (c3);
-\draw[dashededge] (a3) -- (c3);
+\draw[edge, in=290, out=20, looseness=20] (b3) to (b3);
+\draw[dashededge] (a3) -- (b3);
 \node at (1.2, -3) {3};
 
 % (4)
-\node[boundary] (a4) at (4,-2.2) {};
-\node[internal] (b4) at (4.6,-1.6) {};
-\node[internal] (c4) at (5.2,-2.2) {};
+\node[boundary] (a4) at (4.6, -2.2) {};
 
-\draw[edge, bend left=25] (a4) to (b4);
-\draw[edge, bend right=25] (a4) to (c4);
-\draw[edge, bend left=25] (b4) to (c4);
+\draw[edge] (a4) edge[loop left, min distance=15mm, looseness=4] (a4);
+\draw[edge] (a4) edge[loop right, min distance=15mm, looseness=4] (a4);
 \node at (4.6, -3) {4};
 
 \end{tikzpicture}
