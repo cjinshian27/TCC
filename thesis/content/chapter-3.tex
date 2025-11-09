@@ -70,11 +70,72 @@ Assim, dado ($T$, $\partial T$), qualquer subárvore $S$ de $T$ tem um conjunto 
         % --- Draw the Dashed Triangular Outline ---
         
         % Connect the invisible coordinates with rounded corners
-        \draw[dashed, thick, red, rounded corners=10pt] 
+        \draw[dashed, thick, red, rounded corners=30pt] 
             (P1) -- (P2) -- (P3) -- cycle;
 
         % \draw[dashed, thick, red] (e) -- (a) -- (d) -- cycle;
     \end{tikzpicture}
-    \caption{Representação de uma árvore $T$ de $5$ vértices. Os vértices pintados em vermelho são vértices da fronteira de $T$, ou seja, formam o conjunto $\partial T$. O triângulo tracejado representa a subárvore $S$ contendo os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Neste exemplo, note que os vértices da fronteira de $S$ são $a$ e $d$.}
+    \caption{Representação de uma árvore $T$ de $5$ vértices. Os vértices pintados em vermelho são vértices da fronteira de $T$, ou seja, formam o conjunto $\partial T$. A região demarcada em vermelho representa a subárvore $S$ contendo os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Neste exemplo, note que os vértices da fronteira de $S$ são $a$ e $d$.}
     \label{fig:top-tree-subtree-option1}
+\end{figure}
+
+Uma subárvore $S$ é chamado \textbf{cluster} de ($T$, $\partial T$) se ela possuir no máximo dois vértices da fronteira. Assim, por definição, $T$ é um cluster dele mesmo, com $\partial_{(T, \partial T)}T = \partial T$. A subárvore $S$ da Figura~\ref{fig:top-tree-subtree-option1} acima é um cluster, pois ele possui apenas dois vértices da fronteira.
+
+Além disso, se $R$ é uma subárvore de $S$, isto é, $\partial_{(S, \partial_{(T, \partial T)}S)}R = \partial_{(T, \partial T)} R$, então $R$ é um cluster  
+ de ($S$, $\partial_{(T, \partial T)} S$) se, e somente se, $R$ é um cluster de $(T, \partial T)$. Podemos ver essa situação no exemplo da Figura~\ref{fig:top-tree-cluster-of-cluster}.
+
+ \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        inner sep=0pt]
+
+        \node[node, fill=red!30] (a) at (0,1.5) {$a$};
+        \node[node, fill=red!30] (b) at (4,1.5) {$b$};
+        \node[node] (c) at (4,-0.7) {$c$};
+        \node[node] (d) at (1.5,-0.7) {$d$};
+        \node[node] (e) at (-1.5,-0.7) {$e$};
+
+        \draw[edge] (a) -- (b) node[midway, above] {};
+        \draw[edge] (c) -- (d) node[midway, above] {};
+        \draw[edge] (d) -- (a) node[midway, above] {};
+        \draw[edge] (a) -- (e) node[midway, above] {};
+        
+        % P1: Top Vertex (above node 'a')
+        \coordinate (P1) at ([yshift=20pt]a.north); 
+        
+        % P2: Bottom-Left Vertex (left of 'e' and slightly below it, using calc for precision)
+        \coordinate (P2) at ([xshift=-23pt, yshift=-10pt]e.south west);
+        
+        % P3: Bottom-Right Vertex (right of 'd' and slightly below it, using calc for precision)
+        \coordinate (P3) at ([xshift=23pt, yshift=-10pt]d.south east);
+
+
+        \draw[dashed, thick, red, rounded corners=30pt] 
+            (P1) -- (P2) -- (P3) -- cycle;
+        % G1: Top-Left point (relative to 'a')
+  
+        % Top-Left corner (above and to the left of 'a')
+        \coordinate (DR1) at ([xshift=-10pt, yshift=18pt]a.north east); 
+        
+        % Bottom-Left corner (below and to the left of 'a', near 'e')
+        \coordinate (DR2) at ([xshift=-17pt, yshift=-16pt]a.north west); 
+        
+        % Bottom-Right corner (below and to the right of 'd', near 'c')
+        \coordinate (DR3) at ([xshift=12pt, yshift=-18pt]d.south west); 
+        
+        % Top-Right corner (above and to the right of 'd')
+        \coordinate (DR4) at ([xshift=17pt, yshift=14pt]d.south east); 
+
+        % --- Draw the Dashed Green Diagonal Rectangle ---
+        \draw[dashed, thick, green!70!black, rounded corners=20pt] 
+            (DR1) -- (DR2) -- (DR3) -- (DR4) -- cycle;
+
+        % \draw[dashed, thick, red] (e) -- (a) -- (d) -- cycle;
+    \end{tikzpicture}
+    \caption{Representação de uma árvore $T$ de $5$ vértices. Os vértices pintados em vermelho são vértices da fronteira de $T$, ou seja, formam o conjunto $\partial T$. A região demarcada em vermelho representa a subárvore $S$, que é cluster de $T$, e contém os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Já a região demarcada em verde representa a subárvore $R$ contendo os vértices $a$ e $d$ e a aresta $ad$, e logo é cluster de $S$ e de $T$.}
+    \label{fig:top-tree-cluster-of-cluster}
 \end{figure}
