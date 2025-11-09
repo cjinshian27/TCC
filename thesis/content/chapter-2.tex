@@ -930,7 +930,7 @@ Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta s
 
 \begin{programruledcaption}{\texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \label{prog:find-substitute-MSF}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ da aresta $xy$ e o nível $j$.\\
-    \textbf{Saída}: Devolve verdadeiro se a aresta $xy$ é substituta e falso caso contrário.
+    \textbf{Saída}: Remove $xy$ de $R_j$ e, caso $xy$ seja substituta, adiciona $xy$ a $R_j$ e devolve verdadeiro. Caso contrário, adiciona $xy$ a $R_{j-1}$ e devolve falso.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
         language={[brazilian]pseudocode},
@@ -943,7 +943,7 @@ Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta s
     \texttt{removaLAMSF($G.R_j$, $x$, $y$)}
     \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $x$)}
     \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $y$)}
-    \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta xy não é substituta@*)
+    \textbf{se} \texttt{conectadosFD($G.F_j$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta xy não é substituta@*)
         $\dotvarm{G}{nível}{x, y}$ := j - 1
         w := $\dotvarm{G}{peso}{x, y}$
         \texttt{adicioneLAMSF($G.R_{j-1}$, $x$, $y$, $w$)}
@@ -965,6 +965,6 @@ Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta s
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que a rotina \texttt{testeSubstitutaMSF} agora recebe o peso $w$ da aresta $xy$ que estamos testando. Portanto, as únicas modificações desta rotina em relação à \texttt{testeSubstituta} é que, na primeira, precisamos atualizar a variável \textit{pesoMSF} de $G$ quando encontramos uma aresta substituta, além de chamar os devidos métodos auxiliares (acionamos \texttt{removaLAMSF} e \texttt{adicioneLAMSF} em vez de \texttt{removaLA} e \texttt{adicioneLA}). Além disso, como estamos rebaixando arestas reserva, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice afetados, acionando a rotina \texttt{atualizePesoMínimo} nas linhas $2$, $3$, $7$ e $8$.
+Veja que na rotina \texttt{testeSubstitutaMSF} precisamos atualizar a variável \textit{pesoMSF} de $G$ quando encontramos uma aresta substituta, além de chamar os devidos métodos auxiliares (acionamos \texttt{removaLAMSF} e \texttt{adicioneLAMSF} em vez de \texttt{removaLA} e \texttt{adicioneLA}). Além disso, como estamos rebaixando arestas reserva, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice afetados, acionando a rotina \texttt{atualizePesoMínimo} nas linhas $2$, $3$, $8$ e $9$.
 
 Assim, \texttt{testeSubstitutaMSF} continua tendo o mesmo consumo de tempo amortizado de \texttt{testeSubstituta}, que é $\Oh(\lg^2 n)$.
