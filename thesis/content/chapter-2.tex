@@ -146,7 +146,7 @@ Podemos notar algumas diferenças quando comparamos o construtor \texttt{MSFDecr
     ]
     L := $\dotvar{G}{nívelMax}$
     $\dotvarm{G}{nível}{u,v}$ := $L$
-    $\dotvar{G}{peso[u, v]}$ := p
+    $\dotvarm{G}{peso}{u, v}$ := $w$
     \textbf{se} \texttt{conectadosFD($G.F_{L}$, $u$, $v$)} \textbf{então} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
         \texttt{adicioneLAMSF($G.R_{L}$, $u$, $v$, $w$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{L}$, $G.R_{L}$, $u$)}
@@ -633,7 +633,7 @@ A partir dessas imagens, percebe-se que o método \texttt{removaMSF}, descrito a
     i := $\dotvarm{G}{nível}{u,v}$
     $\dotvarm{G}{nível}{u,v}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos $uv$ como removida@*)
     \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ $uv$ é aresta da floresta@*)
-        w := $\dotvar{G}{peso[u, v]}$
+        w := $\dotvarm{G}{peso}{u, v}$
         $\dotvar{G}{pesoMSF}$ := $\dotvar{G}{pesoMSF}$ - $w$
         \textbf{para} j := i \textbf{até} L \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
@@ -826,7 +826,7 @@ A versão completa do método \texttt{adicioneMSF} está descrita abaixo. Ao ins
     ]
     L := $\dotvar{G}{nívelMax}$
     $\dotvarm{G}{nível}{u,v}$ := $L$
-    $\dotvar{G}{peso[u, v]}$ := $w$
+    $\dotvarm{G}{peso}{u,v}$ := $w$
     \textbf{se} \texttt{conectadosFD($G.F_{L}$, $u$, $v$)} \textbf{então} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
         \texttt{adicioneLAMSF($G.R_{L}$, $u$, $v$, $w$)}
         \texttt{atualizePesoMínimo($G.F_{L}$, $G.R_{L}$, $u$)}
@@ -863,7 +863,7 @@ A versão completa do método \texttt{removaMSF} está descrita abaixo.
     i := $\dotvarm{G}{nível}{u,v}$
     $\dotvarm{G}{nível}{u,v}$ := \texttt{NIL} (*@\hfill $\triangleright$ marcamos $uv$ como removida@*)
     \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ $uv$ é aresta da floresta@*)
-        w := $\dotvar{G}{peso[u, v]}$
+        w := $\dotvarm{G}{peso}{u, v}$
         $\dotvar{G}{pesoMSF}$ := $\dotvar{G}{pesoMSF}$ - $w$
         \textbf{para} j := i \textbf{até} L \textbf{faça}
             \texttt{removaFD($G.F_j$, $u$, $v$)}
