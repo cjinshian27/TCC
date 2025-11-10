@@ -151,7 +151,7 @@ Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vér
 
 Para um cluster $C$, os vértices em $C\backslash \partial C$ são chamados de vértices internos (\textit{internal vertices}). Se $a$ e $b$ são vértices da fronteira de $C$, o caminho $a \cdots b$ se chama \textit{cluster path} e denotamos por $\pi(C)$. Se $a \neq b$, o cluster é chamado de \textit{path cluster}. 
 
-Dizemos que o cluster $C$ é \textit{path ancestor} do cluster $D$ e $D$ é chamado de \textit{path descendant} de $C$ se ambos forem \textit{path clusters} e $\pi(D) \subseteq \pi(C)$. Note que cada aresta $e \in \pi(C)$ é um \textit{path descendant} de $C$. Um filho que é caminho descendente é um \textit{path child}. Na Figura~\ref{fig:clusters-formation-cases}, apresentamos os quatro casos quando fazemos a união de dois clusters. Em (1), temos dois \textit{path children}. Em (2), temos um \textit{path child}, e zero \textit{path children} em (3) e (4).
+Dizemos que o cluster $C$ é \textit{path ancestor} do cluster $D$ e $D$ é chamado de \textit{path descendant} de $C$ se ambos forem \textit{path clusters} e $\pi(D) \subseteq \pi(C)$. Note que cada aresta $e \in \pi(C)$ é um \textit{path descendant} de $C$. Um filho que é \textit{path descendant} é um \textit{path child}. Na Figura~\ref{fig:clusters-formation-cases}, apresentamos os quatro casos quando fazemos a união de dois clusters. Em (1), temos dois \textit{path children}; em (2), temos um \textit{path child}; e em (3) e (4), temos zero \textit{path children}.
 
 
 \begin{figure}[H]
@@ -313,6 +313,6 @@ A partir da árvore $T$, podemos derivar uma \textit{top tree}, como se pode ver
 
 
     \end{tikzpicture}
-    \caption{Uma top árvore $\mathcal{T}$ derivada da árvore $T$. Cada vértice (cluster) de $\mathcal{T}$ guarda a união dos vértices dos filhos, que também são clusters. Emabaixo de cada vértice $p$ de $\mathcal{T}$, temos os vértices da fronteira do $p$.}
+    \caption{Uma top árvore $\mathcal{T}$ derivada da árvore $T$. Cada vértice (cluster) de $\mathcal{T}$ guarda a união dos vértices dos filhos, que também são clusters. Embaixo de cada vértice $p$ de $\mathcal{T}$, temos os vértices da fronteira do $p$.}
     \label{fig:top-t-from-tree-t}
 \end{figure}
