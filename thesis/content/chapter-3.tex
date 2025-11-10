@@ -233,17 +233,17 @@ Ademais, se $a$ é um vértice de fronteira de $C$ e $C$ possui dois filhos $A$ 
 
 
         % tree edges (normal black edges)
-        \draw[edge] (a) -- (b) node[midway, below] {};
-        \draw[edge] (a) -- (c) node[midway, below] {};
-        \draw[edge] (a) -- (d) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below, weight, yshift=2pt] {$a$};
+        \draw[edge] (a) -- (c) node[midway, below, weight, yshift=2pt] {$b$};
+        \draw[edge] (a) -- (d) node[midway, below, weight, yshift=2pt] {$c$};
 
-        \draw[edge] (b) -- (e) node[midway, below] {};
-        \draw[edge] (e) -- (f) node[midway, below] {};
-        \draw[edge] (e) -- (g) node[midway, below] {};
+        \draw[edge] (b) -- (e) node[midway, below, weight, yshift=2pt] {$d$};
+        \draw[edge] (e) -- (f) node[midway, below, weight, yshift=2pt] {$e$};
+        \draw[edge] (e) -- (g) node[midway, below, weight,  yshift=2pt] {$f$};
 
-        \draw[edge] (c) -- (h) node[midway, below] {};
-        \draw[edge] (c) -- (i) node[midway, below] {};
-        \draw[edge] (i) -- (j) node[midway, below] {};
+        \draw[edge] (c) -- (h) node[midway, below, weight, yshift=2pt] {$g$};
+        \draw[edge] (c) -- (i) node[midway, below, weight, yshift=2pt] {$h$};
+        \draw[edge] (i) -- (j) node[midway, below, weight, yshift=2pt] {$i$};
 
     \end{tikzpicture}
     \caption{Árvore $T$ com $10$ vértices.}
