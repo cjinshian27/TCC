@@ -250,7 +250,7 @@ Ademais, se $a$ é um vértice de fronteira de $C$ e $C$ possui dois filhos $A$ 
     \label{fig:tree-t}
 \end{figure}
 
-A partir da árvore $T$, podemos derivar uma \textit{top tree} na Figura~\ref{fig:top-t-from-tree-t} abaixo. 
+A partir da árvore $T$, podemos derivar uma \textit{top tree}, como se pode ver na Figura~\ref{fig:top-t-from-tree-t} abaixo. 
 
 \begin{figure}[H]
     \centering
@@ -262,44 +262,57 @@ A partir da árvore $T$, podemos derivar uma \textit{top tree} na Figura~\ref{fi
         inner sep=0pt]
 
  
-        \node[node, shape=ellipse] (ad) at (0, 0) {$a, b, c, d, e, f, g, h, i, j$};
-        \node[node, shape=ellipse] (ab) at (-4.5, -1.5) {$a, b, c, d$};
-        \node[node, shape=ellipse] (cd) at (4.5, -1.5) {$e, f, g, h, i$};
-        \node[node, shape=ellipse] (dc) at (3, -3) {$dc$};
-        \node[node, shape=ellipse] (dd) at (1.5, -4.5) {$dd$};
-        \node[node, shape=ellipse] (cc) at (4.5, -4.5) {$cc$};
+        \node[node, shape=ellipse] (abcdefghi) at (-3, 0) {$a, b, c, d, e, f, g, h, i$};
+        \node[node, shape=ellipse] (abcd) at (-7.5, -1.5) {$a, b, c, d$};
+        \node[node, shape=ellipse] (efghi) at (1.5, -1.5) {$e, f, g, h, i$};
+        \node[node, shape=ellipse] (ef) at (-1.5, -3) {$ef$};
+        \node[node, shape=ellipse] (e) at (-2.5, -4.5) {$e$};
+        \node[node, shape=ellipse] (f) at (-0.5, -4.5) {$f$};
         
         
-        \node[node,shape=ellipse] (da) at (6, -3) {$da$};
-        \node[node, shape=ellipse] (ae) at (7.5, -4.5) {$ae$};
+        \node[node,shape=ellipse] (ghi) at (3, -3) {$g, h, i$};
+        \node[node, shape=ellipse] (g) at (1.5, -4.5) {$g$};
+        \node[node, shape=ellipse] (hi) at (4, -4.5) {$h, i$};
+        \node[node, shape=ellipse] (h) at (3, -6) {$h$};
+        \node[node, shape=ellipse] (i) at (5, -6) {$i$};
         
         
-        \node[node, shape=ellipse] (ea) at (-6, -3) {$ea$};
-        \node[node, shape=ellipse] (ee) at (-7.5, -4.5) {$ee$};
-        \node[node, shape=ellipse] (aa) at (-4.5, -4.5) {$aa$};
+        \node[node, shape=ellipse] (ab) at (-9.5, -3) {$a, b$};
+        \node[node, shape=ellipse] (a) at (-10.5, -4.5) {$a$};
+        \node[node, shape=ellipse] (b) at (-8.5, -4.5) {$b$};
 
 
-        \node[node, shape=ellipse] (bb) at (-3, -3) {$bb$};
-        \node[node, shape=ellipse] (ba) at (-1.5, -4.5) {$ba$};
+        \node[node, shape=ellipse] (cd) at (-5.5, -3) {$c, d$};
+        \node[node, shape=ellipse] (c) at (-6.5, -4.5) {$c$};
+        
+        \node[node, shape=ellipse] (d) at (-4.5, -4.5) {$d$};
 
         
 
         % tree edges (normal black edges)
-        \draw[edge] (ad) -- (ab) node[midway, below] {};
-        \draw[edge] (ad) -- (cd) node[midway, below] {};
-        \draw[edge] (cd) -- (dc) node[midway, below] {};
-        \draw[edge] (cd) -- (da) node[midway, below] {};
-        \draw[edge] (bb) -- (ba) node[midway, below] {};
-        \draw[edge] (ea) -- (ee) node[midway, below] {};
-        \draw[edge] (ea) -- (aa) node[midway, below] {};
-        \draw[edge] (dc) -- (dd) node[midway, below] {};
-        \draw[edge] (dc) -- (cc) node[midway, below] {};
-        \draw[edge] (da) -- (ae) node[midway, below] {};
+        \draw[edge] (abcdefghi) -- (abcd) node[midway, below] {};
+        \draw[edge] (abcdefghi) -- (efghi) node[midway, below] {};
+        \draw[edge] (abcd) -- (ab) node[midway, below] {};
+        \draw[edge] (abcd) -- (cd) node[midway, below] {};
+        \draw[edge] (ab) -- (a) node[midway, below] {};
+        \draw[edge] (ab) -- (b) node[midway, below] {};
 
-        \draw[edge] (ab) -- (ea) node[midway, below] {};
-        \draw[edge] (ab) -- (bb) node[midway, below] {};
+        \draw[edge] (cd) -- (c) node[midway, below] {};
+        \draw[edge] (cd) -- (d) node[midway, below] {};
+
+        \draw[edge] (efghi) -- (ef) node[midway, below] {};
+        \draw[edge] (efghi) -- (ghi) node[midway, below] {};
+
+        \draw[edge] (ef) -- (e) node[midway, below] {};
+        \draw[edge] (ef) -- (f) node[midway, below] {};
+
+        \draw[edge] (ghi) -- (g) node[midway, below] {};
+        \draw[edge] (ghi) -- (hi) node[midway, below] {};
+        \draw[edge] (hi) -- (h) node[midway, below] {};
+        \draw[edge] (hi) -- (i) node[midway, below] {};
+
 
     \end{tikzpicture}
-    \caption{Árvore $T$ com $10$ vértices.}
+    \caption{Uma top árvore $\mathcal{T}$ derivada da árvore $T$.}
     \label{fig:top-t-from-tree-t}
 \end{figure}
