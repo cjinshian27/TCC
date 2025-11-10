@@ -36,7 +36,7 @@ A construção de uma top tree é baseada em um par ($T$, $\partial T$), onde $T
     \label{fig:top-tree-pair-representation}
 \end{figure}
 
-Assim, dado ($T$, $\partial T$), qualquer subárvore $C$ de $T$ tem um conjunto $\partial_{(T, \partial T)}S$ de vértices da fronteira, que são vértices de $C$ que estão ou em $\partial T$ ou são incidentes a uma aresta de $T$ saindo de $C$, como se pode ver no exemplo da Figura~\ref{fig:top-tree-subtree-option1}.
+Assim, dado ($T$, $\partial T$), qualquer subárvore $C$ de $T$ tem um conjunto $\partial_{(T, \partial T)}C$ de vértices da fronteira, que são vértices de $C$ que estão ou em $\partial T$ ou são incidentes a uma aresta de $T$ saindo de $C$, como se pode ver no exemplo da Figura~\ref{fig:top-tree-subtree-option1}.
 
 \begin{figure}[H]
     \centering
@@ -82,7 +82,7 @@ Assim, dado ($T$, $\partial T$), qualquer subárvore $C$ de $T$ tem um conjunto 
 Uma subárvore $C$ é chamado \textbf{cluster} de ($T$, $\partial T$) se ela possuir no máximo dois vértices da fronteira. Assim, por definição, $T$ é um cluster dele mesmo, com $\partial_{(T, \partial T)}T = \partial T$. A subárvore $C$ da Figura~\ref{fig:top-tree-subtree-option1} acima é um cluster, pois ele possui apenas dois vértices da fronteira.
 
 Além disso, se $R$ é uma subárvore de $C$, isto é, $\partial_{(C, \partial_{(T, \partial T)}C)}R = \partial_{(T, \partial T)} R$, então $R$ é um cluster  
- de ($C$, $\partial_{(T, \partial T)} S$) se, e somente se, $R$ é um cluster de $(T, \partial T)$. Podemos ver essa situação no exemplo da Figura~\ref{fig:top-tree-cluster-of-cluster}.
+ de ($C$, $\partial_{(T, \partial T)} C$) se, e somente se, $R$ é um cluster de $(T, \partial T)$. Podemos ver essa situação no exemplo da Figura~\ref{fig:top-tree-cluster-of-cluster}.
 
  \begin{figure}[H]
     \centering
@@ -145,11 +145,11 @@ Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vér
 \begin{itemize}
     \item Os vértices de $\mathcal{T}$ são clusters de ($T$, $\partial T$);
     \item As folhas de $\mathcal{T}$ são as arestas de $T$;
-    \item Se $C$ é pai de $A$ e de $B$ em $\mathcal{T}$, então $S = A \cup B$ e $A$ e $B$ são vizinhos;
+    \item Se $C$ é pai de $A$ e de $B$ em $\mathcal{T}$, então $C = A \cup B$ e $A$ e $B$ são vizinhos;
     \item a raiz de $\mathcal{T}$ é a própria árvore $T$.
 \end{itemize}
 
-Para um cluster $C$, os vértices em $S\backslash \partial S$ são chamados de vértices internos (\textit{internal vertices}). Se $a$ e $b$ são vértices da fronteira de $C$, o caminho $a \cdots b$ se chama caminho do cluster (\textit{cluster path}) e denotamos por $\pi(S)$. Se $a \neq b$, o cluster é chamado de \textit{path cluster}. O cluster $C$ é dito caminho ancestral (\textit{path ancestor}) do cluster $$
+Para um cluster $C$, os vértices em $C\backslash \partial C$ são chamados de vértices internos (\textit{internal vertices}). Se $a$ e $b$ são vértices da fronteira de $C$, o caminho $a \cdots b$ se chama caminho do cluster (\textit{cluster path}) e denotamos por $\pi(C)$. Se $a \neq b$, o cluster é chamado de \textit{path cluster}. O cluster $C$ é dito caminho ancestral (\textit{path ancestor}) do cluster $$
 
 
 
