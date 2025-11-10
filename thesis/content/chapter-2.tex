@@ -48,7 +48,7 @@ Note que, diferente da biblioteca do algoritmo de conexidade em grafos dinâmico
 
 A rotina \texttt{adicioneMSF} é acionada somente dentro do construtor e tem custo amortizado $\Oh(\lg n)$. Ela é uma versão da \texttt{adicioneGD} que acomoda os pesos das arestas como veremos adiante. Por ser uma rotina privada, ou seja, não está disponível para o usuário, após a inserção destas arestas, não é permitido mais operações de inserção, somente de remoção de arestas. Para o usuário, então, só estarão disponíveis as rotinas \texttt{consultePesoMSF} e \texttt{removaMSF}. A versão totalmente dinâmica, que inclui a rotina \texttt{adicioneMSF} para o usuário, será estudada posteriormente no Capítulo~\ref{chapter:fully-MSF}.
 
-O construtor \texttt{MSFDecremental}, devido à ordenação de arestas e à chamada ao método \texttt{adicioneMSF}, possui consumo de tempo $\Oh(m \lg n)$. Já a rotina \texttt{custoMSF} possui consumo de tempo $\Oh(1)$. Como estes dois métodos são mais simples, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaArestaMSF} implementada de maneira diferente do \texttt{substituaAresta} do algoritmo de conexidade em grafos dinâmicos. 
+O construtor \texttt{MSFDecremental}, devido à ordenação de arestas e à chamada ao método \texttt{adicioneMSF}, possui consumo de tempo $\Oh(m \lg n)$. Já a rotina \texttt{consultePesoMSF} possui consumo de tempo $\Oh(1)$. Como estes dois métodos são mais simples, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaArestaMSF} implementada de maneira diferente do \texttt{substituaAresta} do algoritmo de conexidade em grafos dinâmicos. 
 
 Usaremos várias definições já apresentadas no algoritmo de conexidade em grafos dinâmicos, incluindo as mesmas invariantes apresentadas na Seção~\ref{sec:level-slicing}, os mesmos tipos de arestas da Seção~\ref{sec:dynamic-graph-edge-types} e nós das florestas apresentados na Seção~\ref{sec:graph-nodes}. A seguir, apresentaremos as rotinas da MSF decremental e alguns ajustes a serem feitos. 
 
@@ -914,7 +914,7 @@ Para descrever a rotina \texttt{substituaArestaMSF} do Programa~\ref{prog:replac
             $T_u$ := nóXX
             ($x$, $x$) := nóXX.vértices
             ($y$, $w$) := \texttt{consulteMinLAMSF($R_j$, $x$)} 
-            se \texttt{testeSubstitutaMSF($G$, $x$, $y$, $w$, $j$)} \textbf{então} 
+            se \texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \textbf{então} 
                 \textbf{retorne}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
