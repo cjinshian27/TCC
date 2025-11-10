@@ -208,7 +208,7 @@ Dizemos que o cluster $C$ é \textit{path ancestor} do cluster $D$ e $D$ é cham
     \label{fig:clusters-formation-cases}
 \end{figure}
 
-Ademais, se $a$ é um vértice de fronteira de $C$ e $C$ possui dois filhos $A$ e $B$, então $A$ é considerado o mais próximo de $a$ se $a \notin B$. Caso $\partial C = \partial A = \partial C$, então o cluster mais próximo é escolhido arbitrariamente. Dada essas definições, podemos ilustrar como ficaria uma \textit{top tree} para a árvore $T$ na figura abaixo.
+Ademais, se $a$ é um vértice de fronteira de $C$ e $C$ possui dois filhos $A$ e $B$, então $A$ é considerado o mais próximo de $a$ se $a \notin B$. Caso $\partial C = \partial A = \partial C$, então o cluster mais próximo é escolhido arbitrariamente. Dada essas definições, podemos ilustrar como ficaria uma \textit{top tree} para a árvore $T$ da Figura~\ref{fig:tree-t}.
 
 \begin{figure}[H]
     \centering
@@ -247,5 +247,59 @@ Ademais, se $a$ é um vértice de fronteira de $C$ e $C$ possui dois filhos $A$ 
 
     \end{tikzpicture}
     \caption{Árvore $T$ com $10$ vértices.}
-    \label{fig:tree-t-example}
+    \label{fig:tree-t}
+\end{figure}
+
+A partir da árvore $T$, podemos derivar uma \textit{top tree} na Figura~\ref{fig:top-t-from-tree-t} abaixo. 
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        inner sep=0pt]
+
+ 
+        \node[node, shape=ellipse] (ad) at (0, 0) {$a, b, c, d, e, f, g, h, i, j$};
+        \node[node, shape=ellipse] (ab) at (-4.5, -1.5) {$a, b, c, d$};
+        \node[node, shape=ellipse] (cd) at (4.5, -1.5) {$e, f, g, h, i$};
+        \node[node, shape=ellipse] (dc) at (3, -3) {$dc$};
+        \node[node, shape=ellipse] (dd) at (1.5, -4.5) {$dd$};
+        \node[node, shape=ellipse] (cc) at (4.5, -4.5) {$cc$};
+        
+        
+        \node[node,shape=ellipse] (da) at (6, -3) {$da$};
+        \node[node, shape=ellipse] (ae) at (7.5, -4.5) {$ae$};
+        
+        
+        \node[node, shape=ellipse] (ea) at (-6, -3) {$ea$};
+        \node[node, shape=ellipse] (ee) at (-7.5, -4.5) {$ee$};
+        \node[node, shape=ellipse] (aa) at (-4.5, -4.5) {$aa$};
+
+
+        \node[node, shape=ellipse] (bb) at (-3, -3) {$bb$};
+        \node[node, shape=ellipse] (ba) at (-1.5, -4.5) {$ba$};
+
+        
+
+        % tree edges (normal black edges)
+        \draw[edge] (ad) -- (ab) node[midway, below] {};
+        \draw[edge] (ad) -- (cd) node[midway, below] {};
+        \draw[edge] (cd) -- (dc) node[midway, below] {};
+        \draw[edge] (cd) -- (da) node[midway, below] {};
+        \draw[edge] (bb) -- (ba) node[midway, below] {};
+        \draw[edge] (ea) -- (ee) node[midway, below] {};
+        \draw[edge] (ea) -- (aa) node[midway, below] {};
+        \draw[edge] (dc) -- (dd) node[midway, below] {};
+        \draw[edge] (dc) -- (cc) node[midway, below] {};
+        \draw[edge] (da) -- (ae) node[midway, below] {};
+
+        \draw[edge] (ab) -- (ea) node[midway, below] {};
+        \draw[edge] (ab) -- (bb) node[midway, below] {};
+
+    \end{tikzpicture}
+    \caption{Árvore $T$ com $10$ vértices.}
+    \label{fig:top-t-from-tree-t}
 \end{figure}
