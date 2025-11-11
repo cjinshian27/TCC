@@ -76,7 +76,7 @@ Assim, com base na implementação clássica do min-heap, podemos definir a bibl
 
 \end{itemize} 
 
-Uma chamada à rotina \texttt{adicioneLAMSF(R, u, v, w)} adiciona o par ($u$, $w$) no min-heap de $v$ e também adiciona o par ($v$, $w$) no min-heap de $u$, consumindo tempo $\Oh(\lg n)$. Similarmente, uma chamada à rotina \texttt{removaLAMSF(R, u, v)} remove o par ($u$,~$w$) do min-heap de $v$ e também remove o par ($v$, $w$) do min-heap de $u$, consumindo também tempo $\Oh(\lg n)$. Já o método \texttt{consulteMinLAMSF} consome tempo $\Oh(1)$, já que estamos apenas consultando a chave mínima do min-heap de um vértice.
+Uma chamada à rotina \texttt{adicioneLAMSF($R$, $u$, $v$, $w$)} adiciona o par ($u$, $w$) no min-heap de $v$ e também adiciona o par ($v$, $w$) no min-heap de $u$, consumindo tempo $\Oh(\lg n)$. Similarmente, uma chamada à rotina \texttt{removaLAMSF($R$, $u$, $v$)} remove o par ($u$,~$w$) do min-heap de $v$ e também remove o par ($v$, $w$) do min-heap de $u$, consumindo também tempo $\Oh(\lg n)$. Já o método \texttt{consulteMinLAMSF} consome tempo $\Oh(1)$, já que estamos apenas consultando a chave mínima do min-heap de um vértice.
 
 \section{Ajustes nas invariantes}
 
