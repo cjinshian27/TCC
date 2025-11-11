@@ -39,9 +39,9 @@ passe a resolver o problema da MSF decremental.
 Implementar o algoritmo decremental para florestas geradoras maximais de custo mínimo resume-se à construção da seguinte biblioteca de forma eficiente:
 
 \begin{itemize}
-    \item \texttt{\textbf{MSFDecremental(n, E)}}: contrói e devolve um grafo ponderado $G$ com $n$ vértices e as arestas ponderadas dadas no conjunto $E$;
-    \item \texttt{\textbf{consultePesoMSF(G)}}: devolve o peso de uma MSF do grafo ponderado $G$;
-    \item \texttt{\textbf{removaMSF(G, u, v)}}: remove a aresta $uv$ do grafo ponderado $G$.
+    \item \texttt{\textbf{MSFDecremental($n$, $E$)}}: contrói e devolve um grafo ponderado $G$ com $n$ vértices e as arestas ponderadas dadas no conjunto $E$;
+    \item \texttt{\textbf{consultePesoMSF($G$)}}: devolve o peso de uma MSF do grafo ponderado $G$;
+    \item \texttt{\textbf{removaMSF($G$, $u$, $v$)}}: remove a aresta $uv$ do grafo ponderado $G$.
 \end{itemize} 
 
 Note que, diferente da biblioteca do algoritmo de conexidade em grafos dinâmicos, apresentada na Seção~\ref{sec:dynamic-graph-routines}, na MSF decremental não temos um método equivalente a \texttt{adicioneGD} disponível para o usuário. Em nossa implementação \cite{chung2025}, para criarmos um grafo $G$ de $n$ vértices e $m$ arestas ponderadas dadas em $E$, acionamos~ \texttt{MSFDecremental($n$,~$E$)}, onde criamos, como no problema da conexidade em grafos dinâmicos, $\left\lceil \lg n \right\rceil$ florestas dinâmicas e $\left\lceil \lg n \right\rceil$ listas de adjacências, com $n$ vértices isolados. Em seguida, ordenamos e inserimos as $m$ arestas de $E$ em ordem crescente de peso, usando uma biblioteca pronta do $\emph{C++}$ para ordená-las, que consome tempo esperado $\Oh(m \lg n)$. Estas $m$ arestas são  inseridas uma a uma acionando uma rotina que chamamos de  \texttt{adicioneMSF(u, v, w)}, onde $u$ e $v$ são pontas da aresta e $w$ é o peso dela.
@@ -66,13 +66,13 @@ Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descre
 Assim, com base na implementação clássica do min-heap, podemos definir a biblioteca das listas de adjacências da MSF decremental. 
 
 \begin{itemize}
-    \item \texttt{\textbf{listasDeAdjacênciasMSF(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências armazenadas em min-heaps;
+    \item \texttt{\textbf{listasDeAdjacênciasMSF($n$)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências armazenadas em min-heaps;
 
-    \item \texttt{\textbf{adicioneLAMSF(R, u, v, w)}}: adiciona o vértice $u$ na lista de adjacências de $v$ em $R$ e vice-versa, considerando que o peso de $uv$ é $w$;
+    \item \texttt{\textbf{adicioneLAMSF($R$, $u$, $v$, $w$)}}: adiciona o vértice $u$ na lista de adjacências de $v$ em $R$ e vice-versa, considerando que o peso de $uv$ é $w$;
     
-    \item \texttt{\textbf{removaLAMSF(R, u, v)}}: remove o vértice $u$ da lista de adjacências de $v$ em $R$ e vice-versa;
+    \item \texttt{\textbf{removaLAMSF($R$, $u$, $v$)}}: remove o vértice $u$ da lista de adjacências de $v$ em $R$ e vice-versa;
     
-    \item \texttt{\textbf{consulteMinLAMSF(R, u)}}: retorna um par ($v$, $w$), onde $v$ é um vértice do min-heap de $u$ em $R$ com chave mínima;
+    \item \texttt{\textbf{consulteMinLAMSF($R$, $u$)}}: retorna um par ($v$, $w$), onde $v$ é um vértice do min-heap de $u$ em $R$ com chave mínima;
 
 \end{itemize} 
 

@@ -20,10 +20,10 @@ Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros
 O problema da conexidade em florestas dinâmicas pode ser considerado uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. A biblioteca que usaremos contém os seguintes métodos:
 
 \begin{itemize}
-    \item \texttt{\textbf{florestaDinâmica(n)}}: constrói e devolve uma floresta dinâmica $F$ com $n$ vértices e sem arestas;
-    \item \texttt{\textbf{conectadosFD(F, u, v)}}: devolve verdadeiro se \textit{$u$} e \textit{$v$} estão na mesma componente da floresta $F$ e falso caso contrário;
-    \item \texttt{\textbf{adicioneFD(F, u, v)}}: insere uma aresta \textit{uv} na floresta $F$;
-    \item \texttt{\textbf{removaFD(u, v)}}: remove a aresta \textit{uv} da floresta $F$.
+    \item \texttt{\textbf{florestaDinâmica($n$)}}: constrói e devolve uma floresta dinâmica $F$ com $n$ vértices e sem arestas;
+    \item \texttt{\textbf{conectadosFD($F$, $u$, $v$)}}: devolve verdadeiro se \textit{$u$} e \textit{$v$} estão na mesma componente da floresta $F$ e falso caso contrário;
+    \item \texttt{\textbf{adicioneFD($F$, $u$, $v$)}}: insere uma aresta \textit{uv} na floresta $F$;
+    \item \texttt{\textbf{removaFD($u$, $v$)}}: remove a aresta \textit{uv} da floresta $F$.
 \end{itemize}
 
 
@@ -37,10 +37,10 @@ O resultado é uma implementação em que \texttt{florestaDinâmica(n)} tem cust
 Implementar o grafo dinâmico resume-se à construção da seguinte biblioteca de forma eficiente:
 
 \begin{itemize}
-    \item \texttt{\textbf{grafoDinâmico(n)}}: contrói e devolve um grafo dinâmico com $n$ vértices e sem arestas;
-    \item \texttt{\textbf{conectadosGD(G, u, v)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
-    \item \texttt{\textbf{adicioneGD(G, u, v)}}: adiciona a aresta $uv$ no grafo $G$;
-    \item \texttt{\textbf{removaGD(G, u, v)}}: remove a aresta $uv$ do grafo $G$.
+    \item \texttt{\textbf{grafoDinâmico($n$)}}: contrói e devolve um grafo dinâmico com $n$ vértices e sem arestas;
+    \item \texttt{\textbf{conectadosGD($G$, $u$, $v$)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
+    \item \texttt{\textbf{adicioneGD($G$, $u$, $v$)}}: adiciona a aresta $uv$ no grafo $G$;
+    \item \texttt{\textbf{removaGD($G$, $u$, $v$)}}: remove a aresta $uv$ do grafo $G$.
 \end{itemize} 
 
 Para entender como cada uma dessas rotinas funcionam, será necessário apresentar a estrutura interna da implementação do grafo para explicar como ele mantém essas estruturas e como elas deixam essas rotinas mais eficientes.
@@ -77,9 +77,9 @@ Quando realizamos uma chamada à função \texttt{adicioneGD($G$, $u$, $v$)}, é
 Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$ representado por listas de adjacências, que contfém a seguinte biblioteca:
 
 \begin{itemize}
-    \item \texttt{\textbf{listasDeAdjacências(n)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências;
-    \item \texttt{\textbf{adicioneLA(R, u, v)}}: adiciona $u$ na lista de adjacências de $v$ em $R$ e vice-versa;
-    \item \texttt{\textbf{removaLA(R, u, v)}}: remove $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
+    \item \texttt{\textbf{listasDeAdjacências($n$)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências;
+    \item \texttt{\textbf{adicioneLA($R$, $u$, $v$)}}: adiciona $u$ na lista de adjacências de $v$ em $R$ e vice-versa;
+    \item \texttt{\textbf{removaLA($R$, $u$, $v$)}}: remove $u$ da lista de adjacências de $v$ em $R$ e vice-versa.
 \end{itemize} 
 
 A nossa implementação \cite{chung2025} de listas de adjacências possui um custo $\Oh(n)$ ao acionar o construtor \texttt{listasDeAdjacências}, e para 

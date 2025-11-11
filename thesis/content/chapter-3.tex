@@ -316,3 +316,17 @@ A partir da árvore $T$, podemos derivar uma \textit{top tree}, como se pode ver
     \caption{Uma top árvore $\mathcal{T}$ derivada da árvore $T$. Cada vértice (cluster) de $\mathcal{T}$, exceto as folhas, guarda a união dos vértices dos filhos, que também são clusters. Embaixo de cada vértice $p$ de $\mathcal{T}$, temos os vértices da fronteira do $p$.}
     \label{fig:top-t-from-tree-t}
 \end{figure}
+
+\section{Rotinas da biblioteca de top trees}
+
+Na construção das florestas dinâmicas, nas quais o algoritmo de conexidade e a MSF decremental foram baseadas, usamos Euler Tour trees para armazenar uma sequência Euleriana em uma árvore binária de busca balanceada. Agora, usaremos top trees na construção da floresta dinâmica, que será utilizada na MSF dinâmica. 
+
+Como não iremos implementar a biblioteca, apresentaremos o que cada rotina faz e o seu consumo de tempo de forma breve.
+
+\begin{itemize}
+    \item \texttt{\textbf{adicioneTopTree($u$, $v$)}}: liga o vértice $u$ ao vértice $v$ se ambos estão em top trees diferentes, criando a aresta ($u$, $v$);
+    
+    \item \texttt{\textbf{removaTopTree($e$)}}: remove a aresta $e$ da floresta dinâmica;
+    
+    \item \texttt{\textbf{exponhaTopTree($u$, $v$)}}: retorna \texttt{NIL} se $u$ e $v$ não estão na mesma árvore. Caso contrário, $u$ e $v$ se tornarão vértices da fronteira da top tree que os contém e retorna uma nova cluster raiz (\textit{root cluster}).
+\end{itemize}
