@@ -324,9 +324,11 @@ Na construção das florestas dinâmicas, nas quais o algoritmo de conexidade e 
 Como não iremos implementar a biblioteca, apresentaremos o que cada rotina faz e o seu consumo de tempo de forma breve.
 
 \begin{itemize}
-    \item \texttt{\textbf{adicioneTopTree($u$, $v$)}}: liga o vértice $u$ ao vértice $v$ se ambos estão em top trees diferentes, criando a aresta ($u$, $v$);
+    \item \texttt{\textbf{adicioneTopTree($\mathcal{T}$, $u$, $v$)}}: liga o vértice $u$ ao vértice $v$ se ambos estão em top trees diferentes na top tree $\mathcal{T}$, criando a aresta ($u$, $v$);
     
-    \item \texttt{\textbf{removaTopTree($e$)}}: remove a aresta $e$ da floresta dinâmica;
+    \item \texttt{\textbf{removaTopTree($\mathcal{T}$, $e$)}}: remove a aresta $e$ da top tree $\mathcal{T}$ da floresta dinâmica;
     
-    \item \texttt{\textbf{exponhaTopTree($u$, $v$)}}: retorna \texttt{NIL} se $u$ e $v$ não estão na mesma árvore. Caso contrário, $u$ e $v$ se tornarão vértices da fronteira da top tree que os contém e retorna uma nova cluster raiz (\textit{root cluster}).
+    \item \texttt{\textbf{exponhaTopTree($\mathcal{T}$, $u$, $v$)}}: retorna \texttt{NIL} se $u$ e $v$ não estão na mesma árvore. Caso contrário, $u$ e $v$ se tornarão vértices da fronteira da top tree $\mathcal{T}$ que os contém e retorna uma nova cluster raiz (\textit{root cluster}).
 \end{itemize}
+
+As alterações feitas em top trees usando as rotinas mencionadas acima 
