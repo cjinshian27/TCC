@@ -331,4 +331,10 @@ Como não iremos implementar a biblioteca, apresentaremos o que cada rotina faz 
     \item \texttt{\textbf{exponhaTopTree($\mathcal{T}$, $u$, $v$)}}: retorna \texttt{NIL} se $u$ e $v$ não estão na mesma árvore. Caso contrário, $u$ e $v$ se tornarão vértices da fronteira da top tree $\mathcal{T}$ que os contém e retorna uma nova cluster raiz (\textit{root cluster}).
 \end{itemize}
 
-As alterações feitas em top trees usando as rotinas mencionadas acima 
+As alterações feitas em top trees usando as rotinas mencionadas acima utilizam uma sequência de operações \texttt{Merge} e \texttt{Split}, definidas abaixo:
+
+\begin{itemize}
+    \item \texttt{\textbf{Merge($A$, $B$)}}: Cria um novo cluster $C = A \cup B$, onde $A$ e $B$ são clusters vizinhos e raízes das top trees $\mathcal{T}_A$ e $\mathcal{T}_B$. O cluster $C$ se torna raiz com os filhos $\mathcal{T}_A$ e $\mathcal{T}_B$, e por fim retornamos $C$.
+    
+    \item \texttt{\textbf{Split($C$)}}: Remove a cluster raiz $C$ da top tree $\mathcal{T}$, que contém os clusters filhos $A$ e $B$. Assim, a remoção de $C$ de $\mathcal{T}$ gera as top trees $\mathcal{T}_A$ e $\mathcal{T}_B$.
+\end{itemize}
