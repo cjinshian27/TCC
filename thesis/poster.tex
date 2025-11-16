@@ -83,76 +83,145 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
     % ----------------------------------------------------------------------------------------
     \onethirdcol
     \begin{alertblock}{Resumo}
-      Grafos dinâmicos permitem modelar problemas em que o conjunto de arestas sofre inserções e remoções ao longo do tempo, exigindo estruturas de dados capazes de responder consultas de forma eficiente. Um dos problemas fundamentais nesse contexto é o de conexidade dinâmica, que determina se dois vértices permanecem conectados após atualizações sucessivas. Outro problema central é a manutenção de uma floresta geradora maximal (MSF) decremental, estrutura que mantém, para cada componente conexa do grafo, uma árvore de custo mínimo enquanto suporta remoções de arestas. Neste trabalho, estudamos e implementamos a solução proposta por Holm, de Lichtenberg e Thorup para esses problemas, analisando suas garantias de complexidade e sua adaptação ao cenário decremental, além de descrever a ideia geral do algoritmo para manutenção da MSF dinâmica, que suporta adição e remoção de arestas.
+      Grafos dinâmicos permitem modelar problemas em que o conjunto de arestas sofre inserções e remoções ao longo do tempo, exigindo estruturas de dados capazes de responder consultas de forma eficiente. Um dos problemas fundamentais nesse contexto é o de conexidade dinâmica, que determina se dois vértices permanecem conectados após atualizações sucessivas. Outro problema central é a manutenção de uma floresta geradora maximal (MSF) decremental, estrutura que mantém, para cada componente conexa do grafo, uma árvore de custo mínimo enquanto suporta apenas remoções de arestas. Neste trabalho, estudamos e implementamos a solução proposta por Holm, de Lichtenberg e Thorup para esses problemas, analisando suas garantias de complexidade e sua adaptação ao cenário decremental, além de descrever a ideia geral do algoritmo para manutenção da MSF dinâmica, que suporta adição e remoção de arestas.
     \end{alertblock}
 
-    \begin{block}{Retroatividade}
-
-      Introduzida por, as \textbf{estruturas de dados retroativas} fazem com que cada operação possua um instante de tempo associado, o que permite realizar operações em qualquer estado, passado ou presente, da estrutura. Além disso, é possível remover uma operação que aconteceu em um certo instante de tempo, fazendo com que seus efeitos desapareçam da estrutura.
-
-    \end{block}
-
-    \begin{block}{Link-Cut tree}
-      As link-cut trees são uma estrutura de dados que permite manter uma \textbf{floresta de árvores enraizadas com peso nas arestas}, onde os vértices de cada árvore possuem um número arbitrário de filhos. Ademais, a floresta armazenada por essa estrutura não é orientada --- isto é, suas arestas não possuem uma direção --- e devido à maneira que ela é usada nas implementações a seguir, sua raiz é constantemente redefinida, de modo que perdemos o arranjo original das árvores.
-
+    \begin{block}{Euler tour trees}
+      A Euler tour tree é uma técnica proposta por Thorup et al. na Seção 2.1 de seu artigo, e é utilizada para representar uma árvore. Essa representação é obtida de uma árvore $T$ substituindo-se cada aresta por dois arcos em sentidos opostos e adicionando-se um laço a cada vértice. O digrafo resultante de $T$ é Euleriano, ou seja, é conexo e o grau de entrada de cada vértice é igual ao grau de saída. Consequentemente, há uma trilha que começa e termina num mesmo vértice, passando por todos os arcos do digrafo somente uma vez. Tal trilha é chamada de ciclo Euleriano.
+      
       \bigskip
-      \begin{figure}
+      \begin{figure}[H]
         \centering
-        \captionsetup{justification=centering}
-        \begin{tikzpicture}[
-            nointerno/.style={shape=circle, draw=black, minimum size=1cm},
-            pref/.style={ultra thick},
-            pptr/.style={densely dashed},
-          ]
-          \node[nointerno] (a) at (6, 30) {A};
-          \node[nointerno] (b) at (4, 27) {B};
-          \node[nointerno] (c) at (8, 27) {C};
-          \node[nointerno] (d) at (2, 24) {D};
-          \node[nointerno] (e) at (6, 24) {E};
-          \node[nointerno] (f) at (10, 24) {F};
-          \node[nointerno] (g) at (4, 21) {G};
-          \node[nointerno] (h) at (8, 21) {H};
-          \node[nointerno] (i) at (10, 21) {I};
-          \node[nointerno] (j) at (12, 21) {J};
-          \node[nointerno] (k) at (2, 18) {K};
-          \node[nointerno] (l) at (6, 18) {L};
-          \node[nointerno] (m) at (10, 18) {M};
-          \node[nointerno] (n) at (10, 15) {N};
-          \node[nointerno] (o) at (8, 12) {O};
+        \begin{tikzpicture}[thick, node distance=2cm,
+          vtx/.style={draw, circle, minimum size=10mm, inner sep=0pt}]
 
-          \draw[pref] (a) -- (b) node[midway, left] {5};
-          \draw[pptr] (a) -- (c) node[midway, right] {1};
-          \draw[pref] (b) -- (d) node[midway, left] {7};
-          \draw[pref] (d) -- (g) node[midway, right] {2};
-          \draw[pref] (g) -- (k) node[midway, left] {10};
-          \draw[pptr] (g) -- (l) node[midway, right] {9};
-          \draw[pptr] (c) -- (f) node[midway, right] {7};
-          \draw[pref] (c) -- (e) node[midway, left] {4};
-          \draw[pptr] (f) -- (h) node[midway, left] {12};
-          \draw[pref] (f) -- (i) node[midway, right] {1};
-          \draw[pptr] (f) -- (j) node[midway, right] {8};
-          \draw[pref] (i) -- (m) node[midway, left] {11};
-          \draw[pptr] (m) -- (n) node[midway, left] {19};
-          \draw[pref] (n) -- (o) node[midway, left] {20};
+        % ---------- Left: original graph ----------
+        \node[vtx] (a) at (0,0) {$a$};
+        \node[vtx] (b) at (1.5,1.5) {$b$};
+        \node[vtx] (c) at (3,0) {$c$};
+        \node[vtx] (d) at (1.5,-1.5) {$d$};
+        \node[vtx] (e) at (-1.5,-1.5) {$e$};
+
+        % Graph edges
+        \draw (a) -- (b);
+        \draw (c) -- (d);
+        \draw (d) -- (a);
+        \draw (a) -- (e);
+
+        % ---------- Right: Euler-tour representation ----------
+        \begin{scope}[xshift=8cm]
+          \node[vtx] (a1) at (0,0) {$a$};
+          \node[vtx] (b1) at (1.5, 1.5) {$b$};
+          \node[vtx] (c1) at (3,0) {$c$};
+          \node[vtx] (d1) at (1.5,-1.5) {$d$};
+          \node[vtx] (e1) at (-1.5,-1.5) {$e$};
+
+          % Bidirectional arcs
+          \draw[->] (a1) to[bend left=20] (b1);
+          \draw[->] (b1) to[bend left=20] (a1);
+
+          \draw[->] (c1) to[bend left=20] (d1);
+          \draw[->] (d1) to[bend left=20] (c1);
+
+          \draw[->] (d1) to[bend left=20] (a1);
+          \draw[->] (a1) to[bend left=20] (d1);
+
+          \draw[->] (a1) to[bend left=20] (e1);
+          \draw[->] (e1) to[bend left=20] (a1);
+
+          \draw[->] (a1) edge[loop above] ();
+          \draw[->] (b1) edge[loop above] ();
+          \draw[->] (c1) edge[loop right] ();
+          \draw[->] (d1) edge[loop below] ();
+          \draw[->] (e1) edge[loop left] ();
+
+        \end{scope}
 
         \end{tikzpicture}
-        \caption{Árvore representada e seus caminhos preferidos, a estruturação interna de uma link-cut tree. Na figura acima, as arestas escuras representam caminhos preferidos, com isso, temos o seguinte conjunto de caminhos vértice-disjuntos $ \{ \langle K,G,D,B,A \rangle, \langle E,C \rangle, \langle M,I,F \rangle, \langle L \rangle, \langle H \rangle, \langle J \rangle, \langle O,N \rangle \} $. }
-      \end{figure}
+            \caption{À esquerda, temos uma árvore $T$ e, à direita, temos o digrafo Euleriano de $T$.}
+            \label{fig:euler-tour-trees}
+        \end{figure}
 
-      \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
-      \begin{shaded}
-        \textbf{Ideia:} Dividir a floresta em caminhos vértice-disjuntos, chamados \textbf{caminhos preferidos}. Cada um desses caminhos é representado na forma de uma \textit{splay tree}, uma estrutura que permite unir e quebrar estes caminhos de forma bastante eficiente.
-      \end{shaded}
+          \begin{figure}[H]
+          \centering
+          \begin{tikzpicture}
+              [node/.style={circle,draw,minimum size=2em, thick, font=\large},
+              edge/.style={thick, black},
+              reserve/.style={red, thick},
+              removed/.style={black, thick, dashed}, 
+              inner sep=0pt]
+
+              \node[node] (ad) at (0, 0) {$ad$};
+              \node[node] (ab) at (-4.5, -1.5) {$ab$};
+              \node[node] (cd) at (4.5, -1.5) {$cd$};
+              \node[node] (dc) at (3, -3) {$dc$};
+              \node[node] (dd) at (1.5, -4.5) {$dd$};
+              \node[node] (cc) at (4.5, -4.5) {$cc$};
+              \node[node] (da) at (6, -3) {$da$};
+              \node[node] (ae) at (7.5, -4.5) {$ae$};
+              
+              
+              \node[node] (ea) at (-6, -3) {$ea$};
+              \node[node] (ee) at (-7.5, -4.5) {$ee$};
+              \node[node] (aa) at (-4.5, -4.5) {$aa$};
+
+
+              \node[node] (bb) at (-3, -3) {$bb$};
+              \node[node] (ba) at (-1.5, -4.5) {$ba$};
+
+              
+
+              % tree edges (normal black edges)
+              \draw[edge] (ad) -- (ab) node[midway, below] {};
+              \draw[edge] (ad) -- (cd) node[midway, below] {};
+              \draw[edge] (cd) -- (dc) node[midway, below] {};
+              \draw[edge] (cd) -- (da) node[midway, below] {};
+              \draw[edge] (bb) -- (ba) node[midway, below] {};
+              \draw[edge] (ea) -- (ee) node[midway, below] {};
+              \draw[edge] (ea) -- (aa) node[midway, below] {};
+              \draw[edge] (dc) -- (dd) node[midway, below] {};
+              \draw[edge] (dc) -- (cc) node[midway, below] {};
+              \draw[edge] (da) -- (ae) node[midway, below] {};
+
+              \draw[edge] (ab) -- (ea) node[midway, below] {};
+              \draw[edge] (ab) -- (bb) node[midway, below] {};
+
+          \end{tikzpicture}
+          \caption{Uma árvore binária de busca balanceada para um ciclo Euleriano da árvore da Figura~\ref{fig:euler-tour-trees}. Note que se percorrermos os nós da árvore acima em \textit{inorder}, obtemos a sequência Euleriana de (\ref{eq:euler-sequence}).}
+          \label{fig:euler-tour-balanced-tree}
+      \end{figure}
 
     \end{block}
 
+    \begin{block}{Conexidade em florestas dinâmicas}
+      O problema da conexidade em florestas dinâmicas é uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. Uma floresta dinâmica é constituída de várias ABBBs (na nossa implementação usamos \textit{splay trees}, desenvolvidas por Sleator e Tarjan). Utilizamos as Euler tour trees para representar essas ABBBs da floresta.   
+
+      \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
+      \begin{shaded}
+        \begin{itemize}
+          \item[$\bullet$] \textbf{\texttt{create\_union(a, b, t)}}: adiciona a união dos conjuntos que contém $a$ e $b$ no instante de tempo $t$
+          \item[$\bullet$] \textbf{\texttt{same\_set(a, b, t)}}: consulta se dois elementos pertenciam ao mesmo conjunto no instante $t$
+          \item[$\bullet$] \textbf{\texttt{delete\_union(t)}}: desfaz a união realizada em $t$
+        \end{itemize}
+      \end{shaded}
+    \end{block}
+
+    
     % ----------------------------------------------------------------------------------------
     % SEGUNDA COLUNA
     % ----------------------------------------------------------------------------------------
     \onethirdcol
+    
+    \begin{block}{Link-Cut tree}
 
+      % \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
+      % \begin{shaded}
+      %   \textbf{Ideia:} Dividir a floresta em caminhos vértice-disjuntos, chamados \textbf{caminhos preferidos}. Cada um desses caminhos é representado na forma de uma \textit{splay tree}, uma estrutura que permite unir e quebrar estes caminhos de forma bastante eficiente.
+      % \end{shaded}
+
+    \end{block}
     \begin{exampleblock}
-
+      
 
       As link-cut trees fornecem a seguinte interface:
 
@@ -268,9 +337,6 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
           \item[$\bullet$] \textbf{\texttt{delete\_union(t)}}: desfaz a união realizada em $t$
         \end{itemize}
       \end{shaded}
-
-
-      Por exemplo, a Figura \ref{fig:uf-sets} mostra o estado de uma coleção de conjuntos disjuntos após quatro operações serem aplicadas. Antes da operação \texttt{delete\_union(3)}, as consultas \texttt{same\_set(a, b, 3)} e \texttt{same\_set(c, d, 3)} retornam \texttt{verdadeiro}. Por outro lado \texttt{same\_set(a, d, 3)} e \texttt{same\_set(c, d, 3)} retornam \texttt{falso} após a chamada da função \texttt{delete\_union(3)}.
 
       \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
