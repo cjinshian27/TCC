@@ -1,317 +1,354 @@
-% Author: Nelson Lago
-% This file is distributed under the MIT Licence
+% Poster get from https://github.com/victorsenam/tcc/blob/master/poster/main.tex
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PREÂMBULO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[final]{beamer}
+\usepackage[size=a1,orientation=portrait,scale=1.3]{beamerposter}
 
-% A língua padrão é a última da lista
-\documentclass[a1paper,brazilian,english]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{framed,graphicx,xcolor} % for shaded box
+\usepackage{mathtools}%
+\usepackage{tikz}
+\usetikzlibrary{matrix,shapes,positioning,shadows,trees,patterns}
 
-% Vários pacotes e opções de configuração genéricos
-\usepackage{imegoodies}
-\usepackage[poster,hidelinks]{imelooks}
-% \tcbposterset{fontsize = 32pt} % default, mude se necessário
+\usepackage[shortlabels]{enumitem}
+\usepackage[numbers]{natbib}
+\bibliographystyle{plainnat}
+  \def\bibfont{\small}
 
-% Diretórios onde estão as figuras; com isso, não é necessário (mas
-% é permitido) colocar o caminho completo em \includegraphics. Note
-% que a extensão nunca é necessária (mas é permitida), ou seja, o
-% resultado é o mesmo com "\includegraphics{figuras/foto.jpeg}",
-% "\includegraphics{foto.jpeg}", "\includegraphics{figuras/foto}"
-% ou "\includegraphics{foto}".
-\graphicspath{{figuras/},{fig/},{logos/},{img/},{images/},{imagens/}}
+\sloppy
 
-% Comandos rápidos para mudar de língua:
-% \en -> muda para o inglês
-% \br -> muda para o português
-% \texten{blah} -> o texto "blah" é em inglês
-% \textbr{blah} -> o texto "blah" é em português
-\babeltags{br = brazilian, en = english}
+%----------------------------------------------------------------------------------------
+%	SHORTCUTS
+%----------------------------------------------------------------------------------------
+\newcommand{\B}[1]{\mathbb{#1}}
+\newcommand{\Cl}[1]{\ensuremath{\mathcal{#1}}}
 
+\newcommand{\sse}{\Leftrightarrow}
+\newcommand{\so}{\Rightarrow}
+\newcommand{\se}{\Leftarrow}
+\newcommand{\rec}{\leftarrow}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% METADADOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\tdots}{\,.\,.\,}
 
-% O arquivo com os dados bibliográficos para biblatex; você pode usar
-% este comando mais de uma vez para acrescentar múltiplos arquivos
-\addbibresource{bibliografia.bib}
+%----------------------------------------------------------------------------------------
+%	BEAMER STYLE
+%----------------------------------------------------------------------------------------
 
-% Este comando permite acrescentar itens à lista de referências sem incluir
-% uma referência de fato no texto (pode ser usado em qualquer lugar do texto)
-%\nocite{bronevetsky02,schmidt03:MSc, FSF:GNU-GPL, CORBA:spec, MenaChalco08}
-% Com este comando, todos os itens do arquivo .bib são incluídos na lista
-% de referências
-%\nocite{*}
+\usetheme{poster}
+\setbeamercolor{block title}{fg=dblue,bg=white}
+\setbeamercolor{block body}{fg=black,bg=white}
+\setbeamercolor{block alerted title}{fg=dblue,bg=gray!50}
+\setbeamercolor{block alerted body}{fg=black,bg=gray!20}
+\setbeamercolor{block prob}{fg=black,bg=white}
+\setbeamertemplate{caption}[numbered]
 
+%----------------------------------------------------------------------------------------
+%	CUSTOM STYLING
+%----------------------------------------------------------------------------------------
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INÍCIO DO POSTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newenvironment<>{prob}{
+    \begin{beamercolorbox}[sep=1ex,center,dp={1ex}]{block prob}
+    \textcolor{dblue}{\textbf{Problema:}}\itshape
+}{\end{beamercolorbox}}
 
+\newcommand\halfcol{\column{.46\textwidth}}
+\newcommand\onethirdcol{\column{.31\textwidth}}
 
-% Existem várias packages para criar pôsteres com LaTeX (a0poster, baposter,
-% tikzposter, sciposter...). As mais comuns atualmente são beamerposter
-% e tcolorbox (com sua biblioteca "poster"). Ambas funcionam muito bem;
-% beamerposter é mais familiar (ela simplesmente utiliza beamer com alguns
-% ajustes no tamanho das fontes e do papel), mas com tcolorbox o alinhamento
-% vertical dos elementos é MUITO mais simples, e esta é a solução adotada
-% aqui. Vale muito a pena ler a documentação com "texdoc tcolorbox" e
-% "texdoc tcolorbox-tutorial-poster".
+\newcommand{\Oh}{\mathrm{O}}
 
-% Um pôster com tcolorbox é composto por blocos (posterboxes) coloridos
-% de tamanho variável; cada bloco pode conter textos ou imagens e um
-% título opcional. O pôster utiliza uma grade de dimensões definidas em
-% \begin{tcposter} com "rows=" e "columns=" para fazer o alinhamento:
-% para cada posterbox, podemos dizer "row=X, column=Y" para definir sua
-% posição. Além disso, podemos dizer "span=A, rowspan=B" para fixar
-% seu tamanho. Sem "span" e "rowspan", uma posterbox tem pelo menos o
-% tamanho de uma célula da grade, mas se seu tamanho natural for maior
-% ela extrapola esse tamanho. "span" e "rowspan" podem ser números
-% não-inteiros (como 0.8 ou 1.4).
-%
-% "\begin{posterbox}" recebe um conjunto de parâmetros opcional e um
-% conjunto de parâmetros obrigatório:
-%
-% "\begin{posterbox}[opcional]{obrigatório}".
-%
-% O conjunto de parâmetros opcional é onde inserimos os parâmetros comuns
-% de tcolorbox, como "adjusted title", "coltext", "titlerule" etc.; o
-% conjunto de parâmetros obrigatório é usado para determinar as dimensões
-% e a posição da posterbox, ou seja, as opções "name", "column", "below",
-% "span" etc.
-%
-% ALINHAMENTO HORIZONTAL
-%
-% É possível definir um poster com 2 colunas e fazer algo como
-%
-% \posterbox{column=1, span=1.3}{blah}
-% \posterbox{column*=2, span=0.7}{blah}
-%
-% A segunda posterbox será alinhada à direita ("column*="), então as
-% duas serão colocadas lado-a-lado sem sobreposições.
-%
-% Na prática, no entanto, é mais fácil fazer como no exemplo abaixo:
-% definimos que o poster tem 12 colunas, o que nos permite dividir
-% sua largura em 2, 3, 4 ou 6 colunas iguais ou diferentes (como
-% 1/2 + 1/2, 2/3 + 1/3, 1/4 + 1/4 + 1/2, 1/4 + 1/6 + 1/4 + 1/3 etc).
-%
-% ALINHAMENTO VERTICAL
-%
-% Embora seja possível alinhar as posterboxes em função da grade na
-% vertical, uma outra possibilidade é utilizar "above", "below" e
-% "between", como no exemplo abaixo: basta associar um nome "blah" a
-% uma determinada posterbox e, em outra, dizer "below=blah". Lembre-se
-% que a posterbox de nome "blah" deve ser definida *antes* que outra
-% possa fazer referência a ela. Também é possível fazer "below=top",
-% "above=bottom" etc. A opção "equal height group" também é muito útil.
-% Nada impede que você use estratégias de alinhamento diferentes para
-% cada posterbox.
+% ?????????
+\usepackage{subcaption}
 
-% Este modelo define a opção "smallmargins", que diminui a distância
-% entre o conteúdo de uma posterbox e suas bordas. Use com parcimônia!
+\newcommand*\bolinha[1]{\; \tikz[inner sep=.25ex]\node[circle,draw]{#1}; \;}
+
+%----------------------------------------------------------------------------------------
+%	POSTER
+%----------------------------------------------------------------------------------------
+
+\title{Link-cut trees e aplicações em estruturas de dados retroativas}
+\author{Felipe Castro de Noronha \hspace{200pt} Orientadora: Cristina Gomes Fernandes}
+\institute{\vspace{10pt}Departamento de Ciência da Computação,
+Instituto de Matemática e Estatística, Universidade de São Paulo}
+
 
 \begin{document}
+\begin{frame}[fragile]\centering
+  \vspace{-40pt}
+  \begin{columns}[T]
 
-% Em um poster não há \maketitle
+    % ----------------------------------------------------------------------------------------
+    % PRIMEIRA COLUNA
+    % ----------------------------------------------------------------------------------------
+    \onethirdcol
+    \begin{alertblock}{Resumo}
+      Estruturas de dados retroativas permitem a realização de operações que afetam não somente o estado atual da estrutura, mas também qualquer um de seus estados passados. Além disso, uma link-cut tree é uma estrutura de dados que permite a manutenção de uma floresta de árvores enraizadas com peso nas arestas, e onde os nós de cada árvore possuem um número arbitrário de filhos. Tal estrutura é muito utilizada como base para o desenvolvimento de estruturas de dados retroativas, e neste trabalho estudaremos as versões retroativas dos problemas de union-find e floresta geradora mínima.  Para isso, implementamos essas estruturas em \texttt{C++} e descrevemos as ideias por trás de seus funcionamentos. Ademais, apresentamos uma melhoria da solução originalmente apresentada para a floresta geradora mínima retroativa, que retira limitações sem piorar sua performance.
+    \end{alertblock}
 
-\begin{tcbposter}[
-  poster = {
-    %showframe, % muito útil durante a preparação do poster
-    rows = 6,
-    columns = 12,
-    colspacing = 1.2cm,
-    rowspacing = .8cm,
-  },
-]
+    \begin{block}{Retroatividade}
 
+      Introduzida por \citeauthor{10.1145/1240233.1240236}, as \textbf{estruturas de dados retroativas} fazem com que cada operação possua um instante de tempo associado, o que permite realizar operações em qualquer estado, passado ou presente, da estrutura. Além disso, é possível remover uma operação que aconteceu em um certo instante de tempo, fazendo com que seus efeitos desapareçam da estrutura.
 
-\posterbox[titlebox]{name=titlebox, below=top, column=1, span=12}{
-    An example poster using \LaTeX{}\\
-    by CCSL-IME/USP
-}
+    \end{block}
 
-\posterbox[footerbox]{name=footerbox, above=bottom, column=1, span=12}{
-    \large
-    ccsl.ime.usp.br\par
-    \vspace{4pt}
-    \small\ttfamily
-    ccsl@ime.usp.br\par
-    \vspace{4pt}
-    \footnotesize\rmfamily
-    \textcolor{imesoftblue!30!white}
-      {Department of Computer Science --- University of São Paulo}\relax
-    \footimage{\includegraphics[width=13cm]{ccsl-logo}}
-}
+    \begin{block}{Link-Cut tree}
+      As link-cut trees são uma estrutura de dados que permite manter uma \textbf{floresta de árvores enraizadas com peso nas arestas}, onde os vértices de cada árvore possuem um número arbitrário de filhos. Ademais, a floresta armazenada por essa estrutura não é orientada --- isto é, suas arestas não possuem uma direção --- e devido à maneira que ela é usada nas implementações a seguir, sua raiz é constantemente redefinida, de modo que perdemos o arranjo original das árvores.
 
-
-\posterbox[adjusted title = The CCSL logo (full width)]
-          {name=widelogo, below=titlebox, column=1, span=12}{
-
-    \centering
-    \includegraphics[width=.95\textwidth]{ccsl-logo}
-}
-
-
-%%%%%%%% Quatro colunas com "equal height group" %%%%%%%%
-
-\posterbox[adjusted title = One fourth width,
-          smallmargins, equal height group = quartos]
-          {name=quarterlogoLeft, below=widelogo, column=1, span=3}{
-
-    \centering
-    \includegraphics[width=.9\textwidth]{ccsl-logo}
-}
-
-\posterbox[adjusted title = One fourth width,
-          smallmargins, equal height group = quartos]
-          {below=widelogo, column=4, span=3}{
-
-    \centering
-    This block has the same height as the logo
-
-}
-
-\posterbox[adjusted title = One fourth width,
-          smallmargins, equal height group = quartos]
-          {below=widelogo, column=7, span=3}{
-
-    \centering
-    And so does this
-}
-
-\posterbox[adjusted title = One fourth width,
-          smallmargins, equal height group = quartos]
-          {below=widelogo, column=10, span=3}{
-
-    \centering
-    Thanks to\\
-    \texttt{equal height group}
-}
-
-
-%%%%%%%% Duas colunas %%%%%%%%
-
-% Como temos 2 caixas à esquerda e uma caixa à direita, não podemos
-% simplesmente usar "equal height group" aqui, então definimos
-% manualmente a altura das caixas de maneira que as duas colunas
-% tenham o mesmo tamanho.
-
-%%% Esquerda
-\posterbox[adjusted title = Pangrams (half width)]
-          {name=pangramdef, below=quarterlogoLeft,
-           column=1, span=6, rowspan=.9}{
-
-    \begin{itemize}
-      \item A \textcolor{imered}{pangram} is a sentence using
-            every letter of a given alphabet at least once.
-      \item Pangrams have been used to:
-
-      \begin{itemize}
-        \item display typefaces
-        \item test equipment
-        \item develop skills in handwriting, calligraphy, and keyboarding
-      \end{itemize}
-    \end{itemize}
-}
-
-\posterbox[adjusted title = Examples of pangrams (half width)]
-          {below=pangramdef, column=1, span=6, rowspan=1.2}{
-
-    \begin{itemize}
-      \item In English
-
-      \begin{itemize}
-        \item A quick brown fox jumps over the lazy dog
-        \item Sphinx of black quartz, judge my vow
-        \item How vexingly quick daft zebras jump
-        \item Pack my box with five dozen liquor jugs
-      \end{itemize}
-
-      \item In Portuguese
-
-      \begin{itemize}
-        \item Vejo xá gritando que fez show sem playback
-        \item Vi que ex-janota gordo fez show com playback
-        \item Já fiz vinho com toque de kiwi para belga sexy
-        \item Vejo galã sexy pôr quinze kiwis à força em baú achatado
-      \end{itemize}
-    \end{itemize}
-}
-
-%%% Direita
-\posterbox[adjusted title = The IME/USP logo (half width)]
-          {name=halflogo, below=quarterlogoLeft,
-           column=7, span=6, rowspan=2.1}{
-
-    \centering
-    \includegraphics[width=\textwidth,trim=0 0 70 0,clip]{ime-logo}\par
-}
-
-
-%%%%%%% Colunas assimétricas (2/3 + 1/3) %%%%%%%%
-
-%%% Esquerda. Como usamos "between", a altura desta caixa
-%             é definida pela posição das outras duas.
-\posterbox[adjusted title = Bibliography (assimetrical
-           columns -- two thirds width), smallmargins]
-          {name=bibbox, between=halflogo and footerbox, column=1, span=8}{
-
-    \nocite{FSF:GNU-GPL, MenaChalco08, biblatex,
-            waz:09, alves03:simi, carlis:09}
-    \printbibliography
-}
-
-%%% Direita, acima; aqui, ajustamos as margens manualmente
-\posterbox[adjusted title = A Table (one third width),
-          top=.5\baselineskip, bottom=.5\baselineskip]
-          {name=tablebox, below=halflogo, column=9, span=4}{
-
-    \centering
-    \singlespacing\vspace{-\baselineskip} % \singlespacing adiciona uma linha
-    \begin{tabular}{ccl}
-      \toprule
-      Code        & Abbreviation & Name       \\
-      \midrule
-      \texttt{A}  & Ala          & Alanine    \\
-      \texttt{C}  & Cys          & Cysteine   \\
-      \texttt{W}  & Trp          & Tryptophan \\
-      \texttt{Y}  & Tyr          & Tyrosine   \\
-      \bottomrule
-    \end{tabular}
-}
-
-%%% Direita, abaixo. Como usamos "between", a altura desta caixa
-%                    é definida pela posição das outras duas.
-\posterbox[adjusted title = Sponsors (one third width),
-          colframe = imeyellow, smallmargins]
-          {between=tablebox and footerbox, column=9, span=4}{
-
-    \centering
-    % Em um poster ou apresentação, normalmente basta usar \includegraphics
-    % ou \begin{tabular}, como foi feito mais acima. Só é necessário usar
-    % \begin{figure} ou \begin{table} se você quiser acrescentar legendas
-    % ou usar subfiguras. Nesses casos, [H] é obrigatório com beamer e com
-    % tcolorbox. Uma outra opção para inserir legendas é usar \captionof.
-    \begin{figure}[H]
-      \begin{subfigure}[c]{.3\textwidth}
+      \bigskip
+      \begin{figure}
         \centering
-        %\raisebox{.0972\baselineskip}{\includegraphics[height=.927\baselineskip]{fapesp-logo}}
-        \includegraphics[width=.9\textwidth]{ccsl-logo}
-      \end{subfigure}
-      \begin{subfigure}[c]{.3\textwidth}
-        \centering
-        %\raisebox{-.53496\baselineskip}{\includegraphics[height=2.16\baselineskip]{capes-logo}}
-        \includegraphics[width=.9\textwidth]{ccsl-logo}
-      \end{subfigure}
-      \begin{subfigure}[c]{.3\textwidth}
-        \centering
-        %\includegraphics[height=1.08\baselineskip]{cnpq-logo}
-        \includegraphics[width=.9\textwidth]{ccsl-logo}
-      \end{subfigure}
-    \end{figure}
-}
+        \captionsetup{justification=centering}
+        \begin{tikzpicture}[
+            nointerno/.style={shape=circle, draw=black, minimum size=1cm},
+            pref/.style={ultra thick},
+            pptr/.style={densely dashed},
+          ]
+          \node[nointerno] (a) at (6, 30) {A};
+          \node[nointerno] (b) at (4, 27) {B};
+          \node[nointerno] (c) at (8, 27) {C};
+          \node[nointerno] (d) at (2, 24) {D};
+          \node[nointerno] (e) at (6, 24) {E};
+          \node[nointerno] (f) at (10, 24) {F};
+          \node[nointerno] (g) at (4, 21) {G};
+          \node[nointerno] (h) at (8, 21) {H};
+          \node[nointerno] (i) at (10, 21) {I};
+          \node[nointerno] (j) at (12, 21) {J};
+          \node[nointerno] (k) at (2, 18) {K};
+          \node[nointerno] (l) at (6, 18) {L};
+          \node[nointerno] (m) at (10, 18) {M};
+          \node[nointerno] (n) at (10, 15) {N};
+          \node[nointerno] (o) at (8, 12) {O};
 
-\end{tcbposter}
+          \draw[pref] (a) -- (b) node[midway, left] {5};
+          \draw[pptr] (a) -- (c) node[midway, right] {1};
+          \draw[pref] (b) -- (d) node[midway, left] {7};
+          \draw[pref] (d) -- (g) node[midway, right] {2};
+          \draw[pref] (g) -- (k) node[midway, left] {10};
+          \draw[pptr] (g) -- (l) node[midway, right] {9};
+          \draw[pptr] (c) -- (f) node[midway, right] {7};
+          \draw[pref] (c) -- (e) node[midway, left] {4};
+          \draw[pptr] (f) -- (h) node[midway, left] {12};
+          \draw[pref] (f) -- (i) node[midway, right] {1};
+          \draw[pptr] (f) -- (j) node[midway, right] {8};
+          \draw[pref] (i) -- (m) node[midway, left] {11};
+          \draw[pptr] (m) -- (n) node[midway, left] {19};
+          \draw[pref] (n) -- (o) node[midway, left] {20};
 
+        \end{tikzpicture}
+        \caption{Árvore representada e seus caminhos preferidos, a estruturação interna de uma link-cut tree. Na figura acima, as arestas escuras representam caminhos preferidos, com isso, temos o seguinte conjunto de caminhos vértice-disjuntos $ \{ \langle K,G,D,B,A \rangle, \langle E,C \rangle, \langle M,I,F \rangle, \langle L \rangle, \langle H \rangle, \langle J \rangle, \langle O,N \rangle \} $. }
+      \end{figure}
+
+      \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
+      \begin{shaded}
+        \textbf{Ideia:} Dividir a floresta em caminhos vértice-disjuntos, chamados \textbf{caminhos preferidos}. Cada um desses caminhos é representado na forma de uma \textit{splay tree}, uma estrutura que permite unir e quebrar estes caminhos de forma bastante eficiente.
+      \end{shaded}
+
+    \end{block}
+
+    % ----------------------------------------------------------------------------------------
+    % SEGUNDA COLUNA
+    % ----------------------------------------------------------------------------------------
+    \onethirdcol
+
+    \begin{exampleblock}
+
+
+      As link-cut trees fornecem a seguinte interface:
+
+      \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
+      \begin{shaded}
+        \begin{itemize}
+          \item[$\bullet$] \textbf{\texttt{make\_root(u)}}: enraíza no vértice $u$ a árvore que o contém
+          \item[$\bullet$] \textbf{\texttt{link(u, v, w)}}: dado que os vértices $u$ e $v$ estão em árvores separadas, transforma $v$ em raiz de sua árvore e o liga como filho de $u$, colocando peso $w$ na nova aresta criada
+          \item[$\bullet$] \textbf{\texttt{cut(u, v)}}: retira da floresta a aresta com pontas em $u$ e $v$, quebrando a árvore que continha estes vértices em duas novas árvores
+          \item[$\bullet$] \textbf{\texttt{is\_connected(u, v)}}: retorna \texttt{verdadeiro} caso $u$ e $v$ pertençam à mesma árvore, \texttt{falso} caso contrário
+          \item[$\bullet$] \textbf{\texttt{maximum\_edge(u, v)}}: retorna o peso máximo de uma aresta no caminho entre os vértices $u$ e $v$
+        \end{itemize}
+      \end{shaded}
+
+      Todas essas operações consomem tempo $\Oh(\log n)$ amortizado, onde $n$ é o número de vértices na floresta.
+
+    \end{exampleblock}
+
+    \begin{block}{Union-Find retroativo}
+
+      O union-find é uma estrutura de dados utilizada para manter uma \textbf{coleção de conjuntos disjuntos}, isto é, conjuntos que não se intersectam.
+
+      \bigskip
+      \begin{figure}[h!]
+        \captionsetup{justification=centering}
+        \centering
+        \begin{subfigure}{\textwidth}
+          \centering
+          \begin{tikzpicture}[
+              no/.style={shape=circle, minimum size=1cm},
+              scale=1.5, transform shape
+            ]
+            \node[no] (a) at (4,0) {a};
+            \node[no] (x) at (5,0) {};
+            \node[no] (b) at (6,0) {b};
+            \node[no] (y) at (7,0) {};
+            \node[no] (c) at (8,0) {c};
+            \node[no] (z) at (9,0) {};
+            \node[no] (d) at (10,0) {d};
+
+            \draw ($(x)$) ellipse ({1.7cm} and {.7cm});
+            \draw ($(c)$) ellipse ({.7cm} and {.7cm});
+            \draw ($(d)$) ellipse ({.7cm} and {.7cm});
+          \end{tikzpicture}
+          \bigskip
+        \end{subfigure}
+        \begin{subfigure}{\textwidth}
+          \centering
+          \begin{tikzpicture}[
+              no/.style={shape=circle, minimum size=1cm},
+              scale=1.5, transform shape
+            ]
+            \node[no] (a) at (4,0) {a};
+            \node[no] (x) at (5,0) {};
+            \node[no] (b) at (6,0) {b};
+            \node[no] (y) at (7,0) {};
+            \node[no] (c) at (8,0) {c};
+            \node[no] (z) at (9,0) {};
+            \node[no] (d) at (10,0) {d};
+
+            \draw ($(x)$) ellipse ({1.7cm} and {.7cm});
+            \draw ($(z)$) ellipse ({1.7cm} and {.7cm});
+          \end{tikzpicture}
+          \bigskip
+        \end{subfigure}
+        \begin{subfigure}{\textwidth}
+          \centering
+          \begin{tikzpicture}[
+              no/.style={shape=circle, minimum size=1cm},
+              scale=1.5, transform shape
+            ]
+            \node[no] (a) at (4,0) {a};
+            \node[no] (x) at (5,0) {};
+            \node[no] (b) at (6,0) {b};
+            \node[no] (y) at (7,0) {};
+            \node[no] (c) at (8,0) {c};
+            \node[no] (z) at (9,0) {};
+            \node[no] (d) at (10,0) {d};
+
+            \draw ($(y)$) ellipse ({3.7cm} and {.7cm});
+          \end{tikzpicture}
+          \bigskip
+        \end{subfigure}
+        \begin{subfigure}{\textwidth}
+          \centering
+          \begin{tikzpicture}[
+              no/.style={shape=circle, minimum size=1cm},
+              scale=1.5, transform shape
+            ]
+            \node[no] (a) at (4,0) {a};
+            \node[no] (x) at (5,0) {};
+            \node[no] (b) at (6,0) {b};
+            \node[no] (y) at (7,0) {};
+            \node[no] (c) at (8,0) {c};
+            \node[no] (z) at (9,0) {};
+            \node[no] (d) at (10,0) {d};
+
+            \draw ($(b)$) ellipse ({2.8cm} and {.7cm});
+            \draw ($(d)$) ellipse ({.7cm} and {.7cm});
+          \end{tikzpicture}
+        \end{subfigure}
+        \caption{Representação dos conjuntos com os elementos $\{a,b,c,d\}$ após a seguinte sequência de operações: \texttt{create\_union(a, b, 2)}, \texttt{create\_union(c, d, 3)}, \texttt{create\_union(b, c, 4)} e \texttt{delete\_union(3)}. Cada linha mostra o estado atual da coleção imediatamente após uma operação.}
+        \label{fig:uf-sets}
+      \end{figure}
+
+      Na sua versão retroativa, implementamos as seguintes operações:
+
+      \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
+      \begin{shaded}
+        \begin{itemize}
+          \item[$\bullet$] \textbf{\texttt{create\_union(a, b, t)}}: adiciona a união dos conjuntos que contém $a$ e $b$ no instante de tempo $t$
+          \item[$\bullet$] \textbf{\texttt{same\_set(a, b, t)}}: consulta se dois elementos pertenciam ao mesmo conjunto no instante $t$
+          \item[$\bullet$] \textbf{\texttt{delete\_union(t)}}: desfaz a união realizada em $t$
+        \end{itemize}
+      \end{shaded}
+
+
+      Por exemplo, a Figura \ref{fig:uf-sets} mostra o estado de uma coleção de conjuntos disjuntos após quatro operações serem aplicadas. Antes da operação \texttt{delete\_union(3)}, as consultas \texttt{same\_set(a, b, 3)} e \texttt{same\_set(c, d, 3)} retornam \texttt{verdadeiro}. Por outro lado \texttt{same\_set(a, d, 3)} e \texttt{same\_set(c, d, 3)} retornam \texttt{falso} após a chamada da função \texttt{delete\_union(3)}.
+
+      \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
+      \begin{shaded}
+        \textbf{Ideia:} Fazer com que os elementos dos conjuntos sejam vértices na floresta mantida por uma link-cut tree, onde cada aresta representa uma operação de \texttt{union}. Assim, uma chamada \texttt{create\_union(a, b, 3)} cria uma aresta de valor $3$ entre os vértices $a$ e $b$. Da mesma forma, uma chamada \texttt{delete\_union(t)} simplesmente exclui a aresta criada no instante $t$. Para conferir se dois elementos $a$ e $b$, no instante de tempo $t$, estão em um mesmo conjunto, basta conferir se eles estão em uma mesma árvore e se o valor da maior aresta no caminho entre eles é menor ou igual a $t$, o que significa que todas as uniões já foram realizadas no instante consultado.
+      \end{shaded}
+
+    \end{block}
+
+
+
+
+    % ----------------------------------------------------------------------------------------
+    % TERCEIRA COLUNA
+    % ----------------------------------------------------------------------------------------
+    \onethirdcol
+
+    \begin{block}{Floresta geradora mínima retroativa}
+
+      Como passo inicial temos que introduzir a \textbf{floresta geradora mínima incremental}, uma estrutura que utiliza as link-cut trees para fornecer uma maneira eficiente de consulta acerca da floresta geradora mínima de um grafo que está sempre crescendo, isto é, que está sofrendo a inserção de novas arestas.
+
+      \begin{figure}
+        \centering
+        \captionsetup{justification=centering}
+        \begin{equation*}
+          \overbracket{
+            \overbracket{
+              \overbracket{
+                \overbracket{
+                  \overbracket{
+                    \bolinha{\,0\,}
+                  }^{F_0}
+                  \bolinha{\,1\,}
+                  \bolinha{\,2\,}
+                }^{F_1}
+                \bolinha{\,3\,}
+                \bolinha{\,4\,}
+              }^{F_2}
+              \bolinha{\,5\,}
+              \bolinha{\,6\,}
+            }^{F_3}
+            \bolinha{\,7\,}
+            \bolinha{\,8\,}
+          }^{F_4}
+        \end{equation*}
+        \caption{Representação da lista de $8$ arestas inseridas. Neste caso, cada bloco tem tamanho $2$. Assim, por exemplo, a estrutura $F_3$ contém todas as arestas adicionadas desde o instante $1$ até o instante $6$.}
+        \label{fig:sqrt-decomp-blocks-m16}
+      \end{figure}
+
+      A \textbf{floresta geradora mínima retroativa} tem a seguinte interface:
+      \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
+      \begin{shaded}
+        \begin{itemize}
+          \item[$\bullet$] \textbf{\texttt{add\_edge(u, v, w, t)}}: adiciona no grafo, no instante $t$, uma aresta com pontas $u$ e $v$ e peso $w$
+          \item[$\bullet$] \textbf{\texttt{get\_msf(t)}}: retorna a lista com todas as arestas que compõem uma floresta maximal de peso mínimo do grafo no instante $t$
+          \item[$\bullet$] \textbf{\texttt{get\_msf\_weight(t)}}: retorna o custo de uma floresta maximal de peso mínimo no instante $t$
+        \end{itemize}
+      \end{shaded}
+
+      \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
+      \begin{shaded}
+        \textbf{Ideia:} Organizar cada operação retroativa de inserção numa lista ordenada pelo instante de tempo em que a aresta foi inserida. Em seguida, utilizar a técnica de \textbf{square-root decomposition} para dividir essa lista em $\sqrt{m}$ blocos, onde $m$ é o número total de operações na lista. Essa divisão --- ou como chamamos, reconstrução --- vai sendo refeita conforme novas operações de inserção vão sendo adicionadas, a fim de manter o tamanho dos blocos aproximadamente constante. Por último, é necessário distribuir as operações de cada bloco em diferentes florestas geradoras mínimas incrementais, fazendo com que uma consulta acerca do instante de tempo $t$ possa ser realizada de maneira eficiente por uma estrutura que contenha um grafo com um estado próximo ao instante $t$.
+      \end{shaded}
+
+      Por último, além da ideia inicial \citet{10.1093/comjnl/bxaa135} para a floresta geradora mínima retroativa, foi necessário adaptar a ideia apresentada por \citet{10.1145/1240233.1240236} para transformar estruturas parcialmente retroativas em estruturas totalmente retroativas. Em particular, realizamos uma melhoria na etapa de reconstrução da estrutura, permitindo que ela seja realizada em tempo $\Oh(m \log n)$, onde $n$ é o número de vértices na floresta. Adicionalmente, escrevemos um artigo descrevendo essa melhoria, visando a sua publicação em algum veículo da área teórica de ciência da computação.
+
+    \end{block}
+
+    \begin{block}{Informações e contato}
+      Para mais informações, acesse a página do trabalho: \textcolor{jblue}{{\url{https://linux.ime.usp.br/~felipen/mac0499}}}
+
+      \medskip
+      Endereço para contato: \\ \textcolor{jblue}{{\url{felipe.castro.noronha@usp.br}}}
+    \end{block}
+
+    \begin{block}{Referências}
+      \bibliography{bibliografia.bib}
+    \end{block}
+
+
+  \end{columns}
+\end{frame}
 \end{document}
