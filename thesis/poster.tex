@@ -213,120 +213,38 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
     % ----------------------------------------------------------------------------------------
     \onethirdcol
     
-    \begin{block}{Link-Cut tree}
+    \begin{block}{Conexidade em grafos dinâmicos}
 
-      % \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
-      % \begin{shaded}
-      %   \textbf{Ideia:} Dividir a floresta em caminhos vértice-disjuntos, chamados \textbf{caminhos preferidos}. Cada um desses caminhos é representado na forma de uma \textit{splay tree}, uma estrutura que permite unir e quebrar estes caminhos de forma bastante eficiente.
-      % \end{shaded}
-
-    \end{block}
-    \begin{exampleblock}
+      O problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dê suporte aos métodos da biblioteca abaixo:
       
-
-      As link-cut trees fornecem a seguinte interface:
-
       \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
         \begin{itemize}
-          \item[$\bullet$] \textbf{\texttt{make\_root(u)}}: enraíza no vértice $u$ a árvore que o contém
-          \item[$\bullet$] \textbf{\texttt{link(u, v, w)}}: dado que os vértices $u$ e $v$ estão em árvores separadas, transforma $v$ em raiz de sua árvore e o liga como filho de $u$, colocando peso $w$ na nova aresta criada
-          \item[$\bullet$] \textbf{\texttt{cut(u, v)}}: retira da floresta a aresta com pontas em $u$ e $v$, quebrando a árvore que continha estes vértices em duas novas árvores
-          \item[$\bullet$] \textbf{\texttt{is\_connected(u, v)}}: retorna \texttt{verdadeiro} caso $u$ e $v$ pertençam à mesma árvore, \texttt{falso} caso contrário
-          \item[$\bullet$] \textbf{\texttt{maximum\_edge(u, v)}}: retorna o peso máximo de uma aresta no caminho entre os vértices $u$ e $v$
-        \end{itemize}
+            \item \texttt{\textbf{grafoDinâmico($n$)}}: contrói e devolve um grafo dinâmico com $n$ vértices e sem arestas;
+            \item \texttt{\textbf{conectadosGD($G$, $u$, $v$)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
+            \item \texttt{\textbf{adicioneGD($G$, $u$, $v$)}}: adiciona a aresta $uv$ no grafo $G$;
+            \item \texttt{\textbf{removaGD($G$, $u$, $v$)}}: remove a aresta $uv$ do grafo $G$.
+        \end{itemize} 
       \end{shaded}
 
-      Todas essas operações consomem tempo $\Oh(\log n)$ amortizado, onde $n$ é o número de vértices na floresta.
+      \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
+      \begin{shaded}
+        \textbf{Ideia:} fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre 1 e $\left\lceil \lg n \right\rceil$, onde $n$
+        é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá
+        o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado.
+        Seja $G$ um grafo com conjunto $V(G)$ de vértices e conjunto $E(G)$ de arestas. Temos $G_i$ = $G[X]$ o grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Assim, manteremos $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$. Além disso, manteremos também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$.
+      \end{shaded}
+    \end{block}
+
+    \begin{exampleblock}
+
+
+      .
 
     \end{exampleblock}
 
     \begin{block}{Union-Find retroativo}
 
-      O union-find é uma estrutura de dados utilizada para manter uma \textbf{coleção de conjuntos disjuntos}, isto é, conjuntos que não se intersectam.
-
-      \bigskip
-      \begin{figure}[h!]
-        \captionsetup{justification=centering}
-        \centering
-        \begin{subfigure}{\textwidth}
-          \centering
-          \begin{tikzpicture}[
-              no/.style={shape=circle, minimum size=1cm},
-              scale=1.5, transform shape
-            ]
-            \node[no] (a) at (4,0) {a};
-            \node[no] (x) at (5,0) {};
-            \node[no] (b) at (6,0) {b};
-            \node[no] (y) at (7,0) {};
-            \node[no] (c) at (8,0) {c};
-            \node[no] (z) at (9,0) {};
-            \node[no] (d) at (10,0) {d};
-
-            \draw ($(x)$) ellipse ({1.7cm} and {.7cm});
-            \draw ($(c)$) ellipse ({.7cm} and {.7cm});
-            \draw ($(d)$) ellipse ({.7cm} and {.7cm});
-          \end{tikzpicture}
-          \bigskip
-        \end{subfigure}
-        \begin{subfigure}{\textwidth}
-          \centering
-          \begin{tikzpicture}[
-              no/.style={shape=circle, minimum size=1cm},
-              scale=1.5, transform shape
-            ]
-            \node[no] (a) at (4,0) {a};
-            \node[no] (x) at (5,0) {};
-            \node[no] (b) at (6,0) {b};
-            \node[no] (y) at (7,0) {};
-            \node[no] (c) at (8,0) {c};
-            \node[no] (z) at (9,0) {};
-            \node[no] (d) at (10,0) {d};
-
-            \draw ($(x)$) ellipse ({1.7cm} and {.7cm});
-            \draw ($(z)$) ellipse ({1.7cm} and {.7cm});
-          \end{tikzpicture}
-          \bigskip
-        \end{subfigure}
-        \begin{subfigure}{\textwidth}
-          \centering
-          \begin{tikzpicture}[
-              no/.style={shape=circle, minimum size=1cm},
-              scale=1.5, transform shape
-            ]
-            \node[no] (a) at (4,0) {a};
-            \node[no] (x) at (5,0) {};
-            \node[no] (b) at (6,0) {b};
-            \node[no] (y) at (7,0) {};
-            \node[no] (c) at (8,0) {c};
-            \node[no] (z) at (9,0) {};
-            \node[no] (d) at (10,0) {d};
-
-            \draw ($(y)$) ellipse ({3.7cm} and {.7cm});
-          \end{tikzpicture}
-          \bigskip
-        \end{subfigure}
-        \begin{subfigure}{\textwidth}
-          \centering
-          \begin{tikzpicture}[
-              no/.style={shape=circle, minimum size=1cm},
-              scale=1.5, transform shape
-            ]
-            \node[no] (a) at (4,0) {a};
-            \node[no] (x) at (5,0) {};
-            \node[no] (b) at (6,0) {b};
-            \node[no] (y) at (7,0) {};
-            \node[no] (c) at (8,0) {c};
-            \node[no] (z) at (9,0) {};
-            \node[no] (d) at (10,0) {d};
-
-            \draw ($(b)$) ellipse ({2.8cm} and {.7cm});
-            \draw ($(d)$) ellipse ({.7cm} and {.7cm});
-          \end{tikzpicture}
-        \end{subfigure}
-        \caption{Representação dos conjuntos com os elementos $\{a,b,c,d\}$ após a seguinte sequência de operações: \texttt{create\_union(a, b, 2)}, \texttt{create\_union(c, d, 3)}, \texttt{create\_union(b, c, 4)} e \texttt{delete\_union(3)}. Cada linha mostra o estado atual da coleção imediatamente após uma operação.}
-        \label{fig:uf-sets}
-      \end{figure}
 
       Na sua versão retroativa, implementamos as seguintes operações:
 
@@ -354,9 +272,7 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
     % ----------------------------------------------------------------------------------------
     \onethirdcol
 
-    \begin{block}{Floresta geradora mínima retroativa}
-
-      Como passo inicial temos que introduzir a \textbf{floresta geradora mínima incremental}, uma estrutura que utiliza as link-cut trees para fornecer uma maneira eficiente de consulta acerca da floresta geradora mínima de um grafo que está sempre crescendo, isto é, que está sofrendo a inserção de novas arestas.
+    \begin{block}{MSF decremental}
 
       \begin{figure}
         \centering
