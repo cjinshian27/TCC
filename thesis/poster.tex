@@ -83,12 +83,12 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
     % ----------------------------------------------------------------------------------------
     \onethirdcol
     \begin{alertblock}{Resumo}
-      Estruturas de dados retroativas permitem a realização de operações que afetam não somente o estado atual da estrutura, mas também qualquer um de seus estados passados. Além disso, uma link-cut tree é uma estrutura de dados que permite a manutenção de uma floresta de árvores enraizadas com peso nas arestas, e onde os nós de cada árvore possuem um número arbitrário de filhos. Tal estrutura é muito utilizada como base para o desenvolvimento de estruturas de dados retroativas, e neste trabalho estudaremos as versões retroativas dos problemas de union-find e floresta geradora mínima.  Para isso, implementamos essas estruturas em \texttt{C++} e descrevemos as ideias por trás de seus funcionamentos. Ademais, apresentamos uma melhoria da solução originalmente apresentada para a floresta geradora mínima retroativa, que retira limitações sem piorar sua performance.
+      Grafos dinâmicos permitem modelar problemas em que o conjunto de arestas sofre inserções e remoções ao longo do tempo, exigindo estruturas de dados capazes de responder consultas de forma eficiente. Um dos problemas fundamentais nesse contexto é o de conexidade dinâmica, que determina se dois vértices permanecem conectados após atualizações sucessivas. Outro problema central é a manutenção de uma floresta geradora maximal (MSF) decremental, estrutura que mantém, para cada componente conexa do grafo, uma árvore de custo mínimo enquanto suporta remoções de arestas. Neste trabalho, estudamos e implementamos a solução proposta por Holm, de Lichtenberg e Thorup para esses problemas, analisando suas garantias de complexidade e sua adaptação ao cenário decremental, além de descrever a ideia geral do algoritmo para manutenção da MSF dinâmica, que suporta adição e remoção de arestas.
     \end{alertblock}
 
     \begin{block}{Retroatividade}
 
-      Introduzida por \citeauthor{10.1145/1240233.1240236}, as \textbf{estruturas de dados retroativas} fazem com que cada operação possua um instante de tempo associado, o que permite realizar operações em qualquer estado, passado ou presente, da estrutura. Além disso, é possível remover uma operação que aconteceu em um certo instante de tempo, fazendo com que seus efeitos desapareçam da estrutura.
+      Introduzida por, as \textbf{estruturas de dados retroativas} fazem com que cada operação possua um instante de tempo associado, o que permite realizar operações em qualquer estado, passado ou presente, da estrutura. Além disso, é possível remover uma operação que aconteceu em um certo instante de tempo, fazendo com que seus efeitos desapareçam da estrutura.
 
     \end{block}
 
@@ -334,15 +334,15 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
         \textbf{Ideia:} Organizar cada operação retroativa de inserção numa lista ordenada pelo instante de tempo em que a aresta foi inserida. Em seguida, utilizar a técnica de \textbf{square-root decomposition} para dividir essa lista em $\sqrt{m}$ blocos, onde $m$ é o número total de operações na lista. Essa divisão --- ou como chamamos, reconstrução --- vai sendo refeita conforme novas operações de inserção vão sendo adicionadas, a fim de manter o tamanho dos blocos aproximadamente constante. Por último, é necessário distribuir as operações de cada bloco em diferentes florestas geradoras mínimas incrementais, fazendo com que uma consulta acerca do instante de tempo $t$ possa ser realizada de maneira eficiente por uma estrutura que contenha um grafo com um estado próximo ao instante $t$.
       \end{shaded}
 
-      Por último, além da ideia inicial \citet{10.1093/comjnl/bxaa135} para a floresta geradora mínima retroativa, foi necessário adaptar a ideia apresentada por \citet{10.1145/1240233.1240236} para transformar estruturas parcialmente retroativas em estruturas totalmente retroativas. Em particular, realizamos uma melhoria na etapa de reconstrução da estrutura, permitindo que ela seja realizada em tempo $\Oh(m \log n)$, onde $n$ é o número de vértices na floresta. Adicionalmente, escrevemos um artigo descrevendo essa melhoria, visando a sua publicação em algum veículo da área teórica de ciência da computação.
+      Por último, além da ideia inicial  para a floresta geradora mínima retroativa, foi necessário adaptar a ideia apresentada por  para transformar estruturas parcialmente retroativas em estruturas totalmente retroativas. Em particular, realizamos uma melhoria na etapa de reconstrução da estrutura, permitindo que ela seja realizada em tempo $\Oh(m \log n)$, onde $n$ é o número de vértices na floresta. Adicionalmente, escrevemos um artigo descrevendo essa melhoria, visando a sua publicação em algum veículo da área teórica de ciência da computação.
 
     \end{block}
 
     \begin{block}{Informações e contato}
-      Para mais informações, acesse a página do trabalho: \textcolor{jblue}{{\url{https://linux.ime.usp.br/~felipen/mac0499}}}
+      Para mais informações, acesse a página do trabalho: \textcolor{jblue}{{\url{https://linux.ime.usp.br/~cjinshian/}}}
 
       \medskip
-      Endereço para contato: \\ \textcolor{jblue}{{\url{felipe.castro.noronha@usp.br}}}
+      Endereço para contato: \\ \textcolor{jblue}{{\url{cjinshian77@usp.br}}}
     \end{block}
 
     \begin{block}{Referências}
