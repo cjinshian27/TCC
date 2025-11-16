@@ -74,7 +74,7 @@ Na Seção~\ref{sec:dynamic-graph-routines}, descreveremos com mais detalhes com
 
 Quando realizamos uma chamada à função \texttt{adicioneGD($G$, $u$, $v$)}, é feita uma chamada à rotina \texttt{conectadosGD($G$, $u$, $v$)} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem na mesma componente de $G$, então a aresta $uv$ é inserida na floresta maximal $F_L$ que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ em $F_L$. Chamamos esse tipo de aresta de \textbf{aresta da floresta}.
 
-Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$ representado por listas de adjacências, que contfém a seguinte biblioteca:
+Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$ representado por listas de adjacências, que contém a seguinte biblioteca:
 
 \begin{itemize}
     \item \texttt{\textbf{listasDeAdjacências($n$)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências;
