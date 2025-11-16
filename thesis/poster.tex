@@ -199,9 +199,10 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
       \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
         \begin{itemize}
-          \item[$\bullet$] \textbf{\texttt{create\_union(a, b, t)}}: adiciona a união dos conjuntos que contém $a$ e $b$ no instante de tempo $t$
-          \item[$\bullet$] \textbf{\texttt{same\_set(a, b, t)}}: consulta se dois elementos pertenciam ao mesmo conjunto no instante $t$
-          \item[$\bullet$] \textbf{\texttt{delete\_union(t)}}: desfaz a união realizada em $t$
+            \item[$\bullet$] \texttt{\textbf{florestaDinâmica($n$)}}: constrói e devolve uma floresta dinâmica $F$ com $n$ vértices e sem arestas;
+            \item[$\bullet$] \texttt{\textbf{conectadosFD($F$, $u$, $v$)}}: devolve verdadeiro se $u$ e $v$ estão na mesma componente da floresta $F$ e falso caso contrário;
+            \item[$\bullet$] \texttt{\textbf{adicioneFD($F$, $u$, $v$)}}: insere uma aresta \textit{uv} na floresta $F$;
+            \item[$\bullet$] \texttt{\textbf{removaFD($u$, $v$)}}: remove a aresta \textit{uv} da floresta $F$.
         \end{itemize}
       \end{shaded}
     \end{block}
