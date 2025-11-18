@@ -9,7 +9,8 @@ Neste capítulo, consideraremos o problema da \textbf{MSF dinâmica}, onde quere
 
 \section{Top trees}
 
-A construção de uma top tree é baseada em um par ($T$, $\partial T$), onde $T$ é uma árvore e $\partial T$ é um conjunto que contém no máximo dois vértices de $T$, que são chamados vértices da fronteira (\textit{external boundary vertices}), como se pode ver na Figura~\ref{fig:top-tree-pair-representation}.
+Antes de definir uma top tree, precisamos definir alguns conceitos.
+Seja um par ($T$, $\partial T$), onde $T$ é uma árvore e $\partial T$ é um conjunto que contém no máximo dois vértices de $T$, que são chamados \textbf{vértices da fronteira} (\textit{external boundary vertices}), como se pode ver na Figura~\ref{fig:top-tree-pair-representation}.
 
 \begin{figure}[H]
     \centering
@@ -32,11 +33,11 @@ A construção de uma top tree é baseada em um par ($T$, $\partial T$), onde $T
         \draw[edge] (a) -- (e) node[midway, above] {};
 
     \end{tikzpicture}
-    \caption{Representação de uma árvore $T$ de $5$ vértices. Os vértices pintados em vermelho, escolhidos arbitrariamente, são vértices da fronteira de $T$, ou seja, formam o conjunto $\partial T$.}
+    \caption{Uma árvore $T$ com um conjunto $\partial T$ destacado em vermelho}
     \label{fig:top-tree-pair-representation}
 \end{figure}
 
-Assim, dado ($T$, $\partial T$), qualquer subárvore $C$ de $T$ tem um conjunto $\partial_{(T, \partial T)}C$ de vértices da fronteira, que são vértices de $C$ que estão ou em $\partial T$ ou são incidentes a uma aresta de $T$ saindo de $C$, como se pode ver no exemplo da Figura~\ref{fig:top-tree-subtree-option1}.
+Para qualquer subárvore $C$ de $T$, seja um conjunto $\partial_{(T, \partial T)}C$, que são vértices de $C$ que estão ou em $\partial T$ ou são incidentes a uma aresta de $T$ saindo de $C$. Chamamos o conjunto $\partial_{T, \partial T}C$ de vértices da fronteira de $C$. Veja o exemplo da Figura~\ref{fig:top-tree-subtree-option1}.
 
 \begin{figure}[H]
     \centering
@@ -70,16 +71,16 @@ Assim, dado ($T$, $\partial T$), qualquer subárvore $C$ de $T$ tem um conjunto 
         % --- Draw the Dashed Triangular Outline ---
         
         % Connect the invisible coordinates with rounded corners
-        \draw[dashed, thick, red, rounded corners=30pt] 
+        \draw[dashed, very thick, blue, rounded corners=30pt] 
             (P1) -- (P2) -- (P3) -- cycle;
 
         % \draw[dashed, thick, red] (e) -- (a) -- (d) -- cycle;
     \end{tikzpicture}
-    \caption{Representação de uma árvore $T$ de $5$ vértices. Os vértices pintados em vermelho são vértices da fronteira de $T$. A região demarcada em vermelho representa a subárvore $C$ contendo os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Neste exemplo, note que os vértices da fronteira de $C$ são $a$ e $d$.}
+    \caption{Uma árvore $T$ com um conjunto $\partial T$ marcado em vermelho. A região demarcada em azul representa uma subárvore $C$ contendo os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Neste exemplo, note que os vértices da fronteira de $C$ são $a$ e $d$.}
     \label{fig:top-tree-subtree-option1}
 \end{figure}
 
-Uma subárvore $C$ é chamado \textbf{cluster} de ($T$, $\partial T$) se ela possuir no máximo dois vértices da fronteira. Assim, por definição, $T$ é um cluster dele mesmo, com $\partial_{(T, \partial T)}T = \partial T$. A subárvore $C$ da Figura~\ref{fig:top-tree-subtree-option1} acima é um cluster, pois ele possui apenas dois vértices da fronteira.
+Uma subárvore $C$ é chamada \textbf{cluster} de ($T$, $\partial T$) se ela possuir no máximo dois vértices da fronteira. Assim, por definição, $T$ é um cluster dele mesmo, com $\partial_{(T, \partial T)}T = \partial T$. A subárvore $C$ da Figura~\ref{fig:top-tree-subtree-option1} acima é um cluster, pois ele possui apenas dois vértices da fronteira.
 
 Além disso, se $R$ é uma subárvore de $C$, isto é, $\partial_{(C, \partial_{(T, \partial T)}C)}R = \partial_{(T, \partial T)} R$, então $R$ é um cluster  
  de ($C$, $\partial_{(T, \partial T)} C$) se, e somente se, $R$ é um cluster de $(T, \partial T)$. Podemos ver essa situação no exemplo da Figura~\ref{fig:top-tree-cluster-of-cluster}. Para simplificar, denotaremos $\partial_{(T, \partial T)}$ como $\partial$ a partir de agora.
