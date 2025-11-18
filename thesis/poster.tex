@@ -145,7 +145,7 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
           \begin{figure}[H]
           \centering
           \begin{tikzpicture}
-              [node/.style={circle,draw,minimum size=2em, thick, font=\large},
+              [node/.style={circle,draw,minimum size=1em, thick},
               edge/.style={thick, black},
               reserve/.style={red, thick},
               removed/.style={black, thick, dashed}, 
@@ -232,37 +232,221 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
         \textbf{Ideia:} fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre 1 e $\left\lceil \lg n \right\rceil$, onde $n$
         é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá
         o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado.
-        Seja $G$ um grafo com conjunto $V(G)$ de vértices e conjunto $E(G)$ de arestas. Temos $G_i$ = $G[X]$ o grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Assim, manteremos $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$. Além disso, manteremos também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$.
+         Temos $G_i$ = $G[X]$ o grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Além disso, manteremos também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$.
       \end{shaded}
+
+      Se os vértices $u$ e $v$ não estiverem na mesma componente de $G$, então a aresta $uv$ é inserida na floresta maximal $F_L$, assim ligando a árvore que contém $u$ com a que contém $v$ em $F_L$ . Chamamos esse tipo de aresta de \textbf{aresta da floresta}. Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$.
+
+      \begin{figure}[H]
+        \centering
+
+        \noindent
+        \begin{minipage}[c]{2cm}
+            \raggedright
+            Nível $4$
+        \end{minipage}%
+        \begin{minipage}[c]{0.8\textwidth}
+            \centering
+            \begin{tikzpicture}
+            [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {$u$};
+            \node[node] (a) at (-3,4) {$a$};
+            \node[node] (b) at (-5,2) {$b$};
+            \node[node] (c) at (-3,0) {$c$};
+            \node[node] (v) at (2,2) {$v$};
+            \node[node] (d) at (3,3.7) {$d$};
+            \node[node] (e) at (3,0.3) {$e$};
+            \node[node] (f) at (5,0.3) {$f$};
+            \node[node] (g) at (6, 2) {$g$};
+            \node[node] (h) at (5, 3.7) {$h$};
+            
+            % Dotted circles for T_u and T_v
+            \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+            \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+            
+            % Labels for the circles
+            \node at (-3,-1.1) {$T_u$};
+            \node at (4,-1.1) {$T_v$};
+
+            % tree edges (normal black edges)
+            \draw[edge] (a) -- (u) node[midway, below] {};
+            \draw[edge] (a) -- (b) node[midway, below] {};
+            \draw[edge] (b) -- (c) node[midway, below] {};
+            \draw[edge] (v) -- (d) node[midway, below] {};
+            \draw[edge] (v) -- (f) node[midway, below] {};
+            \draw[edge] (v) -- (e) node[midway, below] {};
+            \draw[edge] (f) -- (g) node[midway, below] {};
+            \draw[edge] (g) -- (h) node[midway, below] {};
+            % reserve edges (normal red edges)
+            
+            \draw[removed] (u) -- (v) node[midway, below] {};
+            \draw[reserve] (a) -- (d) node[midway, below] {};
+            \draw[reserve] (c) -- (v) node[midway, below] {};
+            \draw[reserve] (b) -- (u) node[midway, below] {};
+            \draw[reserve] (c) -- (u) node[midway, below] {};
+            \draw[reserve] (d) -- (f) node[midway, below] {};
+            \draw[reserve] (d) -- (h) node[midway, below] {};
+
+            \end{tikzpicture}
+        \end{minipage}
+        \vspace{1cm}
+            \noindent
+        \begin{minipage}[c]{2cm}
+            \raggedright
+            Nível $3$
+        \end{minipage}%
+        \begin{minipage}[c]{0.8\textwidth}
+            \centering
+            \begin{tikzpicture}
+                [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+                edge/.style={thick, black},
+                reserve/.style={red, thick},
+                removed/.style={black, thick, dashed}]
+
+                \node[node] (u) at (-1,2) {$u$};
+                \node[node] (a) at (-3,4) {$a$};
+                \node[node] (b) at (-5,2) {$b$};
+                \node[node] (c) at (-3,0) {$c$};
+                \node[node] (v) at (2,2) {$v$};
+                \node[node] (d) at (3,3.7) {$d$};
+                \node[node] (e) at (3,0.3) {$e$};
+                \node[node] (f) at (5,0.3) {$f$};
+                \node[node] (g) at (6, 2) {$g$};
+                \node[node] (h) at (5, 3.7) {$h$};
+                
+                %\draw[edge] (a) -- (u) node[midway, below] {};
+                %\draw[edge] (a) -- (b) node[midway, below] {};
+                %\draw[edge] (b) -- (c) node[midway, below] {};
+
+            \end{tikzpicture}
+        \end{minipage}
+        \caption{Um grafo $G$ de 10 vértices, onde as arestas pretas são da floresta $F_4$, enquanto as vermelhas são reservas. A aresta $uv$ está prestes a ser removida. A floresta $F_{4}$ de $G$ de cima contém todas as arestas pretas recém-inseridas e as arestas vermelhas estão em $R_4$. A floresta de baixo é a $F_{3}$, com os vértices isolados, e $R_3$ também não tem nenhuma aresta.}
+        \label{fig:example-replacement1}
+    \end{figure}
+
+\begin{figure}[H]
+    \centering
+
+    \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $4$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+        [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {$u$};
+        \node[node] (a) at (-3,4) {$a$};
+        \node[node] (b) at (-5,2) {$b$};
+        \node[node] (c) at (-3,0) {$c$};
+        \node[node] (v) at (2,2) {$v$};
+        \node[node] (d) at (3,3.7) {$d$};
+        \node[node] (e) at (3,0.3) {$e$};
+        \node[node] (f) at (5,0.3) {$f$};
+        \node[node] (g) at (6, 2) {$g$};
+        \node[node] (h) at (5, 3.7) {$h$};
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
+        % reserve edges (normal red edges)
+        
+        \draw[reserve] (a) -- (d) node[midway, below] {};
+        \draw[reserve] (c) -- (v) node[midway, below] {};
+        \draw[reserve] (b) -- (u) node[midway, below] {};
+        \draw[reserve] (c) -- (u) node[midway, below] {};
+        \draw[reserve] (d) -- (f) node[midway, below] {};
+        \draw[reserve] (d) -- (h) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \vspace{1cm}
+        \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $3$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+            [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {$u$};
+            \node[node] (a) at (-3,4) {$a$};
+            \node[node] (b) at (-5,2) {$b$};
+            \node[node] (c) at (-3,0) {$c$};
+            \node[node] (v) at (2,2) {$v$};
+            \node[node] (d) at (3,3.7) {$d$};
+            \node[node] (e) at (3,0.3) {$e$};
+            \node[node] (f) at (5,0.3) {$f$};
+            \node[node] (g) at (6, 2) {$g$};
+            \node[node] (h) at (5, 3.7) {$h$};
+            
+            
+            \draw[edge] (a) -- (u) node[midway, below] {};
+            \draw[edge] (a) -- (b) node[midway, below] {};
+            \draw[edge] (b) -- (c) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \caption{Representação da remoção da aresta $uv$ em $G$. As arestas de nível $4$ de $T_u$ foram rebaixadas para o nível $3$, o que pode ser visto na floresta $F_{3}$.}
+    \label{fig:example-replacement2}    
+\end{figure}
+
     \end{block}
 
-    \begin{exampleblock}
 
 
-      .
-
-    \end{exampleblock}
-
-    \begin{block}{Union-Find retroativo}
 
 
-      Na sua versão retroativa, implementamos as seguintes operações:
 
-      \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
-      \begin{shaded}
-        \begin{itemize}
-          \item[$\bullet$] \textbf{\texttt{create\_union(a, b, t)}}: adiciona a união dos conjuntos que contém $a$ e $b$ no instante de tempo $t$
-          \item[$\bullet$] \textbf{\texttt{same\_set(a, b, t)}}: consulta se dois elementos pertenciam ao mesmo conjunto no instante $t$
-          \item[$\bullet$] \textbf{\texttt{delete\_union(t)}}: desfaz a união realizada em $t$
-        \end{itemize}
-      \end{shaded}
 
-      \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
-      \begin{shaded}
-        \textbf{Ideia:} Fazer com que os elementos dos conjuntos sejam vértices na floresta mantida por uma link-cut tree, onde cada aresta representa uma operação de \texttt{union}. Assim, uma chamada \texttt{create\_union(a, b, 3)} cria uma aresta de valor $3$ entre os vértices $a$ e $b$. Da mesma forma, uma chamada \texttt{delete\_union(t)} simplesmente exclui a aresta criada no instante $t$. Para conferir se dois elementos $a$ e $b$, no instante de tempo $t$, estão em um mesmo conjunto, basta conferir se eles estão em uma mesma árvore e se o valor da maior aresta no caminho entre eles é menor ou igual a $t$, o que significa que todas as uniões já foram realizadas no instante consultado.
-      \end{shaded}
 
-    \end{block}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -272,8 +456,112 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
     % ----------------------------------------------------------------------------------------
     \onethirdcol
 
+        \begin{figure}[H]
+    \centering
+
+    \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $4$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+        [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        reserveremoved/.style={red, thick, dashed}]
+
+        \node[node] (u) at (-1,2) {$u$};
+        \node[node] (a) at (-3,4) {$a$};
+        \node[node] (b) at (-5,2) {$b$};
+        \node[node] (c) at (-3,0) {$c$};
+        \node[node] (v) at (2,2) {$v$};
+        \node[node] (d) at (3,3.7) {$d$};
+        \node[node] (e) at (3,0.3) {$e$};
+        \node[node] (f) at (5,0.3) {$f$};
+        \node[node] (g) at (6, 2) {$g$};
+        \node[node] (h) at (5, 3.7) {$h$};
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        % tree edges (normal black edges)
+        \draw[edge] (a) -- (u) node[midway, below] {};
+        \draw[edge] (a) -- (b) node[midway, below] {};
+        \draw[edge] (b) -- (c) node[midway, below] {};
+        \draw[edge] (v) -- (d) node[midway, below] {};
+        \draw[edge] (v) -- (f) node[midway, below] {};
+        \draw[edge] (v) -- (e) node[midway, below] {};
+        \draw[edge] (f) -- (g) node[midway, below] {};
+        \draw[edge] (g) -- (h) node[midway, below] {};
+        % reserve edges (normal red edges)
+  
+        \draw[reserve] (a) -- (d) node[midway, below] {};
+        \draw[reserve] (c) -- (v) node[midway, below] {};
+        \draw[reserveremoved] (b) -- (u) node[midway, below] {};
+        \draw[reserveremoved] (c) -- (u) node[midway, below] {};
+        \draw[reserve] (d) -- (f) node[midway, below] {};
+        \draw[reserve] (d) -- (h) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \vspace{1cm}
+        \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $3$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+            [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {$u$};
+            \node[node] (a) at (-3,4) {$a$};
+            \node[node] (b) at (-5,2) {$b$};
+            \node[node] (c) at (-3,0) {$c$};
+            \node[node] (v) at (2,2) {$v$};
+            \node[node] (d) at (3,3.7) {$d$};
+            \node[node] (e) at (3,0.3) {$e$};
+            \node[node] (f) at (5,0.3) {$f$};
+            \node[node] (g) at (6, 2) {$g$};
+            \node[node] (h) at (5, 3.7) {$h$};
+            
+            
+            % Dotted circles for T_u and T_v
+            \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+            \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+            
+            % Labels for the circles
+            \node at (-3,-1.1) {$T_u$};
+            \node at (4,-1.1) {$T_v$};
+            
+            \draw[reserve] (b) -- (u) node[midway, below] {};
+            \draw[reserve] (c) -- (u) node[midway, below] {};
+            \draw[edge] (a) -- (u) node[midway, below] {};
+            \draw[edge] (a) -- (b) node[midway, below] {};
+            \draw[edge] (b) -- (c) node[midway, below] {};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \caption{Representação da busca por uma aresta substituta em $R_4$. As arestas reserva de nível $4$ que estão tracejadas foram percorridas e estão prestes a ser removidas de $R_4$, pois foram rebaixadas para o nível $3$, como se pode ver em $R_3$.}
+    \label{fig:example-replacement3}
+\end{figure}
+
     \begin{block}{MSF decremental}
       
+
+
       \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
         \begin{itemize}
@@ -285,10 +573,9 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
 
       \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
-        \textbf{Ideia:} Organizar cada operação retroativa de inserção numa lista ordenada pelo instante de tempo em que a aresta foi inserida. Em seguida, utilizar a técnica de \textbf{square-root decomposition} para dividir essa lista em $\sqrt{m}$ blocos, onde $m$ é o número total de operações na lista. Essa divisão --- ou como chamamos, reconstrução --- vai sendo refeita conforme novas operações de inserção vão sendo adicionadas, a fim de manter o tamanho dos blocos aproximadamente constante. Por último, é necessário distribuir as operações de cada bloco em diferentes florestas geradoras mínimas incrementais, fazendo com que uma consulta acerca do instante de tempo $t$ possa ser realizada de maneira eficiente por uma estrutura que contenha um grafo com um estado próximo ao instante $t$.
+        \textbf{Ideia:} remover uma aresta de nível $i$ da floresta $F_i$ , quebra uma componente desta em duas, $T_u$ e $T_v$.  Para isso, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Assim, em vez de usar um mapa hash para armazenar os vizinhos de cada vértice, usaremos um min-heap, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$.
       \end{shaded}
 
-      Por último, além da ideia inicial  para a floresta geradora mínima retroativa, foi necessário adaptar a ideia apresentada por  para transformar estruturas parcialmente retroativas em estruturas totalmente retroativas. Em particular, realizamos uma melhoria na etapa de reconstrução da estrutura, permitindo que ela seja realizada em tempo $\Oh(m \log n)$, onde $n$ é o número de vértices na floresta. Adicionalmente, escrevemos um artigo descrevendo essa melhoria, visando a sua publicação em algum veículo da área teórica de ciência da computação.
 
     \end{block}
 
@@ -316,34 +603,11 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
           \textit{Dissertação de Mestrado},
           Universidade de São Paulo, São Paulo, Brasil, 2024.
 
-          \bibitem{tarjan}
-          Tarjan, R. E., Vishkin, U.,
-          ``\textbf{An efficient parallel biconnectivity algorithm},''
-          \textit{SIAM Journal on Computing}, 14(4): 862--874, 1985.
-
-          \bibitem{sleator}
-          Sleator, D. D., Tarjan, R. E.,
-          ``\textbf{Self-adjusting binary search trees},''
-          \textit{Journal of the ACM}, 32(3): 652--686, 1985.
-          doi: 10.1145/3828.3835
-
           \bibitem{clrs}
           Cormen, T. H., Leiserson, C. E., Rivest, R. L., Stein, C.,
           ``\textbf{Introduction to Algorithms},''
           3rd ed.,
           MIT Press, Cambridge, MA, 2009.
-
-          \bibitem{kozen}
-          Kozen, D. C.,
-          ``\textbf{The Design and Analysis of Algorithms},''
-          Springer-Verlag, New York, NY, 1991.
-
-          \bibitem{henzinger_king}
-          Henzinger, M. R., King, V.,
-          ``\textbf{Randomized dynamic graph algorithms with polylogarithmic time per operation},''
-          in \textit{Proceedings of the 27th Annual ACM Symposium on Theory of Computing (STOC '95)},
-          Las Vegas, USA, 1995, pp. 519--527.
-
       \end{thebibliography}
       }
 
