@@ -102,10 +102,11 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
       \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
         \textbf{Ideia:} fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre 1 e $\left\lceil \lg n \right\rceil$, onde $n$
-        é o número de vértices do grafo $G$. Uma aresta, ao ser inserida em $G$, começa com o nível $\left\lceil \lg n \right\rceil$. Os seguintes invariantes são mantidos:
-         Temos $G_i$ = $G[X]$ o grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Além disso, manteremos também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$.
+        é o número de vértices do grafo $G$. Uma aresta, ao ser inserida em $G$, começa com o nível $\left\lceil \lg n \right\rceil$. Seja $G_i$ = $G[X]$ onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, o algoritmo mantém uma floresta maximal $F_i$ de $G_i$. Além disso, ele mantém também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam as arestas de nível $i$ que não estejam em $F_i$, chamadas de aresta reserva.
       \end{shaded}
+      
 
+      Cada floresta $F_i$ é mantida em uma estrutura de dados específica para florestas dinâmicas, baseada em Euler tour trees.
       \bigskip
       
 \begin{figure}[H]
@@ -262,16 +263,7 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
 
 
     \begin{block}{Conexidade em florestas dinâmicas} 
-
-      \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
-      \begin{shaded}
-        \begin{itemize}
-            \item[$\bullet$] \texttt{\textbf{florestaDinâmica($n$)}}: constrói e devolve uma floresta dinâmica $F$ com $n$ vértices e sem arestas;
-            \item[$\bullet$] \texttt{\textbf{conectadosFD($F$, $u$, $v$)}}: devolve verdadeiro se $u$ e $v$ estão na mesma componente da floresta $F$ e falso caso contrário;
-            \item[$\bullet$] \texttt{\textbf{adicioneFD($F$, $u$, $v$)}}: insere uma aresta \textit{uv} na floresta $F$;
-            \item[$\bullet$] \texttt{\textbf{removaFD($u$, $v$)}}: remove a aresta \textit{uv} da floresta $F$.
-        \end{itemize}
-      \end{shaded}
+      H
     \end{block}
 
     
