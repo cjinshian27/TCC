@@ -86,11 +86,33 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
       Grafos dinâmicos permitem modelar problemas em que o conjunto de arestas do grafo sofre alterações ao longo do tempo. Um dos problemas fundamentais nesse contexto a manutenção de uma árvore geradora de custo mínimo do grafo dinâmico. Neste trabalho, estudamos vários algoritmos propostos por Holm, de Lichtenberg e Thorup \cite{jacob_holm} para esse variantes desse problema. O foco do trabalho foi no algoritmo manter uma floresta maximal de custo mínimo (MSF) decremental, ou seja, que dá suporte eficiente e remoção de arestas. Esse algoritmo foi implementado e testado em grafos com centenas de milhares de vértices. 
     \end{alertblock}
 
-    \begin{block}{Euler tour trees}
-      A Euler tour tree é uma técnica proposta por Thorup et al. na Seção 2.1 de seu artigo, e é utilizada para representar uma árvore. Essa representação é obtida de uma árvore $T$ substituindo-se cada aresta por dois arcos em sentidos opostos e adicionando-se um laço a cada vértice. O digrafo resultante de $T$ é Euleriano, ou seja, é conexo e o grau de entrada de cada vértice é igual ao grau de saída. Consequentemente, há uma trilha que começa e termina num mesmo vértice, passando por todos os arcos do digrafo somente uma vez. Tal trilha é chamada de ciclo Euleriano.
+    \begin{block}{Conexidade em grafos dinâmicos}
+     O problema da conexidade em grafos dinâmicos visa uma implementação eficiente dos métodos da biblioteca abaixo:
       
+            \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
+      \begin{shaded}
+        \begin{itemize}
+            \item[$\bullet$] \texttt{\textbf{grafoDinâmico($n$)}}: contrói e devolve um grafo dinâmico com $n$ vértices e sem arestas;
+            \item[$\bullet$] \texttt{\textbf{conectadosGD($G$, $u$, $v$)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
+            \item[$\bullet$] \texttt{\textbf{adicioneGD($G$, $u$, $v$)}}: adiciona a aresta $uv$ no grafo $G$;
+            \item[$\bullet$] \texttt{\textbf{removaGD($G$, $u$, $v$)}}: remove a aresta $uv$ do grafo $G$.
+        \end{itemize} 
+      \end{shaded}
+
+      \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
+      \begin{shaded}
+        \textbf{Ideia:} fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre 1 e $\left\lceil \lg n \right\rceil$, onde $n$
+        é o número de vértices do grafo $G$. Uma aresta, ao ser inserida em $G$, começa com o nível $\left\lceil \lg n \right\rceil$. Os seguintes invariantes são mantidos:
+         Temos $G_i$ = $G[X]$ o grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Além disso, manteremos também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$.
+      \end{shaded}
+
       \bigskip
-      \begin{figure}[H]
+      
+\begin{figure}[H]
+    \centering
+
+    % Elemento 1: Grafo original e Dígrafo Euleriano (do primeiro figure)
+    \begin{minipage}{0.7\textwidth} % Usa aproximadamente 70% da largura do texto
         \centering
         \begin{tikzpicture}[thick, node distance=2cm,
           vtx/.style={draw, circle, minimum size=10mm, inner sep=0pt}]
@@ -107,6 +129,9 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
         \draw (c) -- (d);
         \draw (d) -- (a);
         \draw (a) -- (e);
+        
+        % Adiciona uma label ou descrição para o primeiro gráfico
+        \node at (-1, 1) {$T$};
 
         % ---------- Right: Euler-tour representation ----------
         \begin{scope}[xshift=8cm]
@@ -134,23 +159,40 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
           \draw[->] (c1) edge[loop right] ();
           \draw[->] (d1) edge[loop below] ();
           \draw[->] (e1) edge[loop left] ();
+          
+          % Adiciona uma label ou descrição para o segundo gráfico
+          \node at (1.5, 2.5) {};
 
         \end{scope}
+        
+        \draw[->, blue, very thick] ([xshift=1cm]b.east) 
+            to[out=30, in=150] ([xshift=6cm]b.west); % Start from 'b.east', 
+        \node[blue, font=\small] at (5.5, 2.6) {digrafo Euleriano}; % Text above the arrow path
+          
+         \draw[->, blue, very thick] ([yshift=-1cm]d1.south) 
+            to[out=-20, in=20] ([yshift=-5cm]d1.south); % Start from 'b.east', 
+          \node[blue, font=\small, fill=white, inner sep=2pt] at (10.5, -4.5) {trilha};
+          \node[blue, font=\small, fill=white, inner sep=2pt] at (10.5, -5) {Euleriana};
+
+          
 
         \end{tikzpicture}
-            \caption{À esquerda, temos uma árvore $T$ e, à direita, temos o digrafo Euleriano de $T$.}
-            \label{fig:euler-tour-trees}
-        \end{figure}
+    \end{minipage}
 
-          \begin{figure}[H]
-          \centering
-          \begin{tikzpicture}
-              [node/.style={circle,draw,minimum size=1em, thick},
+    \vspace{-2cm}
+    \begin{minipage}{\textwidth} 
+        \centering
+        \begin{tikzpicture}
+              [node/.style={circle,draw,minimum size=10mm, thick},
               edge/.style={thick, black},
               reserve/.style={red, thick},
               removed/.style={black, thick, dashed}, 
               inner sep=0pt]
 
+              % Aumentando a distância horizontal (xshift) e vertical (yshift)
+              % para melhor visualização ao combinar com o primeiro gráfico, 
+              % e ajustando as coordenadas para centralizar o nó raiz.
+              
               \node[node] (ad) at (0, 0) {$ad$};
               \node[node] (ab) at (-4.5, -1.5) {$ab$};
               \node[node] (cd) at (4.5, -1.5) {$cd$};
@@ -186,15 +228,40 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
               \draw[edge] (ab) -- (ea) node[midway, below] {};
               \draw[edge] (ab) -- (bb) node[midway, below] {};
 
-          \end{tikzpicture}
-          \caption{Uma árvore binária de busca balanceada para um ciclo Euleriano da árvore da Figura~\ref{fig:euler-tour-trees}.}
-          \label{fig:euler-tour-balanced-tree}
-      \end{figure}
+              \node at (-4, 0.9) {Euler tour};
+              \node at (-4, 0) {tree de $T$};
+        \end{tikzpicture}
+        % Adiciona uma label ou descrição para o terceiro gráfico
+    \end{minipage}
+
+    \caption{Árvore $T$ e a Euler tour tree de $T$}
+    \label{fig:arvore-euler-tour-combinada}
+\end{figure}
+
 
     \end{block}
 
-    \begin{block}{Conexidade em florestas dinâmicas}
-      O problema da conexidade em florestas dinâmicas é uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. Uma floresta dinâmica é constituída de várias ABBBs (na nossa implementação usamos \textit{splay trees}, desenvolvidas por Sleator e Tarjan). Utilizamos as Euler tour trees para representar essas ABBBs da floresta.   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    \begin{block}{Conexidade em florestas dinâmicas} 
 
       \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
@@ -215,26 +282,7 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
     
     \begin{block}{Conexidade em grafos dinâmicos}
 
-      O problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dê suporte aos métodos da biblioteca abaixo:
       
-      \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
-      \begin{shaded}
-        \begin{itemize}
-            \item[$\bullet$] \texttt{\textbf{grafoDinâmico($n$)}}: contrói e devolve um grafo dinâmico com $n$ vértices e sem arestas;
-            \item[$\bullet$] \texttt{\textbf{conectadosGD($G$, $u$, $v$)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
-            \item[$\bullet$] \texttt{\textbf{adicioneGD($G$, $u$, $v$)}}: adiciona a aresta $uv$ no grafo $G$;
-            \item[$\bullet$] \texttt{\textbf{removaGD($G$, $u$, $v$)}}: remove a aresta $uv$ do grafo $G$.
-        \end{itemize} 
-      \end{shaded}
-
-      \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
-      \begin{shaded}
-        \textbf{Ideia:} fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre 1 e $\left\lceil \lg n \right\rceil$, onde $n$
-        é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá
-        o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado.
-         Temos $G_i$ = $G[X]$ o grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Além disso, manteremos também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$.
-      \end{shaded}
-
       Se os vértices $u$ e $v$ não estiverem na mesma componente de $G$, então a aresta $uv$ é inserida na floresta maximal $F_L$, assim ligando a árvore que contém $u$ com a que contém $v$ em $F_L$ . Chamamos esse tipo de aresta de \textbf{aresta da floresta}. Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$.
 
       \begin{figure}[H]
