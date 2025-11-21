@@ -262,7 +262,7 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     
     \begin{block}
 
-    Abaixo temos uma simplificação do código da remoção de uma aresta do grafo. Observe que as Euler tour trees carregam informação extra para que a implementação das linhas $7$, $8$, $12$ e $13$ sejam eficientes. 
+    Abaixo temos uma simplificação do código da remoção de uma aresta do grafo. Observe que as Euler tour trees carregam informação extra para que a implementação das linhas $7$, $8$, $12$ e $13$ do método \texttt{substituaAresta} seja eficiente. 
     
     \begin{figure}[htb]
     \centering
@@ -343,112 +343,10 @@ Como a nossa implementação utiliza splay trees, então para cada rotina da bib
     % ----------------------------------------------------------------------------------------
     \onethirdcol
 
-        \begin{figure}[H]
-    \centering
-
-    \noindent
-    \begin{minipage}[c]{2cm}
-        \raggedright
-        Nível $4$
-    \end{minipage}%
-    \begin{minipage}[c]{0.8\textwidth}
-        \centering
-        \begin{tikzpicture}
-        [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}, 
-        reserveremoved/.style={red, thick, dashed}]
-
-        \node[node] (u) at (-1,2) {$u$};
-        \node[node] (a) at (-3,4) {$a$};
-        \node[node] (b) at (-5,2) {$b$};
-        \node[node] (c) at (-3,0) {$c$};
-        \node[node] (v) at (2,2) {$v$};
-        \node[node] (d) at (3,3.7) {$d$};
-        \node[node] (e) at (3,0.3) {$e$};
-        \node[node] (f) at (5,0.3) {$f$};
-        \node[node] (g) at (6, 2) {$g$};
-        \node[node] (h) at (5, 3.7) {$h$};
-        
-         % Dotted circles for T_u and T_v
-        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
-        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
-        
-        % Labels for the circles
-        \node at (-3,-1.1) {$T_u$};
-        \node at (4,-1.1) {$T_v$};
-
-        % tree edges (normal black edges)
-        \draw[edge] (a) -- (u) node[midway, below] {};
-        \draw[edge] (a) -- (b) node[midway, below] {};
-        \draw[edge] (b) -- (c) node[midway, below] {};
-        \draw[edge] (v) -- (d) node[midway, below] {};
-        \draw[edge] (v) -- (f) node[midway, below] {};
-        \draw[edge] (v) -- (e) node[midway, below] {};
-        \draw[edge] (f) -- (g) node[midway, below] {};
-        \draw[edge] (g) -- (h) node[midway, below] {};
-        % reserve edges (normal red edges)
-  
-        \draw[reserve] (a) -- (d) node[midway, below] {};
-        \draw[reserve] (c) -- (v) node[midway, below] {};
-        \draw[reserveremoved] (b) -- (u) node[midway, below] {};
-        \draw[reserveremoved] (c) -- (u) node[midway, below] {};
-        \draw[reserve] (d) -- (f) node[midway, below] {};
-        \draw[reserve] (d) -- (h) node[midway, below] {};
-
-        \end{tikzpicture}
-    \end{minipage}
-    \vspace{1cm}
-        \noindent
-    \begin{minipage}[c]{2cm}
-        \raggedright
-        Nível $3$
-    \end{minipage}%
-    \begin{minipage}[c]{0.8\textwidth}
-        \centering
-        \begin{tikzpicture}
-            [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
-            edge/.style={thick, black},
-            reserve/.style={red, thick},
-            removed/.style={black, thick, dashed}]
-
-            \node[node] (u) at (-1,2) {$u$};
-            \node[node] (a) at (-3,4) {$a$};
-            \node[node] (b) at (-5,2) {$b$};
-            \node[node] (c) at (-3,0) {$c$};
-            \node[node] (v) at (2,2) {$v$};
-            \node[node] (d) at (3,3.7) {$d$};
-            \node[node] (e) at (3,0.3) {$e$};
-            \node[node] (f) at (5,0.3) {$f$};
-            \node[node] (g) at (6, 2) {$g$};
-            \node[node] (h) at (5, 3.7) {$h$};
-            
-            
-            % Dotted circles for T_u and T_v
-            \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
-            \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
-            
-            % Labels for the circles
-            \node at (-3,-1.1) {$T_u$};
-            \node at (4,-1.1) {$T_v$};
-            
-            \draw[reserve] (b) -- (u) node[midway, below] {};
-            \draw[reserve] (c) -- (u) node[midway, below] {};
-            \draw[edge] (a) -- (u) node[midway, below] {};
-            \draw[edge] (a) -- (b) node[midway, below] {};
-            \draw[edge] (b) -- (c) node[midway, below] {};
-
-        \end{tikzpicture}
-    \end{minipage}
-    \caption{Representação da busca por uma aresta substituta em $R_4$. As arestas reserva de nível $4$ que estão tracejadas foram percorridas e estão prestes a ser removidas de $R_4$, pois foram rebaixadas para o nível $3$, como se pode ver em $R_3$.}
-    \label{fig:example-replacement3}
-\end{figure}
-
     \begin{block}{MSF decremental}
       
-
-
+     O problema da manutenção de uma MSF decremental do grafo visa uma implementação eficiente dos métodos da biblioteca abaixo:
+      
       \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
         \begin{itemize}
