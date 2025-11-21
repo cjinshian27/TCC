@@ -1,13 +1,15 @@
 % Poster get from https://github.com/victorsenam/tcc/blob/master/poster/main.tex
 
-\documentclass[final]{beamer}
+\documentclass[final, brazilian]{beamer}
 \usepackage[size=a1,orientation=portrait,scale=1.3]{beamerposter}
+\graphicspath{{figuras/}}  
 
 \usepackage[brazil]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{framed,graphicx,xcolor} % for shaded box
 \usepackage{mathtools}%
+\usepackage{listings}
 \usepackage{tikz}
 \usetikzlibrary{matrix,shapes,positioning,shadows,trees,patterns}
 
@@ -258,192 +260,51 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     % ----------------------------------------------------------------------------------------
     \onethirdcol
     
-    \begin{block}{Conexidade em grafos dinâmicos}
+    \begin{block}
 
-      
-      Se os vértices $u$ e $v$ não estiverem na mesma componente de $G$, então a aresta $uv$ é inserida na floresta maximal $F_L$, assim ligando a árvore que contém $u$ com a que contém $v$ em $F_L$ . Chamamos esse tipo de aresta de \textbf{aresta da floresta}. Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$.
-
-      \begin{figure}[H]
-        \centering
-
-        \noindent
-        \begin{minipage}[c]{2cm}
-            \raggedright
-            Nível $4$
-        \end{minipage}%
-        \begin{minipage}[c]{0.8\textwidth}
-            \centering
-            \begin{tikzpicture}
-            [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
-            edge/.style={thick, black},
-            reserve/.style={red, thick},
-            removed/.style={black, thick, dashed}]
-
-            \node[node] (u) at (-1,2) {$u$};
-            \node[node] (a) at (-3,4) {$a$};
-            \node[node] (b) at (-5,2) {$b$};
-            \node[node] (c) at (-3,0) {$c$};
-            \node[node] (v) at (2,2) {$v$};
-            \node[node] (d) at (3,3.7) {$d$};
-            \node[node] (e) at (3,0.3) {$e$};
-            \node[node] (f) at (5,0.3) {$f$};
-            \node[node] (g) at (6, 2) {$g$};
-            \node[node] (h) at (5, 3.7) {$h$};
-            
-            % Dotted circles for T_u and T_v
-            \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
-            \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
-            
-            % Labels for the circles
-            \node at (-3,-1.1) {$T_u$};
-            \node at (4,-1.1) {$T_v$};
-
-            % tree edges (normal black edges)
-            \draw[edge] (a) -- (u) node[midway, below] {};
-            \draw[edge] (a) -- (b) node[midway, below] {};
-            \draw[edge] (b) -- (c) node[midway, below] {};
-            \draw[edge] (v) -- (d) node[midway, below] {};
-            \draw[edge] (v) -- (f) node[midway, below] {};
-            \draw[edge] (v) -- (e) node[midway, below] {};
-            \draw[edge] (f) -- (g) node[midway, below] {};
-            \draw[edge] (g) -- (h) node[midway, below] {};
-            % reserve edges (normal red edges)
-            
-            \draw[removed] (u) -- (v) node[midway, below] {};
-            \draw[reserve] (a) -- (d) node[midway, below] {};
-            \draw[reserve] (c) -- (v) node[midway, below] {};
-            \draw[reserve] (b) -- (u) node[midway, below] {};
-            \draw[reserve] (c) -- (u) node[midway, below] {};
-            \draw[reserve] (d) -- (f) node[midway, below] {};
-            \draw[reserve] (d) -- (h) node[midway, below] {};
-
-            \end{tikzpicture}
-        \end{minipage}
-        \vspace{1cm}
-            \noindent
-        \begin{minipage}[c]{2cm}
-            \raggedright
-            Nível $3$
-        \end{minipage}%
-        \begin{minipage}[c]{0.8\textwidth}
-            \centering
-            \begin{tikzpicture}
-                [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
-                edge/.style={thick, black},
-                reserve/.style={red, thick},
-                removed/.style={black, thick, dashed}]
-
-                \node[node] (u) at (-1,2) {$u$};
-                \node[node] (a) at (-3,4) {$a$};
-                \node[node] (b) at (-5,2) {$b$};
-                \node[node] (c) at (-3,0) {$c$};
-                \node[node] (v) at (2,2) {$v$};
-                \node[node] (d) at (3,3.7) {$d$};
-                \node[node] (e) at (3,0.3) {$e$};
-                \node[node] (f) at (5,0.3) {$f$};
-                \node[node] (g) at (6, 2) {$g$};
-                \node[node] (h) at (5, 3.7) {$h$};
-                
-                %\draw[edge] (a) -- (u) node[midway, below] {};
-                %\draw[edge] (a) -- (b) node[midway, below] {};
-                %\draw[edge] (b) -- (c) node[midway, below] {};
-
-            \end{tikzpicture}
-        \end{minipage}
-        \caption{Um grafo $G$ de 10 vértices, onde as arestas pretas são da floresta $F_4$, enquanto as vermelhas são reservas. A aresta $uv$ está prestes a ser removida. A floresta $F_{4}$ de $G$ de cima contém todas as arestas pretas recém-inseridas e as arestas vermelhas estão em $R_4$. A floresta de baixo é a $F_{3}$, com os vértices isolados, e $R_3$ também não tem nenhuma aresta.}
-        \label{fig:example-replacement1}
-    \end{figure}
-
-\begin{figure}[H]
+    Abaixo temos uma simplificação do código da remoção de uma aresta do grafo. Observe que as Euler tour trees carregam informação extra para que a implementação das linhas $7$, $8$, $12$ e $13$ sejam eficientes. 
+    
+    \begin{figure}[htb]
     \centering
-
-    \noindent
-    \begin{minipage}[c]{2cm}
-        \raggedright
-        Nível $4$
-    \end{minipage}%
-    \begin{minipage}[c]{0.8\textwidth}
-        \centering
-        \begin{tikzpicture}
-        [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}]
-
-        \node[node] (u) at (-1,2) {$u$};
-        \node[node] (a) at (-3,4) {$a$};
-        \node[node] (b) at (-5,2) {$b$};
-        \node[node] (c) at (-3,0) {$c$};
-        \node[node] (v) at (2,2) {$v$};
-        \node[node] (d) at (3,3.7) {$d$};
-        \node[node] (e) at (3,0.3) {$e$};
-        \node[node] (f) at (5,0.3) {$f$};
-        \node[node] (g) at (6, 2) {$g$};
-        \node[node] (h) at (5, 3.7) {$h$};
-        
-         % Dotted circles for T_u and T_v
-        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
-        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
-        
-        % Labels for the circles
-        \node at (-3,-1.1) {$T_u$};
-        \node at (4,-1.1) {$T_v$};
-
-        % tree edges (normal black edges)
-        \draw[edge] (a) -- (u) node[midway, below] {};
-        \draw[edge] (a) -- (b) node[midway, below] {};
-        \draw[edge] (b) -- (c) node[midway, below] {};
-        \draw[edge] (v) -- (d) node[midway, below] {};
-        \draw[edge] (v) -- (f) node[midway, below] {};
-        \draw[edge] (v) -- (e) node[midway, below] {};
-        \draw[edge] (f) -- (g) node[midway, below] {};
-        \draw[edge] (g) -- (h) node[midway, below] {};
-        % reserve edges (normal red edges)
-        
-        \draw[reserve] (a) -- (d) node[midway, below] {};
-        \draw[reserve] (c) -- (v) node[midway, below] {};
-        \draw[reserve] (b) -- (u) node[midway, below] {};
-        \draw[reserve] (c) -- (u) node[midway, below] {};
-        \draw[reserve] (d) -- (f) node[midway, below] {};
-        \draw[reserve] (d) -- (h) node[midway, below] {};
-
-        \end{tikzpicture}
-    \end{minipage}
-    \vspace{1cm}
-        \noindent
-    \begin{minipage}[c]{2cm}
-        \raggedright
-        Nível $3$
-    \end{minipage}%
-    \begin{minipage}[c]{0.8\textwidth}
-        \centering
-        \begin{tikzpicture}
-            [node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
-            edge/.style={thick, black},
-            reserve/.style={red, thick},
-            removed/.style={black, thick, dashed}]
-
-            \node[node] (u) at (-1,2) {$u$};
-            \node[node] (a) at (-3,4) {$a$};
-            \node[node] (b) at (-5,2) {$b$};
-            \node[node] (c) at (-3,0) {$c$};
-            \node[node] (v) at (2,2) {$v$};
-            \node[node] (d) at (3,3.7) {$d$};
-            \node[node] (e) at (3,0.3) {$e$};
-            \node[node] (f) at (5,0.3) {$f$};
-            \node[node] (g) at (6, 2) {$g$};
-            \node[node] (h) at (5, 3.7) {$h$};
-            
-            
-            \draw[edge] (a) -- (u) node[midway, below] {};
-            \draw[edge] (a) -- (b) node[midway, below] {};
-            \draw[edge] (b) -- (c) node[midway, below] {};
-
-        \end{tikzpicture}
-    \end{minipage}
-    \caption{Representação da remoção da aresta $uv$ em $G$. As arestas de nível $4$ de $T_u$ foram rebaixadas para o nível $3$, o que pode ser visto na floresta $F_{3}$.}
-    \label{fig:example-replacement2}    
+    % The file name here does NOT include the 'extras/' path 
+    % because $of the \graphicspath command above.
+    \includegraphics[width=1\linewidth]{removaGD.png}
+    
+    \caption{Algoritmo de remoção de aresta do grafo.}
+    \label{prog:removeGD_image} % Use a meaningful label for referencing
 \end{figure}
+      
+    \begin{figure}[htb]
+    \centering
+    % The file name here does NOT include the 'extras/' path 
+    % because of the \graphicspath command above.
+    \includegraphics[width=1\linewidth]{substituaAresta.png}
+    
+    \caption{Algoritmo que procura uma aresta substituta.}
+    \label{prog:replaceGD_image} % Use a meaningful label for referencing
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    % The file name here does NOT include the 'extras/' path 
+    % because of the \graphicspath command above.
+    \includegraphics[width=1\linewidth]{testeSubstituta.png}
+    
+    \caption{Algoritmo que testa se uma aresta reserva é substituta.}
+    \label{prog:testSubstitute_image} % Use a meaningful label for referencing
+\end{figure}
+      
+Como a nossa implementação utiliza splay trees, então para cada rotina da biblioteca temos um consumo amortizado por operação. 
+
+    \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
+      \begin{shaded}
+        \begin{itemize}
+            \item[$\bullet$] \texttt{\textbf{grafoDinâmico($n$)}}: $\Oh(n \lg n)$;
+            \item[$\bullet$] \texttt{\textbf{conectadosGD($G$, $u$, $v$)}}: $\Oh(\lg n)$ amortizado;
+            \item[$\bullet$] \texttt{\textbf{adicioneGD($G$, $u$, $v$)}}: $\Oh(\lg n)$ amortizado;
+            \item[$\bullet$] \texttt{\textbf{removaGD($G$, $u$, $v$)}}: $\Oh(\lg^2 n)$ amortizado;
+        \end{itemize} 
+      \end{shaded}
 
     \end{block}
 
