@@ -358,8 +358,19 @@ Como a nossa implementação utiliza splay trees, então para cada rotina da bib
 
       \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
-        \textbf{Ideia:} remover uma aresta de nível $i$ da floresta $F_i$ , quebra uma componente desta em duas, $T_u$ e $T_v$.  Para isso, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Assim, em vez de usar um mapa hash para armazenar os vizinhos de cada vértice, usaremos um min-heap, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$.
+        \textbf{Ideia:} remover uma aresta de nível $i$ da floresta $F_i$ , quebra uma componente desta em duas, $T_u$ e $T_v$.  Para isso, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Assim, em vez de usar um mapa hash (como fazemos no grafo dinâmico) para armazenar os vizinhos de cada vértice, usaremos um min-heap, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$. Dessa forma, basta procurar pela aresta em $R_i$ que incide em $T_u$ e que tenha o menor peso que conecte $T_u$ e $T_v$.
       \end{shaded}
+
+      Veja que, na Figura~\ref{prog:replaceGDMSF_image}, nas linhas $13$ e $17$ passamos a procurar a aresta de peso mínimo em $R_i$ incidente a $T_u$.
+
+      \begin{figure}[htb]
+          \centering
+
+          \includegraphics[width=1\linewidth]{substituaArestaMSF.png}
+          
+          \caption{Algoritmo da MSF decremental que procura uma aresta substituta.}
+          \label{prog:replaceGDMSF_image} 
+      \end{figure}
 
 
     \end{block}
