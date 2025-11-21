@@ -372,13 +372,13 @@ Como a nossa implementação utiliza splay trees, então para cada rotina da bib
           \label{prog:replaceGDMSF_image} 
       \end{figure}
 
-    Como a nossa implementação utiliza splay trees, então para cada rotina da biblioteca temos um consumo amortizado por operação. 
+    Como a nossa implementação utiliza splay trees, então para as rotinas \texttt{removaGD} da biblioteca temos um consumo amortizado por operação. 
 
     \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
         \begin{itemize}
             \item[$\bullet$] \texttt{\textbf{grafoDinâmico($n$)}}: $\Oh(n \lg m)$;
-            \item[$\bullet$] \texttt{\textbf{consultePesoMSF}}: $\Oh(1)$;
+            \item[$\bullet$] \texttt{\textbf{consultePesoMSF($G$)}}: $\Oh(1)$;
             \item[$\bullet$]  \texttt{\textbf{removaGD($G$, $u$, $v$)}}: amortizado $\Oh(\lg^2 n)$;
         \end{itemize} 
       \end{shaded}
