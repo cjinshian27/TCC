@@ -1542,13 +1542,11 @@ A rotina de substituição da aresta \texttt{substituaAresta} está descrita no 
             $T_u \leftrightarrow T_v$
         \textbf{enquanto} $T_u$.arestasDeNível > 0 \textbf{faça} 
             nóXY := \texttt{procureArestaDeNível($T_u$)}
-            \texttt{splay($\emph{nóXY}$)}
-            $T_u$ := nóXY
+            $T_u$ := \texttt{splay($\emph{nóXY}$)}
             \texttt{rebaixeNívelDaAresta($G$, $\emph{nóXY}$, j)}
         \textbf{enquanto} $T_u$.arestasReservasDeNível > 0     \textbf{faça}
             nóXX := \texttt{procureNóIncideArestaReservaDeNível($T_u$)}
-            \texttt{splay($\emph{nóXX}$)}
-            $T_u$ := nóXX
+            $T_u$ := \texttt{splay($\emph{nóXX}$)}
             ($x$, $x$) := \textit{nóXX.vértices}
             \textbf{para} $y \in G.R_j[x]$ \textbf{faça}
                 se \texttt{testeSubstituta($G$, $x$, $y$, $j$)} \textbf{então} 
@@ -1561,7 +1559,7 @@ Para explicar o \texttt{substituaAresta} do Programa~\ref{prog:replaceGD}, descr
 
 Nas linhas $3$ e $4$, obtemos as árvores $T_u$ e $T_v$, que foram derivadas da floresta $F_j$, já que uma componente desta foi quebrada em duas após a remoção de $uv$. As operações \texttt{splay} puxam os nós $u$ e $v$ para raiz de $T_u$ e $T_v$, respectivamente. As linhas $5$ e $6$ garantem que $|T_u| \leq |T_v|$ como já discutido na Seção~\ref{sec:dynamic-graph-edge-removal}. 
 
-Nas linhas $7$ a $11$, realizamos o processo de rebaixar as arestas de $T_u$ de nível $j$. Na linha $7$, temos um laço que terminará quando todas as arestas de nível $j$ tiverem sido rebaixadas, isto é, quando o contador \textit{arestasDeNível} do nó raiz de $T_u$ estiver nulo. Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que retornará um nó de aresta de nível $j$, ou seja, que possui o \textit{éNível} verdadeiro. Para cada nó de aresta retornado, acionamos \texttt{splay} nele e atualizamos $T_u$. Em seguida, o rebaixamos chamando o método \texttt{rebaixeNívelDaAresta}, descrito abaixo.
+Nas linhas $7$ a $10$, realizamos o processo de rebaixar as arestas de $T_u$ de nível $j$. Na linha $7$, temos um laço que terminará quando todas as arestas de nível $j$ tiverem sido rebaixadas, isto é, quando o contador \textit{arestasDeNível} do nó raiz de $T_u$ estiver nulo. Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que retornará um nó de aresta de nível $j$, ou seja, que possui o \textit{éNível} verdadeiro. Para cada nó de aresta retornado, acionamos \texttt{splay} nele e atualizamos $T_u$. Em seguida, o rebaixamos chamando o método \texttt{rebaixeNívelDaAresta}, descrito abaixo.
 
 \begin{programruledcaption}{\texttt{rebaixeNívelDaAresta($G$, $p$, $j$)} \label{prog:decrease-edge-level}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta $p$ da floresta $F_j$ que é raiz de uma árvore e tem nível $j$.\\
@@ -1587,11 +1585,11 @@ Nas linhas $7$ a $11$, realizamos o processo de rebaixar as arestas de $T_u$ de 
 
 No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. Note que o nó $p$ é raiz de sua árvore pois foi feito um splay neste nó antes da chamada a \texttt{rebaixeNívelDaAresta}, na linha $9$ do Programa~\ref{prog:replaceGD}. Ademais, como rebaixamos $xy$ de $F_j$ para $F_{j - 1}$, então em $F_j$ atualizamos o seu atributo \textit{éNível} para falso, e em $F_{j-1}$ atualizamos este atributo para verdadeiro. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$.
 
-Voltando ao Programa~\ref{prog:replaceGD}, nas linhas $12$ a $19$, procuramos por uma aresta substituta de nível~$j$. Similarmente à linha $7$, a linha $10$ é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta.  
+Voltando ao Programa~\ref{prog:replaceGD}, nas linhas $11$ a $17$, procuramos por uma aresta substituta de nível~$j$. Similarmente à linha $7$, a linha $11$ é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta.  
 
-Na linha $13$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vértice $xx$ que incide em alguma aresta reserva de nível~$j$. Depois, acionamos \texttt{splay} em $xx$ e atualizamos $T_u$. Na linha $16$, obtemos o vértice $x$ do nó $xx$ e percorremos todos os vizinhos $y$ de $x$ na lista de adjacências na linha $17$, pois queremos testar se $xy$ é uma aresta substituta.
+Na linha $12$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vértice $xx$ que incide em alguma aresta reserva de nível~$j$. Depois, acionamos \texttt{splay} em $xx$ e atualizamos $T_u$. Na linha $14$, obtemos o vértice $x$ do nó $xx$ e percorremos todos os vizinhos $y$ de $x$ na lista de adjacências na linha $15$, pois queremos testar se $xy$ é uma aresta substituta.
 
-Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $18$, descrito no Programa~\ref{prog:find-substitute}. Como o nome sugere, o método testa se $xy$ é uma aresta substituta, devolvendo verdadeiro se $xy$ for e falso caso contrário. Quando o método devolve verdadeiro, chegamos à linha $19$ do Programa~\ref{prog:replaceGD}, terminando o algoritmo. Caso contrário, continuamos percorrendo os vizinhos $y$ da lista de adjacências de $x$ e chamando o mesmo método várias vezes.
+Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $16$, descrito no Programa~\ref{prog:find-substitute}. Como o nome sugere, o método testa se $xy$ é uma aresta substituta, devolvendo verdadeiro se $xy$ for e falso caso contrário. Quando o método devolve verdadeiro, chegamos à linha $17$ do Programa~\ref{prog:replaceGD}, terminando o algoritmo. Caso contrário, continuamos percorrendo os vizinhos $y$ da lista de adjacências de $x$ e chamando o mesmo método várias vezes.
 
 \begin{programruledcaption}{\texttt{testeSubstituta($G$, $x$, $y$, $j$)} \label{prog:find-substitute}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ do nó $xy$ e o nível $j$.\\
