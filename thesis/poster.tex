@@ -104,7 +104,7 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
       \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
         \textbf{Ideia:} fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre 1 e $\left\lceil \lg n \right\rceil$, onde $n$
-        é o número de vértices do grafo $G$. Uma aresta, ao ser inserida em $G$, começa com o nível $\left\lceil \lg n \right\rceil$. Seja $G_i$ = $G[X]$ onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, o algoritmo mantém uma floresta maximal $F_i$ de $G_i$. Além disso, ele mantém também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam as arestas de nível $i$ que não estejam em $F_i$, chamadas de aresta reserva.
+        é o número de vértices do grafo $G$. Uma aresta, ao ser inserida em $G$, começa com o nível $\left\lceil \lg n \right\rceil$, e, durante do algoritmo, seu nível vai sendo decrementado. Seja $G_i$ = $G[X]$ onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, o algoritmo mantém uma floresta maximal $F_i$ de $G_i$. Além disso, ele mantém também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam as arestas de nível $i$ que não estejam em $F_i$, chamadas de aresta reserva.
       \end{shaded}
 
       Cada floresta $F_i$ é mantida em uma estrutura de dados específica para florestas dinâmicas, baseada em Euler tour trees. Cada componente de $F_i$ é armazenada como uma Euler tour tree. Em nossa implementação, Euler tour trees são implementadas como splay trees.
@@ -294,7 +294,7 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     \label{prog:testSubstitute_image} % Use a meaningful label for referencing
 \end{figure}
       
-Como a nossa implementação utiliza splay trees, então para cada rotina da biblioteca temos um consumo amortizado por operação. 
+    Como a nossa implementação utiliza splay trees, algumas rotinas da biblioteca possuem um consumo amortizado por operação.
 
     \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
@@ -372,7 +372,7 @@ Como a nossa implementação utiliza splay trees, então para cada rotina da bib
           \label{prog:replaceGDMSF_image} 
       \end{figure}
 
-    Como a nossa implementação utiliza splay trees, então para as rotinas \texttt{removaGD} da biblioteca temos um consumo amortizado por operação. 
+    Como a nossa implementação utiliza splay trees, algumas rotinas da biblioteca possuem um consumo amortizado por operação.
 
     \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
