@@ -358,7 +358,7 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
 
       \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
-        \textbf{Ideia:} remover uma aresta de nível $i$ da floresta $F_i$ , quebra uma componente desta em duas, $T_u$ e $T_v$.  Para isso, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Assim, em vez de usar um mapa hash (como fazemos no algoritmo de conexidade do grafo dinâmico) para armazenar os vizinhos de cada vértice, usaremos um min-heap, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$. Dessa forma, basta procurar por uma aresta em $R_i$ que incide em $T_u$ e que tenha o menor peso que conecte $T_u$ e $T_v$.
+        \textbf{Ideia:} remover uma aresta de nível $i$ da floresta $F_i$ , quebra uma componente desta em duas, $T_u$ e $T_v$.  Para isso, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Assim, em vez de usar um mapa hash (como fazemos no algoritmo de conexidade do grafo dinâmico) para armazenar os vizinhos de cada vértice, usaremos um min-heap, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$. Dessa forma, basta procurar por uma aresta em $R_i$ que incide em $T_u$ e que tenha o menor peso que conecte $T_u$ e $T_v$, para podermos manter o peso mínimo de uma MSF do grafo ao longo das remoções de arestas. 
       \end{shaded}
 
       Veja que, na Figura~\ref{prog:replaceGDMSF_image}, nas linhas $13$ e $17$ passamos a procurar a aresta de peso mínimo em $R_i$ incidente a $T_u$.
