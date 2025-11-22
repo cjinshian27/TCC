@@ -85,7 +85,7 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
     % ----------------------------------------------------------------------------------------
     \onethirdcol
     \begin{alertblock}{Resumo}
-      Grafos dinâmicos permitem modelar problemas em que o conjunto de arestas do grafo sofre alterações ao longo do tempo. Um dos problemas fundamentais nesse contexto é a manutenção de uma árvore geradora de custo mínimo do grafo dinâmico. Estudamos vários algoritmos propostos por Holm, de Lichtenberg e Thorup \cite{jacob_holm} para esse variantes desse problema. O foco foi no algoritmo para manter uma floresta maximal de custo mínimo (MSF) decremental, que dá suporte eficiente à remoção de arestas. Esse algoritmo foi implementado e testado em grafos com centenas de milhares de vértices. 
+      Grafos dinâmicos permitem modelar problemas em que o conjunto de arestas do grafo sofre alterações ao longo do tempo. Um dos problemas fundamentais nesse contexto é a manutenção de uma árvore geradora de custo mínimo do grafo dinâmico. Estudamos vários algoritmos propostos por Holm, de Lichtenberg e Thorup \cite{jacob_holm} para variantes desse problema. O foco foi no algoritmo para manter uma floresta maximal de custo mínimo (MSF) decremental, que dá suporte eficiente à remoção de arestas. Esse algoritmo foi implementado e testado em grafos com centenas de milhares de vértices. 
     \end{alertblock}
 
     \begin{block}{Conexidade em grafos dinâmicos}
@@ -345,7 +345,7 @@ O algoritmo mantém as seguintes invariantes:
       \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
         \begin{itemize}
-          \item[$\bullet$] \texttt{\textbf{MSFDecremental($n$, $E$)}}: contrói e devolve um grafo ponderado $G$ com $n$ vértices e as arestas ponderadas dadas no conjunto $E$;
+          \item[$\bullet$] \texttt{\textbf{MSFDecremental($n$, $E$)}}: constrói e devolve o grafo ponderado $G$ com $n$ vértices e as arestas ponderadas dadas no conjunto $E$;
           \item[$\bullet$] \texttt{\textbf{consultePesoMSF($G$)}}: devolve o peso de uma MSF do grafo ponderado $G$;
           \item[$\bullet$] \texttt{\textbf{removaMSF($G$, $u$, $v$)}}: remove a aresta $uv$ do grafo ponderado $G$.
         \end{itemize}
@@ -353,10 +353,10 @@ O algoritmo mantém as seguintes invariantes:
 
       \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
-        \textbf{Ideia:} remover uma aresta de nível $i$ da floresta $F_i$ , quebra uma componente desta em duas, $T_u$ e $T_v$.  Para isso, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a $T_v$. Assim, em vez de usar um mapa hash (como fazemos no algoritmo de conexidade do grafo dinâmico) para armazenar os vizinhos de cada vértice, usaremos um min-heap, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$. Dessa forma, basta procurar por uma aresta em $R_i$ que incide em $T_u$ e que tenha o menor peso que conecte $T_u$ e $T_v$, para podermos manter o peso mínimo de uma MSF do grafo ao longo das remoções de arestas. 
+        \textbf{Ideia:} remover uma aresta de nível $i$ da floresta $F_i$, quebra uma componente desta em duas, $T_u$ e $T_v$. Precisamos buscar uma aresta substituta com o menor peso que ligue $T_u$ a $T_v$. Em vez de usar listas de adjacências para armazenar os vizinhos de cada vértice, usa-se um min-heap, onde a chave para um vizinho $v$ será o peso da aresta $uv$. Dessa forma, basta procurar por uma aresta em $R_i$ que incide em $T_u$ e que tenha o menor peso que conecte $T_u$ e $T_v$, para podermos manter o peso mínimo de uma MSF do grafo ao longo das remoções de arestas. 
       \end{shaded}
 
-      Veja que, na Figura~\ref{prog:replaceGDMSF_image}, nas linhas $13$ e $17$ passamos a procurar a aresta de peso mínimo em $R_i$ incidente a $T_u$.
+      Veja que, na Figura~\ref{prog:replaceGDMSF_image}, nas linhas $11$ e $14$ passamos a procurar a aresta de peso mínimo em $R_i$ incidente a $T_u$.
 
       \begin{figure}[htb]
           \centering
@@ -366,7 +366,7 @@ O algoritmo mantém as seguintes invariantes:
           \label{prog:replaceGDMSF_image} 
       \end{figure}
 
-    Como a nossa implementação utiliza splay trees, algumas rotinas da biblioteca possuem um consumo amortizado por operação.
+    Abaixo está o consumo de tempo da nossa implementação:
 
     \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
@@ -377,7 +377,7 @@ O algoritmo mantém as seguintes invariantes:
         \end{itemize} 
       \end{shaded}
 
-      A seguir, testamos a remoção das arestas de um grafo $G$ com 300.000 vértices e 300.000 arestas, realizando uma comparação da performance do algoritmo de Kruskal e da MSF decremental que implementamos. 
+      Testamos a remoção das arestas das um grafo $G$ com 300.000 vértices e 300.000 arestas, realizando uma comparação da performance do algoritmo de Kruskal e da MSF decremental que implementamos. 
 
 
       <INSERIR GRÁFICO DA COMPARAÇÃO DA PERFORMANCE>
@@ -388,7 +388,7 @@ O algoritmo mantém as seguintes invariantes:
       Para mais informações, acesse a página do trabalho: \textcolor{jblue}{{\url{https://linux.ime.usp.br/~cjinshian/}}}
 
       \medskip
-      Endereço para contato: \\ \textcolor{jblue}{{\url{cjinshian77@usp.br}}}
+      Endereço para contato: \textcolor{jblue}{{\url{cjinshian77@usp.br}}}
     \end{block}
 
     \begin{block}{Referências}
