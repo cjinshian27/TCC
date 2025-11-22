@@ -356,7 +356,7 @@ O algoritmo mantém as seguintes invariantes:
         \textbf{Ideia:} remover uma aresta de nível $i$ da floresta $F_i$, quebra uma componente desta em duas, $T_u$ e $T_v$. Precisamos buscar uma aresta substituta com o menor peso que ligue $T_u$ a $T_v$. Em vez de usar listas de adjacências para armazenar os vizinhos de cada vértice, usa-se um min-heap, onde a chave para um vizinho $v$ será o peso da aresta $uv$. Dessa forma, basta procurar por uma aresta em $R_i$ que incide em $T_u$ e que tenha o menor peso que conecte $T_u$ e $T_v$, para podermos manter o peso mínimo de uma MSF do grafo ao longo das remoções de arestas. 
       \end{shaded}
 
-      Veja que, na Figura~\ref{prog:replaceGDMSF_image}, nas linhas $11$ e $14$ passamos a procurar a aresta de peso mínimo em $R_i$ incidente a $T_u$.
+      Na figura abaixo, veja que as linhas $11$ e $14$ passamos a procurar a aresta de peso mínimo em $R_i$ incidente a $T_u$.
 
       \begin{figure}[htb]
           \centering
