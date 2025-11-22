@@ -78,7 +78,7 @@ Se um grafo $G$ tem $n$ vértices e $m$ arestas, o algoritmo de Kruskal consome 
 
 No nosso estudo, estamos interessados em grafos dinâmicos, que podem sofrer inserções e remoções de arestas, e por isso abrimos mão de exigir que o grafo seja conexo. Queremos manter uma floresta geradora maximal (MSF) de custo mínimo do grafo. Este problema já existe uma solução proposta por Holm, de Lichtenberg e Thorup~\cite{jacob_holm} na Seção~5 do seu artigo. Essa solução se baseia num algoritmo para o problema de conexidade em grafos dinâmicos, descrito na Seção~3 de seu artigo. 
 
-No decorrer do nosso estudo, destrincharemos a solução dos autores em vários capítulos do texto. No Capítulo~2 descreveremos em detalhes o problema da conexidade em grafos dinâmicos, apresentando as invariantes que o algoritmo mantém preservadas no decorrer de sua execução. Mostraremos também os pseudocódigos e a complexidade de tempo de cada um. 
+No decorrer do nosso estudo, destrincharemos a solução dos autores em vários capítulos do texto. No Capítulo~2 descreveremos em detalhes o problema da conexidade em grafos dinâmicos, onde mostramos os pseudocódigos e a complexidade de tempo de cada um, e como as invariantes são mantidas no decorrer de sua execução.
 
 No Capítulo~3, descreveremos a nossa implementação do algoritmo para o problema da floresta geradora maximal de custo mínimo decremental, que chamamos de \textbf{MSF decremental}. Como este algoritmo é baseado em vários métodos do problema de conexidade em grafos dinâmicos, realizamos alguns ajustes nos métodos deste último para adaptarmos ao contexto decremental. 
 
