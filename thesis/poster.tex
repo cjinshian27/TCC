@@ -85,11 +85,11 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
     % ----------------------------------------------------------------------------------------
     \onethirdcol
     \begin{alertblock}{Resumo}
-      Grafos dinâmicos permitem modelar problemas em que o conjunto de arestas do grafo sofre alterações ao longo do tempo. Um dos problemas fundamentais nesse contexto é a manutenção de uma árvore geradora de custo mínimo do grafo dinâmico. Neste trabalho, estudamos vários algoritmos propostos por Holm, de Lichtenberg e Thorup \cite{jacob_holm} para esse variantes desse problema. O foco do trabalho foi no algoritmo manter uma floresta maximal de custo mínimo (MSF) decremental, ou seja, que dá suporte eficiente e remoção de arestas. Esse algoritmo foi implementado e testado em grafos com centenas de milhares de vértices. 
+      Grafos dinâmicos permitem modelar problemas em que o conjunto de arestas do grafo sofre alterações ao longo do tempo. Um dos problemas fundamentais nesse contexto é a manutenção de uma árvore geradora de custo mínimo do grafo dinâmico. Estudamos vários algoritmos propostos por Holm, de Lichtenberg e Thorup \cite{jacob_holm} para esse variantes desse problema. O foco foi no algoritmo para manter uma floresta maximal de custo mínimo (MSF) decremental, que dá suporte eficiente à remoção de arestas. Esse algoritmo foi implementado e testado em grafos com centenas de milhares de vértices. 
     \end{alertblock}
 
     \begin{block}{Conexidade em grafos dinâmicos}
-     O problema da conexidade em grafos dinâmicos visa uma implementação eficiente dos métodos da biblioteca abaixo:
+     O problema da conexidade em grafos dinâmicos visa uma implementação eficiente da biblioteca abaixo:
       
             \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
@@ -103,8 +103,8 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
 
       \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
-        \textbf{Ideia:} fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre 1 e $\left\lceil \lg n \right\rceil$, onde $n$
-        é o número de vértices do grafo $G$. Uma aresta, ao ser inserida em $G$, começa com o nível $\left\lceil \lg n \right\rceil$, e, durante o algoritmo, seu nível vai sendo decrementado. Seja $G_i$ = $G[X]$ onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, o algoritmo mantém uma floresta maximal $F_i$ de $G_i$. Além disso, ele mantém também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam as arestas de nível $i$ que não estejam em $F_i$, chamadas de aresta reserva.
+        \textbf{Ideia:} Fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre 1 e $\left\lceil \lg n \right\rceil$, onde $n$
+        é o número de vértices do grafo $G$. Uma aresta, ao ser inserida em $G$, começa com o nível $\left\lceil \lg n \right\rceil$ e, durante o algoritmo, seu nível vai sendo decrementado. Seja $G_i$ = $G[X]$ onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, o algoritmo mantém uma floresta maximal $F_i$ de $G_i$. Além disso, ele mantém também um grafo $R_i$ em forma de listas de adjacências, que guardam as arestas de nível $i$ que não estejam em $F_i$, chamadas de arestas reserva.
       \end{shaded}
 
       Cada floresta $F_i$ é mantida em uma estrutura de dados específica para florestas dinâmicas, baseada em Euler tour trees. Cada componente de $F_i$ é armazenada como uma Euler tour tree. Em nossa implementação, Euler tour trees são implementadas como splay trees.
@@ -173,8 +173,7 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
                 
               \draw[->, blue, very thick] ([yshift=-1cm]d1.south) 
                   to[out=-20, in=20] ([yshift=-5cm]d1.south); % Start from 'b.east', 
-                \node[blue, font=\small, fill=white, inner sep=2pt] at (10.5, -4.5) {trilha};
-                \node[blue, font=\small, fill=white, inner sep=2pt] at (10.5, -5) {Euleriana};
+                \node[blue, font=\small, fill=white, inner sep=2pt] at (10.5, -4.7) {trilha Euleriana};
 
                 
 
@@ -236,20 +235,19 @@ Instituto de Matemática e Estatística, Universidade de São Paulo}
               % Adiciona uma label ou descrição para o terceiro gráfico
           \end{minipage}
 
-          \caption{Árvore $T$ e a Euler tour tree de $T$}
           \label{fig:arvore-euler-tour-combinada}
       \end{figure}
  
-Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
+O algoritmo mantém as seguintes invariantes:
 
        \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
 \begin{itemize}
-    \item[$\bullet$] \label{invariant1} $F_i$ é uma floresta maximal de $G_i$ para todo $1 \leq i \leq  \left\lceil \lg n \right\rceil$;
+    \item[$\bullet$] \label{invariant1} $F_i$ é floresta maximal de $G_i$ para $1 \leq i \leq  \left\lceil \lg n \right\rceil$;
     
-    \item[$\bullet$] \label{invariant2} $F_i \subseteq F_{i+1}$ para todo $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$;
+    \item[$\bullet$] \label{invariant2} $F_i \subseteq F_{i+1}$ para $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$;
     
-    \item[$\bullet$] \label{invariant3} Cada componente da floresta $F_i$ possui no máximo $2^i$ vértices.
+    \item[$\bullet$] \label{invariant3} Cada componente $F_i$ tem no máximo $2^i$ vértices.
 \end{itemize}
 \end{shaded}
     \end{block}
@@ -262,7 +260,7 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     
     \begin{block}
 
-    Abaixo temos uma simplificação do código da remoção de uma aresta do grafo. Observe que as Euler tour trees carregam informação extra para que a implementação das linhas $7$, $8$, $12$ e $13$ do método \texttt{substituaAresta} seja eficiente. 
+    Nos pseudocódigos abaixo, esboçamos a remoção de uma aresta do grafo. As Euler tour trees carregam informação extra para que a implementação das linhas $6$, $7$, $10$ e $11$ do método \texttt{substituaAresta} seja eficiente. 
     
     \begin{figure}[htb]
     \centering
@@ -270,7 +268,6 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     % because $of the \graphicspath command above.
     \includegraphics[width=1\linewidth]{removaGD.png}
     
-    \caption{Algoritmo de remoção de aresta do grafo.}
     \label{prog:removeGD_image} % Use a meaningful label for referencing
 \end{figure}
       
@@ -280,7 +277,6 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     % because of the \graphicspath command above.
     \includegraphics[width=1\linewidth]{substituaAresta.png}
     
-    \caption{Algoritmo que procura uma aresta substituta.}
     \label{prog:replaceGD_image} % Use a meaningful label for referencing
 \end{figure}
 
@@ -290,11 +286,10 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
     % because of the \graphicspath command above.
     \includegraphics[width=1\linewidth]{testeSubstituta.png}
     
-    \caption{Algoritmo que testa se uma aresta reserva é substituta.}
     \label{prog:testSubstitute_image} % Use a meaningful label for referencing
 \end{figure}
       
-    Como a nossa implementação utiliza splay trees, algumas rotinas da biblioteca possuem um consumo amortizado por operação.
+    Na nossa implementação, que utiliza splay trees, alguns dos métodos têm  consumo amortizado por operação.
 
     \definecolor{shadecolor}{rgb}{0.93, 0.80, 0.82} % pale pink
       \begin{shaded}
@@ -368,7 +363,6 @@ Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo da
 
           \includegraphics[width=1\linewidth]{substituaArestaMSF.png}
           
-          \caption{Algoritmo da MSF decremental que procura uma aresta substituta.}
           \label{prog:replaceGDMSF_image} 
       \end{figure}
 
