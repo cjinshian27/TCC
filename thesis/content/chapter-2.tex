@@ -905,13 +905,11 @@ Para descrever a rotina \texttt{substituaArestaMSF} do Programa~\ref{prog:replac
             $T_u \leftrightarrow T_v$
         \textbf{enquanto} $T_u$.arestasDeNível > 0 \textbf{faça} 
             nóXY := \texttt{procureArestaDeNível($T_u$)}
-            \texttt{splay($\emph{nóXY}$)}
-            $T_u$ := nóXY
+            $T_u$ := \texttt{splay($\emph{nóXY}$)}
             \texttt{rebaixeNívelDaAresta($G$, $\emph{nóXY}$, j)}
         \textbf{enquanto} $T_u$.arestasReservasDeNível > 0     \textbf{faça}
             nóXX := \texttt{procureNóIncideArestaDePesoMínimo($R_j$, $T_u$)}
-            \texttt{splay($\emph{nóXX}$)}
-            $T_u$ := nóXX
+            $T_u$ := \texttt{splay($\emph{nóXX}$)}
             ($x$, $x$) := nóXX.vértices
             ($y$, $w$) := \texttt{consulteMinLAMSF($R_j$, $x$)} 
             se \texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \textbf{então} 
@@ -920,13 +918,13 @@ Para descrever a rotina \texttt{substituaArestaMSF} do Programa~\ref{prog:replac
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Veja que já vimos as linhas $1$ a $11$ do Programa~\ref{prog:replaceMSF}, pois elas são exatamente iguais a esse mesmo trecho do código do Programa~\ref{prog:replaceGD}. Isso quer dizer que o rebaixamento de arestas da floresta acontece da mesma forma que no algoritmo de conexidade em grafos dinâmicos. O que muda é somente a forma como procuramos por alguma aresta substituta.
+Veja que já vimos as linhas $1$ a $10$ do Programa~\ref{prog:replaceMSF}, pois elas são exatamente iguais a esse mesmo trecho do código do Programa~\ref{prog:replaceGD}. Isso quer dizer que o rebaixamento de arestas da floresta acontece da mesma forma que no algoritmo de conexidade em grafos dinâmicos. O que muda é somente a forma como procuramos por alguma aresta substituta.
 
-Sendo assim, explicaremos o código da linha $12$ em diante. A linha $12$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
+Sendo assim, explicaremos o código da linha $11$ em diante. A linha $11$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
 
-A linha $13$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos um nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $17$, onde obtemos um par ($y$, $w$). 
+A linha $12$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos um nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $15$, onde obtemos um par ($y$, $w$). 
 
-Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta substituta que reconecta $T_u$ a $T_v$. Para isso, na linha $18$ chamamos \texttt{testeSubstitutaMSF}, descrita no Programa~\ref{prog:find-substitute-MSF}.
+Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta substituta que reconecta $T_u$ a $T_v$. Para isso, na linha $16$ chamamos \texttt{testeSubstitutaMSF}, descrita no Programa~\ref{prog:find-substitute-MSF}.
 
 \begin{programruledcaption}{\texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \label{prog:find-substitute-MSF}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ da aresta $xy$ e o nível $j$.\\
@@ -978,8 +976,8 @@ No entanto, para chegar a essa situação, teriam ocorrido $\Theta(n^2)$ inserç
 Agora mostraremos que, se ocorreram $t$ operações de inserção e remoção de arestas desde a criação do grafo, então o custo total de tal sequência de operações é $\Oh(t \lg^2 n)$, o que resulta em um custo amortizado por operação de $\Oh(\lg^2 n)$.
 
 Para tanto, cada inserção será responsável não apenas pelo custo da inserção de uma aresta $e$, mas também pelo custo de todos os rebaixamentos sofridos por $e$ no decorrer de todas as remoções que ocorrerem após a inserção de $e$.
-Isso quer dizer que a inserção da aresta $e$ vai pagar por cada execução das linhas $7$ a $11$ do Programa~\ref{prog:replaceMSF} e das linhas $2$ a $7$ do Programa~\ref{prog:find-substitute-MSF} que processa a aresta $e$. Como a inserção custa $\Oh(\lg n)$ e essas linhas custam $\Oh(\lg n)$ e são executadas $\Oh(\lg n)$ vezes, pois $e$ pode ser rebaixada no máximo $\left\lceil \lg n \right\rceil$ vezes, o custo pago por uma inserção é $\Oh(\lg^2 n)$.
+Isso quer dizer que a inserção da aresta $e$ vai pagar por cada execução das linhas $7$ a $10$ do Programa~\ref{prog:replaceMSF} e das linhas $4$ a $12$ do Programa~\ref{prog:find-substitute-MSF} que processa a aresta $e$. Como a inserção custa $\Oh(\lg n)$ e essas linhas custam $\Oh(\lg n)$ e são executadas $\Oh(\lg n)$ vezes, pois $e$ pode ser rebaixada no máximo $\left\lceil \lg n \right\rceil$ vezes, o custo pago por uma inserção é $\Oh(\lg^2 n)$.
 
-Já uma remoção de aresta, executada pelo Programa~\ref{prog:removeGD-version-msf-final-version}, custa $\Oh(\lg^2 n)$ mais o custo do \texttt{substituaArestaMSF}. O custo do \texttt{substituaArestaMSF} é $\Oh(\lg^2 n)$ excluindo-se as execuções das linhas $7$ a $11$ do Programa~\ref{prog:replaceMSF}, como também as linhas $4$ a $12$ do Programa~\ref{prog:find-substitute-MSF}. Isso porque, desconsiderando estas linhas onde ocorrem rebaixamento de aresta, na linha $2$ do Programa~\ref{prog:replaceMSF} acaba tendo custo $\Oh(\lg n)$ nas linhas restantes. Apesar de as linhas $16$ e $17$ do Programa~\ref{prog:find-substitute-MSF} consumirem tempo $\Oh(\lg^2 n)$, este trecho do código será executado uma única vez quando encontrarmos a substituta e o algoritmo será finalizado. Assim, como a linha $2$ pode ser executada em no máximo $\Oh(\lg n)$ vezes, temos que \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação de remoção.
+Já uma remoção de aresta, executada pelo Programa~\ref{prog:removeGD-version-msf-final-version}, custa $\Oh(\lg^2 n)$ mais o custo do \texttt{substituaArestaMSF}. O custo do \texttt{substituaArestaMSF} é $\Oh(\lg^2 n)$ excluindo-se as execuções das linhas $7$ a $10$ do Programa~\ref{prog:replaceMSF}, como também as linhas $4$ a $12$ do Programa~\ref{prog:find-substitute-MSF}. Isso porque, desconsiderando estas linhas onde ocorrem rebaixamento de aresta, na linha $2$ do Programa~\ref{prog:replaceMSF} acaba tendo custo $\Oh(\lg n)$ nas linhas restantes. Apesar de as linhas $16$ e $17$ do Programa~\ref{prog:find-substitute-MSF} consumirem tempo $\Oh(\lg^2 n)$, este trecho do código será executado uma única vez quando encontrarmos a substituta e o algoritmo será finalizado. Assim, como a linha $2$ pode ser executada em no máximo $\Oh(\lg n)$ vezes, temos que \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação de remoção.
 
 Com isso, concluímos que o custo total da sequência de $t$ inserções e remoções é $\Oh(t \lg^2 n)$, e assim cada inserção e remoção consome tempo amortizado $\Oh(\lg^2 n)$.
