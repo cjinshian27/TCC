@@ -939,10 +939,10 @@ Em particular, essa rotina deve percorrer as arestas da floresta e as arestas re
     L := $\dotvar{G}{nívelMax}$
     \textbf{se} uv $\in$ G.$F_{L}$ \textbf{então}  (*@\hfill $\triangleright$ $uv$ é aresta da floresta@*)
         \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
-            \texttt{removaFD($G.F_j$, $u$, $v$)}
+            \texttt{removaFD($G.F_j$, $u$, $v$)} (*@\hfill $\triangleright$ remove $uv$ da floresta $F_j$ @*)
         \texttt{substituaAresta($G$, $i$, $u$, $v$)}
     \textbf{senão} (*@\hfill $\triangleright$ $uv$ é aresta reserva@*)
-        \texttt{removaLA($G.R_i$, $u$, $v$)}
+        \texttt{removaLA($G.R_i$, $u$, $v$)} (*@\hfill $\triangleright$ remove $uv$ do grafo $R_i$ @*)
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
