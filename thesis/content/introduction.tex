@@ -15,9 +15,7 @@
 
 Grafos são estruturas de dados que nos permitem modelar vários problemas existentes da vida real, sejam eles estáticos ou dinâmicos. Em problemas estáticos, o grafo não sofre alterações com o passar do tempo. Podemos citar, como exemplo, o planejamento de rotas de entrega, análise de moléculas químicas e de dependências em software utilizando ordenação topológica. Entretanto, ainda existem muitas situações em que ocorre dinamicidade, como nas interações de usuários em redes sociais, monitoramento de epidemias (contatos e isolamentos) e sistemas de navegação \textit{GPS}, onde há necessidade de recalcular rotas dependendo de condições como congestionamentos e acidentes. Para modelar tais problemas, podemos usar grafos dinâmicos.
 
-Dessa forma, são considerados problemas em grafos completamente dinâmicos aqueles em que o grafo sofre, com o tempo, alterações como inserções e remoções 
-de arestas. Caso o algoritmo permita apenas inserção ou apenas remoção, tais 
-problemas são chamados de parcialmente dinâmicos, conforme Holm, de Lichtenberg e Thorup ~\cite{jacob_holm}. Note que as operações de 
+Dessa forma, são considerados problemas em grafos completamente dinâmicos aqueles em que o grafo sofre, com o tempo, alterações como inserções e remoções de arestas. As invariantes em que se permite apenas inserção ou apenas remoção de arestas, tais problemas são chamados de parcialmente dinâmicas, conforme Holm, de Lichtenberg e Thorup ~\cite{jacob_holm}. Note que as operações de 
 atualização e consulta são apresentadas de forma online, sem conhecimento algum das operações futuras.
 
 Aqui serão tratados problemas em que o grafo dinâmico possui um conjunto fixo de vértices \textit{V}, e estabelecemos $n = |\textit{V}\ |$. Além disso, pode-se definir $m$ como o número de arestas existentes. Na maior parte das vezes, a complexidade de tempo das operações será amortizada, o que implica que elas são calculadas como a média sobre todas as operações realizadas. 
@@ -28,12 +26,11 @@ Um problema em grafos dinâmicos consiste em verificar se o grafo atual \textit{
 
 Iremos tratar inicialmente do \textbf{problema de conexidade em grafos dinâmicos}, que consiste em manter um grafo dinâmico que sofre uma sequência de inserções e remoções de arestas. Entre essas modificações, realizamos consultas para verificar se dois vértices \textit{u} e \textit{v} estão conectados por algum caminho. Porém, antes de entrarmos em detalhes, iremos apresentar alguns conceitos importantes que constituirão a base do nosso problema. 
 
-Uma \textbf{floresta} em um grafo $G$ é um subgrafo acíclico de $G$. Uma \textbf{árvore} é uma floresta conexa, ou seja, uma floresta pode conter várias árvores desconexas. Um subgrafo $F$ de $G$ é gerador se contém todos os vértices de $G$. Com isso, podemos enunciar um problema clássico em grafos chamado o problema da árvore geradora de custo mínimo (MST, de \textit{Minimum Spanning Tree}). Seja um grafo conexo $G = (V, E)$, onde $V$ é o conjunto de vértices e $E$ o conjunto de arestas. Para cada aresta $uv \in E$, temos um peso $w(uv)$ associado. Assim, o objetivo do problema é encontrar uma árvore geradora cujo peso total 
-
+Uma \textbf{floresta} em um grafo $G$ é um subgrafo acíclico de $G$. Uma \textbf{árvore} é uma floresta conexa, ou seja, uma floresta pode consistir de várias árvores. Um subgrafo $F$ de $G$ é \textbf{gerador} se contém todos os vértices de $G$. Com isso, podemos enunciar um problema clássico em grafos chamado o \textbf{problema da árvore geradora de custo mínimo} (MST, de \textit{Minimum Spanning Tree}). Seja $G = (V, E)$ um grafo conexo, onde $V$ é o conjunto de vértices e $E$ o conjunto de arestas. Para cada aresta $uv \in E$, temos um peso $w(uv)$ associado. Assim, o objetivo do problema é encontrar uma árvore geradora cujo peso total 
 $$
 w(T) = \sum_{e \,\in\, E(T)} w(e)
 $$
-seja mínimo. A Figura 1.1 mostra um exemplo de grafo conexo com pesos nas arestas e uma árvore geradora mínima de peso 17.
+seja mínimo. A Figura 1.1 mostra um exemplo de grafo conexo com pesos nas arestas e uma árvore geradora mínima.
 
 \begin{figure}
     \centering
@@ -68,20 +65,20 @@ seja mínimo. A Figura 1.1 mostra um exemplo de grafo conexo com pesos nas arest
         \draw[mst] (B) -- (G) node[midway, above] {5};
         
     \end{tikzpicture}
-    \caption{Um grafo com sete vértices. As arestas em vermelho formam uma árvore geradora mínima (MST) de peso total 17.}
+    \caption{Um grafo com sete vértices. As arestas em vermelho formam uma árvore geradora mínima (MST) com peso total 17.}
     \label{fig:mst_example}
 \end{figure}
 
-Para encontrar uma árvore geradora mínima, podemos utilizar uma abordagem gulosa para o problema. Existem dois algoritmos gulosos clássicos que resolvem este problema eficientemente, quando o grafo não é dinâmico: o algoritmo de Kruskal e o de Prim. Cada um deles estabelece uma regra específica para determinar uma aresta segura.
+Para encontrar uma árvore geradora mínima, podemos utilizar uma abordagem gulosa para o problema. Existem dois algoritmos gulosos clássicos que resolvem este problema eficientemente, quando o grafo não é dinâmico: o algoritmo de Kruskal e o de Prim. Cada um deles estabelece uma regra específica para escolher uma aresta segura.
 
-Se um grafo $G$ tem $n$ vértices e $m$ arestas, o algoritmo de Kruskal consome $\Oh(m \lg m)$, que é a complexidade de tempo para ordenar as arestas em ordem crescente de peso. Já o algoritmo de Prim pode ser implementado de modo a consumir $\Oh(m + n \lg n)$, usando Fibonacci heaps. Tais algoritmos e suas implementações estão bem descritos no Capítulo~23.2 do livro de Cormen, Leiserson, Rivest e Stein ~\cite{clrs} e, por isso, não iremos aprofundá-los em nosso estudo. 
+Se um grafo $G$ tem $n$ vértices e $m$ arestas, o algoritmo de Kruskal consome $\Oh(m \lg n)$, que é a complexidade de tempo para ordenar as arestas em ordem crescente de peso. Já o algoritmo de Prim pode ser implementado de modo a consumir $\Oh(m + n \lg n)$, usando Fibonacci heaps. Tais algoritmos e suas implementações estão bem descritos no Capítulo~23.2 do livro de Cormen, Leiserson, Rivest e Stein~\cite{clrs} e, como não são o foco do nosso estudo, não iremos descrevê-los nesse estudo. 
 
-No nosso estudo, estamos interessados em grafos dinâmicos, que podem sofrer inserções e remoções de arestas, e por isso abrimos mão de exigir que o grafo seja conexo. Queremos manter uma floresta geradora maximal (MSF) de custo mínimo do grafo. Este problema já existe uma solução proposta por Holm, de Lichtenberg e Thorup~\cite{jacob_holm} na Seção~5 do seu artigo. Essa solução se baseia num algoritmo para o problema de conexidade em grafos dinâmicos, descrito na Seção~3 de seu artigo. 
+No nosso estudo, estamos interessados em grafos dinâmicos, que podem sofrer inserções e remoções de arestas, e por isso abrimos mão de exigir que o grafo seja conexo. Queremos manter uma floresta geradora maximal (MSF) de custo mínimo do grafo. Já existe uma solução para esse problema proposta por Holm, de Lichtenberg e Thorup~\cite{jacob_holm} na Seção~5 do seu artigo. Essa solução se baseia num algoritmo para o problema de conexidade em grafos dinâmicos, descrito na Seção~3 de seu artigo. 
 
 No decorrer do nosso estudo, destrincharemos a solução dos autores em vários capítulos do texto. No Capítulo~2 descreveremos em detalhes o problema da conexidade em grafos dinâmicos, onde mostramos os pseudocódigos e a complexidade de tempo de cada um, e como as invariantes são mantidas no decorrer de sua execução.
 
-No Capítulo~3, descreveremos a nossa implementação do algoritmo para o problema da floresta geradora maximal de custo mínimo decremental, que chamamos de \textbf{MSF decremental}. Como este algoritmo é baseado em vários métodos do problema de conexidade em grafos dinâmicos, realizamos alguns ajustes nos métodos deste último para adaptarmos ao contexto decremental. 
+No Capítulo~3, descreveremos a nossa implementação do algoritmo para o problema decremental da floresta geradora maximal de custo mínimo, que chamamos de \textbf{MSF decremental}. Como este algoritmo é baseado em vários métodos do problema de conexidade em grafos dinâmicos, realizamos alguns ajustes nos métodos deste último para adaptarmos ao contexto decremental. 
 
-No Capítulo~4, por fim, descreveremos a ideia por trás do algoritmo para o problema da floresta geradora maximal de custo mínimo dinâmica, que chamamos de \textbf{MSF dinâmica}. Este algoritmo, que dá suporte a adições e remoções de arestas, utiliza várias estruturas decrementais em sua implementação.
+No Capítulo~4, por fim, descreveremos a ideia por trás do algoritmo para o problema dinâmico da floresta geradora maximal de custo mínimo, que chamamos de \textbf{MSF dinâmica}. Este algoritmo, que dá suporte a adições e remoções de arestas, utiliza várias estruturas decrementais em sua implementação.
 
-As implementações dos nossos algoritmos da solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} serão feitas utilizando a linguagem \textit{C++}, onde disponibilizamos o código no repositório do \textit{GitHub}~\cite{chung2025}.
+As implementações dos nossos algoritmos da solução de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} foram feitas utilizando a linguagem \textit{C++}, e disponibilizamos o código no repositório do \textit{GitHub}~\cite{chung2025}.
