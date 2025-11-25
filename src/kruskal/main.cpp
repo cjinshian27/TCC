@@ -1,6 +1,7 @@
 
 #include "kruskal.hpp"
 #include <iostream>
+#include <chrono>
 
 Graph buildGraph() {
     
@@ -19,6 +20,7 @@ Graph buildGraph() {
         std::cin >> u >> v >> weight;
         g.addEdge(u, v, weight);
     }
+	g.sortEdges();
         
     g.buildMST();
     return g;
@@ -30,6 +32,8 @@ void decode(){
 
 	Graph graph = buildGraph(); 
 
+	auto start = std::chrono::steady_clock::now();
+	
 	while(std::cin >> operation){
 		
 		switch(operation){
@@ -59,6 +63,9 @@ void decode(){
 		}
 	}
 
+	auto end = std::chrono::steady_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+    std::cout << "Elapsed time: " << elapsed.count() << " s" << std::endl;
 }
 
 int main(){

@@ -2,7 +2,6 @@
 
 #include <vector>
 
-// Union-Find with path compression and union by rank
 class UnionFind {
     private:
         std::vector<int> parent;

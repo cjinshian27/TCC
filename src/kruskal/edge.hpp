@@ -1,9 +1,9 @@
-struct Edge {
+struct GraphEdge {
     int u, v, weight;
     
-    Edge(int u, int v, int w) : u(u), v(v), weight(w) {}
+    GraphEdge(int u, int v, int w) : u(u), v(v), weight(w) {}
     
-    bool operator<(const Edge& other) const {
+    bool operator<(const GraphEdge& other) const {
         return weight < other.weight;
     }
 };
