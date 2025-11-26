@@ -20,7 +20,6 @@ Graph buildGraph() {
         std::cin >> u >> v >> weight;
         g.addEdge(u, v, weight);
     }
-	g.sortEdges();
         
     g.buildMST();
     return g;
@@ -57,9 +56,6 @@ void decode(){
 				graph.printTotalWeight();
 				break;
 
-			case 4:
-				graph.printWeightedEdges();
-				break;
 		}
 	}
 
