@@ -40,24 +40,24 @@ void buildFile(std::vector<std::tuple<int, int, int>> & edges, std::vector<std::
         return;
     }
 
-    // First line: n m
+    // first line: n m
     out << n << " " << m << "\n";
 
-    // Next m lines: generated edges u v w
+    // next m lines: generated edges u v w
     for (auto &e : edges) {
         int u, v, w;
         std::tie(u, v, w) = e;
         out << u << " " << v << " " << w << "\n";
     }
 
-    // Next m lines: removal operations "2 u v"
+    // next m lines: removal operations "2 u v"
     for (auto &e : edgesToRemove) {
         int u, v, w;
         std::tie(u, v, w) = e;
         out << "2 " << u << " " << v << "\n";
     }
 
-    // Last line: 3 (total weight)
+    // last line: 3 (MST weight)
     out << "3\n";
 
     out.close();
