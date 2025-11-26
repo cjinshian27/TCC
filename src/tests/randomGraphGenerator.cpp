@@ -27,8 +27,13 @@ std::vector<std::tuple<int, int, int>> buildPermutation(std::vector<std::tuple<i
     return shuffledEdges;
 }
 
-void buildFile(std::vector<std::tuple<int, int, int>> & edges, std::vector<std::tuple<int, int, int>> & edgesToRemove, int n, int m){
-    std::ofstream out("graph_1_permutation_1");
+void buildFile(std::vector<std::tuple<int, int, int>> & edges, std::vector<std::tuple<int, int, int>> & edgesToRemove, int n, int m, int graphID, int permutationID){
+    
+    std::string filename =
+        "graph_" + std::to_string(graphID) +
+        "_permutation_" + std::to_string(permutationID);
+
+    std::ofstream out(filename);
 
     if (!out) {
         std::cerr << "Error opening output file.\n";
@@ -57,17 +62,14 @@ void buildFile(std::vector<std::tuple<int, int, int>> & edges, std::vector<std::
 
     out.close();
 
-    std::cout << "File graph_1_permutation_1 written successfully.\n";
+    std::cout << "File graph_"<< graphID << "_permutation_" << permutationID << " written successfully.\n";
 }
 
-// code to generate a weighted G(n, p) graph
-int main() {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
 
-    const long long n = 20000;
+void generateGraph(int graphID, int numberOfPermutations){
+    const long long n = 20;
 
-    const double p = log2(20000.0) / 20000.0;  // ≈ 0.000714385
+    const double p = log2(n) / n;  // ≈ 0.000714385
 
     const long long minWeight = 1;
     const long long maxWeight = n;
@@ -98,17 +100,32 @@ int main() {
     long long m = edges.size();
     double expectedNumberOfEdges = (n * (n - 1) / 2.0) * p;
 
-    std::vector<std::tuple<int, int, int>> edgesToRemove = buildPermutation(edges, rng, m);
+    // std::cout << "# G(" << n << ", " << p << ")\n";
+    // std::cout << "# seed = " << seed << "\n";
+    // std::cout << "# vertices = " << n << "\n";
+    // std::cout << "# edges (actual) = " << m << "\n";
+    // std::cout << "# edges (expected) = " << expectedNumberOfEdges << "\n";
+    // std::cout << "# weights: [" << minWeight << ", " << maxWeight << "]\n";
+    // std::cout << "# format: u v w\n";
+    for(unsigned int permutationID = 0; permutationID < numberOfPermutations; ++permutationID){
 
-    std::cout << "# G(" << n << ", " << p << ")\n";
-    std::cout << "# seed = " << seed << "\n";
-    std::cout << "# vertices = " << n << "\n";
-    std::cout << "# edges (actual) = " << m << "\n";
-    std::cout << "# edges (expected) = " << expectedNumberOfEdges << "\n";
-    std::cout << "# weights: [" << minWeight << ", " << maxWeight << "]\n";
-    std::cout << "# format: u v w\n";
+        std::vector<std::tuple<int, int, int>> edgesToRemove = buildPermutation(edges, rng, m);
+    
+        buildFile(edges, edgesToRemove, n, m, graphID,  permutationID);
+    }
+}
 
-    buildFile(edges, edgesToRemove, n, m);
+// code to generate a weighted G(n, p) graph
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int numberOfGraphs = 3;
+    int numberOfPermutations = 2;
+    
+    for(unsigned int i = 0; i < numberOfGraphs; ++i){
+        generateGraph(i, numberOfPermutations);
+    }
 
     return 0;
 }
