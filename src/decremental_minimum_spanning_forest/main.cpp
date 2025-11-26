@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include "decrementalMSF.hpp"
+#include <chrono>
 
 /*
 runs in O(mlg(m)) time, since we are sorting 
@@ -18,7 +19,7 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 	std::vector<int> vertices(numberOfVertices);
 
 	for(unsigned int i = 0; i < numberOfVertices; ++i){
-		vertices[i] = i + 1;
+		vertices[i] = i;
 	}
 
 	std::cin >> numberOfEdges;
@@ -36,7 +37,7 @@ DecrementalMSF<int> * buildDecrementalMSF(){
 	});
 	
 	DecrementalMSF<int> * decrementalMSF = new DecrementalMSF<int>(vertices);
-
+	
 	// add the edges beforehand (user is not allowed to add more later)
 	for (const auto& [u, v, weight] : edges) {
 		decrementalMSF->add(u, v, weight);
@@ -55,7 +56,9 @@ void decode(){
 	if(!decrementalMSF){
 		return;
 	} 
-		
+	
+	auto start = std::chrono::steady_clock::now();
+
 	while(std::cin >> operation){
 		
 		switch(operation){
@@ -92,6 +95,12 @@ void decode(){
 				break;
 		}
 	}
+
+    auto end = std::chrono::steady_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+    std::cout << "Elapsed time: " << elapsed.count() << " ms\n";
+
 
 }
 
