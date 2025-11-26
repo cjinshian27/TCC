@@ -57,10 +57,24 @@ void decode(){
 		return;
 	} 
 	
+	int totalRemoved = 0;
+	int batch = 25;
 	auto start = std::chrono::steady_clock::now();
 
 	while(std::cin >> operation){
 		
+
+		if(totalRemoved > 12800) break;
+
+		if(totalRemoved == batch){
+			auto end = std::chrono::steady_clock::now();
+    		auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+			std::cout << "Elapsed time: " << elapsed.count() << " milliseconds for batch " << batch << " - MST weight: " <<  decrementalMSF->getTotalWeight() << std::endl;
+		
+			batch = batch + batch;
+		}
+
 		switch(operation){
 
 			case 1:
@@ -75,11 +89,12 @@ void decode(){
 			
 			case 2: 
 				std::cin >> u >> v;
+				++totalRemoved;
 				decrementalMSF->remove(u, v);
 				break;
 			
 			case 3:
-				decrementalMSF->printTotalWeight();
+				std::cout << decrementalMSF->getTotalWeight() << std::endl;
 				break;
 
 			case 4:
@@ -95,13 +110,6 @@ void decode(){
 				break;
 		}
 	}
-
-    auto end = std::chrono::steady_clock::now();
-	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
-    std::cout << "Elapsed time: " << elapsed.count() << " ms\n";
-
-
 }
 
 int main(){

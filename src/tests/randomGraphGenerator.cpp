@@ -67,7 +67,7 @@ void buildFile(std::vector<std::tuple<int, int, int>> & edges, std::vector<std::
 
 
 void generateGraph(int graphID, int numberOfPermutations){
-    const long long n = 20;
+    const long long n = 20000;
 
     const double p = log2(n) / n;  // ≈ 0.000714385
 

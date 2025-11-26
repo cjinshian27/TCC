@@ -112,8 +112,8 @@ public:
     }
     
     // print MST total weight
-    void printTotalWeight(){
-	    std::cout << "total weight is: " << mst_weight << '\n';
+    long long getTotalWeight(){
+        return mst_weight;
     }
 
     // print MST weighted edges

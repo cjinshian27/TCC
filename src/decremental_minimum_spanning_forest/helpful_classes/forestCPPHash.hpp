@@ -273,8 +273,8 @@ class Forest{
 			}	
 		}
 
-		void printTotalWeight(){
-			std::cout << "total weight is: " << totalWeight << '\n';
+		long long getTotalWeight(){
+			return totalWeight;
 		}
 
 		bool hasNode(Key u, Key v){

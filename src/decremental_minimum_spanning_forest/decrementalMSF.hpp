@@ -241,8 +241,8 @@ class DecrementalMSF{
 			return forest->areConnected(u, v);
 		}
 
-		void printTotalWeight(){
-			this->forests[this->maxLevel]->printTotalWeight();
+		long long getTotalWeight(){
+			return this->forests[this->maxLevel]->getTotalWeight();
 		}
 		
 		void printWeightedEdges(){

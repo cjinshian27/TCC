@@ -16,7 +16,7 @@ Graph buildGraph() {
     std::cin >> numberOfEdges;
 
     // add edges (u, v, weight)
-	for(unsigned int i = 1; i <= numberOfEdges; ++i){
+	for(unsigned int i = 0; i < numberOfEdges; ++i){
         std::cin >> u >> v >> weight;
         g.addEdge(u, v, weight);
     }
@@ -31,10 +31,23 @@ void decode(){
 
 	Graph graph = buildGraph(); 
 
+	int totalRemoved = 0;
+	int batch = 25;
 	auto start = std::chrono::steady_clock::now();
-	
+
 	while(std::cin >> operation){
 		
+		if(totalRemoved > 12800) break;
+
+		if(totalRemoved == batch){
+			auto end = std::chrono::steady_clock::now();
+    		auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+			std::cout << "Elapsed time: " << elapsed.count() << " milliseconds for batch " << batch << " - MST weight: " <<  graph.getTotalWeight() << std::endl;
+		
+			batch = batch + batch;
+		}
+
 		switch(operation){
 
 			case 1:
@@ -49,19 +62,17 @@ void decode(){
 			
 			case 2: 
 				std::cin >> u >> v;
+				++totalRemoved;
 				graph.removeEdge(u, v);
 				break;
 
 			case 3:
-				graph.printTotalWeight();
+				std::cout << graph.getTotalWeight() << std::endl;
 				break;
-
+			
 		}
 	}
 
-	auto end = std::chrono::steady_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start);
-    std::cout << "Elapsed time: " << elapsed.count() << " s" << std::endl;
 }
 
 int main(){
