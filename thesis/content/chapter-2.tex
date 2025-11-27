@@ -941,7 +941,7 @@ Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta s
     \texttt{removaLAMSF($G.R_j$, $x$, $y$)}
     \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $x$)}
     \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $y$)}
-    \textbf{se} \texttt{conectadosFD($G.F_j$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta xy não é substituta@*)
+    \textbf{se} \texttt{conectadosFD($G.F_j$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta $xy$ não é substituta@*)
         $\dotvarm{G}{nível}{x, y}$ := j - 1
         w := $\dotvarm{G}{peso}{x, y}$
         \texttt{adicioneLAMSF($G.R_{j-1}$, $x$, $y$, $w$)}
@@ -950,7 +950,7 @@ Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta s
         \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
         \textbf{retorne falso}
-    \textbf{senão} (*@\hfill $\triangleright$ a aresta xy é substituta@*)
+    \textbf{senão} (*@\hfill $\triangleright$ a aresta $xy$ é substituta@*)
         L := $\dotvar{G}{nívelMax}$
         $\dotvar{G}{pesoMSF}$ := $\dotvar{G}{pesoMSF}$ + $w$ 
         \textbf{para} k := j \textbf{até} $L$ \textbf{faça}
