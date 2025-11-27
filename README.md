@@ -34,7 +34,7 @@ v₂
 vₙ
 ```
 
-where *n* is the number of vertices and v<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries. 
+where *n* is the number of vertices and v<sub>i</sub> (1 ≤ i ≤ n) is the value each vertex carries. In the main program, we set the vertices to carry the values 1 through n. If you intend to use other data types, you must modify the relevant portion of the main program to suit your needs.
 
 Then you follow with the operations like:
 ```
