@@ -133,7 +133,7 @@ Instituto de Matemática, Estatística e Ciência da Computação, Universidade 
               \draw (a) -- (e);
               
               % Adiciona uma label ou descrição para o primeiro gráfico
-              \node at (-1, 1) {$T$};
+                    \node at (-1, 1) {\textcolor{blue}{$T$}};
 
               % ---------- Right: Euler-tour representation ----------
               \begin{scope}[xshift=8cm]
@@ -171,9 +171,9 @@ Instituto de Matemática, Estatística e Ciência da Computação, Universidade 
                   to[out=30, in=150] ([xshift=6cm]b.west); % Start from 'b.east', 
               \node[blue, font=\small] at (5.5, 2.6) {digrafo Euleriano}; % Text above the arrow path
                 
-              \draw[->, blue, very thick] ([yshift=-1cm]d1.south) 
-                  to[out=-20, in=20] ([yshift=-5cm]d1.south); % Start from 'b.east', 
-                \node[blue, font=\small, fill=white, inner sep=2pt] at (10.5, -4.7) {trilha Euleriana};
+              \draw[->, blue, very thick] ([yshift=0cm, xshift=1cm]d1.east) 
+                  to[out=-20, in=20] ([yshift=-3.2cm]d1.south); % Start from 'b.east', 
+                \node[blue, font=\small, fill=white, inner sep=2pt] at (10.5, -3.7) {trilha Euleriana};
 
                 
 
@@ -247,7 +247,7 @@ O algoritmo mantém as seguintes invariantes:
     
     \item[$\bullet$] \label{invariant2} $F_i \subseteq F_{i+1}$ para $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$;
     
-    \item[$\bullet$] \label{invariant3} Cada componente $F_i$ tem no máximo $2^i$ vértices.
+    \item[$\bullet$] \label{invariant3} Cada componente de $F_i$ tem no máximo $2^i$ vértices.
 \end{itemize}
 \end{shaded}
     \end{block}
@@ -317,7 +317,7 @@ O algoritmo mantém as seguintes invariantes:
 
       \definecolor{shadecolor}{rgb}{0.74, 0.83, 0.9} % pale blue
       \begin{shaded}
-        \textbf{Ideia:} remover uma aresta de nível $i$ da floresta $F_i$, quebra uma componente desta em duas, $T_u$ e $T_v$. Precisamos buscar uma aresta substituta \textbf{com o menor peso} que ligue $T_u$ a $T_v$. Em vez de usar listas de adjacências para armazenar os vizinhos de cada vértice em $R_i$, usa-se um min-heap, onde a chave para um vizinho $v$ é o peso da aresta $uv$. Assim, basta procurar por uma aresta em $R_i$ que incida em $T_u$, que tenha o menor peso e que conecte $T_u$ e $T_v$, para podermos manter o peso mínimo de uma MSF do grafo ao longo das remoções de arestas. 
+        \textbf{Ideia:} No loop das linhas $10$ a $15$ do método \texttt{substituaAresta}, busca-se por uma aresta substituta numa ordem arbitrária. Na implementação da MSF decremental, a ideia é olhar as arestas candidatas à substituta em ordem crescente de peso. Para isso, as listas de adjacências de $R_i$ são substituídas por min-heaps, onde a chave para um vizinho $v$ é o peso da aresta $uv$. Assim, nas linhas $11$ e $14$ do \texttt{substituaArestaMSF}, basta procurar por uma aresta em $R_i$ que incida em $T_u$, que tenha o menor peso e que conecte $T_u$ e $T_v$, para podermos manter o peso mínimo de uma MSF do grafo ao longo das remoções de arestas. 
       \end{shaded}
     \end{block}
 
@@ -358,7 +358,7 @@ O algoritmo mantém as seguintes invariantes:
     \begin{block}{}
       
 
-      Na figura abaixo, veja que, nas linhas $11$ e $14$, passamos a procurar a aresta de peso mínimo em $R_i$ incidente a $T_u$. Note também que as linhas $1$ ao $9$ são idênticas às do método \texttt{substituaAresta}.
+      Na figura abaixo, veja que, nas linhas $11$ e $14$, passamos a procurar uma aresta de peso mínimo em $R_i$ incidente a $T_u$. Note também que as linhas $1$ ao $9$ são idênticas às do método \texttt{substituaAresta}.
 
       \begin{figure}[htb]
           \centering
@@ -398,6 +398,10 @@ O algoritmo mantém as seguintes invariantes:
       \end{figure}
 
 
+    \end{block}
+
+    \begin{block}{Comentários finais}
+    No texto do TCC, além da descrição detalhada dos algoritmos apresentados aqui bem como de suas análises de consumo de tempo, também descrevemos um algoritmo para o problema da MSF totalmente dinâmico, que dá suporte  eficiente não só à remoção de arestas, como também à inserção de arestas. Esse algoritmo faz uso do algoritmo da MSF decremental apresentado acima.
     \end{block}
 
 
