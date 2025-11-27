@@ -1604,13 +1604,13 @@ Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $16$, d
         escapeinside={(*@}{@*)},
     ]
     \texttt{removaLA($G.R_j$, $x$, $y$)} 
-    \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta xy não é substituta@*)
+    \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta $xy$ não é substituta@*)
         $\dotvarm{G}{nível}{x, y}$ := j - 1
         \texttt{adicioneLA($G.R_{j-1}$, $x$, $y$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
         \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
         \textbf{retorne falso}
-    \textbf{senão} (*@\hfill $\triangleright$ a aresta xy é substituta@*)
+    \textbf{senão} (*@\hfill $\triangleright$ a aresta $xy$ é substituta@*)
         L := $\dotvar{G}{nívelMax}$
         \textbf{para} k := j \textbf{até} $L$ \textbf{faça}
             \texttt{adicioneFD($G.F_k$, $x$, $y$)}
