@@ -133,7 +133,7 @@ Instituto de Matemática, Estatística e Ciência da Computação, Universidade 
               \draw (a) -- (e);
               
               % Adiciona uma label ou descrição para o primeiro gráfico
-                    \node at (-1, 1) {\textcolor{blue}{$T$}};
+                    \node[font=\small] at (-1, 1) {\textcolor{blue}{$T$}};
 
               % ---------- Right: Euler-tour representation ----------
               \begin{scope}[xshift=8cm]
@@ -229,8 +229,8 @@ Instituto de Matemática, Estatística e Ciência da Computação, Universidade 
                     \draw[edge] (ab) -- (ea) node[midway, below] {};
                     \draw[edge] (ab) -- (bb) node[midway, below] {};
 
-                    \node at (-4, 0.9) {\textcolor{blue}{Euler tour}};
-                    \node at (-4, 0) {\textcolor{blue}{tree de $T$}};
+                    \node[font=\small] at (-4, 0.9) {\textcolor{blue}{Euler tour}};
+                    \node[font=\small] at (-4, 0) {\textcolor{blue}{tree de $T$}};
               \end{tikzpicture}
               % Adiciona uma label ou descrição para o terceiro gráfico
           \end{minipage}
@@ -358,7 +358,7 @@ O algoritmo mantém as seguintes invariantes:
     \begin{block}{}
       
 
-      Na figura abaixo, veja que, nas linhas $11$ e $14$, passamos a procurar uma aresta de peso mínimo em $R_i$ incidente a $T_u$. Note também que as linhas $1$ ao $9$ são idênticas às do método \texttt{substituaAresta}.
+      Na figura abaixo, veja que, nas linhas $11$ e $14$, passamos a procurar uma aresta de peso mínimo em $R_i$ incidente a $T_u$. As linhas $1$ ao $9$ são idênticas às do método \texttt{substituaAresta}.
 
       \begin{figure}[htb]
           \centering
