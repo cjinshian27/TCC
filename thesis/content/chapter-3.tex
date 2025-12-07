@@ -231,31 +231,31 @@ Ademais, se $a$ é um vértice de fronteira de $C$ e $C$ possui dois filhos $A$ 
         removed/.style={black, thick, dashed}, 
         inner sep=0pt]
 
-        \node[node, fill=red!30] (a) at (0, 0) {$5$};
-        \node[node, fill=red!30] (b) at (-4, -1) {$4$};
-        \node[node] (c) at (4, -1) {$7$};
-        \node[node] (d) at (0, -2) {$6$};
-        \node[node] (e) at (-5, -3.5) {$3$};
-        \node[node] (f) at (-6, -6) {$1$};
-        \node[node] (g) at (-4, -6) {$2$};
+        \node[node, fill=red!30] (five) at (0, 0) {$5$};
+        \node[node, fill=red!30] (four) at (-4, -1) {$4$};
+        \node[node] (seven) at (4, -1) {$7$};
+        \node[node] (six) at (0, -2) {$6$};
+        \node[node] (three) at (-5, -3.5) {$3$};
+        \node[node] (one) at (-6, -6) {$1$};
+        \node[node] (two) at (-4, -6) {$2$};
        
-        \node[node] (h) at (2, -3.5) {$8$};
-        \node[node] (i) at (6, -3.5) {$9$};
-        \node[node] (j) at (6, -6) {$10$};
+        \node[node] (eight) at (2, -3.5) {$8$};
+        \node[node] (nine) at (6, -3.5) {$9$};
+        \node[node] (ten) at (6, -6) {$10$};
 
 
         % tree edges (normal black edges)
-        \draw[edge] (a) -- (b) node[midway, below, weight, yshift=2pt] {$a$};
-        \draw[edge] (a) -- (c) node[midway, below, weight, yshift=2pt] {$b$};
-        \draw[edge] (a) -- (d) node[midway, below, weight, yshift=2pt] {$c$};
+        \draw[edge] (one) -- (three) node[midway, below, weight, yshift=2pt] {$a$};
+        \draw[edge] (three) -- (two) node[midway, below, weight, yshift=2pt] {$b$};
+        \draw[edge] (three) -- (four) node[midway, below, weight, yshift=2pt] {$c$};
 
-        \draw[edge] (b) -- (e) node[midway, below, weight, yshift=2pt] {$d$};
-        \draw[edge] (e) -- (f) node[midway, below, weight, yshift=2pt] {$e$};
-        \draw[edge] (e) -- (g) node[midway, below, weight,  yshift=2pt] {$f$};
+        \draw[edge] (four) -- (five) node[midway, below, weight, yshift=2pt] {$d$};
+        \draw[edge] (five) -- (six) node[midway, below, weight, yshift=2pt] {$e$};
+        \draw[edge] (five) -- (seven) node[midway, below, weight,  yshift=2pt] {$f$};
 
-        \draw[edge] (c) -- (h) node[midway, below, weight, yshift=2pt] {$g$};
-        \draw[edge] (c) -- (i) node[midway, below, weight, yshift=2pt] {$h$};
-        \draw[edge] (i) -- (j) node[midway, below, weight, yshift=2pt] {$i$};
+        \draw[edge] (seven) -- (eight) node[midway, below, weight, yshift=2pt] {$g$};
+        \draw[edge] (seven) -- (nine) node[midway, below, weight, yshift=2pt] {$h$};
+        \draw[edge] (nine) -- (ten) node[midway, below, weight, yshift=2pt] {$i$};
 
     \end{tikzpicture}
     \caption{Árvore $T$ com $10$ vértices. Os vértices $4$ e $5$ em vermelho correspondem aos vértices da fronteira de $T$.}
@@ -274,30 +274,30 @@ A partir da árvore $T$, podemos derivar uma top tree, como se pode ver na Figur
         inner sep=0pt]
 
  
-        \node[node, shape=ellipse, label=below:{(4, 5)}] (abcdefghi) at (-3, 0) {$a, b, c, d, e, f, g, h, i$};
-        \node[node, shape=ellipse, label=below:{(5)}] (abcd) at (-7.5, -1.5) {$a, b, c, d$};
-        \node[node, shape=ellipse, label=below:{(5)}] (efghi) at (1.5, -1.5) {$e, f, g, h, i$};
-        \node[node, shape=ellipse, label=below:{(5, 7)}] (ef) at (-1.2, -3) {$ef$};
-        \node[node, shape=ellipse, label=below:{(5)}] (e) at (-2.7, -4.5) {$e$};
-        \node[node, shape=ellipse, label=below:{(5, 7)}] (f) at (0.2, -4.5) {$f$};
+        \node[node, shape=ellipse, label=below:{\{4, 5\}}] (abcdefghi) at (-3, 0) {$a, b, c, d, e, f, g, h, i$};
+        \node[node, shape=ellipse, label=below:{\{5\}}] (abcd) at (-7.5, -1.5) {$a, b, c, d$};
+        \node[node, shape=ellipse, label=below:{\{5\}}] (efghi) at (1.5, -1.5) {$e, f, g, h, i$};
+        \node[node, shape=ellipse, label=below:{\{5, 7\}}] (ef) at (-1.2, -3) {$ef$};
+        \node[node, shape=ellipse, label=below:{\{5\}}] (e) at (-2.7, -4.5) {$e$};
+        \node[node, shape=ellipse, label=below:{\{5, 7\}}] (f) at (0.2, -4.5) {$f$};
         
         
-        \node[node,shape=ellipse, label=below:{(7)}] (ghi) at (3, -3) {$g, h, i$};
-        \node[node, shape=ellipse, label=below:{(7)}] (g) at (2, -4.5) {$g$};
-        \node[node, shape=ellipse, label=below:{(7)}] (hi) at (4, -4.5) {$h, i$};
-        \node[node, shape=ellipse, label=below:{(7, 9)}] (h) at (3, -6) {$h$};
-        \node[node, shape=ellipse, label=below:{(9)}] (i) at (5, -6) {$i$};
+        \node[node,shape=ellipse, label=below:{\{7\}}] (ghi) at (3, -3) {$g, h, i$};
+        \node[node, shape=ellipse, label=below:{\{7\}}] (g) at (2, -4.5) {$g$};
+        \node[node, shape=ellipse, label=below:{\{7\}}] (hi) at (4, -4.5) {$h, i$};
+        \node[node, shape=ellipse, label=below:{\{7, 9\}}] (h) at (3, -6) {$h$};
+        \node[node, shape=ellipse, label=below:{\{9\}}] (i) at (5, -6) {$i$};
         
         
-        \node[node, shape=ellipse, label=below:{(3)}] (ab) at (-9.5, -3) {$a, b$};
-        \node[node, shape=ellipse, label=below:{(3)}] (a) at (-10.5, -4.5) {$a$};
-        \node[node, shape=ellipse, label=below:{(3)}] (b) at (-8.5, -4.5) {$b$};
+        \node[node, shape=ellipse, label=below:{\{3\}}] (ab) at (-9.5, -3) {$a, b$};
+        \node[node, shape=ellipse, label=below:{\{3\}}] (a) at (-10.5, -4.5) {$a$};
+        \node[node, shape=ellipse, label=below:{\{3\}}] (b) at (-8.5, -4.5) {$b$};
 
 
-        \node[node, shape=ellipse, label=below:{(3, 5)}] (cd) at (-5.5, -3) {$c, d$};
-        \node[node, shape=ellipse, label=below:{(3, 4)}] (c) at (-7, -4.5) {$c$};
+        \node[node, shape=ellipse, label=below:{\{3, 5\}}] (cd) at (-5.5, -3) {$c, d$};
+        \node[node, shape=ellipse, label=below:{\{3, 4\}}] (c) at (-7, -4.5) {$c$};
         
-        \node[node, shape=ellipse, label=below:{(4, 5)}] (d) at (-4, -4.5) {$d$};
+        \node[node, shape=ellipse, label=below:{\{4, 5\}}] (d) at (-4, -4.5) {$d$};
 
         
 
@@ -325,7 +325,7 @@ A partir da árvore $T$, podemos derivar uma top tree, como se pode ver na Figur
 
 
     \end{tikzpicture}
-    \caption{Uma top árvore $\mathcal{T}$ derivada da árvore $T$. Cada vértice (cluster) de $\mathcal{T}$, exceto as folhas, guarda a união dos vértices dos filhos, que também são clusters. Embaixo de cada vértice $p$ de $\mathcal{T}$, temos os vértices da fronteira do $p$.}
+    \caption{Uma top tree $\mathcal{T}$ derivada da árvore $T$. Cada vértice (cluster) de $\mathcal{T}$, tem como rótulo as arestas do cluster. Embaixo de cada vértice $p$ de $\mathcal{T}$, temos os vértices da fronteira do $p$.}
     \label{fig:top-t-from-tree-t}
 \end{figure}
 
