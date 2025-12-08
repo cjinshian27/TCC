@@ -336,11 +336,11 @@ Top trees, assim como Euler tour trees, podem ser usadas para manter uma florest
 Top trees dão suporte eficiente à seguinte biblioteca, onde $\mathcal{T}$ é uma coleção de top trees que representa uma floresta $F_i$.
 
 \begin{itemize}
-    \item \texttt{\textbf{adicioneTopTree($\mathcal{T}$, $u$, $v$)}}: liga o vértice $u$ ao vértice $v$ se ambos estão em top trees diferentes na top tree $\mathcal{T}$, criando a aresta ($u$, $v$);
+    \item \texttt{\textbf{adicioneTopTree($\mathcal{T}$, $u$, $v$)}}: adiciona a aresta $uv$ à floresta $F$, atualizando $\mathcal{T}$ de acordo;
     
-    \item \texttt{\textbf{removaTopTree($\mathcal{T}$, $e$)}}: remove a aresta $e$ da top tree $\mathcal{T}$ da floresta dinâmica;
+    \item \texttt{\textbf{removaTopTree($\mathcal{T}$, $u$, $v$)}}: remove a aresta $uv$ da floresta $F$, atualizando $\mathcal{T}$ de acordo;
     
-    \item \texttt{\textbf{exponhaTopTree($\mathcal{T}$, $u$, $v$)}}: retorna \texttt{NIL} se $u$ e $v$ não estão na mesma árvore. Caso contrário, $u$ e $v$ se tornarão vértices da fronteira da top tree $\mathcal{T}$ que os contém e retorna uma nova cluster raiz (\textit{root cluster}).
+    \item \texttt{\textbf{exponhaTopTree($\mathcal{T}$, $u$, $v$)}}: retorna \texttt{NIL} se $u$ e $v$ não estão na mesma top tree de $\mathcal{T}$. Caso contrário, $u$ e $v$ se tornarão vértices da fronteira da top tree de $\mathcal{T}$ que os contém e retorna uma nova raiz com $u$ e $v$ como novos vértices da fronteira.
 \end{itemize}
 
 As alterações feitas em top trees usando as rotinas mencionadas acima utilizam uma sequência de operações \texttt{Merge} e \texttt{Split}, definidas abaixo:
