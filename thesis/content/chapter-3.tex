@@ -388,6 +388,47 @@ Como usaremos o método \texttt{exponhaTopTree} no algoritmo da MSF totalmente d
         removed/.style={black, thick, dashed}, 
         inner sep=0pt]
 
+        \node[node] (five) at (0, 0) {$5$};
+        \node[node] (four) at (-4, -1) {$4$};
+        \node[node, fill=red!30] (seven) at (4, -1) {$7$};
+        \node[node] (six) at (0, -2) {$6$};
+        \node[node] (three) at (-5, -3.5) {$3$};
+        \node[node] (one) at (-6, -6) {$1$};
+        \node[node] (two) at (-4, -6) {$2$};
+       
+        \node[node, fill=red!30] (eight) at (2, -3.5) {$8$};
+        \node[node] (nine) at (6, -3.5) {$9$};
+        \node[node] (ten) at (6, -6) {$10$};
+
+
+        % tree edges (normal black edges)
+        \draw[edge] (one) -- (three) node[midway, below, weight, yshift=2pt] {$a$};
+        \draw[edge] (three) -- (two) node[midway, below, weight, yshift=2pt] {$b$};
+        \draw[edge] (three) -- (four) node[midway, below, weight, yshift=2pt] {$c$};
+
+        \draw[edge] (four) -- (five) node[midway, below, weight, yshift=2pt] {$d$};
+        \draw[edge] (five) -- (six) node[midway, below, weight, yshift=2pt] {$e$};
+        \draw[edge] (five) -- (seven) node[midway, below, weight,  yshift=2pt] {$f$};
+
+        \draw[edge] (seven) -- (eight) node[midway, below, weight, yshift=2pt] {$g$};
+        \draw[edge] (seven) -- (nine) node[midway, below, weight, yshift=2pt] {$h$};
+        \draw[edge] (nine) -- (ten) node[midway, below, weight, yshift=2pt] {$i$};
+
+    \end{tikzpicture}
+    \caption{Os vértices $7$ e $8$ em vermelho correspondem agora aos vértices da fronteira de $T$, após acionarmos \texttt{exponhaTopTree($7$, $8$)}.}
+    \label{fig:exposed-tree}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed}, 
+        inner sep=0pt]
+
  
         \node[node, shape=ellipse, label=below:{\{7, 8\}}] (abcdefghi) at (-3, 0) {$a, b, c, d, e, f, g, h, i$};
 
@@ -445,6 +486,9 @@ Como usaremos o método \texttt{exponhaTopTree} no algoritmo da MSF totalmente d
 
 
     \end{tikzpicture}
-    \caption{Uma top tree $\mathcal{T}$ derivada da árvore $T$. Cada vértice (cluster) de $\mathcal{T}$ tem como rótulo as arestas do cluster. Embaixo de cada vértice $p$ de $\mathcal{T}$, temos os vértices da fronteira do $p$.}
+    \caption{Top tree $\mathcal{T}$ da Figura~\ref{fig:top-t-from-tree-t} após acionarmos \texttt{exponhaTopTree($7$, $8$)}, gerando a remoção e reconstrução de alguns clusters através de \texttt{splits} e \texttt{joins}.}
     \label{fig:exposed-top-tree}
 \end{figure}
+
+\subsection{MSF totalmente dinâmica}
+
