@@ -343,10 +343,30 @@ Top trees dão suporte eficiente à seguinte biblioteca, onde $\mathcal{T}$ é u
     \item \texttt{\textbf{exponhaTopTree($\mathcal{T}$, $u$, $v$)}}: retorna \texttt{NIL} se $u$ e $v$ não estão na mesma top tree de $\mathcal{T}$. Caso contrário, $u$ e $v$ se tornarão vértices da fronteira da top tree de $\mathcal{T}$ que os contém e retorna uma nova raiz com $u$ e $v$ como novos vértices da fronteira.
 \end{itemize}
 
-As alterações feitas em top trees usando as rotinas mencionadas acima utilizam uma sequência de operações \texttt{Merge} e \texttt{Split}, definidas abaixo:
+As alterações feitas em top trees usando as rotinas mencionadas acima utilizam uma sequência de operações \texttt{join} e \texttt{split}, definidas abaixo:
 
 \begin{itemize}
-    \item \texttt{\textbf{Merge($A$, $B$)}}: Cria um novo cluster $C = A \cup B$, onde $A$ e $B$ são clusters vizinhos e raízes das top trees $\mathcal{T}_A$ e $\mathcal{T}_B$. O cluster $C$ se torna raiz com os filhos $\mathcal{T}_A$ e $\mathcal{T}_B$, e por fim retornamos $C$.
+    \item \texttt{\textbf{join($A$, $B$)}}: Cria um novo cluster $C = A \cup B$, onde $A$ e $B$ são clusters vizinhos e raízes das top trees $\mathcal{T}_A$ e $\mathcal{T}_B$. O cluster $C$ se torna raiz com os filhos $\mathcal{T}_A$ e $\mathcal{T}_B$, e por fim retornamos $C$.
     
-    \item \texttt{\textbf{Split($C$)}}: Remove a cluster raiz $C$ da top tree $\mathcal{T}$, que contém os clusters filhos $A$ e $B$. Assim, a remoção de $C$ de $\mathcal{T}$ gera as top trees $\mathcal{T}_A$ e $\mathcal{T}_B$.
+    \item \texttt{\textbf{split($C$)}}: Remove a cluster raiz $C$ da top tree $\mathcal{T}$, que contém os clusters filhos $A$ e $B$. Assim, a remoção de $C$ de $\mathcal{T}$ gera as top trees $\mathcal{T}_A$ e $\mathcal{T}_B$.
 \end{itemize}
+
+Uma chamada às rotinas \texttt{adicioneTopTree}, \texttt{removaTopTree} e \texttt{exponhaTopTree} geram as seguintes modificações, nesta ordem:
+
+\begin{itemize}
+    \item Primeiramente, de cima para baixo (top-down), realizamos uma sequência de \texttt{splits};
+    
+    \item Depois, destruímos as clusters de algumas arestas;
+    
+    \item Em seguida, atualizamos a floresta;
+    
+    \item Então, criamos clusters de algumas arestas;
+    
+    \item Finalmente, com \texttt{joins}, reconstruímos a top tree de baixo para cima (bottom-up).
+\end{itemize}
+
+Assim, para uma floresta dinâmica com $n$ vértices, podemos manter top trees de altura $\Oh(\lg n)$ que dê suporte aos métodos \texttt{adicioneTopTree}, \texttt{removaTopTree} e \texttt{exponhaTopTree} em uma sequência de $\Oh(\lg n)$ operações de \texttt{split} e \texttt{join}. Dessa forma, a sequência de operações consome tempo $\Oh(\lg n)$.
+
+Para implementar uma top tree, podemos utilizar uma árvore binária onde cada nó representa um cluster, que chamaremos de \textbf{nó top}. Cada nó top está associado a um conjunto de até no máximo dois vértices da fronteira, e teremos um ponteiro para cada nó. Assim, ao acionarmos \texttt{join} em dois nós $A$ e $B$, criamos um nó $C$ com base nas informações guardadas nos dois nós. Da mesma forma, quando acionamos \texttt{split} no nó $C$, dividindo-o em dois nós $A$ e $B$, as suas informações serão propagadas em $A$ e $B$.   
+
+Com isso, podemos manter uma floresta dinâmica ponderada que suporte consultas de peso máximo entre dois vértices em tempo $\Oh(\lg n)$. Para isso, para cada cluster-caminho $C$ manteremos o peso máximo $w_C$ em $\pi(C)$. Se um cluster-caminho consiste em apenas uma única aresta $e$, $w_e$ será o peso da aresta de $e$. Assim, $C :=$ \texttt{join($A$, $B$)} irá definir $w_C :=$ max$\{w_D \text{ | } D \in \{A, B\} \text{ é um filho de caminho de } C\}$, enquanto \texttt{split($C$)} simplesmente removerá $C$. Ambas as operações consomem tempo constante. Para responder, então, a consulta \texttt{pesoMaximo($P$)}, onde $P$ é o caminho entre $v$ e $w$, basta chamarmos $C :=$ \texttt{exponhaTopTree($v$, $w$)} e retornar $w_C$.
