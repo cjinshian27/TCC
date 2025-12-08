@@ -331,9 +331,9 @@ A partir da árvore $T$, podemos derivar uma top tree, como se pode ver na Figur
 
 \section{Rotinas da biblioteca de top trees}
 
-Na construção das florestas dinâmicas, nas quais o algoritmo de conexidade e a MSF decremental foram baseadas, usamos Euler Tour trees para armazenar uma sequência Euleriana em uma árvore binária de busca balanceada. Agora, usaremos top trees na construção da floresta dinâmica, que será utilizada na MSF dinâmica. 
+Top trees, assim como Euler tour trees, podem ser usadas para manter uma floresta dinâmica. Mais precisamente, podemos armazenar uma floresta por meio de uma coleção de top trees, uma para cada componente da floresta. 
 
-Como não iremos implementar a biblioteca, apresentaremos o que cada rotina faz e o seu consumo de tempo de forma breve.
+Top trees dão suporte eficiente à seguinte biblioteca, onde $\mathcal{T}$ é uma coleção de top trees que representa uma floresta $F_i$.
 
 \begin{itemize}
     \item \texttt{\textbf{adicioneTopTree($\mathcal{T}$, $u$, $v$)}}: liga o vértice $u$ ao vértice $v$ se ambos estão em top trees diferentes na top tree $\mathcal{T}$, criando a aresta ($u$, $v$);
