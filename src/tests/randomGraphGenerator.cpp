@@ -120,8 +120,8 @@ int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
 
-    int numberOfGraphs = 3;
-    int numberOfPermutations = 2;
+    int numberOfGraphs = 6;
+    int numberOfPermutations = 5;
     
     for(unsigned int i = 0; i < numberOfGraphs; ++i){
         generateGraph(i, numberOfPermutations);
