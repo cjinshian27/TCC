@@ -377,7 +377,7 @@ Além disso, usaremos um método auxiliar chamado \texttt{encontreTopTree($v$)},
 
 Como os identificadores são campos extras de cada cluster-raiz, ao acionarmos \texttt{encontreTopTree($v$)} inicialmente obtemos o nó dado por $p(v)$. A partir deste nó subimos na árvore em tempo $O(\lg n)$ até alcançarmos a raiz, retornando, então, o seu identificador.
 
-Como usaremos o método \texttt{exponhaTopTree} no algoritmo da MSF totalmente dinâmica, vale mostrar um exemplo de como ficaria a top tree da Figura~\ref{fig:top-t-from-tree-t} ao chamarmos \texttt{exponhaTopTree($7$, $8$)}.
+Como usaremos o método \texttt{exponhaTopTree} no algoritmo da MSF totalmente dinâmica, vale mostrar um exemplo de como ficaria a top tree da Figura~\ref{fig:top-t-from-tree-t} ao chamarmos \texttt{exponhaTopTree($7$, $8$)}, ou seja, os vértices $7$ e $8$ passam a ser os novos vértices da fronteira de $T$.
 
 \begin{figure}[H]
     \centering
