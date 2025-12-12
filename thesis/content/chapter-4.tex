@@ -1,4 +1,19 @@
 \chapter{Testes experimentais}
 \label{chapter:experiments}
 
-Nesta seção, apresentaremos alguns 
+Nesta seção, apresentaremos alguns testes de comparação de performance entre os algoritmos de Kruskal e da MSF decremental. Os experimentos foram realizados em um computador pessoal com as seguintes configurações: 
+
+\begin{itemize}
+    \item Sistema operacional Ubuntu 24.04.3 LTS (kernel 6.8.0-49-generic);
+    \item Processador Intel Core i5-8265U (4 núcleos, 8 threads), arquitetura x86\_64;
+    \item Memória RAM de 7,6 GB; 
+    \item GPU Intel UHD Graphics 620.
+\end{itemize}
+
+Para calcular a duração de tempo de uma operação em milissegundos, utilizamos a biblioteca \texttt{chrono} da linguagem \textit{C++}. Além disso, o experimento não considera o tempo pra inicializar um grafo com $n$ vértices e $m$ arestas, apenas a remoção das arestas e a consulta do peso da MST após a remoção delas. 
+
+Foi construído um gerador de grafos aleatórios, seguindo um modelo $G(n, p)$, em que $n$ é o número de vértices do grafo $G$ e $p$ a probabilidade da existência de cada aresta. Considera-se como limiar crítico o valor de $p = \frac{\lg n}{n} $. Assim, temos que o número esperado de arestas em um grafo $G(n, p)$ é dado por $\frac{n(n-1)}{2} \cdot p$. Ademais, a cada aresta é atribuído um peso inteiro no intervalo de $1$ a $n$.
+
+Cada arquivo gerado de teste possui a primeira linha com os valores $n$ e $m$, seguida de $m$ linhas da forma $u$ $v$ $w$, onde $w$ é o peso da aresta $uv$. Em seguida, temos outras $m$ linhas da forma $u$ $v$, que representam uma permutação de arestas a serem removidas. No experimento, entretanto, removemos somente as 12.800 linhas, o que foi suficiente para demonstrar a eficiência do algoritmo da MSF decremental.
+
+Assim, para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após cada lote de remoções, imprimimos a MST correspondente ao estado atual do grafo e, em seguida, dobramos o tamanho do lote. Dessa forma, removemos $50, 100, 200, \ldots, 12.800$ arestas, registrando tanto o tempo acumulado das remoções quanto o peso da MST após cada etapa.
