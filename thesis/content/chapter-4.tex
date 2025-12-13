@@ -17,3 +17,5 @@ Foi construído um gerador de grafos aleatórios, seguindo um modelo $G(n, p)$, 
 Cada arquivo gerado de teste possui a primeira linha com os valores $n$ e $m$, seguida de $m$ linhas da forma $u$ $v$ $w$, onde $w$ é o peso da aresta $uv$. Em seguida, temos outras $m$ linhas da forma $u$ $v$, que representam uma permutação de arestas a serem removidas. No experimento, entretanto, removemos somente as 12.800 linhas, o que foi suficiente para demonstrar a eficiência do algoritmo da MSF decremental.
 
 Assim, para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após cada lote de remoções, imprimimos a MST correspondente ao estado atual do grafo e, em seguida, dobramos o tamanho do lote. Dessa forma, removemos $50, 100, 200, \ldots, 12.800$ arestas, registrando tanto o tempo acumulado das remoções quanto o peso da MST após cada etapa.
+
+No algoritmo de Kruskal, 
