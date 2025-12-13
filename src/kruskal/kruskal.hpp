@@ -16,6 +16,7 @@ private:
     UnionFind* uf;
     long long mst_weight;
     bool mst_built;
+    bool removed = false;
     
     // make u < v
     std::pair<int,int> normalize_edge(int u, int v) {
@@ -40,6 +41,7 @@ public:
     
     // remove an edge
     void removeEdge(int u, int v) {
+        removed = true;
         std::pair<int,int> target_edge = normalize_edge(u, v);
         
         // Find the edge in the vector
@@ -66,6 +68,21 @@ public:
         buildMST();
     }
     
+    void insertionSort(std::vector<Edge>& edges) {
+        int n = edges.size();
+        for (int i = 1; i < n; i++) {
+            Edge key = edges[i];
+            int j = i - 1;
+
+            while (j >= 0 && edges[j].weight > key.weight) {
+                edges[j + 1] = edges[j];
+                j--;
+            }
+
+            edges[j + 1] = key;
+        }
+    }
+
     // build MST using Kruskal's algorithm
     void buildMST() {
         
@@ -76,7 +93,14 @@ public:
         mst_weight = 0;
         
         // sort edges by weight
-        sort(edges.begin(), edges.end());
+        if(!removed){
+            // O(n lg n) sorting 
+            sort(edges.begin(), edges.end());
+        }
+        else{
+            // linear sorting for nearly sorted arrays
+            insertionSort(edges);
+        }
                 
         // process edges in order
         for (const auto& edge : edges) {

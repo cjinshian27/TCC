@@ -32,12 +32,12 @@ void decode(){
 	Graph graph = buildGraph(); 
 
 	int totalRemoved = 0;
-	int batch = 25;
+	int batch = 100;
 	auto start = std::chrono::steady_clock::now();
 
 	while(std::cin >> operation){
 		
-		if(totalRemoved > 12800) break;
+		if(totalRemoved > 25600) break;
 
 		if(totalRemoved == batch){
 			auto end = std::chrono::steady_clock::now();
