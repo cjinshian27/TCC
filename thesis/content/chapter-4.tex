@@ -10,7 +10,7 @@ Nesta seção, apresentaremos alguns testes de comparação de performance entre
     \item GPU Intel UHD Graphics 620.
 \end{itemize}
 
-Para calcular a duração de tempo de uma operação em milissegundos, utilizamos a biblioteca \texttt{chrono} da linguagem \textit{C++}. Além disso, o experimento não considera o tempo pra inicializar um grafo com $n$ vértices e $m$ arestas, apenas a remoção das arestas e a consulta do peso da MST após a remoção delas. 
+Para calcular a duração de tempo de uma operação em milissegundos, utilizamos a biblioteca \texttt{chrono} da linguagem \textit{C++}. Além disso, o experimento não considera o tempo para inicializar um grafo com $n$ vértices e $m$ arestas, apenas a remoção das arestas e a consulta do peso da MST após a remoção delas. 
 
 Foi construído um gerador de grafos aleatórios, seguindo um modelo $G(n, p)$, em que $n$ é o número de vértices do grafo $G$ e $p$ a probabilidade da existência de cada aresta. Considera-se como limiar crítico o valor de $p = \frac{\lg n}{n} $. Assim, temos que o número esperado de arestas em um grafo $G(n, p)$ é dado por $\frac{n(n-1)}{2}p$. Ademais, a cada aresta é atribuído um peso inteiro no intervalo de $1$ a $n$.
 
