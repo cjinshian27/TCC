@@ -31,82 +31,84 @@ Quando removemos uma aresta $uv$, precisamos reordenar as arestas restantes. Par
 
 O grafo $G_0$ foi gerado com 142.069 arestas, que é um número próximo do esperado. A seguir, mostraremos os resultados das remoções em cada permutação de arestas. É importante ressaltar que, como o algoritmo de Kruskal consome tempo $O(m)$ por remoção de aresta, optamos por fazer uma compressão de valores dos eixos $x$ e $y$ dos gráficos para evitar a sobreposição dos números, mas ainda manter um aspecto linear de crescimento.
 
-\subsection{Primeira permutação de arestas}
+\subsection{Permutação $0$ de arestas}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_0.png}
-    \caption{Tabela comparando a performance entre os algoritmos de Kruskal e de MSF decremental, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_0$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation0}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_0_permutation_0.png}
-    \caption{Gráfico comparando a performance entre os algoritmos de Kruskal e de MSF decremental.}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_0$.}
     \label{fig:graph_g0_permutation0}
 \end{figure}
-\subsection{Segunda permutação de arestas}
+
+\subsection{Permutação $1$ de arestas}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_1.png}
-    \caption{Tabela comparando a performance entre os algoritmos de Kruskal e de MSF decremental, exibindo o valor do peso da MST após a remoção de cada de lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $1$ de $G_0$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_0_permutation_1.png}
-    \caption{Gráfico comparando a performance entre os algoritmos de Kruskal e de MSF decremental.}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $1$ de $G_0$.}
     \label{fig:graph_g0_permutation1}
 \end{figure}
 
-\subsection{Terceira permutação de arestas}
+\subsection{Permutação $2$ de arestas}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_2.png}
-    \caption{Tabela comparando a performance entre os algoritmos de Kruskal e de MSF decremental, exibindo o valor do peso da MST após a remoção de cada de lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $2$ de $G_0$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_0_permutation_2.png}
-    \caption{Gráfico comparando a performance entre os algoritmos de Kruskal e de MSF decremental.}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $2$ de $G_0$.}
     \label{fig:graph_g0_permutation2}
 \end{figure}
 
-\subsection{Quarta permutação de arestas}
+\subsection{Permutação $3$ de arestas}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_3.png}
-    \caption{Tabela comparando a performance entre os algoritmos de Kruskal e de MSF decremental, exibindo o valor do peso da MST após a remoção de cada de lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $3$ de $G_0$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation3}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_0_permutation_3.png}
-    \caption{Gráfico comparando a performance entre os algoritmos de Kruskal e de MSF decremental.}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $3$ de $G_0$.}
     \label{fig:graph_g0_permutation3}
 \end{figure}
 
-\subsection{Quinta permutação de arestas}
+\subsection{Permutação $4$ de arestas}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_4.png}
-    \caption{Tabela comparando a performance entre os algoritmos de Kruskal e de MSF decremental, exibindo o valor do peso da MST após a remoção de cada de lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $4$ de $G_0$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation4}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_0_permutation_4.png}
-    \caption{Gráfico comparando a performance entre os algoritmos de Kruskal e de MSF decremental.}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $4$ de $G_0$.}
+
     \label{fig:graph_g0_permutation4}
 \end{figure}
 
@@ -115,13 +117,13 @@ O grafo $G_0$ foi gerado com 142.069 arestas, que é um número próximo do espe
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_average.png}
-\caption{Tempo médio de execução obtido a partir de $5$ permutações de arestas do grafo $G_0$.}
+\caption{Tempo médio de execução obtido a partir de cinco permutações de arestas de $G_0$.}
     \label{fig:table_g0_average}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_0_average.png}
-\caption{Comparação do tempo médio de execução dos algoritmos de Kruskal e MSF Decremental ao longo de $5$ permutações de arestas do grafo $G_0$.}
+\caption{Comparação do tempo médio de execução dos algoritmos de Kruskal e MSF Decremental ao longo de cinco permutações de arestas de $G_0$.}
     \label{fig:graph_g0_average}
 \end{figure}
