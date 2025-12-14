@@ -377,7 +377,7 @@ Além disso, usaremos um método auxiliar chamado \texttt{encontreTopTree($v$)},
 
 Como os identificadores são campos extras de cada cluster-raiz, ao acionarmos \texttt{encontreTopTree($v$)} inicialmente obtemos o nó dado por $p(v)$. A partir deste nó subimos na árvore em tempo $O(\lg n)$ até alcançarmos a raiz, retornando, então, o seu identificador.
 
-Como usaremos o método \texttt{exponhaTopTree} no algoritmo da MSF totalmente dinâmica, vale mostrar um exemplo de como ficaria a top tree da Figura~\ref{fig:top-t-from-tree-t} ao chamarmos \texttt{exponhaTopTree($7$, $8$)}, ou seja, os vértices $7$ e $8$ passam a ser os novos vértices da fronteira de $T$.
+Como usaremos o método \texttt{exponhaTopTree} no algoritmo da MSF dinâmica, vale mostrar um exemplo de como ficaria a top tree da Figura~\ref{fig:top-t-from-tree-t} ao chamarmos \texttt{exponhaTopTree($7$, $8$)}, ou seja, os vértices $7$ e $8$ passam a ser os novos vértices da fronteira de $T$.
 
 \begin{figure}[H]
     \centering
@@ -490,11 +490,20 @@ Como usaremos o método \texttt{exponhaTopTree} no algoritmo da MSF totalmente d
     \label{fig:exposed-top-tree}
 \end{figure}
 
-\subsection{MSF totalmente dinâmica}
+\subsection{MSF dinâmica}
 
-A Seção 5.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propõe um algoritmo para a MSF totalmente dinâmica, a qual mantém uma floresta geradora maximal de custo mínimo que consome tempo amortizado $\Oh(\lg^4 n)$ por inserção e remoção de aresta.
+A Seção 5.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propõe um algoritmo para a MSF dinâmica, a qual mantém uma floresta geradora maximal de custo mínimo que consome tempo amortizado $\Oh(\lg^4 n)$ por inserção e remoção de aresta.
 
 A ideia inicial é manter um número logarítmico de estruturas decrementais (onde cada uma é uma MSF decremental, que já vimos na Seção~\ref{sec:decremental-msf-library}). Quando queremos remover uma aresta, tal aresta é removida de todas as estruturas decrementais e uma aresta substituta é obtida dentre as arestas substitutas retornadas por estas estruturas. Já no momento da inserção de uma aresta, unimos tal aresta com algumas estruturas decrementais para criar uma nova estrutura decremental.
 
-Inicialmente, manteremos uma MSF $F$ do grafo $G$ com $m$ arestas e um conjunto $\mathcal{G} = \{G_0, \ldots, G_L\}$ de subgrafos de $G$, onde $L = \left\lceil \lg m \right\rceil$. Para cada $G_i$, manteremos uma MSF $F_i$. Chamaremos as arestas de $F$ de \textbf{arestas globais da floresta} e as arestas de $F_i$ de \textbf{arestas locais da floresta}. Todas as arestas de $G$ estarão em pelo menos um $G_i$, então $F \subseteq \bigcup_i F_i$.   
+Inicialmente, manteremos uma MSF $F$ do grafo $G$ com $m$ arestas e um conjunto $\mathcal{G} = \{G_0, \ldots, G_L\}$ de subgrafos de $G$, onde $L = \left\lceil \lg m \right\rceil$. Para cada $G_i$, manteremos uma MSF $F_i$. Chamaremos as arestas de $F$ de \textbf{arestas da floresta globais} e as arestas de $F_i$ de \textbf{arestas da floresta locais}. Todas as arestas de $G$ estarão em pelo menos um $G_i$, então $F \subseteq \bigcup_i F_i$.   
 
+Além disso, temos o grafo $R$ de $G$, que guardará as \textbf{arestas reserva globais}, e $R_i$ de $G_i$, que guardará \textbf{arestas reserva locais}. Com essas definições, podemos enunciar a seguinte invariante:
+
+\begin{enumerate}[label=(\Roman*)]
+    \item \label{invariant111} Para cada aresta reserva global $e \in R$, existe exatamente um $i$ tal que $e \in R_i$ e, se $e \in F_j$, então $j > i$.
+\end{enumerate}
+
+Dessa forma, se uma aresta $e$ da floresta global é removida, podemos encontrar uma aresta $f$ substituta de menor peso ao removermos todas as ocorrências de $e$ em $G_i$. 
+
+Podemos apresentar a biblioteca da 
