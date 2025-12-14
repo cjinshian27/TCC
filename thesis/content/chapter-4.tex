@@ -127,3 +127,112 @@ O grafo $G_0$ foi gerado com 142.069 arestas, que é um número próximo do espe
 \caption{Comparação do tempo médio de execução dos algoritmos de Kruskal e MSF Decremental ao longo de cinco permutações de arestas de $G_0$.}
     \label{fig:graph_g0_average}
 \end{figure}
+
+\section{Grafos $G_1$, $G_2$, $G_3$, $G_4$ e $G_5$}
+
+Neste experimento, testamos apenas a primeira permutação de arestas de cada grafo. O grafo $G_1$ foi gerado com $142.589$ arestas; o grafo $G_2$ com $142.954$ arestas; o grafo $G_3$ com $142.734$ arestas; o grafo $G_4$ com $142.402$ arestas; o grafo $G_5$ com $143.216$ arestas.
+
+\subsection{Grafo $G_1$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_1.png}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_1$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g1_permutation0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_1.png}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_1$.}
+    \label{fig:graph_g1_permutation0}
+\end{figure}
+
+\subsection{Grafo $G_2$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_2.png}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_2$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g2_permutation0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_2.png}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_2$.}
+    \label{fig:graph_g2_permutation0}
+\end{figure}
+
+\subsection{Grafo $G_3$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_3.png}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_3$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g3_permutation0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_3.png}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_3$.}
+    \label{fig:graph_g3_permutation0}
+\end{figure}
+
+
+\subsection{Grafo $G_4$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_4.png}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_4$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g4_permutation0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_4.png}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_4$.}
+    \label{fig:graph_g4_permutation0}
+\end{figure}
+
+\subsection{Grafo $G_5$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_5.png}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_5$, exibindo o valor do peso da MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g5_permutation0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_5.png}
+\caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_5$.}
+    \label{fig:graph_g5_permutation0}
+\end{figure}
+
+\subsection{Tempo médio de execução dos cinco grafos}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_5_graphs_average.png}
+\caption{Tempo médio de execução obtido a partir de cinco grafos.}
+    \label{fig:performance_table_5_graphs_average}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/5_graphs_average.png}
+\caption{Comparação do tempo médio de execução dos algoritmos de Kruskal e MSF Decremental considerando cinco grafos distintos.}
+    \label{fig:5_graphs_average}
+\end{figure}
+
+\section{Conclusão dos resultados}
+
+A partir dos experimentos realizados, verifica-se que os grafos gerados para os testes apresentam um número de arestas próximo ao valor esperado para um grafo do modelo $G(n, p)$. Ademais, os resultados indicam que, nos gráficos de tempo de execução, o algoritmo de Kruskal apresenta um crescimento aproximadamente linear em função do número de arestas removidas, enquanto o algoritmo de MSF decremental exibe um padrão de crescimento logarítmico.
+
+As tabelas de resultados complementam essa análise ao evidenciar de forma quantitativa a diferença significativa no tempo de execução entre os dois algoritmos durante o processo de remoção de arestas, diferença esta que já se mostra perceptível mesmo nas primeiras remoções realizadas.
+
+Por fim, observa-se que os experimentos conduzidos sobre diferentes grafos com o mesmo número de vértices produzem gráficos e tabelas com comportamentos semelhantes no que tange ao tempo de execução, indicando consistência nos resultados obtidos.
