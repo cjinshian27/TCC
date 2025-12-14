@@ -25,7 +25,7 @@ Para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após ca
 
 O algoritmo de Kruskal foi implementado de uma forma que permita remoção de arestas. Utilizamos Union-Find como a parte central do algoritmo. Na inicialização do construtor, ordenamos um vetor de $m$ arestas em ordem crescente de peso, usando o método \texttt{sort} da linguagem \textit{C++}, que consome tempo esperado $O(m \lg m)$. Em seguida, acionamos o método \texttt{union} para adicionar as arestas, uma a uma, em ordem crescente de peso.
 
-Quando removemos uma aresta $uv$, precisamos reordenar as arestas restantes. Para isso, usamos o algoritmo de ordenação \textit{insertion sort}, visto que ele consome tempo $O(m)$ para ordenar um vetor de arestas quase ordenado. No nosso caso, como a $uv$ é trocada pela última aresta do vetor e removida, obtemos um vetor quase ordenado. Isso garante a complexidade de tempo $O(m)$ quando ordenamos as arestas remanescentes.
+Quando removemos uma aresta $uv$, precisamos reordenar as arestas restantes. Para isso, usamos o algoritmo de ordenação \textit{insertion sort}, visto que ele consome tempo $O(m)$ para ordenar um vetor de arestas quase ordenado. No nosso caso, como a $uv$ é trocada pela última aresta do vetor e removida, obtemos um vetor quase ordenado. Isso garante a complexidade de tempo $O(m)$ quando ordenamos as arestas remanescentes neste vetor.
 
 \section{Grafo $G_0$}
 
