@@ -1,6 +1,6 @@
 # Final Course Project
 
-This is a final course project made in *C++*. Each folder is an independent project, and they are the base for the more complex ones. My main page can be accessed [here](https://linux.ime.usp.br/~cjinshian/).
+This is a final course project made in *C++*. Each folder is an independent project, and they are the base for the more complex ones. My main page can be accessed [here](https://linux.ime.usp.br/~cjinshian/mac0499/).
 
 # Contents
 
