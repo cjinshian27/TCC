@@ -1,7 +1,7 @@
 \chapter{Testes experimentais}
 \label{chapter:experiments}
 
-Nesta seção, apresentaremos alguns testes de comparação de performance entre os algoritmos de Kruskal e da MSF decremental. Os experimentos foram realizados em um computador pessoal com as seguintes configurações: 
+Neste capítulo, apresentaremos alguns testes de comparação de performance entre o algoritmo descrito no Capítulo~\ref{chapter:msf-decremental-chapter} e uma versão do algoritmo de Kruskal adaptado para o problema da MSF decremental. Os experimentos foram realizados em um computador pessoal com as seguintes configurações: 
 
 \begin{itemize}
     \item Sistema operacional Ubuntu 24.04.3 LTS (kernel 6.8.0-49-generic);
@@ -10,16 +10,16 @@ Nesta seção, apresentaremos alguns testes de comparação de performance entre
     \item GPU Intel UHD Graphics 620.
 \end{itemize}
 
-Para calcular a duração de tempo de uma operação em milissegundos, utilizamos a biblioteca \texttt{chrono} da linguagem \textit{C++}. Além disso, o experimento não considera o tempo para inicializar um grafo com $n$ vértices e $m$ arestas, apenas a remoção das arestas e a consulta do peso da MST após a remoção delas. 
+Para calcular a duração de tempo de uma operação em milissegundos, utilizamos a biblioteca \texttt{chrono} da linguagem \textit{C++}. Além disso, o experimento não considera o tempo para inicializar um grafo com $n$ vértices e $m$ arestas. Considera apenas o tempo para as remoções das arestas e para as consultas ao peso da MST. 
 
-Foi construído um gerador de grafos aleatórios, seguindo um modelo $G(n, p)$, em que $n$ é o número de vértices do grafo $G$ e $p$ a probabilidade da existência de cada aresta. Considera-se como limiar crítico o valor de $p = \frac{\lg n}{n} $. Assim, temos que o número esperado de arestas em um grafo $G(n, p)$ é dado por $\frac{n(n-1)}{2}p$. Ademais, a cada aresta é atribuído um peso inteiro no intervalo de $1$ a $n$.
+Foi implementado um gerador de grafos aleatórios, seguindo o modelo $G(n, p)$, em que $n$ é o número de vértices e $p$ a probabilidade da existência de cada aresta. É sabido que, no modelo $G(n, p)$ de Erdős-Rényi, o limiar para conexidade é $p = \frac{\ln n}{n}$. Nos nossos experimentos, usamos o valor $p = \frac{\lg n}{n} > \frac{\ln n}{n}$, $n > 1$. Assim, temos que o número esperado de arestas nos grafos gerados é dado por $\frac{n(n-1)\lg n}{2n}$. Ademais, a cada aresta é atribuído um peso inteiro no intervalo de $1$ a $n$.
 
-Cada arquivo gerado de teste possui a primeira linha com os valores $n$ e $m$, seguida de $m$ linhas da forma $u$ $v$ $w$, onde $w$ é o peso da aresta $uv$. Em seguida, temos outras $m$ linhas da forma $u$ $v$, que representam uma permutação aleatória de arestas a serem removidas. No experimento, entretanto, removemos somente as primeiras 25.600 arestas da permutação, o que foi suficiente para demonstrar a eficiência do algoritmo da MSF decremental.
+Cada arquivo de teste gerado possui a primeira linha com os valores $n$ e $m$, seguida de $m$ linhas da forma $u$ $v$ $w$, onde $w$ é o peso da aresta $uv$. Em seguida, temos outras $k$ linhas da forma $u$ $v$, que representam uma lista aleatória das arestas a serem removidas. Nos experimentos, cada grafo gerado possui $n = 20.000$ vértices, o que dá um número esperado de arestas de $142.000$, e removemos $k = 25.600$ arestas, o que foi suficiente para demonstrar a eficiência do algoritmo da MSF decremental.
 
-Cada grafo gerado possui $n = 20.000$ vértices, o que dá um número esperado de arestas de $142.000$. Nos nossos experimentos, geramos seis grafos $G_i$, $0 \leq i \leq 5$, com cinco permutações aleatórias distintas de arestas para cada.   
-Inicialmente, avaliamos o grafo $G_0$ considerando a remoção de $25\,600$ arestas em cinco permutações distintas. Para cada permutação, registramos o peso da MST após a remoção de cada lote de arestas e o tempo de execução, em milissegundos, dos algoritmos de Kruskal e MSF Decremental. Depois, calculamos a média dos cinco testes realizados. Por fim, realizamos os mesmos experimentos de $G_0$  em outros cinco grafos, usando somente a primeira permutação de arestas gerada para cada grafo. Os resultados foram apresentados em tabelas e gráficos gerados por programas escritos em \textit{Python~3}.
+Nos nossos experimentos, geramos seis grafos $G_i$, $0 \leq i \leq 5$, com cinco listas aleatórias distintas de arestas para cada.   
+Inicialmente, avaliamos o grafo $G_0$ considerando a remoção de $25\,600$ arestas em cinco listas distintas. Para cada lista, registramos o peso da MST após a remoção de uma certa quantidade de arestas e o tempo de execução, em milissegundos, dos dois algoritmos. Depois, calculamos a média dos cinco testes realizados. Por fim, realizamos os mesmos experimentos de $G_0$  em outros cinco grafos, usando somente a primeira lista de arestas gerada para cada grafo. Os resultados foram apresentados em tabelas e gráficos gerados por programas escritos em \textit{Python~3}.
 
-Para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após cada lote de remoções, imprimimos a MST correspondente ao estado atual do grafo e, em seguida, dobramos o tamanho do lote. Dessa forma, removemos $100, 200, 400, \ldots, 25.600$ arestas, registrando tanto o tempo acumulado das remoções quanto o peso da MST após cada etapa.
+Para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após cada lote de remoções, imprimimos o peso da MST correspondente ao estado atual do grafo e, em seguida, dobramos o tamanho do lote. Dessa forma, removemos $100, 200, 400, \ldots, 25.600$ arestas, registrando tanto o tempo acumulado das remoções quanto o peso da MST após cada etapa.
 
 \section{Algoritmo de Kruskal}
 
