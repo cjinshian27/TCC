@@ -5,12 +5,12 @@
 \chapter{MSF totalmente dinâmica}
 \label{chapter:fully-MSF}
 
-Neste capítulo, consideraremos o problema da \textbf{MSF dinâmica}, onde queremos manter uma MSF em um grafo dinâmico. Estudaremos um algoritmo para MSF dinâmica. Como este algoritmo não foi implementado em nosso estudo, apresentaremos apenas a ideia por trás dele, de como podemos manter o peso mínimo de uma MSF de um grafo $G$ dando suporte à adição e remoção de arestas. Inicialmente, será descrito o funcionamento das \textbf{top trees}, estruturas de dados que serão usadas na manutenção da MSF dinâmica. Estas estruturas estão descritas na Seção~2.2 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}.
+Neste capítulo, consideraremos o problema da \textbf{MSF dinâmica}, onde queremos manter uma MSF em um grafo dinâmico. Estudaremos um algoritmo para MSF dinâmica. Como este algoritmo não foi implementado em nosso estudo, apresentaremos apenas a ideia por trás dele, de como podemos manter o peso mínimo de uma MSF de um grafo $G$ dando suporte eficiente à adição e remoção de arestas. Inicialmente, será descrito o funcionamento das \textbf{top trees}, estruturas de dados que serão usadas na manutenção de uma MSF dinâmica. Estas estruturas estão descritas na Seção~2.2 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}.
 
 \section{Top trees}
 
 Antes de definir uma top tree, precisamos definir alguns conceitos.
-Seja um par ($T$, $\partial T$), onde $T$ é uma árvore e $\partial T$ é um conjunto que contém no máximo dois vértices de $T$, que são chamados \textbf{vértices da fronteira} (\textit{external boundary vertices}), como se pode ver na Figura~\ref{fig:top-tree-pair-representation}.
+Seja ($T$, $\partial T$) um par, onde $T$ é uma árvore e $\partial T$ é um conjunto que contém no máximo dois vértices de $T$, que são chamados \textbf{vértices da fronteira} (\textit{external boundary vertices}), como se pode ver na Figura~\ref{fig:top-tree-pair-representation}.
 
 \begin{figure}[H]
     \centering
@@ -33,11 +33,11 @@ Seja um par ($T$, $\partial T$), onde $T$ é uma árvore e $\partial T$ é um co
         \draw[edge] (a) -- (e) node[midway, above] {};
 
     \end{tikzpicture}
-    \caption{Uma árvore $T$ com um conjunto $\partial T$ destacado em vermelho}
+    \caption{Uma árvore $T$ com um conjunto $\partial T$ destacado em vermelho.}
     \label{fig:top-tree-pair-representation}
 \end{figure}
 
-Para qualquer subárvore $C$ de $T$, seja um conjunto $\partial_{(T, \partial T)}C$, que são vértices de $C$ que estão ou em $\partial T$ ou são incidentes a uma aresta de $T$ saindo de $C$. Chamamos o conjunto $\partial_{T, \partial T}C$ de vértices da fronteira de $C$. Veja o exemplo da Figura~\ref{fig:top-tree-subtree-option1}.
+Para qualquer subárvore $C$ de $T$, seja $\partial_{(T, \partial T)}C$ o conjunto dos vértices de $C$ que estão ou em $\partial T$ ou são incidentes a uma aresta de $T$ saindo de $C$. Chamamos o conjunto $\partial_{T, \partial T}C$ de vértices da fronteira de $C$. Veja o exemplo da Figura~\ref{fig:top-tree-subtree-option1}.
 
 \begin{figure}[H]
     \centering
@@ -80,7 +80,7 @@ Para qualquer subárvore $C$ de $T$, seja um conjunto $\partial_{(T, \partial T)
     \label{fig:top-tree-subtree-option1}
 \end{figure}
 
-Uma subárvore $C$ é chamada de \textbf{cluster} de ($T$, $\partial T$) se o número de vértices da fronteira de $C$ é no máximo dois. Assim, por definição, $T$ é um cluster dele mesmo, com $\partial_{(T, \partial T)}T = \partial T$. Além disso, qualquer aresta de $T$ é um cluster de ($T$, $\partial T$). A subárvore $C$ da Figura~\ref{fig:top-tree-subtree-option1} acima é um cluster, pois ela possui apenas dois vértices da fronteira.
+Uma subárvore $C$ é chamada de um \textbf{cluster} de ($T$, $\partial T$) se o número de vértices da fronteira de $C$ é no máximo dois. Assim, por definição, $T$ é um cluster dele mesmo, com $\partial_{(T, \partial T)}T = \partial T$. Além disso, qualquer aresta de $T$ é um cluster de ($T$, $\partial T$). A subárvore $C$ da Figura~\ref{fig:top-tree-subtree-option1} acima é um cluster, pois ela possui apenas dois vértices da fronteira.
 
 Além disso, se $R$ é uma subárvore de $C$, então $R$ é um cluster  
  de ($C$, $\partial_{(T, \partial T)} C$) se, e somente se, $R$ é um cluster de $(T, \partial T)$. Podemos ver essa situação no exemplo da Figura~\ref{fig:top-tree-cluster-of-cluster}. Para simplificar, denotaremos $\partial_{(T, \partial T)}$ como $\partial$ a partir de agora.
@@ -137,11 +137,11 @@ Além disso, se $R$ é uma subárvore de $C$, então $R$ é um cluster
 
         % \draw[dashed, thick, red] (e) -- (a) -- (d) -- cycle;
     \end{tikzpicture}
-    \caption{A região demarcada em azul representa a subárvore $C$ de $T$, e é cluster de $(T, \partial T)$. Já a região demarcada em verde representa uma subárvore $R$ de $C$, e é cluster de $(C, \partial C)$ e de $(T, \partial T)$.}
+    \caption{A região demarcada em azul representa a subárvore $C$ de $T$, que é um cluster de $(T, \partial T)$. Já a região demarcada em verde representa uma subárvore $R$ de $C$, e é um cluster de $(C, \partial C)$ e de $(T, \partial T)$.}
     \label{fig:top-tree-cluster-of-cluster}
 \end{figure}
 
-Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vértice e se $A \cup B$ é um cluster. Finalmente, definimos uma \textbf{top tree} $\mathcal{T}$ do par ($T$, $\partial T$) como sendo uma árvore binária que respeita o seguinte:
+Dizemos que clusters $A$ e $B$ são \textbf{vizinhos} se eles compartilham um único vértice e se $A \cup B$ é um cluster. Finalmente, definimos uma \textbf{top tree} do par ($T$, $\partial T$) como sendo uma árvore binária $\mathcal{T}$ que respeita o seguinte:
 
 \begin{itemize}
     \item Os vértices de $\mathcal{T}$ são os clusters de ($T$, $\partial T$);
@@ -150,9 +150,9 @@ Dizemos que clusters $A$ e $B$ são vizinhos se eles compartilham um único vér
     \item A raiz de $\mathcal{T}$ é a própria árvore $T$.
 \end{itemize}
 
-Para um cluster $C$, os vértices em $C\backslash \partial C$ são chamados de \textbf{vértices internos}. Se $a$ e $b$ são vértices da fronteira de $C$, o caminho entre $a$ e $b$ em $C$ se chama \textbf{caminho de cluster} e o denotamos por $\pi(C)$. Se $a \neq b$, o cluster é chamado de \textbf{cluster-caminho}. 
+Para um cluster $C$, os vértices em $C\backslash \partial C$ são chamados de \textbf{vértices internos}. Se $a$ e $b$ são vértices da fronteira de $C$, o caminho entre $a$ e $b$ em $C$ se chama \textbf{caminho do cluster} e o denotamos por $\pi(C)$. Se $a \neq b$, o cluster é chamado de \textbf{cluster-caminho}. 
 
-Dizemos que o cluster $C$ é \textbf{ancestral de caminho} do cluster $D$ e $D$ é chamado de \textbf{descendente de caminho} de $C$ se ambos forem cluster-caminhos e $\pi(D) \subseteq \pi(C)$. Note que cada aresta $e \in \pi(C)$ é um descendente de caminho de $C$. Um filho que é descendente de caminho é um \textbf{filho de caminho}. Na Figura~\ref{fig:clusters-formation-cases}, apresentamos os quatro casos quando fazemos a união de dois clusters. Em (1), temos dois filhos de caminho; em (2), temos um filho de caminho; e em (3) e (4), temos nenhum filho de caminho.
+Dizemos que o cluster $C$ é \textbf{ancestral de caminho} do cluster $D$ e $D$ é chamado de \textbf{descendente de caminho} de $C$ se ambos forem clusters-caminho e $\pi(D) \subseteq \pi(C)$. Note que cada aresta $e \in \pi(C)$ é um descendente de caminho de $C$. Um filho que é descendente de caminho é um \textbf{filho de caminho}. Na Figura~\ref{fig:clusters-formation-cases}, apresentamos os quatro casos que podem ocorrer quando fazemos a união de dois clusters $A$ e $B$. Em (1), $A$ e $B$ são ambos filhos de caminho; em (2), $A \cup B$ tem um filho de caminho; e em (3) e (4), $A \cup B$ não é cluster caminho, logo não há nenhum filho de caminho.
 
 
 \begin{figure}[H]
@@ -166,19 +166,19 @@ Dizemos que o cluster $C$ é \textbf{ancestral de caminho} do cluster $D$ e $D$ 
 ]
 
 % (1)
-\node[draw=none] (A1) at (0.6,0.5) {A};
-\node[draw=none] (B1) at (1.8,0.5) {B};
+\node[draw=none] (A1) at (-4.4,0.5) {A};
+\node[draw=none] (B1) at (-3.2,0.5) {B};
 
-\node[boundary] (a1) at (0,0) {};
-\node[internal] (b1) at (1.2,0) {};
-\node[boundary] (c1) at (2.4,0) {};
+\node[boundary] (a1) at (-5,0) {};
+\node[internal] (b1) at (-3.8,0) {};
+\node[boundary] (c1) at (-2.6,0) {};
 
 \draw[edge, bend left=30] (a1) to (b1);
 \draw[edge, bend right=30] (a1) to (b1);
 \draw[edge, bend left=30] (b1) to (c1);
 \draw[edge, bend right=30] (b1) to (c1);
 \draw[dashededge] (a1) -- (c1);
-\node at (1.2, -0.8) {1};
+\node at (-3.8, -0.8) {1};
 
 % (2)
 \node[draw=none] (A2) at (4.6,0.5) {A};
@@ -191,20 +191,20 @@ Dizemos que o cluster $C$ é \textbf{ancestral de caminho} do cluster $D$ e $D$ 
 \draw[edge, bend right=30] (a2) to (b2);
 \draw[edge, in=290, out=20, looseness=20] (b2) to (b2);
 %\draw[dashededge] (a2) -- (b2);
-\node at (4.6, -0.8) {2};
+\node at (4.6, -0.8) {3};
 
 % (3)
-\node[draw=none] (A3) at (4,-1.7) {A};
-\node[draw=none] (B3) at (5.3,-1.7) {B};
+\node[draw=none] (A3) at (-1.2,0.5) {A};
+\node[draw=none] (B3) at (-0.3,0.5) {B};
 
-\node[boundary] (a3) at (0.5,-2.2) {};
-\node[boundary] (b3) at (1.7,-2.2) {};
+\node[boundary] (a3) at (-1.7,0) {};
+\node[boundary] (b3) at (-0.5,0) {};
 
 \draw[edge, bend left=30] (a3) to (b3);
 \draw[edge, bend right=30] (a3) to (b3);
 \draw[edge, in=290, out=20, looseness=20] (b3) to (b3);
 \draw[dashededge] (a3) -- (b3);
-\node at (1.2, -3) {3};
+\node at (-1, -0.8) {2};
 
 % (4)
 \node[draw=none] (A4) at (1.1,-1.7) {A};
@@ -506,4 +506,4 @@ Além disso, temos o grafo $R$ de $G$, que guardará as \textbf{arestas reserva 
 
 Dessa forma, se uma aresta $e$ da floresta global é removida, podemos encontrar uma aresta $f$ substituta de menor peso ao removermos todas as ocorrências de $e$ em $G_i$. 
 
-Podemos apresentar a biblioteca da 
+Podemos descrever os métodos de inserção e remoção 
