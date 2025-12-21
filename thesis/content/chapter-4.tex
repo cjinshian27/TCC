@@ -187,8 +187,10 @@ O grafo $G_1$ tem gerado com $142.589$ arestas; o grafo $G_2$ tem $142.954$ ares
 
 \section{Conclusão}
 
-A partir dos experimentos realizados, verifica-se que os grafos gerados para os testes apresentam um número de arestas próximo ao valor esperado para um grafo do modelo $G(n, p)$. Além disso, os resultados indicam que, nos gráficos de tempo de execução, o algoritmo de Kruskal apresenta um crescimento aproximadamente linear em função do número de arestas removidas, enquanto o algoritmo de MSF decremental exibe um padrão de crescimento logarítmico.
+A partir dos experimentos realizados, verifica-se que os grafos gerados para os testes apresentam um número de arestas próximo do valor esperado para um grafo do modelo $G(n, p)$, com $p = \frac{\lg n}{n}$. Além disso, os resultados indicam que, nos gráficos de tempo de execução, o algoritmo derivado de Kruskal apresenta um crescimento aproximadamente linear em função do número de arestas removidas, enquanto o algoritmo para MSF decremental exibe um padrão de crescimento compatível com o esperado que é polilogarítmico.
 
 As tabelas de resultados, por outro lado, evidenciam a diferença significativa no tempo de execução entre os dois algoritmos durante o processo de remoção de arestas, diferença esta que já se mostra perceptível mesmo nas primeiras remoções realizadas.
 
-Por fim, observa-se que os experimentos conduzidos sobre diferentes grafos com o mesmo número de vértices produzem gráficos e tabelas com comportamentos semelhantes no que tange ao tempo de execução, indicando consistência nos resultados obtidos.
+Portanto, observa-se que os experimentos conduzidos sobre diferentes grafos aleatórios com o mesmo número de vértices produzem gráficos e tabelas com comportamentos semelhantes no que tange ao tempo de execução, indicando consistência nos resultados obtidos.
+
+Por fim, seria interessante usar essas implementações para testar os algoritmos em grafos vindos de aplicações reais.
