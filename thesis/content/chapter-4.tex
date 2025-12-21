@@ -28,86 +28,40 @@ O algoritmo de Kruskal foi implementado de uma forma que permita remoção de ar
 Quando removemos uma aresta $uv$, precisamos reordenar as arestas restantes. Para isso, basta deslocar as arestas a partir de $uv$ de uma posição para cima no vetor, o que consome tempo $O(m)$.
 
 \section{Grafo $G_0$}
+\label{section:graph0}
 
-O grafo $G_0$ gerado tem 142.069 arestas, que é um número próximo do esperado. A seguir, mostraremos os resultados das remoções em algumas listas de arestas, visto que o comportamento dos gráficos e valores das tabelas são muito parecidos. É importante ressaltar que, como o algoritmo derivado de Kruskal consome tempo $O(m)$ por remoção de aresta, optamos por fazer uma compressão de valores dos eixos $x$ e $y$ dos gráficos para evitar a sobreposição dos números, preservando ainda a aparência de crescimento linear.
+O grafo $G_0$ gerado tem 142.069 arestas, que é um número próximo do esperado. A seguir, mostraremos os resultados das remoções de algumas listas de arestas, visto que o comportamento dos gráficos e valores das tabelas são muito parecidos. É importante ressaltar que, como o algoritmo derivado de Kruskal consome tempo $O(m)$ por remoção de aresta, optamos por fazer uma compressão de valores dos eixos $x$ e $y$ dos gráficos para evitar a sobreposição dos números, preservando ainda a aparência de crescimento linear.
 
-\subsection{Permutação $0$ de arestas}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_0.png}
-    \caption{Desempenho dos dois algoritmos na permutação $0$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
-    \label{fig:table_g0_permutation0}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=11cm]{./figuras/graph_0_permutation_0.png}
-\caption{Desempenho dos dois algoritmos na permutação $0$ de $G_0$.}
-    \label{fig:graph_g0_permutation0}
-\end{figure}
-
-\subsection{Permutação $1$ de arestas}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_1.png}
-    \caption{Desempenho dos dois algoritmos na permutação $1$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
-    \label{fig:table_g0_permutation1}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=11cm]{./figuras/graph_0_permutation_1.png}
-\caption{Desempenho dos dois algoritmos na permutação $1$ de $G_0$.}
-    \label{fig:graph_g0_permutation1}
-\end{figure}
-
-\subsection{Permutação $2$ de arestas}
+\subsection{Primeira lista de arestas}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_2.png}
-    \caption{Desempenho dos dois algoritmos na permutação $2$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_0_permutation_2.png}
-\caption{Desempenho dos dois algoritmos na permutação $2$ de $G_0$.}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_0$.}
     \label{fig:graph_g0_permutation2}
 \end{figure}
 
-\subsection{Permutação $3$ de arestas}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_3.png}
-    \caption{Desempenho dos dois algoritmos na permutação $3$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
-    \label{fig:table_g0_permutation3}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=11cm]{./figuras/graph_0_permutation_3.png}
-\caption{Desempenho dos dois algoritmos na permutação $3$ de $G_0$.}
-    \label{fig:graph_g0_permutation3}
-\end{figure}
-
-\subsection{Permutação $4$ de arestas}
+\subsection{Segunda lista de arestas}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_4.png}
-    \caption{Desempenho dos dois algoritmos na permutação $4$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos dois algoritmos na segunda lista de arestas de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation4}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_0_permutation_4.png}
-\caption{Desempenho dos dois algoritmos na permutação $4$ de $G_0$.}
+\caption{Desempenho dos dois algoritmos na segunda lista de arestas de $G_0$.}
 
     \label{fig:graph_g0_permutation4}
 \end{figure}
@@ -130,21 +84,23 @@ O grafo $G_0$ gerado tem 142.069 arestas, que é um número próximo do esperado
 
 \section{Grafos $G_1$, $G_2$, $G_3$, $G_4$ e $G_5$}
 
-Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas a primeira permutação de arestas de outros cinco grafos. O grafo $G_1$ foi gerado com $142.589$ arestas; o grafo $G_2$ com $142.954$ arestas; o grafo $G_3$ com $142.734$ arestas; o grafo $G_4$ com $142.402$ arestas; e o grafo $G_5$ com $143.216$ arestas.
+Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas a primeira lista aleatória de arestas de outros cinco grafos. Isso porque vimos na Seção~\ref{section:graph0} que os resultados entre as diferentes listas aleatórias de um mesmo grafo são bem parecidos.
+
+O grafo $G_1$ tem gerado com $142.589$ arestas; o grafo $G_2$ tem $142.954$ arestas; o grafo $G_3$ tem $142.734$ arestas; o grafo $G_4$ tem $142.402$ arestas; e o grafo $G_5$ tem $143.216$ arestas.
 
 \subsection{Grafo $G_1$}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_1.png}
-    \caption{Desempenho dos dois algoritmos na permutação $0$ de $G_1$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_1$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g1_permutation0}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_1.png}
-\caption{Desempenho dos dois algoritmos na permutação $0$ de $G_1$.}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_1$.}
     \label{fig:graph_g1_permutation0}
 \end{figure}
 
@@ -153,14 +109,14 @@ Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_2.png}
-    \caption{Desempenho dos dois algoritmos na permutação $0$ de $G_2$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_2$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g2_permutation0}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_2.png}
-\caption{Desempenho dos dois algoritmos na permutação $0$ de $G_2$.}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_2$.}
     \label{fig:graph_g2_permutation0}
 \end{figure}
 
@@ -169,14 +125,14 @@ Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_3.png}
-    \caption{Desempenho dos dois algoritmos na permutação $0$ de $G_3$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_3$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g3_permutation0}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_3.png}
-\caption{Desempenho dos dois algoritmos na permutação $0$ de $G_3$.}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_3$.}
     \label{fig:graph_g3_permutation0}
 \end{figure}
 
@@ -186,14 +142,14 @@ Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_4.png}
-    \caption{Desempenho dos dois algoritmos na permutação $0$ de $G_4$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_4$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g4_permutation0}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_4.png}
-\caption{Desempenho dos dois algoritmos na permutação $0$ de $G_4$.}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_4$.}
     \label{fig:graph_g4_permutation0}
 \end{figure}
 
@@ -202,14 +158,14 @@ Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_5.png}
-    \caption{Desempenho dos dois algoritmos na permutação $0$ de $G_5$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_5$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g5_permutation0}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_5.png}
-\caption{Desempenho dos dois algoritmos na permutação $0$ de $G_5$.}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_5$.}
     \label{fig:graph_g5_permutation0}
 \end{figure}
 
