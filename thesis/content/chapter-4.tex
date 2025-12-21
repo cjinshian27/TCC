@@ -29,7 +29,7 @@ Quando removemos uma aresta $uv$, precisamos reordenar as arestas restantes. Par
 
 \section{Grafo $G_0$}
 
-O grafo $G_0$ gerado tem 142.069 arestas, que é um número próximo do esperado. A seguir, mostraremos os resultados das remoções em cada permutação de arestas. É importante ressaltar que, como o algoritmo derivado de Kruskal consome tempo $O(m)$ por remoção de aresta, optamos por fazer uma compressão de valores dos eixos $x$ e $y$ dos gráficos para evitar a sobreposição dos números, preservando ainda a aparência de crescimento linear.
+O grafo $G_0$ gerado tem 142.069 arestas, que é um número próximo do esperado. A seguir, mostraremos os resultados das remoções em algumas listas de arestas, visto que, visualmente, os valores e o comportamento dos gráficos são muito parecidos. É importante ressaltar que, como o algoritmo derivado de Kruskal consome tempo $O(m)$ por remoção de aresta, optamos por fazer uma compressão de valores dos eixos $x$ e $y$ dos gráficos para evitar a sobreposição dos números, preservando ainda a aparência de crescimento linear.
 
 \subsection{Permutação $0$ de arestas}
 
@@ -112,19 +112,19 @@ O grafo $G_0$ gerado tem 142.069 arestas, que é um número próximo do esperado
     \label{fig:graph_g0_permutation4}
 \end{figure}
 
-\subsection{Tempo médio de execução das cinco permutações de arestas}
+\subsection{Tempo médio de execução das cinco listas de arestas}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_average.png}
-\caption{Tempo médio de execução obtido a partir de cinco permutações de arestas de $G_0$.}
+\caption{Tempo médio de execução obtido a partir de cinco listas de arestas de $G_0$.}
     \label{fig:table_g0_average}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/graph_0_average.png}
-\caption{Comparação do tempo médio de execução dos algoritmos de Kruskal e MSF Decremental ao longo de cinco permutações de arestas de $G_0$.}
+\caption{Comparação do tempo médio de execução dos algoritmos de Kruskal e MSF Decremental ao longo de cinco listas de arestas de $G_0$.}
     \label{fig:graph_g0_average}
 \end{figure}
 
