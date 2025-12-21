@@ -181,39 +181,39 @@ Dizemos que o cluster $C$ é \textbf{ancestral de caminho} do cluster $D$ e $D$ 
 \node at (-3.8, -0.8) {1};
 
 % (2)
-\node[draw=none] (A2) at (4.6,0.5) {A};
-\node[draw=none] (B2) at (5.5,0.5) {B};
+\node[draw=none] (A2) at (2, 0.5) {A};
+\node[draw=none] (B2) at (2.8, 0.5) {B};
 
-\node[boundary] (a2) at (4,0) {};
-\node[internal] (b2) at (5.2,0) {};
+\node[boundary] (a2) at (1.3,0) {};
+\node[internal] (b2) at (2.5,0) {};
 
 \draw[edge, bend left=30] (a2) to (b2);
 \draw[edge, bend right=30] (a2) to (b2);
 \draw[edge, in=290, out=20, looseness=20] (b2) to (b2);
 %\draw[dashededge] (a2) -- (b2);
-\node at (4.6, -0.8) {3};
+\node at (2, -0.8) {3};
 
 % (3)
-\node[draw=none] (A3) at (-1.2,0.5) {A};
-\node[draw=none] (B3) at (-0.3,0.5) {B};
+\node[draw=none] (A3) at (-0.9, 0.5) {A};
+\node[draw=none] (B3) at (-0.2, 0.5) {B};
 
-\node[boundary] (a3) at (-1.7,0) {};
-\node[boundary] (b3) at (-0.5,0) {};
+\node[boundary] (a3) at (-1.5, 0) {};
+\node[boundary] (b3) at (-0.3, 0) {};
 
 \draw[edge, bend left=30] (a3) to (b3);
 \draw[edge, bend right=30] (a3) to (b3);
 \draw[edge, in=290, out=20, looseness=20] (b3) to (b3);
 \draw[dashededge] (a3) -- (b3);
-\node at (-1, -0.8) {2};
+\node at (-0.8, -0.8) {2};
 
 % (4)
-\node[draw=none] (A4) at (1.1,-1.7) {A};
-\node[draw=none] (B4) at (2,-1.7) {B};
+\node[draw=none] (A4) at (4.6, 0.5) {A};
+\node[draw=none] (B4) at (5.8,0.5) {B};
 
-\node[boundary] (a4) at (4.6, -2.2) {};
+\node[boundary] (a4) at (5.2, 0) {};
 \draw[edge] (a4) edge[loop left, min distance=15mm, looseness=4] (a4);
 \draw[edge] (a4) edge[loop right, min distance=15mm, looseness=4] (a4);
-\node at (4.6, -3) {4};
+\node at (5.2, -0.8) {4};
 
 \end{tikzpicture}
 \caption{Representação da união de dois clusters $A$ e $B$ formando um cluster $C$, e seus quatro diferentes casos. Os vértices pretos são vértices da fronteira de $C$ após a união de $A$ e $B$. Já os vértices brancos são vértices da fronteira de $A$ e de $B$, que não são vértices da fronteira de $C$. A linha tracejada é o cluster-caminho formado entre os vértices da fronteira de $C$.}
