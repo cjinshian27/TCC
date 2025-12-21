@@ -10,33 +10,33 @@ Neste capítulo, apresentaremos alguns testes de comparação de performance ent
     \item GPU Intel UHD Graphics 620.
 \end{itemize}
 
-Para calcular a duração de tempo de uma operação em milissegundos, utilizamos a biblioteca \texttt{chrono} da linguagem \textit{C++}. Além disso, o experimento não considera o tempo para inicializar um grafo com $n$ vértices e $m$ arestas. Considera apenas o tempo para as remoções das arestas e para as consultas ao peso da MST. 
+Para calcular a duração de tempo de uma operação em milissegundos, utilizamos a biblioteca \texttt{chrono} da linguagem \textit{C++}. Além disso, o experimento não considera o tempo para inicializar um grafo com $n$ vértices e $m$ arestas. Considera apenas o tempo para as remoções das arestas e para as consultas ao peso de uma MST. 
 
 Foi implementado um gerador de grafos aleatórios, seguindo o modelo $G(n, p)$, em que $n$ é o número de vértices e $p$ a probabilidade da existência de cada aresta. É sabido que, no modelo $G(n, p)$ de Erdős-Rényi, o limiar para conexidade é $p = \frac{\ln n}{n}$. Nos nossos experimentos, usamos o valor $p = \frac{\lg n}{n} > \frac{\ln n}{n}$, $n > 1$. Assim, temos que o número esperado de arestas nos grafos gerados é dado por $\frac{n(n-1)\lg n}{2n}$. Ademais, a cada aresta é atribuído um peso inteiro no intervalo de $1$ a $n$.
 
 Cada arquivo de teste gerado possui a primeira linha com os valores $n$ e $m$, seguida de $m$ linhas da forma $u$ $v$ $w$, onde $w$ é o peso da aresta $uv$. Em seguida, temos outras $k$ linhas da forma $u$ $v$, que representam uma lista aleatória das arestas a serem removidas. Nos experimentos, cada grafo gerado possui $n = 20.000$ vértices, o que dá um número esperado de arestas de $142.000$, e removemos $k = 25.600$ arestas, o que foi suficiente para demonstrar a eficiência do algoritmo da MSF decremental.
 
 Nos nossos experimentos, geramos seis grafos $G_i$, $0 \leq i \leq 5$, com cinco listas aleatórias distintas de arestas para cada.   
-Inicialmente, avaliamos o grafo $G_0$ considerando a remoção de $25\,600$ arestas em cinco listas distintas. Para cada lista, registramos o peso da MST após a remoção de uma certa quantidade de arestas e o tempo de execução, em milissegundos, dos dois algoritmos. Depois, calculamos a média dos cinco testes realizados. Por fim, realizamos os mesmos experimentos de $G_0$  em outros cinco grafos, usando somente a primeira lista de arestas gerada para cada grafo. Os resultados foram apresentados em tabelas e gráficos gerados por programas escritos em \textit{Python~3}.
+Inicialmente, avaliamos o grafo $G_0$ considerando a remoção de $25\,600$ arestas em cinco listas distintas. Para cada lista, registramos o peso de uma MST após a remoção de uma certa quantidade de arestas e o tempo de execução, em milissegundos, dos dois algoritmos. Depois, calculamos a média dos cinco testes realizados. Por fim, realizamos os mesmos experimentos de $G_0$  em outros cinco grafos, usando somente a primeira lista de arestas gerada para cada grafo. Os resultados foram apresentados em tabelas e gráficos gerados por programas escritos em \textit{Python~3}.
 
-Para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após cada lote de remoções, imprimimos o peso da MST correspondente ao estado atual do grafo e, em seguida, dobramos o tamanho do lote. Dessa forma, removemos $100, 200, 400, \ldots, 25.600$ arestas, registrando tanto o tempo acumulado das remoções quanto o peso da MST após cada etapa.
+Para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após cada lote de remoções, imprimimos o peso de uma MST correspondente ao estado atual do grafo e, em seguida, dobramos o tamanho do lote. Dessa forma, removemos $100, 200, 400, \ldots, 25.600$ arestas, registrando tanto o tempo acumulado das remoções quanto o peso de uma MST após cada etapa.
 
 \section{Algoritmo de Kruskal}
 
-O algoritmo de Kruskal foi implementado de uma forma que permita remoção de arestas. Utilizamos Union-Find como a parte central do algoritmo. Na inicialização do construtor, ordenamos um vetor de $m$ arestas em ordem crescente de peso, usando o método \texttt{sort} da linguagem \textit{C++}, que consome tempo esperado $O(m \lg m)$. Em seguida, acionamos o método \texttt{union} para adicionar as arestas, uma a uma, em ordem crescente de peso.
+O algoritmo de Kruskal foi implementado de uma forma que permita remoção de arestas. Utilizamos Union-Find como a parte central do algoritmo. Na inicialização do construtor, ordenamos o vetor de $m$ arestas em ordem crescente de peso, usando o método \texttt{sort} da linguagem \textit{C++}, que consome tempo esperado $O(m \lg m)$. Em seguida, inserimos as arestas no grafo, em ordem crescente de peso.
 
-Quando removemos uma aresta $uv$, precisamos reordenar as arestas restantes. Para isso, usamos o algoritmo de ordenação \textit{insertion sort}, visto que ele consome tempo $O(m)$ para ordenar um vetor de arestas quase ordenado. No nosso caso, como a $uv$ é trocada pela última aresta do vetor e removida, obtemos um vetor quase ordenado. Isso garante a complexidade de tempo $O(m)$ quando ordenamos as arestas remanescentes neste vetor.
+Quando removemos uma aresta $uv$, precisamos reordenar as arestas restantes. Para isso, basta deslocar as arestas a partir de $uv$ de uma posição para cima no vetor, o que consome tempo $O(m)$.
 
 \section{Grafo $G_0$}
 
-O grafo $G_0$ foi gerado com 142.069 arestas, que é um número próximo do esperado. A seguir, mostraremos os resultados das remoções em cada permutação de arestas. É importante ressaltar que, como o algoritmo de Kruskal consome tempo $O(m)$ por remoção de aresta, optamos por fazer uma compressão de valores dos eixos $x$ e $y$ dos gráficos para evitar a sobreposição dos números, preservando ainda a aparência de crescimento linear.
+O grafo $G_0$ gerado tem 142.069 arestas, que é um número próximo do esperado. A seguir, mostraremos os resultados das remoções em cada permutação de arestas. É importante ressaltar que, como o algoritmo derivado de Kruskal consome tempo $O(m)$ por remoção de aresta, optamos por fazer uma compressão de valores dos eixos $x$ e $y$ dos gráficos para evitar a sobreposição dos números, preservando ainda a aparência de crescimento linear.
 
 \subsection{Permutação $0$ de arestas}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_0.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_0$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation0}
 \end{figure}
 
@@ -52,7 +52,7 @@ O grafo $G_0$ foi gerado com 142.069 arestas, que é um número próximo do espe
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_1.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $1$ de $G_0$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $1$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation1}
 \end{figure}
 
@@ -68,7 +68,7 @@ O grafo $G_0$ foi gerado com 142.069 arestas, que é um número próximo do espe
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_2.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $2$ de $G_0$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $2$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation2}
 \end{figure}
 
@@ -84,7 +84,7 @@ O grafo $G_0$ foi gerado com 142.069 arestas, que é um número próximo do espe
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_3.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $3$ de $G_0$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $3$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation3}
 \end{figure}
 
@@ -100,7 +100,7 @@ O grafo $G_0$ foi gerado com 142.069 arestas, que é um número próximo do espe
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_4.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $4$ de $G_0$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $4$ de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g0_permutation4}
 \end{figure}
 
@@ -137,7 +137,7 @@ Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_1.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_1$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_1$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g1_permutation0}
 \end{figure}
 
@@ -153,7 +153,7 @@ Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_2.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_2$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_2$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g2_permutation0}
 \end{figure}
 
@@ -169,7 +169,7 @@ Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_3.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_3$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_3$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g3_permutation0}
 \end{figure}
 
@@ -186,7 +186,7 @@ Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_4.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_4$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_4$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g4_permutation0}
 \end{figure}
 
@@ -202,7 +202,7 @@ Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas
 \begin{figure}[H]
     \centering
     \includegraphics[width=11cm]{./figuras/performance_table_graph_5.png}
-    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_5$, exibindo o peso da MST após a remoção de cada lote de arestas.}
+    \caption{Desempenho dos algoritmos de Kruskal e MSF Decremental na permutação $0$ de $G_5$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
     \label{fig:table_g5_permutation0}
 \end{figure}
 
