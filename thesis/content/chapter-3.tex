@@ -1,509 +1,194 @@
-%!TeX root=../tese.tex
-%("dica" para o editor de texto: este arquivo é parte de um documento maior)
-% para saber mais: https://tex.stackexchange.com/q/78101
+\chapter{Testes experimentais}
+\label{chapter:experiments}
 
-\chapter{MSF totalmente dinâmica}
-\label{chapter:fully-MSF}
-
-Neste capítulo, consideraremos o problema da \textbf{MSF dinâmica}, onde queremos manter uma MSF em um grafo dinâmico. Estudaremos um algoritmo para MSF dinâmica. Como este algoritmo não foi implementado em nosso estudo, apresentaremos apenas a ideia por trás dele, de como podemos manter o peso mínimo de uma MSF de um grafo $G$ dando suporte eficiente à adição e remoção de arestas. Inicialmente, será descrito o funcionamento das \textbf{top trees}, estruturas de dados que serão usadas na manutenção de uma MSF dinâmica. Estas estruturas estão descritas na Seção~2.2 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}.
-
-\section{Top trees}
-
-Antes de definir uma top tree, precisamos definir alguns conceitos.
-Seja ($T$, $\partial T$) um par onde $T$ é uma árvore e $\partial T$ é um conjunto que contém no máximo dois vértices de $T$, que são chamados \textbf{vértices da fronteira} (\textit{external boundary vertices}), como se pode ver na Figura~\ref{fig:top-tree-pair-representation}.
-
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}, 
-        inner sep=0pt]
-
-        \node[node, fill=red!30] (a) at (0,1.5) {$a$};
-        \node[node, fill=red!30] (b) at (4,1.5) {$b$};
-        \node[node] (c) at (4,-0.7) {$c$};
-        \node[node] (d) at (1.5,-0.7) {$d$};
-        \node[node] (e) at (-1.5,-0.7) {$e$};
-
-        \draw[edge] (a) -- (b) node[midway, above] {};
-        \draw[edge] (c) -- (d) node[midway, above] {};
-        \draw[edge] (d) -- (a) node[midway, above] {};
-        \draw[edge] (a) -- (e) node[midway, above] {};
-
-    \end{tikzpicture}
-    \caption{Uma árvore $T$ com um conjunto $\partial T$ destacado em vermelho.}
-    \label{fig:top-tree-pair-representation}
-\end{figure}
-
-Para qualquer subárvore $C$ de $T$, seja $\partial_{(T, \partial T)}C$ o conjunto dos vértices de $C$ que estão ou em $\partial T$ ou são incidentes a uma aresta de $T$ saindo de $C$. Chamamos o conjunto $\partial_{T, \partial T}C$ de vértices da fronteira de $C$. Veja o exemplo da Figura~\ref{fig:top-tree-subtree-option1}.
-
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}, 
-        inner sep=0pt]
-
-        \node[node, fill=red!30] (a) at (0,1.5) {$a$};
-        \node[node, fill=red!30] (b) at (4,1.5) {$b$};
-        \node[node] (c) at (4,-0.7) {$c$};
-        \node[node] (d) at (1.5,-0.7) {$d$};
-        \node[node] (e) at (-1.5,-0.7) {$e$};
-
-        \draw[edge] (a) -- (b) node[midway, above] {};
-        \draw[edge] (c) -- (d) node[midway, above] {};
-        \draw[edge] (d) -- (a) node[midway, above] {};
-        \draw[edge] (a) -- (e) node[midway, above] {};
-        
-        % P1: Top Vertex (above node 'a')
-        \coordinate (P1) at ([yshift=20pt]a.north); 
-        
-        % P2: Bottom-Left Vertex (left of 'e' and slightly below it, using calc for precision)
-        \coordinate (P2) at ([xshift=-23pt, yshift=-10pt]e.south west);
-        
-        % P3: Bottom-Right Vertex (right of 'd' and slightly below it, using calc for precision)
-        \coordinate (P3) at ([xshift=23pt, yshift=-10pt]d.south east);
-
-        % --- Draw the Dashed Triangular Outline ---
-        
-        % Connect the invisible coordinates with rounded corners
-        \draw[dashed, very thick, blue, rounded corners=30pt] 
-            (P1) -- (P2) -- (P3) -- cycle;
-
-        % \draw[dashed, thick, red] (e) -- (a) -- (d) -- cycle;
-    \end{tikzpicture}
-    \caption{Uma árvore $T$ com um conjunto $\partial T$ marcado em vermelho. A região demarcada em azul representa uma subárvore $C$ contendo os vértices $a$, $e$ e $d$ e as arestas $ae$ e $ad$. Neste exemplo, note que os vértices da fronteira de $C$ são $a$ e $d$.}
-    \label{fig:top-tree-subtree-option1}
-\end{figure}
-
-Uma subárvore $C$ é chamada de um \textbf{cluster} de ($T$, $\partial T$) se o número de vértices da fronteira de $C$ é no máximo dois. Assim, por definição, $T$ é um cluster dele mesmo, com $\partial_{(T, \partial T)}T = \partial T$. Além disso, qualquer aresta de $T$ é um cluster de ($T$, $\partial T$). A subárvore $C$ da Figura~\ref{fig:top-tree-subtree-option1} acima é um cluster, pois ela possui apenas dois vértices da fronteira.
-
-Além disso, se $R$ é uma subárvore de $C$, então $R$ é um cluster  
- de ($C$, $\partial_{(T, \partial T)} C$) se, e somente se, $R$ é um cluster de $(T, \partial T)$. Podemos ver essa situação no exemplo da Figura~\ref{fig:top-tree-cluster-of-cluster}. Para simplificar, denotaremos $\partial_{(T, \partial T)}$ como $\partial$ a partir de agora.
-
- \begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}, 
-        inner sep=0pt]
-
-        \node[node, fill=red!30] (a) at (0,1.5) {$a$};
-        \node[node, fill=red!30] (b) at (4,1.5) {$b$};
-        \node[node] (c) at (4,-0.7) {$c$};
-        \node[node] (d) at (1.5,-0.7) {$d$};
-        \node[node] (e) at (-1.5,-0.7) {$e$};
-
-        \draw[edge] (a) -- (b) node[midway, above] {};
-        \draw[edge] (c) -- (d) node[midway, above] {};
-        \draw[edge] (d) -- (a) node[midway, above] {};
-        \draw[edge] (a) -- (e) node[midway, above] {};
-        
-        % P1: Top Vertex (above node 'a')
-        \coordinate (P1) at ([yshift=20pt]a.north); 
-        
-        % P2: Bottom-Left Vertex (left of 'e' and slightly below it, using calc for precision)
-        \coordinate (P2) at ([xshift=-23pt, yshift=-10pt]e.south west);
-        
-        % P3: Bottom-Right Vertex (right of 'd' and slightly below it, using calc for precision)
-        \coordinate (P3) at ([xshift=23pt, yshift=-10pt]d.south east);
-
-
-        \draw[dashed, thick, blue, rounded corners=30pt] 
-            (P1) -- (P2) -- (P3) -- cycle;
-        % G1: Top-Left point (relative to 'a')
-  
-        % Top-Left corner (above and to the left of 'a')
-        \coordinate (DR1) at ([xshift=-10pt, yshift=18pt]a.north east); 
-        
-        % Bottom-Left corner (below and to the left of 'a', near 'e')
-        \coordinate (DR2) at ([xshift=-17pt, yshift=-10pt]a.north west); 
-        
-        % Bottom-Right corner (below and to the right of 'd', near 'c')
-        \coordinate (DR3) at ([xshift=12pt, yshift=-18pt]d.south west); 
-        
-        % Top-Right corner (above and to the right of 'd')
-        \coordinate (DR4) at ([xshift=17pt, yshift=7pt]d.south east); 
-
-        % --- Draw the Dashed Green Diagonal Rectangle ---
-        \draw[dashed, thick, green!70!black, rounded corners=20pt] 
-            (DR1) -- (DR2) -- (DR3) -- (DR4) -- cycle;
-
-        % \draw[dashed, thick, red] (e) -- (a) -- (d) -- cycle;
-    \end{tikzpicture}
-    \caption{A região demarcada em azul representa a subárvore $C$ de $T$, que é um cluster de $(T, \partial T)$. Já a região demarcada em verde representa uma subárvore $R$ de $C$, e é um cluster de $(C, \partial C)$ e de $(T, \partial T)$.}
-    \label{fig:top-tree-cluster-of-cluster}
-\end{figure}
-
-Dizemos que clusters $A$ e $B$ são \textbf{vizinhos} se eles compartilham um único vértice e se $A \cup B$ é um cluster. Finalmente, definimos uma \textbf{top tree} do par ($T$, $\partial T$) como sendo uma árvore binária $\mathcal{T}$ que respeita o seguinte:
+Neste capítulo, apresentaremos alguns testes de comparação de performance entre o algoritmo descrito no Capítulo~\ref{chapter:msf-decremental-chapter} e uma versão do algoritmo de Kruskal adaptado para o problema da MSF decremental. Os experimentos foram realizados em um computador pessoal com as seguintes configurações: 
 
 \begin{itemize}
-    \item Os vértices de $\mathcal{T}$ são os clusters de ($T$, $\partial T$);
-    \item As folhas de $\mathcal{T}$ são as arestas de $T$;
-    \item Se $C$ é pai de $A$ e de $B$ em $\mathcal{T}$, então $C = A \cup B$ e $A$ e $B$ são vizinhos;
-    \item A raiz de $\mathcal{T}$ é a própria árvore $T$.
+    \item Sistema operacional Ubuntu 24.04.3 LTS (kernel 6.8.0-49-generic);
+    \item Processador Intel Core i5-8265U (4 núcleos, 8 threads), arquitetura x86\_64;
+    \item Memória RAM de 7,6 GB; 
+    \item GPU Intel UHD Graphics 620.
 \end{itemize}
 
-Para um cluster $C$, os vértices em $C\backslash \partial C$ são chamados de \textbf{vértices internos}. Se $a$ e $b$ são vértices da fronteira de $C$, o caminho entre $a$ e $b$ em $C$ se chama \textbf{caminho do cluster} e o denotamos por $\pi(C)$. Se $a \neq b$, o cluster é chamado de \textbf{cluster-caminho}. 
+Para calcular a duração de tempo de uma operação em milissegundos, utilizamos a biblioteca \texttt{chrono} da linguagem \textit{C++}. Além disso, o experimento não considera o tempo para inicializar um grafo com $n$ vértices e $m$ arestas. Considera apenas o tempo para as remoções das arestas e para as consultas ao peso de uma MST. 
 
-Dizemos que o cluster $C$ é \textbf{ancestral de caminho} do cluster $D$ e $D$ é chamado de \textbf{descendente de caminho} de $C$ se ambos forem clusters-caminho e $\pi(D) \subseteq \pi(C)$. Note que cada aresta $e \in \pi(C)$ é um descendente de caminho de $C$. Um filho que é descendente de caminho é um \textbf{filho de caminho}. Na Figura~\ref{fig:clusters-formation-cases}, apresentamos os quatro casos que podem ocorrer quando fazemos a união de dois clusters $A$ e $B$. Em (1), $A$ e $B$ são ambos filhos de caminho; em (2), $A \cup B$ tem um filho de caminho; e em (3) e (4), $A \cup B$ não é cluster caminho, logo não há nenhum filho de caminho.
+Foi implementado um gerador de grafos aleatórios, seguindo o modelo $G(n, p)$ de Erdős-Rényi, onde $n$ é o número de vértices e $p$ a probabilidade da existência de cada aresta. É sabido que, no modelo $G(n, p)$ de Erdős-Rényi, o limiar para conexidade é $p = \frac{\ln n}{n}$. Nos nossos experimentos, usamos o valor $p = \frac{\lg n}{n} > \frac{\ln n}{n}$, $n > 1$. Assim, temos que o número esperado de arestas nos grafos gerados é dado por $\frac{n(n-1)\lg n}{2n}$. Ademais, a cada aresta é atribuído um peso inteiro no intervalo de $1$ a $n$.
+
+Cada arquivo de teste gerado possui a primeira linha com os valores $n$ e $m$, seguida de $m$ linhas da forma $u$ $v$ $w$, onde $w$ é o peso da aresta $uv$. Em seguida, temos outras $k$ linhas da forma $u$ $v$, que representam uma lista aleatória das arestas a serem removidas. Nos experimentos, cada grafo gerado possui $n = 20.000$ vértices, o que dá um número esperado de arestas de $142.000$, e removemos $k = 25.600$ arestas, o que foi suficiente para demonstrar a eficiência do algoritmo da MSF decremental.
+
+Nos nossos experimentos, geramos seis grafos $G_i$, $0 \leq i \leq 5$, com cinco listas aleatórias distintas de arestas para cada.   
+Inicialmente, avaliamos o grafo $G_0$ considerando a remoção de $25.600$ arestas em cinco listas distintas. Para cada lista, registramos o peso de uma MST após a remoção de uma certa quantidade de arestas e o tempo de execução, em milissegundos, dos dois algoritmos. Depois, calculamos a média dos cinco testes realizados. Por fim, realizamos os mesmos experimentos de $G_0$  em outros cinco grafos, usando somente a primeira lista de arestas gerada para cada grafo. Os resultados foram apresentados em tabelas e gráficos gerados por programas escritos em \textit{Python~3}.
+
+Para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após cada lote de remoções, imprimimos o peso de uma MST correspondente ao estado atual do grafo e, em seguida, dobramos o tamanho do lote. Assim, removemos $100, 200, 400, \ldots, 25.600$ arestas, registrando o tempo acumulado das remoções e o peso de uma MST após cada etapa.
+
+\section{Algoritmo de Kruskal}
+
+O algoritmo de Kruskal foi implementado de uma forma que permita remoção de arestas. Utilizamos Union-Find como a parte central do algoritmo. Na inicialização do construtor, ordenamos o vetor de $m$ arestas em ordem crescente de peso, usando o método \texttt{sort} da linguagem \textit{C++}, que consome tempo esperado $O(m \lg m)$. Em seguida, inserimos as arestas no grafo, em ordem crescente de peso.
+
+Quando removemos uma aresta $uv$, precisamos reordenar as arestas restantes. Para isso, basta deslocar as arestas a partir de $uv$ de uma posição para cima no vetor, o que consome tempo $O(m)$.
+
+\section{Grafo $G_0$}
+\label{section:graph0}
+
+O grafo $G_0$ gerado tem 142.069 arestas, que é um número próximo do esperado. A seguir, mostraremos os resultados das remoções de algumas listas de arestas, visto que o comportamento dos gráficos e valores das tabelas são muito parecidos. É importante ressaltar que, como o algoritmo derivado de Kruskal consome tempo $O(m)$ por remoção de aresta, optamos por fazer uma compressão de valores dos eixos $x$ e $y$ dos gráficos para evitar a sobreposição dos números, preservando ainda a aparência de crescimento linear.
 
 
-\begin{figure}[H]
-    \centering
-\begin{tikzpicture}[scale=1.2,
-    every node/.style={circle, draw, inner sep=2pt},
-    boundary/.style={fill=black},
-    internal/.style={fill=white},
-    edge/.style={thick},
-    dashededge/.style={thick, dashed}
-]
-
-% (1)
-\node[draw=none] (A1) at (-4.4,0.5) {A};
-\node[draw=none] (B1) at (-3.2,0.5) {B};
-
-\node[boundary] (a1) at (-5,0) {};
-\node[internal] (b1) at (-3.8,0) {};
-\node[boundary] (c1) at (-2.6,0) {};
-
-\draw[edge, bend left=30] (a1) to (b1);
-\draw[edge, bend right=30] (a1) to (b1);
-\draw[edge, bend left=30] (b1) to (c1);
-\draw[edge, bend right=30] (b1) to (c1);
-\draw[dashededge] (a1) -- (c1);
-\node[draw=none] at (-3.8, -0.8) {(1)};
-
-% (2)
-\node[draw=none] (A2) at (2, 0.5) {A};
-\node[draw=none] (B2) at (2.8, 0.5) {B};
-
-\node[boundary] (a2) at (1.3,0) {};
-\node[internal] (b2) at (2.5,0) {};
-
-\draw[edge, bend left=30] (a2) to (b2);
-\draw[edge, bend right=30] (a2) to (b2);
-\draw[edge, in=290, out=20, looseness=20] (b2) to (b2);
-%\draw[dashededge] (a2) -- (b2);
-\node[draw=none] at (2, -0.8) {(3)};
-
-% (3)
-\node[draw=none] (A3) at (-0.9, 0.5) {A};
-\node[draw=none] (B3) at (-0.2, 0.5) {B};
-
-\node[boundary] (a3) at (-1.5, 0) {};
-\node[boundary] (b3) at (-0.3, 0) {};
-
-\draw[edge, bend left=30] (a3) to (b3);
-\draw[edge, bend right=30] (a3) to (b3);
-\draw[edge, in=290, out=20, looseness=20] (b3) to (b3);
-\draw[dashededge] (a3) -- (b3);
-\node[draw=none] at (-0.8, -0.8) {(2)};
-
-% (4)
-\node[draw=none] (A4) at (4.6, 0.5) {A};
-\node[draw=none] (B4) at (5.8,0.5) {B};
-
-\node[boundary] (a4) at (5.2, 0) {};
-\draw[edge] (a4) edge[loop left, min distance=15mm, looseness=4] (a4);
-\draw[edge] (a4) edge[loop right, min distance=15mm, looseness=4] (a4);
-\node[draw=none] at (5.2, -0.8) {(4)};
-
-\end{tikzpicture}
-\caption{Representação da união de dois clusters $A$ e $B$ formando um cluster $C$, e seus quatro diferentes casos. Os vértices pretos representam vértices da fronteira de $C$ após a união de $A$ e $B$. Já os vértices brancos são vértices da fronteira de $A$ e de $B$, que não são vértices da fronteira de $C$. A linha tracejada é o caminho formado entre os vértices da fronteira de $C$.}
-    \label{fig:clusters-formation-cases}
-\end{figure}
-
-Ademais, se $a$ é um vértice de fronteira de $C$ e $C$ possui dois filhos $A$ e $B$, então $A$ é considerado mais próximo de $a$ se $a \notin B$. Caso $\partial C = \partial A = \partial C$, então o cluster mais próximo é escolhido arbitrariamente. Dadas essas definições, podemos ilustrar como ficaria uma top tree para a árvore $T$ da Figura~\ref{fig:tree-t}.
+\subsection{Primeira lista de arestas}
 
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}, 
-        inner sep=0pt]
-
-        \node[node, fill=red!30] (five) at (0, 0) {$5$};
-        \node[node, fill=red!30] (four) at (-4, -1) {$4$};
-        \node[node] (seven) at (4, -1) {$7$};
-        \node[node] (six) at (0, -2) {$6$};
-        \node[node] (three) at (-5, -3.5) {$3$};
-        \node[node] (one) at (-6, -6) {$1$};
-        \node[node] (two) at (-4, -6) {$2$};
-       
-        \node[node] (eight) at (2, -3.5) {$8$};
-        \node[node] (nine) at (6, -3.5) {$9$};
-        \node[node] (ten) at (6, -6) {$10$};
-
-
-        % tree edges (normal black edges)
-        \draw[edge] (one) -- (three) node[midway, below, weight, yshift=2pt] {$a$};
-        \draw[edge] (three) -- (two) node[midway, below, weight, yshift=2pt] {$b$};
-        \draw[edge] (three) -- (four) node[midway, below, weight, yshift=2pt] {$c$};
-
-        \draw[edge] (four) -- (five) node[midway, below, weight, yshift=2pt] {$d$};
-        \draw[edge] (five) -- (six) node[midway, below, weight, yshift=2pt] {$e$};
-        \draw[edge] (five) -- (seven) node[midway, below, weight,  yshift=2pt] {$f$};
-
-        \draw[edge] (seven) -- (eight) node[midway, below, weight, yshift=2pt] {$g$};
-        \draw[edge] (seven) -- (nine) node[midway, below, weight, yshift=2pt] {$h$};
-        \draw[edge] (nine) -- (ten) node[midway, below, weight, yshift=2pt] {$i$};
-
-    \end{tikzpicture}
-    \caption{Árvore $T$ com $10$ vértices. Os vértices $4$ e $5$ em vermelho correspondem aos vértices da fronteira de $T$.}
-    \label{fig:tree-t}
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_2.png}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g0_permutation2}
 \end{figure}
-
-A partir da árvore $T$, podemos derivar uma top tree, como se pode ver na Figura~\ref{fig:top-t-from-tree-t}. 
 
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}, 
-        inner sep=0pt]
-
- 
-        \node[node, shape=ellipse, label=below:{\{4, 5\}}] (abcdefghi) at (-3, 0) {$a, b, c, d, e, f, g, h, i$};
-        \node[node, shape=ellipse, label=below:{\{5\}}] (abcd) at (-7.5, -1.5) {$a, b, c, d$};
-        \node[node, shape=ellipse, label=below:{\{5\}}] (efghi) at (1.5, -1.5) {$e, f, g, h, i$};
-        \node[node, shape=ellipse, label=below:{\{5, 7\}}] (ef) at (-1.2, -3) {$ef$};
-        \node[node, shape=ellipse, label=below:{\{5\}}] (e) at (-2.7, -4.5) {$e$};
-        \node[node, shape=ellipse, label=below:{\{5, 7\}}] (f) at (0.2, -4.5) {$f$};
-        
-        
-        \node[node,shape=ellipse, label=below:{\{7\}}] (ghi) at (3, -3) {$g, h, i$};
-        \node[node, shape=ellipse, label=below:{\{7\}}] (g) at (2, -4.5) {$g$};
-        \node[node, shape=ellipse, label=below:{\{7\}}] (hi) at (4, -4.5) {$h, i$};
-        \node[node, shape=ellipse, label=below:{\{7, 9\}}] (h) at (3, -6) {$h$};
-        \node[node, shape=ellipse, label=below:{\{9\}}] (i) at (5, -6) {$i$};
-        
-        
-        \node[node, shape=ellipse, label=below:{\{3\}}] (ab) at (-9.5, -3) {$a, b$};
-        \node[node, shape=ellipse, label=below:{\{3\}}] (a) at (-10.5, -4.5) {$a$};
-        \node[node, shape=ellipse, label=below:{\{3\}}] (b) at (-8.5, -4.5) {$b$};
-
-
-        \node[node, shape=ellipse, label=below:{\{3, 5\}}] (cd) at (-5.5, -3) {$c, d$};
-        \node[node, shape=ellipse, label=below:{\{3, 4\}}] (c) at (-7, -4.5) {$c$};
-        
-        \node[node, shape=ellipse, label=below:{\{4, 5\}}] (d) at (-4, -4.5) {$d$};
-
-        
-
-        % tree edges (normal black edges)
-        \draw[edge] (abcdefghi) -- (abcd) node[midway, below] {};
-        \draw[edge] (abcdefghi) -- (efghi) node[midway, below] {};
-        \draw[edge] (abcd) -- (ab) node[midway, below] {};
-        \draw[edge] (abcd) -- (cd) node[midway, below] {};
-        \draw[edge] (ab) -- (a) node[midway, below] {};
-        \draw[edge] (ab) -- (b) node[midway, below] {};
-
-        \draw[edge] (cd) -- (c) node[midway, below] {};
-        \draw[edge] (cd) -- (d) node[midway, below] {};
-
-        \draw[edge] (efghi) -- (ef) node[midway, below] {};
-        \draw[edge] (efghi) -- (ghi) node[midway, below] {};
-
-        \draw[edge] (ef) -- (e) node[midway, below] {};
-        \draw[edge] (ef) -- (f) node[midway, below] {};
-
-        \draw[edge] (ghi) -- (g) node[midway, below] {};
-        \draw[edge] (ghi) -- (hi) node[midway, below] {};
-        \draw[edge] (hi) -- (h) node[midway, below] {};
-        \draw[edge] (hi) -- (i) node[midway, below] {};
-
-
-    \end{tikzpicture}
-    \caption{Uma top tree $\mathcal{T}$ derivada da árvore $T$. Cada vértice (cluster) de $\mathcal{T}$ tem como rótulo as arestas do cluster. Embaixo de cada vértice $p$ de $\mathcal{T}$, temos os vértices da fronteira do $p$.}
-    \label{fig:top-t-from-tree-t}
+    \includegraphics[width=11cm]{./figuras/graph_0_permutation_2.png}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_0$.}
+    \label{fig:graph_g0_permutation2}
 \end{figure}
 
-\section{Rotinas da biblioteca de top trees}
-
-Top trees, assim como Euler tour trees, podem ser usadas para manter uma floresta dinâmica. Mais precisamente, podemos armazenar uma floresta por meio de uma coleção de top trees, uma para cada componente da floresta. 
-
-Top trees dão suporte eficiente à seguinte biblioteca, onde $\mathcal{T}$ é uma coleção de top trees que representa uma floresta $F_i$.
-
-\begin{itemize}
-    \item \texttt{\textbf{adicioneTopTree($\mathcal{T}$, $u$, $v$)}}: adiciona a aresta $uv$ à floresta $F$, atualizando $\mathcal{T}$ de acordo;
-    
-    \item \texttt{\textbf{removaTopTree($\mathcal{T}$, $u$, $v$)}}: remove a aresta $uv$ da floresta $F$, atualizando $\mathcal{T}$ de acordo;
-    
-    \item \texttt{\textbf{exponhaTopTree($\mathcal{T}$, $u$, $v$)}}: retorna \texttt{NIL} se $u$ e $v$ não estão na mesma top tree de $\mathcal{T}$. Caso contrário, $u$ e $v$ se tornarão vértices da fronteira da top tree de $\mathcal{T}$ que os contém e retorna uma nova raiz com $u$ e $v$ como novos vértices da fronteira.
-\end{itemize}
-
-As alterações feitas em top trees usando as rotinas mencionadas acima utilizam uma sequência de operações \texttt{join} e \texttt{split}, definidas abaixo:
-
-\begin{itemize}
-    \item \texttt{\textbf{join($A$, $B$)}}: Cria um novo cluster $C = A \cup B$, onde $A$ e $B$ são clusters vizinhos e raízes das top trees $\mathcal{T}_A$ e $\mathcal{T}_B$. O cluster $C$ se torna raiz com os filhos $\mathcal{T}_A$ e $\mathcal{T}_B$, e por fim retornamos $C$.
-    
-    \item \texttt{\textbf{split($C$)}}: Remove a cluster raiz $C$ da top tree $\mathcal{T}$, que contém os clusters filhos $A$ e $B$. Assim, a remoção de $C$ de $\mathcal{T}$ gera as top trees $\mathcal{T}_A$ e $\mathcal{T}_B$.
-\end{itemize}
-
-Uma chamada às rotinas \texttt{adicioneTopTree}, \texttt{removaTopTree} e \texttt{exponhaTopTree} geram as seguintes modificações, nesta ordem:
-
-\begin{itemize}
-    \item Primeiramente, de cima para baixo (top-down), realizamos uma sequência de \texttt{splits};
-    
-    \item Depois, destruímos as clusters de algumas arestas;
-    
-    \item Em seguida, atualizamos a floresta;
-    
-    \item Então, criamos clusters de algumas arestas;
-    
-    \item Finalmente, com \texttt{joins}, reconstruímos a top tree de baixo para cima (bottom-up).
-\end{itemize}
-
-Assim, para uma floresta dinâmica com $n$ vértices, podemos manter top trees de altura $\Oh(\lg n)$ que dê suporte aos métodos \texttt{adicioneTopTree}, \texttt{removaTopTree} e \texttt{exponhaTopTree} em uma sequência de $\Oh(\lg n)$ operações de \texttt{split} e \texttt{join}. Dessa forma, a sequência de operações consome tempo $\Oh(\lg n)$.
-
-Para implementar uma top tree, podemos utilizar uma árvore binária onde cada nó representa um cluster, que chamaremos de \textbf{nó top}. Cada nó top está associado a um conjunto de até no máximo dois vértices da fronteira, e teremos um ponteiro para cada nó. Assim, ao acionarmos \texttt{join} em dois nós $A$ e $B$, criamos um nó $C$ com base nas informações guardadas nos dois nós. Da mesma forma, quando acionamos \texttt{split} no nó $C$, dividindo-o em dois nós $A$ e $B$, as suas informações serão propagadas em $A$ e $B$.   
-
-Como cada vértice $v$ é vértice interno em no máximo $\Oh(\lg n)$ clusters, podemos ter um ponteiro $p(v)$ para o menor cluster em que $v$ é vértice interno. Caso $v$ seja um vértice de fronteira e não seja vértice interno em nenhum cluster, então $p(v)$ apontará para a raiz da top tree que contém $v$, que vamos chamar de \textbf{cluster-raiz}. 
-
-Com isso, podemos manter uma floresta dinâmica ponderada que suporte consultas de peso máximo entre dois vértices em tempo $\Oh(\lg n)$. Para isso, para cada cluster-caminho $C$ manteremos o peso máximo $w_C$ em $\pi(C)$. Se um cluster-caminho consiste em apenas uma única aresta $e$, $w_e$ será o peso da aresta de $e$. Assim, $C :=$ \texttt{join($A$, $B$)} irá definir $w_C :=$ max$\{w_D \text{ | } D \in \{A, B\} \text{ é um filho de caminho de } C\}$, enquanto \texttt{split($C$)} simplesmente removerá $C$. Ambas as operações consomem tempo constante. Então, para responder a consulta \texttt{pesoMaximo($P$)}, onde $P$ é o caminho entre $v$ e $w$, basta chamarmos $C :=$ \texttt{exponhaTopTree($v$, $w$)} e retornar $w_C$.
-
-Além disso, usaremos um método auxiliar chamado \texttt{encontreTopTree($v$)}, que retorna o identificador da árvore que contém o vértice $v$. Assim, temos que \texttt{encontreTopTree($u$)} $=$ \texttt{encontreTopTree($v$)} somente se $u$ e $v$ estiverem na mesma componente da floresta que os contém. Fica fácil ver que o identificador da árvore só muda quando acionamos \texttt{adicioneTopTree} e \texttt{removaTopTree}. Acionar \texttt{exponhaTopTree} não gera esta mudança, visto que a cluster-raiz não muda.
-
-Como os identificadores são campos extras de cada cluster-raiz, ao acionarmos \texttt{encontreTopTree($v$)} inicialmente obtemos o nó dado por $p(v)$. A partir deste nó subimos na árvore em tempo $O(\lg n)$ até alcançarmos a raiz, retornando, então, o seu identificador.
-
-Como usaremos o método \texttt{exponhaTopTree} no algoritmo da MSF dinâmica, vale mostrar um exemplo de como ficaria a top tree da Figura~\ref{fig:top-t-from-tree-t} ao chamarmos \texttt{exponhaTopTree($7$, $8$)}, ou seja, os vértices $7$ e $8$ passam a ser os novos vértices da fronteira de $T$.
+\subsection{Segunda lista de arestas}
 
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}, 
-        inner sep=0pt]
-
-        \node[node] (five) at (0, 0) {$5$};
-        \node[node] (four) at (-4, -1) {$4$};
-        \node[node, fill=red!30] (seven) at (4, -1) {$7$};
-        \node[node] (six) at (0, -2) {$6$};
-        \node[node] (three) at (-5, -3.5) {$3$};
-        \node[node] (one) at (-6, -6) {$1$};
-        \node[node] (two) at (-4, -6) {$2$};
-       
-        \node[node, fill=red!30] (eight) at (2, -3.5) {$8$};
-        \node[node] (nine) at (6, -3.5) {$9$};
-        \node[node] (ten) at (6, -6) {$10$};
-
-
-        % tree edges (normal black edges)
-        \draw[edge] (one) -- (three) node[midway, below, weight, yshift=2pt] {$a$};
-        \draw[edge] (three) -- (two) node[midway, below, weight, yshift=2pt] {$b$};
-        \draw[edge] (three) -- (four) node[midway, below, weight, yshift=2pt] {$c$};
-
-        \draw[edge] (four) -- (five) node[midway, below, weight, yshift=2pt] {$d$};
-        \draw[edge] (five) -- (six) node[midway, below, weight, yshift=2pt] {$e$};
-        \draw[edge] (five) -- (seven) node[midway, below, weight,  yshift=2pt] {$f$};
-
-        \draw[edge] (seven) -- (eight) node[midway, below, weight, yshift=2pt] {$g$};
-        \draw[edge] (seven) -- (nine) node[midway, below, weight, yshift=2pt] {$h$};
-        \draw[edge] (nine) -- (ten) node[midway, below, weight, yshift=2pt] {$i$};
-
-    \end{tikzpicture}
-    \caption{Os vértices $7$ e $8$ em vermelho correspondem agora aos vértices da fronteira de $T$, após acionarmos \texttt{exponhaTopTree($7$, $8$)}.}
-    \label{fig:exposed-tree}
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_0_permutation_4.png}
+    \caption{Desempenho dos dois algoritmos na segunda lista de arestas de $G_0$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g0_permutation4}
 \end{figure}
-
 
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
-        edge/.style={thick, black},
-        reserve/.style={red, thick},
-        removed/.style={black, thick, dashed}, 
-        inner sep=0pt]
+    \includegraphics[width=11cm]{./figuras/graph_0_permutation_4.png}
+\caption{Desempenho dos dois algoritmos na segunda lista de arestas de $G_0$.}
 
- 
-        \node[node, shape=ellipse, label=below:{\{7, 8\}}] (abcdefghi) at (-3, 0) {$a, b, c, d, e, f, g, h, i$};
-
-        \node[node,shape=ellipse, label=below:{\{7\}}] (abcdef) at (-6, -2) {$a, b, c, d, e, f$};
-
-        \node[node, shape=ellipse, label=below:{\{5\}}] (abcd) at (-8.5, -4) {$a, b, c, d$};
-        \node[node, shape=ellipse, label=below:{\{7, 8\}}] (ghi) at (1.5, -1.5) {$g, h, i$};
-        \node[node, shape=ellipse, label=below:{\{5, 7\}}] (ef) at (-3, -4) {$ef$};
-        \node[node, shape=ellipse, label=below:{\{5\}}] (e) at (-4.5, -5) {$e$};
-        \node[node, shape=ellipse, label=below:{\{5, 7\}}] (f) at (-1.5, -5) {$f$};
-        
-        
-        \node[node,shape=ellipse, label=below:{\{7\}}] (hi) at (3, -3) {$h, i$};
-        \node[node, shape=ellipse, label=below:{\{7, 8\}}] (g) at (0, -3) {$g$};
-
-        \node[node, shape=ellipse, label=below:{\{7, 9\}}] (h) at (1.5, -5) {$h$};
-        \node[node, shape=ellipse, label=below:{\{9\}}] (i) at (4.5, -5) {$i$};
-        
-        
-        \node[node, shape=ellipse, label=below:{\{3\}}] (ab) at (-11, -6) {$a, b$};
-        \node[node, shape=ellipse, label=below:{\{3\}}] (a) at (-12, -7.5) {$a$};
-        \node[node, shape=ellipse, label=below:{\{3\}}] (b) at (-10, -7.5) {$b$};
-
-
-        \node[node, shape=ellipse, label=below:{\{3, 5\}}] (cd) at (-6, -6) {$c, d$};
-        \node[node, shape=ellipse, label=below:{\{3, 4\}}] (c) at (-7.5, -7.5) {$c$};
-        
-        \node[node, shape=ellipse, label=below:{\{4, 5\}}] (d) at (-4.5, -7.5) {$d$};
-
-        
-
-        % tree edges (normal black edges)
-
-        \draw[edge] (abcdefghi) -- (ghi) node[midway, below] {};
-        \draw[edge] (abcdefghi) -- (abcdef) node[midway, below] {};
-        \draw[edge] (abcdef) -- (abcd) node[midway, below] {};
-        \draw[edge] (abcdef) -- (ef) node[midway, below] {};
-
-
-        \draw[edge] (abcd) -- (ab) node[midway, below] {};
-        \draw[edge] (abcd) -- (cd) node[midway, below] {};
-        \draw[edge] (ab) -- (a) node[midway, below] {};
-        \draw[edge] (ab) -- (b) node[midway, below] {};
-
-        \draw[edge] (cd) -- (c) node[midway, below] {};
-        \draw[edge] (cd) -- (d) node[midway, below] {};
-
-        \draw[edge] (ef) -- (e) node[midway, below] {};
-        \draw[edge] (ef) -- (f) node[midway, below] {};
-
-        \draw[edge] (ghi) -- (g) node[midway, below] {};
-        \draw[edge] (ghi) -- (hi) node[midway, below] {};
-        \draw[edge] (hi) -- (h) node[midway, below] {};
-        \draw[edge] (hi) -- (i) node[midway, below] {};
-
-
-    \end{tikzpicture}
-    \caption{Top tree $\mathcal{T}$ da Figura~\ref{fig:top-t-from-tree-t} após acionarmos \texttt{exponhaTopTree($7$, $8$)}, gerando a remoção e reconstrução de alguns clusters através de \texttt{splits} e \texttt{joins}.}
-    \label{fig:exposed-top-tree}
+    \label{fig:graph_g0_permutation4}
 \end{figure}
 
-\subsection{MSF dinâmica}
+\subsection{Tempo médio de execução das cinco listas de arestas}
 
-A Seção 5.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propõe um algoritmo para a MSF dinâmica, a qual mantém uma floresta geradora maximal de custo mínimo que consome tempo amortizado $\Oh(\lg^4 n)$ por inserção e remoção de aresta.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_0_average.png}
+\caption{Tempo médio de execução obtido a partir de cinco listas de arestas de $G_0$.}
+    \label{fig:table_g0_average}
+\end{figure}
 
-A ideia inicial é manter um número logarítmico de estruturas decrementais, onde cada uma é uma MSF decremental, que já vimos na Seção~\ref{sec:decremental-msf-library}. Quando queremos remover uma aresta, tal aresta é removida de todas as estruturas decrementais e uma aresta substituta é obtida dentre as arestas substitutas retornadas por estas estruturas. Já no momento da inserção de uma aresta, unimos tal aresta com algumas estruturas decrementais para criar uma nova estrutura decremental.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_0_average.png}
+\caption{Comparação do tempo médio de execução dos dois algoritmos ao longo de cinco listas de arestas de $G_0$.}
+    \label{fig:graph_g0_average}
+\end{figure}
 
-Inicialmente, manteremos uma MSF $F$ do grafo $G$ com $m$ arestas e um conjunto $\mathcal{G} = \{G_0, \ldots, G_L\}$ de subgrafos de $G$, onde $L = \left\lceil \lg m \right\rceil$. Para cada $G_i$, manteremos uma MSF $F_i$. Chamaremos as arestas de $F$ de \textbf{arestas da floresta globais} e as arestas de $F_i$ de \textbf{arestas da floresta locais}. Todas as arestas de $G$ estarão em pelo menos um $G_i$, então $F \subseteq \bigcup_i F_i$.   
+\section{Grafos $G_1$, $G_2$, $G_3$, $G_4$ e $G_5$}
 
-Além disso, temos o grafo $R$ de $G$, que guardará as \textbf{arestas reserva globais}, e $R_i$ de $G_i$, que guardará \textbf{arestas reserva locais}. Com essas definições, podemos enunciar a seguinte invariante:
+Neste experimento, realizamos os mesmos experimentos de $G_0$, mas usando apenas a primeira lista aleatória de arestas de outros cinco grafos. Isso porque vimos na Seção~\ref{section:graph0} que os resultados entre as diferentes listas aleatórias de um mesmo grafo são bem parecidos. Por isso, focamos no desempenho dos dois algoritmos em grafos aleatórios distintos. O grafo $G_1$ gerado tem $142.589$ arestas; o grafo $G_2$ tem $142.954$ arestas; o grafo $G_3$ tem $142.734$ arestas; o grafo $G_4$ tem $142.402$ arestas; e o grafo $G_5$ tem $143.216$ arestas.
 
-\begin{enumerate}[label=(\Roman*)]
-    \item \label{invariant111} Para cada aresta reserva global $e \in R$, existe exatamente um $i$ tal que $e \in R_i$ e, se $e \in F_j$, então $j > i$.
-\end{enumerate}
+\subsection{Grafo $G_1$}
 
-Dessa forma, se uma aresta $e$ da floresta global é removida, podemos encontrar uma aresta $f$ substituta de menor peso ao removermos todas as ocorrências de $e$ em $G_i$. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_1.png}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_1$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g1_permutation0}
+\end{figure}
 
-Podemos descrever os métodos de inserção e remoção 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_1.png}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_1$.}
+    \label{fig:graph_g1_permutation0}
+\end{figure}
+
+\subsection{Grafo $G_2$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_2.png}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_2$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g2_permutation0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_2.png}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_2$.}
+    \label{fig:graph_g2_permutation0}
+\end{figure}
+
+\subsection{Grafo $G_3$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_3.png}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_3$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g3_permutation0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_3.png}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_3$.}
+    \label{fig:graph_g3_permutation0}
+\end{figure}
+
+
+\subsection{Grafo $G_4$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_4.png}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_4$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g4_permutation0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_4.png}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_4$.}
+    \label{fig:graph_g4_permutation0}
+\end{figure}
+
+\subsection{Grafo $G_5$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_graph_5.png}
+    \caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_5$, exibindo o peso de uma MST após a remoção de cada lote de arestas.}
+    \label{fig:table_g5_permutation0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/graph_5.png}
+\caption{Desempenho dos dois algoritmos na primeira lista de arestas de $G_5$.}
+    \label{fig:graph_g5_permutation0}
+\end{figure}
+
+\subsection{Tempo médio de execução dos cinco grafos}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/performance_table_5_graphs_average.png}
+\caption{Tempo médio de execução obtido a partir de cinco grafos.}
+    \label{fig:performance_table_5_graphs_average}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{./figuras/5_graphs_average.png}
+\caption{Comparação do tempo médio de execução dos dois algoritmos considerando cinco grafos distintos.}
+    \label{fig:5_graphs_average}
+\end{figure}
+
+\section{Conclusão}
+
+A partir dos experimentos realizados, verifica-se que os grafos gerados para os testes apresentam um número de arestas próximo do valor esperado para um grafo do modelo $G(n, p)$, com $p = \frac{\lg n}{n}$. Além disso, os resultados indicam que, nos gráficos de tempo de execução, o algoritmo derivado de Kruskal apresenta um crescimento aproximadamente linear em função do número de arestas removidas, enquanto o algoritmo para MSF decremental exibe um padrão de crescimento compatível com o esperado que é polilogarítmico.
+
+As tabelas de resultados, por outro lado, evidenciam a diferença significativa no tempo de execução entre os dois algoritmos durante o processo de remoção de arestas, diferença esta que já se mostra perceptível mesmo nas primeiras remoções realizadas.
+
+Portanto, observa-se que os experimentos conduzidos sobre diferentes grafos aleatórios com o mesmo número de vértices produzem gráficos e tabelas com comportamentos semelhantes no que tange ao tempo de execução, indicando consistência nos resultados obtidos.
+
+Por fim, seria interessante usar essas implementações para testar os algoritmos em grafos vindos de aplicações reais.
