@@ -10,7 +10,7 @@ Top trees são árvores binárias que suportam adição e remoção de arestas. 
 
 Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propuseram um algoritmo para MSF dinâmica que mantém uma MSF que suporta adições e remoções de arestas em tempo amortizado $\Oh(\lg^4 n)$ por operação. A ideia deste algoritmo é manter uma MSF $F$ de $G$, um grafo de $n$ vértices e $m$ arestas, como também um conjunto $\mathcal{G} = \{G_0, \ldots, G_L\}$, $L = \left\lceil \lg m \right\rceil$, de subgrafos de $G$, de modo que para cada $G_i$ manteremos uma MSF decremental $F_i$.
 
-As arestas de $F$ são chamadas de \textbf{arestas da floresta globais} e as arestas de $R = G / F$ são chamadas de \textbf{arestas reserva globais}. $R$ corresponde à lista de arestas reserva retornadas pelas estruturas decrementais de $\mathcal{G}$.
+As arestas de $F$ são chamadas de \textbf{arestas da floresta globais} e as arestas de $R = G / F$ são chamadas de \textbf{arestas reserva globais}. $R$ corresponde à lista de arestas reserva retornadas pelas estruturas decrementais de $\mathcal{G}$, e é nesta lista que iremos procurar a aresta substituta de menor peso para reconectar as componentes separadas de $F$ quando removemos alguma aresta da floresta global.
 
 Similarmente, as arestas de $F_i$ são chamadas de \textbf{arestas da floresta locais} e as arestas de $R_i = G_i / F_i$ de \textbf{arestas reserva locais}. Além disso, todas as arestas de $G$ estarão em alguma $G_i$, de modo que $F \subseteq \bigcup_i F_i$.
 
