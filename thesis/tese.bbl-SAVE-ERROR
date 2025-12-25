@@ -19,6 +19,50 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{alstrup_top_trees_arxiv}{article}{}
+      \name{author}{4}{}{%
+        {{hash=fa897130aaba3865010d5db920146a69}{%
+           family={Alstrup},
+           familyi={A\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5ef988b66ee622a15f50641b757c54e2}{%
+           family={Holm},
+           familyi={H\bibinitperiod},
+           given={Jacob},
+           giveni={J\bibinitperiod}}}%
+        {{hash=b3c424136e511df6cffd28b588138e40}{%
+           family={Lichtenberg},
+           familyi={L\bibinitperiod},
+           given={Kristian},
+           giveni={K\bibinitperiod},
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+        {{hash=da8de8904d487b343a6b7f3a39674fb6}{%
+           family={Thorup},
+           familyi={T\bibinitperiod},
+           given={Mikkel},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{c45dae5eb7a9e9435f9996b00099c472}
+      \strng{fullhash}{34c05bc0a257c3d3058c25f509885325}
+      \strng{bibnamehash}{c45dae5eb7a9e9435f9996b00099c472}
+      \strng{authorbibnamehash}{c45dae5eb7a9e9435f9996b00099c472}
+      \strng{authornamehash}{c45dae5eb7a9e9435f9996b00099c472}
+      \strng{authorfullhash}{34c05bc0a257c3d3058c25f509885325}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.DS}
+      \field{eprinttype}{arXiv}
+      \field{note}{arXiv:cs/0310065v2, revised 21 Nov 2003}
+      \field{title}{Maintaining Information in Fully-Dynamic Trees with Top Trees}
+      \field{year}{2003}
+      \verb{eprint}
+      \verb cs/0310065
+      \endverb
+    \endentry
     \entry{clrs}{book}{}
       \name{author}{4}{}{%
         {{hash=835b8c52757d98c15859b416316d9820}{%
