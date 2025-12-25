@@ -10,9 +10,11 @@ Top trees são árvores binárias que suportam adição e remoção de arestas. 
 
 Holm, de Lichtenberg e Thorup~\cite{jacob_holm} propuseram um algoritmo para MSF dinâmica que mantém uma MSF que suporta adições e remoções de arestas em tempo amortizado $\Oh(\lg^4 n)$ por operação. A ideia deste algoritmo é manter uma MSF $F$ de $G$, um grafo de $n$ vértices e $m$ arestas, como também um conjunto $\mathcal{G} = \{G_0, \ldots, G_L\}$, $L = \left\lceil \lg m \right\rceil$, de subgrafos de $G$, de modo que para cada $G_i$ manteremos uma MSF decremental $F_i$.
 
-As arestas de $F$ são chamadas de \textbf{arestas da floresta globais} e as arestas de $R = G / F$ são chamadas de \textbf{arestas reserva globais}, onde $R$ corresponde à lista de arestas reserva retornadas pelas estruturas decrementais de $\mathcal{G}$. É nesta lista que iremos procurar, se houver, uma aresta substituta de menor peso para reconectar as componentes separadas de $F$ quando removemos alguma aresta da floresta global.
+As arestas de $F$ são chamadas de \textbf{arestas da floresta globais} e as arestas de $R = G \textbackslash
+ F$ são chamadas de \textbf{arestas reserva globais}, onde $R$ corresponde à lista de arestas reserva retornadas pelas estruturas decrementais de $\mathcal{G}$. É nesta lista que iremos procurar, se houver, uma aresta substituta de menor peso para reconectar as componentes separadas de $F$ quando removemos alguma aresta da floresta global.
 
-Similarmente, as arestas de $F_i$ são chamadas de \textbf{arestas da floresta locais} e as arestas de $R_i = G_i / F_i$ de \textbf{arestas reserva locais}. Além disso, todas as arestas de $G$ estarão em alguma $G_i$, de modo que $F \subseteq \bigcup_i F_i$.
+Similarmente, as arestas de $F_i$ são chamadas de \textbf{arestas da floresta locais} e as arestas de $R_i = G_i \textbackslash
+ F_i$ de \textbf{arestas reserva locais}. Além disso, todas as arestas de $G$ estarão em alguma $G_i$, de modo que $F \subseteq \bigcup_i F_i$.
 
 Para inserir uma aresta $uv$, temos dois casos a considerar:
 
@@ -28,12 +30,13 @@ Para inserir uma aresta $uv$, temos dois casos a considerar:
 Já para remover uma aresta $uv$, primeiramente removemos todas as ocorrências desta aresta em $G_i$. Se $uv$ for uma aresta de $F$, removemo-la de $F$ e
 verificamos se em $R$ há arestas que reconectem as componentes separadas de $F$. Se houver, escolhemos a de menor peso dentre elas. Finalmente, independentemente se $uv$ é uma aresta da floresta global ou aresta reserva global, atualizamos $\mathcal{G}$ com $R$.
 
-Quando falamos em atualizar $\mathcal{G}$ com um conjunto de arestas $E$, queremos encontrar o menor $j$ tal que $|(E \cup \bigcup_{h \leq j} (R_h))\ F| \leq 2^j$. Em seguida, definimos
+Quando falamos em atualizar $\mathcal{G}$ com um conjunto de arestas $E$, queremos encontrar o menor $j$ tal que $|(E \cup \bigcup_{h \leq j} R_h) \textbackslash F| \leq 2^j$. Em seguida, definimos
 $$
-G_j := F \cup E \cup \bigcup_{h \leq j} (R_h) 
+G_j := F \cup E \cup \bigcup_{h \leq j} R_h 
 $$
-
 inicializando $G_j$ como uma nova MSF decremental. Por fim, definimos $G_h := \emptyset$ para todo $h < j$.
+
+Na verdade, a atualização de $\mathcal{G}$ ocorre com a adição de uma floresta $F$ de modo implícito, que no caso é a $F'$. O artigo explica em detalhes sobre como a $F'$ é construída, e para isso ele se baseia fortemente na estrutura das top trees para podermos tornar este algoritmo para MSF dinâmica mais eficiente, tanto de espaço quanto de consumo de tempo. No final, da Seção~5 do artigo, é mencionado que o algoritmo para MSF dinâmica consome espaço $O(m \lg n)$.  
 
 Até o momento, fica claro que há uma certa cadeia de dependências entre os algoritmos que estudamos e implementamos. Dessa forma, seria interessante apresentar os detalhes de como implementar a biblioteca deste algoritmo para MSF dinâmica. Mas, para isso, precisaríamos modificar a implementação da biblioteca da conexidade em florestas dinâmicas, que passaria a manter top trees no lugar de Euler tour trees. Como a nossa implementação da biblioteca de Euler tour trees possui um consumo de tempo diferente da implementação de top trees apresentada em Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, a biblioteca que implementamos do algoritmo de conexidade em grafos dinâmicos teria a sua complexidade de tempo alterada, visto que este passaria a manter componentes destas florestas dinâmicas ajustadas. 
 
