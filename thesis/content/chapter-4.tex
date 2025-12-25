@@ -1,7 +1,9 @@
 \chapter{Conclusões}
 \label{chapter:conclusions}
 
-Neste capítulo, consideraremos o problema da \textbf{MSF dinâmica}, onde queremos manter uma MSF em um grafo dinâmico. Apresentaremos brevemente a intuição por trás de um algoritmo para MSF dinâmica, proposto por Holm, de Lichtenberg e Thorup~\cite{jacob_holm} na Seção~$5$ de seu artigo. Este algoritmo, que procura manter o peso mínimo de uma MSF de um grafo $G$ dando suporte eficiente à adição e remoção de arestas, possui vários conceitos avançados que fogem um pouco do escopo do nosso estudo. Assim, inicialmente será descrito resumidamente o papel principal das \textbf{top trees} no algoritmo, estruturas de dados que serão usadas na manutenção de uma MSF dinâmica. Estas estruturas estão descritas em mais detalhes na Seção~2 do artigo de Alstrup, Holm, de Lichtenberg e Thorup~\cite{alstrup_top_trees_arxiv}. 
+Neste capítulo, consideraremos o problema da \textbf{MSF dinâmica}, onde queremos manter uma MSF em um grafo dinâmico. Apresentaremos brevemente a intuição por trás de um algoritmo para MSF dinâmica, proposto por Holm, de Lichtenberg e Thorup~\cite{jacob_holm} na Seção~$5$ de seu artigo. Este algoritmo, que procura manter o peso mínimo de uma MSF de um grafo $G$ dando suporte eficiente à adição e remoção de arestas, possui vários conceitos avançados que fogem um pouco do escopo do nosso estudo. 
+
+Inicialmente será descrito resumidamente o papel principal das \textbf{top trees} no algoritmo, estruturas de dados que serão usadas na manutenção de uma MSF dinâmica. Estas estruturas estão descritas em mais detalhes na Seção~2 do artigo de Alstrup, Holm, de Lichtenberg e Thorup~\cite{alstrup_top_trees_arxiv}. 
 
 Como vimos nas Euler tour trees, um caminho não corresponde a um segmento contínuo ao longo do percurso da Euler tour tree. Isso dificulta a manutenção eficiente de informações sobre caminhos na árvore, como, por exemplo, a aresta com o peso máximo no caminho entre dois vértices dados.
 Dessa forma, os autores do artigo sugeriram o uso de top trees para armazenar e retornar dados sobre qualquer caminho entre dois vértices numa árvore.
