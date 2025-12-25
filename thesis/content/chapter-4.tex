@@ -16,7 +16,7 @@ Para implementar a operação de inserção de uma aresta $uv$, dividimos em doi
     \item se $u$ e $v$ não estão conectados
 \end{itemize}
 
-As arestas de $F$ são chamadas de \textbf{arestas da floresta globais} e as arestas de $R = G / F$ são chamadas de \textbf{arestas reserva globais}. Similarmente, as arestas de $F_i$ são chamadas de \textbf{arestas da floresta locais} e as arestas de $R_i = G_i / F_i$ de \textbf{arestas reserva locais}. 
+As arestas de $F$ são chamadas de \textbf{arestas da floresta globais} e as arestas de $R = G / F$ são chamadas de \textbf{arestas reserva globais}. Similarmente, as arestas de $F_i$ são chamadas de \textbf{arestas da floresta locais} e as arestas de $R_i = G_i / F_i$ de \textbf{arestas reserva locais}. Além disso, todas as arestas de $G$ estarão em alguma $G_i$, de modo que $F \subseteq \bigcup_i F_i$.
 
 Até o momento, fica claro que há uma certa cadeia de dependências entre os algoritmos que estudamos e implementamos. Dessa forma, seria interessante apresentar os detalhes de como implementar a biblioteca deste algoritmo para MSF dinâmica. Para isso, entretanto, precisaríamos modificar a implementação da biblioteca da conexidade em florestas dinâmicas, que passaria a manter top trees no lugar de Euler tour trees. Como a nossa implementação da biblioteca de Euler tour trees possui um consumo de tempo diferente da implementação de top trees apresentada em Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, a biblioteca que implementamos do algoritmo de conexidade em grafos dinâmicos teria a sua complexidade de tempo alterada, visto que este passaria a manter componentes destas florestas dinâmicas ajustadas. 
 
