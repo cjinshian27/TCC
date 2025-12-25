@@ -30,7 +30,7 @@ Para inserir uma aresta $uv$, temos dois casos a considerar:
 Já para remover uma aresta $uv$, primeiramente removemos todas as ocorrências desta aresta em $G_i$. Se $uv$ for uma aresta de $F$, removemo-la de $F$ e
 verificamos se em $R$ há arestas que reconectem as componentes separadas de $F$. Se houver, escolhemos a de menor peso dentre elas. Finalmente, independentemente se $uv$ é uma aresta da floresta global ou aresta reserva global, atualizamos $\mathcal{G}$ com $R$.
 
-Quando falamos em atualizar $\mathcal{G}$ com um conjunto de arestas $E$, queremos encontrar o menor $j$ tal que $|(E \cup \bigcup_{h \leq j} R_h) \textbackslash F| \leq 2^j$. Em seguida, definimos
+Quando falamos em atualizar $\mathcal{G}$ com um conjunto $E$ de arestas, queremos encontrar o menor $j$ tal que $|(E \cup \bigcup_{h \leq j} R_h) \textbackslash F| \leq 2^j$. Em seguida, definimos
 $$
 G_j := F \cup E \cup \bigcup_{h \leq j} R_h 
 $$
