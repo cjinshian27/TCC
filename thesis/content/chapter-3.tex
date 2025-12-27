@@ -21,14 +21,11 @@ Inicialmente, avaliamos o grafo $G_0$ considerando a remoção de $25.600$ arest
 
 Para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após cada lote de remoções, imprimimos o peso de uma MST correspondente ao estado atual do grafo e, em seguida, dobramos o tamanho do lote. Assim, removemos $100, 200, 400, \ldots, 25.600$ arestas, registrando o tempo acumulado das remoções e o peso de uma MST após cada etapa.
 
-Todos os arquivos de teste mencionados nesse Capítulo, bem como os geradores desenvolvidos, estão disponíveis no diretório \texttt{src/tests} da nossa implementação~\cite{chung2025}.
-
+Todos os arquivos de teste mencionados nesse capítulo, bem como os geradores desenvolvidos, estão disponíveis no diretório \texttt{src/tests/} da nossa implementação~\cite{chung2025}.
 
 \section{Algoritmo de Kruskal}
 
-O algoritmo de Kruskal foi implementado de uma forma que permita remoção de arestas. Utilizamos Union-Find como a parte central do algoritmo. Na inicialização do construtor, ordenamos o vetor de $m$ arestas em ordem crescente de peso, usando o método \texttt{sort} da linguagem \textit{C++}, que consome tempo esperado $O(m \lg m)$. Em seguida, inserimos as arestas no grafo, em ordem crescente de peso.
-
-Quando removemos uma aresta $uv$, precisamos reordenar as arestas restantes. Para isso, basta deslocar as arestas a partir de $uv$ de uma posição para cima no vetor, o que consome tempo $O(m)$.
+O algoritmo de Kruskal foi implementado de uma forma que permita remoção de arestas. Utilizamos Union-Find como a parte central do algoritmo. Na inicialização do construtor, ordenamos o vetor de $m$ arestas em ordem crescente de peso, usando o método \texttt{sort} da linguagem \textit{C++}, que consome tempo esperado $O(m \lg m)$. Em seguida, inserimos as arestas no grafo, em ordem crescente de peso. Para remover uma aresta $uv$, precisamos reordenar as arestas restantes. Para isso, basta deslocar as arestas a partir de $uv$ de uma posição para cima no vetor, o que consome tempo $O(m)$.
 
 \section{Grafo $G_0$}
 \label{section:graph0}
