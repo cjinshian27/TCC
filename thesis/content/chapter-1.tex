@@ -12,12 +12,12 @@
 
 \enlargethispage{.8\baselineskip}
 
-Como citado no Capítulo~\ref{cap:introducao}, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dê suporte a inserções e remoções de arestas e consultas de conexidade entre dois vértices. O algoritmo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} para este problema de conexidade mantém $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$, e utiliza uma biblioteca que será descrita na próxima seção. 
+Como citado no Capítulo~\ref{cap:introducao}, o problema da conexidade em grafos dinâmicos visa construir um algoritmo eficiente que dê suporte a inserções e remoções de arestas e consultas de conexidade entre dois vértices. O algoritmo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} para este problema de conexidade mantém $\left\lceil \lg n \right\rceil$ florestas dinâmicas do grafo $G$ de ordem $n$, e utiliza uma biblioteca que será descrita na próxima seção. 
 
 \section{Conexidade em florestas dinâmicas}
 \label{sec:dynamic-forest-connectivity}
 
-Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o algoritmo que foi proposto na Seção~2 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}. No Capítulo~2 da sua dissertação, Rodrigues descreve as rotinas principais de sua implementação, que se baseia em Euler tour trees, e realiza uma análise minuciosa da complexidade de tempo de cada rotina de sua implementação. Levando isso em conta, optamos por não apresentar uma descrição detalhada desse mesmo algoritmo, e apenas explicar brevemente o que as rotinas principais fazem, ressaltando algumas diferenças da nossa implementação em código em relação à de Rodrigues.  
+Rodrigues \cite{arthur}, em sua dissertação do mestrado, estudou, entre outros assuntos, o problema da conexidade em florestas dinâmicas e implementou o algoritmo que foi proposto na Seção~2 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}. No Capítulo~2 da sua dissertação, Rodrigues descreveu as rotinas principais de sua implementação, que se baseia em Euler tour trees, e realizou uma análise minuciosa da complexidade de tempo de cada rotina de sua implementação. Levando isso em conta, optamos por não apresentar uma descrição detalhada desse mesmo algoritmo, e apenas explicar brevemente o que as rotinas principais fazem, ressaltando algumas diferenças da nossa implementação em código em relação à de Rodrigues.  
 
 O problema da conexidade em florestas dinâmicas pode ser considerado uma simplificação do problema de conexidade em grafos dinâmicos, quando o grafo em questão é uma floresta. A biblioteca que usaremos contém os seguintes métodos:
 
@@ -25,11 +25,11 @@ O problema da conexidade em florestas dinâmicas pode ser considerado uma simpli
     \item \texttt{\textbf{florestaDinâmica($n$)}}: constrói e devolve uma floresta dinâmica $F$ com $n$ vértices e sem arestas;
     \item \texttt{\textbf{conectadosFD($F$, $u$, $v$)}}: devolve verdadeiro se \textit{$u$} e \textit{$v$} estão na mesma componente da floresta $F$ e falso caso contrário;
     \item \texttt{\textbf{adicioneFD($F$, $u$, $v$)}}: insere uma aresta \textit{uv} na floresta $F$;
-    \item \texttt{\textbf{removaFD($u$, $v$)}}: remove a aresta \textit{uv} da floresta $F$.
+    \item \texttt{\textbf{removaFD($F$, $u$, $v$)}}: remove a aresta \textit{uv} da floresta $F$.
 \end{itemize}
 
 
-A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficiente às rotinas acima é uma árvore binária de busca balanceada (ABBB). Uma floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que são de natureza aleatória. Em nosso caso, utilizamos árvores \texttt{splay}, que foram desenvolvidas por \textit{Sleator e Tarjan} \cite{sleator}. Árvores \texttt{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \texttt{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. O nó em que a operação \texttt{splay} é aplicada é trazido, por meio das tradicionais rotações usadas no balanceamento de árvores binárias de busca, para cima até chegar na raiz da árvore. Isso faz com que o custo de uma sequência de $m$ operações (inserção, remoção ou busca) em uma árvore \texttt{splay} com $n$ nós seja $\Oh(m\lg n)$, ou seja, o custo amortizado por operação é $\Oh(\lg n)$. Como também já existe bastante literatura sobre árvores \texttt{splay}~\cite[Lecture 12]{kozen}, e seu funcionamento interno afeta muito pouco a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
+A estrutura de dados principal usada neste algoritmo de Holm, de Lichtenberg e Thorup~para dar suporte eficiente às rotinas acima é uma árvore binária de busca balanceada (ABBB). Uma floresta dinâmica é constituída de várias ABBBs. Rodrigues utiliza \textit{treaps} em sua implementação, que são de natureza aleatória. Em nosso caso, utilizamos árvores \texttt{splay}, que foram desenvolvidas por Sleator e Tarjan~\cite{sleator}. Árvores \texttt{splay} são árvores binárias de busca (ABBs) que possuem uma rotina extra (além das usuais de busca, inserção e remoção) chamada \texttt{splay}, que é acionada ao final de cada operação feita na árvore, de modo que é sempre aplicada ao nó mais profundo visitado. O nó em que a operação \texttt{splay} é aplicada é trazido, por meio das tradicionais rotações usadas no balanceamento de árvores binárias de busca, para cima até chegar na raiz da árvore. Isso faz com que o custo de uma sequência de $m$ operações (inserção, remoção ou busca) em uma árvore \texttt{splay} com $n$ nós seja $\Oh(m\lg n)$, ou seja, o custo amortizado por operação é $\Oh(\lg n)$. Como também já existe bastante literatura sobre árvores \texttt{splay}~\cite[Lecture 12]{kozen}, e seu funcionamento interno afeta muito pouco a descrição dos algoritmos que descreveremos, não entraremos em detalhes de sua implementação.
 
 O resultado é uma implementação em que \texttt{florestaDinâmica(n)} tem custo $\Theta(n)$ e os demais métodos da biblioteca têm custo amortizado $\Oh(\lg n)$.
 
@@ -41,24 +41,24 @@ Implementar o grafo dinâmico resume-se à construção da seguinte biblioteca d
 \begin{itemize}
     \item \texttt{\textbf{grafoDinâmico($n$)}}: contrói e devolve um grafo dinâmico com $n$ vértices e sem arestas;
     \item \texttt{\textbf{conectadosGD($G$, $u$, $v$)}}: devolve verdadeiro se os vértices $u$ e $v$ estão na mesma componente de $G$ e falso caso contrário;
-    \item \texttt{\textbf{adicioneGD($G$, $u$, $v$)}}: adiciona a aresta $uv$ no grafo $G$;
+    \item \texttt{\textbf{adicioneGD($G$, $u$, $v$)}}: adiciona a aresta $uv$ ao grafo $G$;
     \item \texttt{\textbf{removaGD($G$, $u$, $v$)}}: remove a aresta $uv$ do grafo $G$.
 \end{itemize} 
 
-Para entender como cada uma dessas rotinas funcionam, será necessário apresentar a estrutura interna da implementação do grafo para explicar como ele mantém essas estruturas e como elas deixam essas rotinas mais eficientes.
+Para entender como cada uma dessas rotinas funcionam, será necessário apresentar a estrutura interna da implementação do grafo para explicar como manter essas estruturas e como elas deixam essas rotinas mais eficientes.
 
 \subsection{Fatiamento do grafo em níveis}
 \label{sec:level-slicing}
 
 Na Seção~3.1 do artigo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm}, é apresentada a técnica de fatiar o grafo $G$ em níveis. Cada aresta do grafo possui um nível entre $1$ e $\left\lceil \lg n \right\rceil$, onde $n$ é o número de vértices do grafo $G$. Toda vez que inserimos uma aresta em $G$, ela possuirá o nível $\left\lceil \lg n \right\rceil$, e ele nunca será aumentado. 
 
-Seja $G$ um grafo com conjunto $V(G)$ de vértices e conjunto $E(G)$ de arestas. Se $X$ é um conjunto não-vazio de arestas, dizemos que o subgrafo de $G$ \textbf{induzido} por $X$ é o subgrafo gerador $H$ de $G$ tal que $E(H) = X$. Denotamos, $H$ como $G[X]$.
+Seja $G$ um grafo com $n$ vértices, com conjunto $V(G)$ de vértices e conjunto $E(G)$ de arestas. Se $X$ é um conjunto não-vazio de arestas, dizemos que o subgrafo de $G$ \textbf{induzido} por $X$ é o subgrafo gerador $H$ de $G$ tal que $E(H) = X$. Denotamos $H$ por $G[X]$.
 
 Sendo assim, seja $G_i = G[X]$ o grafo onde $X$ é o conjunto das arestas do grafo $G$ de nível menor ou igual a $i$. Para cada nível $i$, manteremos uma floresta maximal $F_i$ de $G_i$. Além disso, vamos manter também, para cada nível $i$, um grafo $R_i$ em forma de listas de adjacências, que guardam apenas arestas de nível $i$ que não estejam em $F_i$. 
 
-Consequentemente, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{\left\lceil \lg n \right\rceil}$, para um grafo $G$ de $n$ vértices, e deduzimos que $G = G_{\left\lceil \lg n \right\rceil}$ e que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de consulta de conexidade em nosso grafo~$G$, podemos realizá-la na floresta $F_{\left\lceil \lg n \right\rceil}$ de~$G$.
+Consequentemente, temos que $G_1 \subseteq G_2 \subseteq \cdots \subseteq G_{\left\lceil \lg n \right\rceil}$ e deduzimos que $G = G_{\left\lceil \lg n \right\rceil}$ e que $F_{\left\lceil \lg n \right\rceil}$ é uma floresta maximal de $G$. Dessa maneira, sempre que estivermos realizando alguma operação de consulta de conexidade em nosso grafo~$G$, podemos realizá-la na floresta $F_{\left\lceil \lg n \right\rceil}$ de~$G$.
 
-Com isso, podemos estabelecer algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
+Com isso, podemos enunciar algumas invariantes, que são mantidas ao longo das modificações no grafo $G$:
 
 \begin{enumerate}[label=(\Roman*)]
     \item \label{invariant1} $F_i$ é uma floresta maximal de $G_i$ para todo $1 \leq i \leq  \left\lceil \lg n \right\rceil$;
@@ -76,7 +76,7 @@ Na Seção~\ref{sec:dynamic-graph-routines}, descreveremos com mais detalhes com
 
 Quando realizamos uma chamada à função \texttt{adicioneGD($G$, $u$, $v$)}, é feita uma chamada à rotina \texttt{conectadosGD($G$, $u$, $v$)} para verificar a conexidade de $u$ com $v$ em $G$. Se estes vértices não estiverem na mesma componente de $G$, então a aresta $uv$ é inserida na floresta maximal $F_L$ que estamos mantendo, assim ligando a árvore que contém $u$ com a que contém $v$ em $F_L$. Chamamos esse tipo de aresta de \textbf{aresta da floresta}.
 
-Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$ representado por listas de adjacências, que contém a seguinte biblioteca:
+Caso $u$ e $v$ já estejam conectados em $G$, então essa aresta $uv$ é chamada de \textbf{aresta reserva} e ela será armazenada no grafo $R_L$ representado por listas de adjacências, mantido pela seguinte biblioteca:
 
 \begin{itemize}
     \item \texttt{\textbf{listasDeAdjacências($n$)}}: constrói e devolve um grafo com $n$ vértices e sem arestas, representado por listas de adjacências;
@@ -93,7 +93,7 @@ as rotinas \texttt{adicioneLA} e \texttt{removaLA} é garantido tempo esperado $
 \subsection{Criação do grafo}
 \label{sec:dynamic-graph-creation}
 
-Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, acionamos a rotina \texttt{grafoDinâmico($n$)}. Nesta chamada, armazenamos o nível máximo do grafo, no caso o valor de $\left\lceil \lg n \right\rceil$, numa variável do grafo chamada \textit{nívelMax}, onde podemos extrair e usar o valor do nível máximo chamando \textit{$\dotvar{G}{nívelMax}$}. Em seguida, chamamos \texttt{florestaDinâmica($n$)}, que criará $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências($n$)}, que criará $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
+Para criar um grafo dinâmico $G$ com $n$ vértices e inicialmente sem arestas, acionamos a rotina \texttt{grafoDinâmico($n$)}. Nesta chamada, armazenamos o nível máximo do grafo, no caso o valor de $\left\lceil \lg n \right\rceil$, numa variável do grafo chamada \textit{nívelMax}, onde podemos extrair e usar o valor do nível máximo chamando \textit{$\dotvar{G}{nívelMax}$}. Em seguida, chamamos \texttt{florestaDinâmica($n$)} para criar $\left\lceil \lg n \right\rceil$ florestas dinâmicas com $n$ vértices, e \texttt{listasDeAdjacências($n$)} para criar $\left\lceil \lg n \right\rceil$ grafos com $n$ vértices representados por listas de adjacências. 
 
 Além disso, usamos um mapa hash para guardar e obter o nível de uma aresta $uv$ em tempo esperado $\Oh(1)$. Assim, este mapa usa como chave as pontas da aresta ($u$~e~$v$) e armazena o valor do nível da aresta $uv$. Assim, podemos definir um outro método \texttt{novoMapaHash($n$)} que devolve um mapa hash vazio em tempo $\Oh(1)$ para um grafo de $n$ vértices. Dessa forma, se chamarmos esse método e atribuirmos o objeto devolvido a uma variável chamada \textit{nível}, podemos realizar as seguintes operações com \textit{nível}:
 
@@ -466,8 +466,7 @@ O caso da remoção de uma aresta $uv$ da floresta é mais complexo. Se a aresta
 
 Para buscar uma aresta reserva de maneira o mais eficiente possível, o algoritmo percorre cada vértice $x$ de $T_u$ e verifica se existe algum vértice $y$ na lista de adjacências de $x$ de $R_i$ que esteja em $T_v$. Se $y \in V(T_v)$, então a aresta $xy$ é uma aresta substituta de nível $i$, bastando apenas acionar \texttt{adicioneFD($F_i$, $x$, $y$)} para reconectar $T_u$ e $T_v$, que virariam uma única componente da floresta $F_i$, e acionar \texttt{removaLA($R_i$, $x$, $y$)} já que $xy$ se tornará uma aresta da floresta.
 
-É por este motivo que introduzimos o fatiamento em níveis na Seção~\ref{sec:level-slicing}. A intuição por trás deste fatiamento é que, quando uma aresta de nível $i$ da floresta é removida, não é necessário buscar por substitutas nos níveis menores que $i$. Isso quer dizer que começamos a busca no nível em questão, ou seja, em $R_i$, e caso não haja nenhuma substituta em $R_i$, passamos a procurar em $R_{i+1}, R_{i + 2}, \ldots, R_L$. Quando não encontramos uma substituta em um certo $R_i$, aproveitamos para rebaixar o nível de todas as arestas percorridas em $R_i$ para $i - 1$, de modo que não precisaremos mais percorrer essas arestas quando removermos uma outra aresta de nível $i$, visto que elas já estariam em $R_{i-1}$.
-
+É para tornar essa busca mais eficiente que introduzimos o fatiamento em níveis na Seção~\ref{sec:level-slicing}. A intuição por trás deste fatiamento é que, quando uma aresta de nível $i$ da floresta é removida, não é necessário buscar por substitutas nos níveis menores que $i$. Isso quer dizer que começamos a busca no nível em questão, ou seja, em $R_i$, e caso não haja nenhuma substituta em $R_i$, passamos a procurar em $R_{i+1}, R_{i + 2}, \ldots, R_L$. Quando não encontramos uma substituta em um certo $R_i$, aproveitamos para rebaixar o nível de todas as arestas percorridas em $R_i$ para $i - 1$, de modo que não precisaremos mais percorrer essas arestas quando removermos uma outra aresta de nível $i$, visto que elas já estariam em $R_{i-1}$.
 
 Na verdade, antes de fazer esse rebaixamento, rebaixamos o nível de toda aresta de nível $i$ de $T_u$ para $i-1$, de modo que $T_u \subseteq F_{i-1}$.
 Rebaixar o nível dessas arestas significa inseri-las em $F_{i-1}$, pois elas passam a ser de nível $i-1$. Esse rebaixamento e as inserções em $F_{i-1}$ se tornam necessários para preservar a invariante~\ref{invariant1}. Ao mesmo tempo, para manter também a invariante~\ref{invariant3}, esse processo deverá ser feito na menor das árvores $T_u$ e $T_v$. Seja $T = T_u \cup T_v + uv$ . Denotando o número de vértices de uma árvore $T$ por $|T|$, o algoritmo garantirá que $|T_u| \leq |T_v|$. Pela invariante~\ref{invariant3}, temos que $|T| \leq 2^i$, e como $|T_u| + |T_v| = |T|$, então $|T_u| \leq 2^{i-1}$. Por isso, ao rebaixarmos todas as arestas de nível $i$ de $T_u$ para o nível $i-1$, preservamos a invariante~\ref{invariant3}. 
@@ -608,11 +607,11 @@ A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma séri
 
 \raggedbottom
 
-Temos também que $n = 10$ e $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ da floresta é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só acontecem no nível $L$, no momento, em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
+Temos também que $n = 10$ e $\left\lceil \lg 10 \right\rceil = 4$, logo o nível máximo $L$ é $4$ e,  consequentemente, $G = G_4$. Como todas as inserções só acontecem no nível $L$, no momento, em $F_4$, só temos arestas da floresta de nível $4$, enquanto $F_3$ contém apenas vértices isolados. Neste cenário, note que a remoção da aresta $uv$ da floresta, representada por uma linha tracejada na figura, acaba quebrando a única componente da floresta $F_4$ em duas, $T_u$ e $T_v$. Como $F_4$ é a floresta maximal de nível máximo de $G$, então removemos somente a $uv$ de $F_4$. 
 
 O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nível~$3$. Dessa forma, as arestas de $T_u$ passam a estar em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement2}, pois agora elas passam a ser de nível $3$.  
 
-Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de diferentes níveis em uma mesma floresta. Assim, percorrer todas as arestas de $T_u$ e selecionar apenas as de nível~$i$ para rebaixar pode se tornar demorado quando o grafo possui uma grande quantidade de vértices. A forma como o algoritmo procura as arestas de nível $i$ de $T_u$ será descrita de maneira mais detalhada na Seção~\ref{sec:node-edge}. No momento, só precisamos entender como este rebaixamento funciona.
+Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de diferentes níveis em uma mesma floresta. Assim, percorrer todas as arestas de $T_u$ e selecionar apenas as de nível~$i$ para rebaixar pode se tornar demorado quando o grafo possui uma grande quantidade de vértices. A forma como o algoritmo procura as arestas de nível $i$ de $T_u$ será descrita de maneira detalhada na Seção~\ref{sec:node-edge}. No momento, só precisamos entender como este rebaixamento funciona.
 
 \begin{figure}[H]
     \centering
@@ -816,7 +815,7 @@ Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reserva em $R_4
 \end{figure}
 
 
-Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, conectamos $T_u$ e $T_v$ chamando \texttt{adicioneFD($F_4$, a, d)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para os níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement4} ilustra essa etapa do algoritmo.
+Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, conectamos $T_u$ e $T_v$ chamando \texttt{adicioneFD($F_4$, a, d)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement4} ilustra essa etapa do algoritmo.
 
 \begin{figure}[H]
     \centering
@@ -1061,7 +1060,7 @@ O digrafo resultante de $T$ é Euleriano, ou seja, é conexo e o grau de entrada
 
 \raggedbottom
 
-A representação da árvore $T$ é basicamente a sequência de arcos que forma um ciclo Euleriano do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, então o arco será escrito como $uu$. Assim, no exemplo da Figura~\ref{fig:euler-tour-trees}, um possível ciclo Euleriano poderia ser o seguinte: 
+A representação da árvore $T$ é basicamente a sequência de arcos que forma um ciclo Euleriano do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, o arco será escrito como $uu$. Assim, no exemplo da Figura~\ref{fig:euler-tour-trees}, um possível ciclo Euleriano poderia ser o seguinte: 
 \begin{equation}
 \textit{ee ea aa ab bb ba ad dd dc cc cd da ae}.
 \label{eq:euler-sequence}
@@ -1126,7 +1125,7 @@ Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euler
 
 \raggedbottom
 
-Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma floresta pela coleção de sequências Eulerianas de cada componente da floresta. Assim, é possível implementar as operações de consulta de conexidade e de alteração na floresta com consumo esperado de tempo $\Oh(\lg n)$ (amortizado em nossa implementação), onde $n$ é o número de nós da floresta. O algoritmo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} armazena cada floresta $F_i$ em uma estrutura dessas.
+Além disso, Henzinger e King \cite{henzinger_king} propuseram representar uma floresta pela coleção de sequências Eulerianas de cada componente da floresta. Assim, é possível implementar as operações de consulta de conexidade e de alteração na floresta com consumo esperado de tempo $\Oh(\lg n)$ (amortizado em nossa implementação), onde $n$ é o número de nós da floresta. O algoritmo de Holm, de Lichtenberg e Thorup~\cite{jacob_holm} para conexidade dinâmica armazena cada floresta $F_i$ em uma estrutura dessas.
 
 \subsection{Nós das florestas}
 \label{sec:graph-nodes}
@@ -1135,7 +1134,7 @@ Os nós das árvores binárias de busca que representam as sequências Euleriana
 
 Como representamos uma Euler tour tree por uma árvore binária de busca, cada nó $p$ possui apontadores para o filho esquerdo, filho direito e seu pai. Na descrição de nossa implementação, denotamos tais apontadores por \textit{p.esq}, \textit{p.dir} e \textit{p.pai}, respectivamente. O motivo de usar o apontador para o pai é por conta da operação \texttt{splay}.
 
-Além disso, para extrairmos as pontas de um nó de aresta $p$ que representa $xy$, usamos os campos \textit{p.vértice1} e \textit{p.vértice2}, que guardam os valores  $x$ e $y$, respectivamente. Em um nó de vértice $q$ que representa $xx$, \textit{q.vértice1} guarda o mesmo valor do \textit{q.vértice2}, ou seja, ambos armazenam $x$. Podemos extrair ambas as pontas do nó $p$ chamando $p$.\emph{vértices}. Extrair as pontas dos nós será importante como veremos em vários métodos posteriormente. 
+Além disso, para extrairmos as pontas de um nó de aresta $p$ que representa $xy$, chamamos $(x, y) := $ \textit{p.vértices}. Em um nó de vértice $q$ que representa $xx$, podemos extrair as pontas do nó $q$ chamando $(x, x) := $ \textit{q.vértices}. Extrair as pontas dos nós será importante como veremos em vários métodos posteriormente. 
 
 A seguir, descreveremos a funcionalidade de cada tipo de nó, bem como outros atributos relevantes que lhe pertencem. 
 
@@ -1149,7 +1148,7 @@ Além disso, todos os nós da floresta armazenam um contador chamado \textit{are
 A rotina abaixo do Programa~\ref{prog:updateIsLevel-GD} é usada para alterar para $b$ o valor do atributo \textit{éNível} para uma aresta $uv$. Ela é acionada sempre que adicionamos uma aresta ao grafo, e também quando uma aresta é rebaixada. Tal rotina utiliza um método auxiliar chamado \textit{atualizeArestasDeNível}, descrito no Programa~\ref{prog:updateIsLevelCount-GD}.
 
 \begin{programruledcaption}{\texttt{atualizeÉNível($F$, $u$, $v$, $b$)} \label{prog:updateIsLevel-GD}}
-    \noindent\textbf{Entrada}: Recebe uma floresta $F$, pontas $u$ e $v$ de uma aresta de $G$, e um booleano $b$.\\
+    \noindent\textbf{Entrada}: Recebe uma floresta $F$, pontas $u$ e $v$ de uma aresta de $F$, e um booleano $b$.\\
     \noindent\textbf{Efeito}: Atualiza o atributo \textit{éNível} do nó $uv$ da floresta $F$ e o contador \textit{arestasDeNível}.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -1193,7 +1192,7 @@ A rotina abaixo do Programa~\ref{prog:updateIsLevel-GD} é usada para alterar pa
 \end{programruledcaption}
 
 
-Como se pode ver, o Programa~\ref{prog:updateIsLevelCount-GD} consome tempo $\Oh(1)$. Já Programa~\ref{prog:updateIsLevel-GD} consome tempo amortizado $\Oh(\lg n)$ por conta da operação \texttt{splay}. Veja que ambos os métodos não alteram a floresta $F_i$, alteram apenas uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
+Como se pode ver, o Programa~\ref{prog:updateIsLevelCount-GD} consome tempo $\Oh(1)$. Já o Programa~\ref{prog:updateIsLevel-GD} consome tempo amortizado $\Oh(\lg n)$ por conta da operação \texttt{splay}. Veja que ambos os métodos não alteram a floresta $F_i$, alteram apenas a forma de uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasDeNível} de cada nó na árvore. Na nossa implementação, os vértices são identificados por inteiros de $1$ a $n$ e, para uma aresta $uv$, usamos o atributo \textit{éNível} apenas para o nó de $uv$ com $u < v$.
 
@@ -1307,7 +1306,7 @@ O método \texttt{decrementeArestasReservasDeNível} do Programa~\ref{prog:decre
         \textbf{se} R[u] = $\emptyset$ \textbf{então}
             \texttt{splay($\emph{vérticeU}$)} 
             vérticeU.incideArestaReservaDeNível := falso
-            \texttt{atualizeArestaReservaDeNível($\emph{vérticeU}$)}
+            \texttt{atualizeArestasReservasDeNível($\emph{vérticeU}$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
@@ -1330,7 +1329,7 @@ Já o método \texttt{incrementeArestasReservasDeNível} do Programa~\ref{prog:i
     \textbf{se} |R[u]| = $1$ \textbf{então}
         \texttt{splay($\emph{vérticeU}$)}
         vérticeU.incideArestaReservaDeNível := verdadeiro
-        \texttt{atualizeArestaReservaDeNível($\emph{vérticeU}$)}
+        \texttt{atualizeArestasReservasDeNível($\emph{vérticeU}$)}
     \end{lstlisting}
     \vspace{-0.5\baselineskip}
 \end{programruledcaption} 
@@ -1360,7 +1359,7 @@ Já o método \texttt{incrementeArestasReservasDeNível} do Programa~\ref{prog:i
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(1)$. Já os Programas~\ref{prog:decrementReserveEdgesCount-GD} e \ref{prog:incrementReserveEdgesCount-GD} consomem tempo $\Oh(\lg n)$, amortizado em nossa implementação por conta das operações \texttt{splay}. Como estes três métodos não alteram a floresta $F_i$, alteram apenas uma da árvores uma das árvores binárias que a representam, então as três invariantes são preservadas. 
+O Programa~\ref{prog:updateReserveEdgesCount-GD} consome tempo $\Oh(1)$. Já os Programas~\ref{prog:decrementReserveEdgesCount-GD} e \ref{prog:incrementReserveEdgesCount-GD} consomem tempo $\Oh(\lg n)$, amortizado em nossa implementação por conta das operações \texttt{splay}. Como estes três métodos não alteram a floresta $F_i$, alteram apenas a forma de uma das árvores binárias que a representam, então as três invariantes são preservadas. 
 
 Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\ref{sec:euler-tour-trees}, podemos ilustrar como estaria o atributo \textit{arestasReservasDeNível} de cada nó na árvore.
 
@@ -1420,7 +1419,7 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
  
 No \texttt{substituaAresta} acionado na floresta $F_i$, após rebaixarmos as arestas de nível $i$ de~$T_u$, precisamos procurar por uma aresta substituta. Para isso, precisamos buscar por uma aresta reserva de nível $i$, com uma ponta em $T_u$ e outra em $T_v$, para que consigamos reconectar as duas componentes de $F_i$ separadas pela remoção de $uv$. 
 
-Para resolver este problema de maneira eficiente, usa-se uma estratégia semelhante à que usamos para buscar arestas de nível $i$ em $T_u$. Introduzimos um método auxiliar chamado \texttt{procureNóIncideArestaReservaDeNível}, que devolveria um vértice de $T_u$ que incide em alguma aresta reserva de nível $i$. Assim, podemos percorrer cada vizinho desse vértice em $R_i$ para verificar se a aresta entre eles liga $T_u$ a $T_v$. 
+Para resolver este problema de maneira eficiente, usa-se uma estratégia semelhante à que usamos para buscar arestas de nível $i$ em $T_u$. Introduzimos um método auxiliar chamado \texttt{procureNóIncideArestaReservaDeNível}, que devolve um vértice de $T_u$ que incide em alguma aresta reserva de nível $i$. Assim, podemos percorrer cada vizinho desse vértice em $R_i$ para verificar se a aresta entre eles liga $T_u$ a $T_v$. 
 
 \begin{programruledcaption}{\texttt{procureNóIncideArestaReservaDeNível($p$)} \label{prog:findReserveEdge-GD}}
     \noindent\textbf{Entrada}: Recebe um nó da floresta $p$ com o contador \textit{arestasReservasDeNível} $> 0$.
@@ -1479,7 +1478,7 @@ Nesta seção, apresentamos uma versão completa da rotina \texttt{adicioneGD} m
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Nesta versão final, veja que as linhas $5$ e $6$ são necessárias para que o campo \textit{incideArestaReservaDeNível}, assim como o campo de todos os nós da floresta dos vértices $u$ e $v$ estejam corretos. Já a linha $9$ define o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro em $F_L$, quando ela é aresta da floresta, e atualiza o campo \textit{arestasDeNível} de todos os nós da floresta.
+Nesta versão final, veja que as linhas $5$ e $6$ são necessárias para que os campos \textit{incideArestaReservaDeNível} e \textit{arestasReservasDeNível} dos nós de vértice $u$ e $v$ estejam corretos. Já a linha $9$ define o atributo \textit{éNível} do nó de aresta $uv$ como verdadeiro em $F_L$, quando ela é aresta da floresta, e atualiza o campo \textit{arestasDeNível} de todos os nós da floresta.
 
 Atualizamos os atributos desses nós que descrevemos para fazermos a remoção eficiente de arestas, cuja rotina será descrita também com ajustes na Seção~\ref{sec:code-edge-removal-second-version}. Note que o método \texttt{adicioneGD} do Programa~\ref{prog:addGD-version2} continua tendo o mesmo consumo de tempo do Programa~\ref{prog:addGD} após esses ajustes, ou seja, $\Oh(\lg n)$ amortizado. 
 
@@ -1525,7 +1524,7 @@ Agora falta descrever a rotina \texttt{substituaAresta}. Da mesma forma que a pr
 A rotina de substituição da aresta \texttt{substituaAresta} está descrita no Programa~\ref{prog:replaceGD} abaixo, onde usaremos vários dos métodos auxiliares apresentados nas Seções~\ref{sec:node-edge} e~\ref{sec:node-vertex}. Além disso, usaremos dois métodos auxiliares chamados \texttt{rebaixeNívelDaAresta} e \texttt{testeSubstituta}, que serão explicados de maneira detalhada no momento em que estivermos explicando cada trecho do código de \texttt{substituaAresta}. O atributo \textit{tam}, que existe em todos os nós da floresta, guarda o número de nós na subárvore de cada nó.
 
 \begin{programruledcaption}{\texttt{substituaAresta($G$, $i$, $u$, $v$)} \label{prog:replaceGD}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta removida $uv$. \\
     \noindent\textbf{Efeito}: Adiciona uma aresta substituta no grafo, se ela existir.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -1561,7 +1560,7 @@ Para explicar o \texttt{substituaAresta} do Programa~\ref{prog:replaceGD}, descr
 
 Nas linhas $3$ e $4$, obtemos as árvores $T_u$ e $T_v$, que foram derivadas da floresta $F_j$, já que uma componente desta foi quebrada em duas após a remoção de $uv$. As operações \texttt{splay} puxam os nós $u$ e $v$ para raiz de $T_u$ e $T_v$, respectivamente. As linhas $5$ e $6$ garantem que $|T_u| \leq |T_v|$ como já discutido na Seção~\ref{sec:dynamic-graph-edge-removal}. 
 
-Nas linhas $7$ a $10$, realizamos o processo de rebaixar as arestas de $T_u$ de nível $j$. Na linha $7$, temos um laço que terminará quando todas as arestas de nível $j$ tiverem sido rebaixadas, isto é, quando o contador \textit{arestasDeNível} do nó raiz de $T_u$ estiver nulo. Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que retornará um nó de aresta de nível $j$, ou seja, que possui o \textit{éNível} verdadeiro. Para cada nó de aresta retornado, acionamos \texttt{splay} nele e atualizamos $T_u$. Em seguida, o rebaixamos chamando o método \texttt{rebaixeNívelDaAresta}, descrito abaixo.
+Nas linhas $7$ a $10$, realizamos o processo de rebaixar as arestas de $T_u$ de nível $j$. Na linha $7$, temos um laço que terminará quando todas as arestas de nível $j$ tiverem sido rebaixadas, isto é, quando o contador \textit{arestasDeNível} do nó raiz de $T_u$ estiver nulo. Na linha $8$, utilizamos o método auxiliar \texttt{procureArestaDeNível}, que retornará um nó de aresta de nível $j$, ou seja, que possui o \textit{éNível} verdadeiro. Para cada nó de aresta retornado, acionamos \texttt{splay} nele. Em seguida, o rebaixamos chamando o método \texttt{rebaixeNívelDaAresta}, descrito abaixo.
 
 \begin{programruledcaption}{\texttt{rebaixeNívelDaAresta($G$, $p$, $j$)} \label{prog:decrease-edge-level}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$, um nó de aresta $p$ da floresta $F_j$ que é raiz de uma árvore e tem nível $j$.\\
@@ -1587,9 +1586,9 @@ Nas linhas $7$ a $10$, realizamos o processo de rebaixar as arestas de $T_u$ de 
 
 No Programa~\ref{prog:decrease-edge-level}, atualizamos o nível do nó de aresta $xy$ de $j$ para $j-1$. Note que o nó $p$ é raiz de sua árvore pois foi feito um splay neste nó antes da chamada a \texttt{rebaixeNívelDaAresta}, na linha $9$ do Programa~\ref{prog:replaceGD}. Ademais, como rebaixamos $xy$ de $F_j$ para $F_{j - 1}$, então em $F_j$ atualizamos o seu atributo \textit{éNível} para falso, e em $F_{j-1}$ atualizamos este atributo para verdadeiro. Veja que \texttt{rebaixeNívelDaAresta} consome tempo amortizado $O(\lg n)$.
 
-Voltando ao Programa~\ref{prog:replaceGD}, nas linhas $11$ a $17$, procuramos por uma aresta substituta de nível~$j$. Similarmente à linha $7$, a linha $11$ é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta.  
+Voltando ao Programa~\ref{prog:replaceGD}, nas linhas $11$ a $17$, procuramos por uma aresta substituta de nível~$j$. Similarmente à linha $7$, a linha $11$ é um laço que terminará quando não existirem mais arestas reserva de nível $j$ incidentes a $T_u$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta.  
 
-Na linha $12$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vértice $xx$ que incide em alguma aresta reserva de nível~$j$. Depois, acionamos \texttt{splay} em $xx$ e atualizamos $T_u$. Na linha $14$, obtemos o vértice $x$ do nó $xx$ e percorremos todos os vizinhos $y$ de $x$ na lista de adjacências na linha $15$, pois queremos testar se $xy$ é uma aresta substituta.
+Na linha $12$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vértice $xx$ que incide em alguma aresta reserva de nível~$j$. Depois, acionamos \texttt{splay} em $xx$. Na linha $14$, obtemos o vértice $x$ do nó $xx$ e percorremos todos os vizinhos $y$ na lista de adjacências de $x$ na linha $15$, pois queremos testar se $xy$ é uma aresta substituta.
 
 Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $16$, descrito no Programa~\ref{prog:find-substitute}. Como o nome sugere, o método testa se $xy$ é uma aresta substituta, devolvendo verdadeiro se $xy$ for e falso caso contrário. Quando o método devolve verdadeiro, chegamos à linha $17$ do Programa~\ref{prog:replaceGD}, terminando o algoritmo. Caso contrário, continuamos percorrendo os vizinhos $y$ da lista de adjacências de $x$ e chamando o mesmo método várias vezes.
 
@@ -1605,7 +1604,9 @@ Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $16$, d
         specialidentifiers={},
         escapeinside={(*@}{@*)},
     ]
-    \texttt{removaLA($G.R_j$, $x$, $y$)} 
+    \texttt{removaLA($G.R_j$, $x$, $y$)}
+    \texttt{decrementeArestasReservasDeNível($G.F_{j}$, $G.R_{j}$, $x$)}
+    \texttt{decrementeArestasReservasDeNível($G.F_{j}$, $G.R_{j}$, $y$)}  
     \textbf{se} \texttt{conectadosGD($G$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta $xy$ não é substituta@*)
         $\dotvarm{G}{nível}{x, y}$ := j - 1
         \texttt{adicioneLA($G.R_{j-1}$, $x$, $y$)}
@@ -1641,6 +1642,6 @@ Agora mostraremos que, se ocorreram $t$ operações de inserção e remoção de
 Para tanto, cada inserção será responsável não apenas pelo custo da inserção de uma aresta $e$, mas também pelo custo de todos os rebaixamentos sofridos por $e$ no decorrer de todas as remoções que ocorrerem após a inserção de $e$.
 Isso quer dizer que a inserção da aresta $e$ vai pagar por cada execução das linhas $7$ a $10$ do Programa~\ref{prog:replaceGD} e das linhas $2$ a $7$ do Programa~\ref{prog:find-substitute} que processa a aresta $e$. Como a inserção custa $\Oh(\lg n)$ e essas linhas custam $\Oh(\lg n)$ e são executadas $\Oh(\lg n)$ vezes, pois $e$ pode ser rebaixada no máximo $\left\lceil \lg n \right\rceil$ vezes, o custo pago por uma inserção é $\Oh(\lg^2 n)$.
 
-Já uma remoção de aresta, executada pelo Programa~\ref{prog:removeGD-version2}, custa $\Oh(\lg^2 n)$ mais o custo do \texttt{substituaAresta}. O custo do \texttt{substituaAresta} é $\Oh(\lg^2 n)$ excluindo-se as execuções das linhas $7$ a $10$ do Programa~\ref{prog:replaceGD}, como também as linhas $2$ a $7$ do Programa~\ref{prog:find-substitute}. Isso porque, desconsiderando estas linhas onde ocorrem rebaixamento de aresta, na linha $2$ do Programa~\ref{prog:replaceGD} acaba tendo custo $\Oh(\lg n)$ nas linhas restantes. Apesar de as linhas $10$ e $11$ do Programa~\ref{prog:find-substitute} consumirem tempo $\Oh(\lg^2 n)$, este trecho do código será executado uma única vez quando encontrarmos a substituta e o algoritmo será finalizado. Assim, como a linha $2$ pode ser executada em no máximo $\Oh(\lg n)$ vezes, temos que \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação de remoção.
+Já uma remoção de aresta, executada pelo Programa~\ref{prog:removeGD-version2}, custa $\Oh(\lg^2 n)$ mais o custo do \texttt{substituaAresta}. O custo do \texttt{substituaAresta} é $\Oh(\lg^2 n)$ excluindo-se as execuções das linhas $7$ a $10$ do Programa~\ref{prog:replaceGD}, assim como as linhas $2$ a $7$ do Programa~\ref{prog:find-substitute}. Isso porque, desconsiderando estas linhas onde ocorrem rebaixamentos de arestas, para cada execução da linha $2$ do Programa~\ref{prog:replaceGD} acaba tendo custo $\Oh(\lg n)$ nas linhas restantes. Apesar das linhas $10$ e $11$ do Programa~\ref{prog:find-substitute} consumirem tempo $\Oh(\lg^2 n)$, este trecho do código será executado uma única vez quando encontrarmos uma substituta e o algoritmo finaliza. Assim, como a linha $2$ pode ser executada no máximo $\Oh(\lg n)$ vezes, temos que \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação de remoção.
 
-Com isso, concluímos que o custo total da sequência de $t$ inserções e remoções é $\Oh(t \lg^2 n)$, e assim cada inserção e remoção consome tempo amortizado $\Oh(\lg^2 n)$.
+Com isso, concluímos que o custo total de uma sequência de $t$ inserções e remoções é $\Oh(t \lg^2 n)$, e assim cada inserção e remoção consome tempo amortizado $\Oh(\lg^2 n)$.
