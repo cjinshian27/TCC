@@ -47,7 +47,7 @@ Implementar o algoritmo decremental para florestas geradoras maximais de custo m
 
 Note que, diferente da biblioteca do algoritmo de conexidade em grafos dinâmicos, apresentada na Seção~\ref{sec:dynamic-graph-routines}, na MSF decremental não temos um método equivalente a \texttt{adicioneGD} disponível para o usuário. Em nossa implementação \cite{chung2025}, para criarmos um grafo $G$ de $n$ vértices e $m$ arestas ponderadas dadas em $E$, acionamos~ \texttt{MSFDecremental($n$,~$E$)}, onde criamos, como no problema da conexidade em grafos dinâmicos, $\left\lceil \lg n \right\rceil$ florestas dinâmicas e $\left\lceil \lg n \right\rceil$ listas de adjacências, com $n$ vértices isolados. Em seguida, ordenamos e inserimos as $m$ arestas de $E$ em ordem crescente de peso, usando uma biblioteca pronta do $\emph{C++}$ para ordená-las, que consome tempo esperado $\Oh(m \lg n)$. Estas $m$ arestas são  inseridas uma a uma acionando uma rotina que chamamos de  \texttt{adicioneMSF(u, v, w)}, onde $u$ e $v$ são pontas da aresta e $w$ é o peso dela.
 
-A rotina \texttt{adicioneMSF} é acionada somente dentro do construtor e tem custo amortizado $\Oh(\lg n)$. Ela é uma versão da \texttt{adicioneGD} que acomoda os pesos das arestas como veremos adiante. Por ser uma rotina privada, ou seja, não está disponível para o usuário, após a inserção destas arestas, não é permitido mais operações de inserção, somente de remoção de arestas. Para o usuário, então, só estarão disponíveis as rotinas \texttt{consultePesoMSF} e \texttt{removaMSF}. A versão totalmente dinâmica, que inclui a rotina \texttt{adicioneMSF} para o usuário, será estudada posteriormente no Capítulo~\ref{chapter:fully-MSF}.
+A rotina \texttt{adicioneMSF} é acionada somente dentro do construtor e tem custo amortizado $\Oh(\lg n)$. Ela é uma versão da \texttt{adicioneGD} que acomoda os pesos das arestas como veremos adiante. Por ser uma rotina privada, ou seja, não está disponível para o usuário, após a inserção destas arestas, não são permitidas mais operações de inserção, somente de remoção de arestas. Para o usuário, então, só estarão disponíveis as rotinas \texttt{consultePesoMSF} e \texttt{removaMSF}. Discutiremos brevemente a versão totalmente dinâmica no Capítulo~\ref{chapter:conclusions}, que inclui a rotina de adição de arestas para o usuário.
 
 O construtor \texttt{MSFDecremental}, devido à ordenação de arestas e à chamada ao método \texttt{adicioneMSF}, possui consumo de tempo $\Oh(m \lg n)$. Já a rotina \texttt{consultePesoMSF} possui consumo de tempo $\Oh(1)$. Como estes dois métodos são mais simples, passaremos brevemente sobre eles, e detalharemos mais a rotina \texttt{removaMSF}, que possui a rotina auxiliar \texttt{substituaArestaMSF} implementada de maneira diferente do \texttt{substituaAresta} do algoritmo de conexidade em grafos dinâmicos. 
 
@@ -58,9 +58,9 @@ Usaremos várias definições já apresentadas no algoritmo de conexidade em gra
 
 Na Seção~\ref{sec:dynamic-graph-edge-types}, apresentamos a biblioteca de \texttt{listasDeAdjacências}, onde usamos um mapa hash para inserir ou remover um vértice $v$ da lista de $u$, além de percorrer os vizinhos da lista de $u$. No algoritmo da MSF decremental, quando removemos uma aresta de nível $i$ da floresta $F_i$, uma componente desta será quebrada em duas, $T_u$ e $T_v$, da mesma forma que no algoritmo de conexidade em grafos dinâmicos. A diferença é que, no caso da MSF decremental, precisamos buscar por uma aresta substituta que tenha o menor peso e que ligue $T_u$ a~$T_v$. Não podemos simplesmente percorrer todos os vizinhos $y$ de cada vértice $x$ em $T_u$, verificar se $xy$ reconecta as componentes separadas e se é de menor peso dentre todas as substitutas, já que isso seria ineficiente.
 
-Assim, fica claro que seria bom percorrer as arestas reserva em ordem crescente de peso e testar se alguma é substituta nesta ordem. Por isso, em vez de usar um mapa hash para armazenar os vizinhos de cada vértice, usaremos um min-heap. Na verdade, como estamos trabalhando com nós de vértice e de aresta, cada nó de vértice $u$ guardará um min-heap com os vizinhos de $u$ em $R_i$, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$. Nós de aresta também guardarão um min-heap, porém vazio. 
+Assim, fica claro que seria bom percorrer as arestas reserva em ordem crescente de peso e testar se alguma é substituta nesta ordem. Por isso, em vez de usar um mapa hash para armazenar os vizinhos de cada vértice, usa-se um min-heap. Na verdade, como estamos trabalhando com nós de vértice e de aresta, cada nó de vértice $u$ guardará um min-heap com os vizinhos de $u$ em $R_i$, onde a chave dessa estrutura de dados para um vizinho $v$ será o peso da aresta $uv$. Nós de aresta também guardarão um min-heap, porém vazio. 
 
-Os métodos principais (remoção, inserção e extração do vértice de chave mínima) que usamos no min-heap consomem tempo O($\lg n)$ usando uma implementação tradicional de heap, como a descrita no Capítulo 6 de Thomas H. Cormen et al. \cite{clrs}. O resto dos métodos (consulta do vértice de chave mínima, da quantidade de elementos na min-heap e se a min-heap está vazia) consomem tempo constante, e eles serão necessários para buscar a aresta substituta de peso, como descreveremos mais à frente.
+Os métodos principais (remoção, inserção e extração do vértice de chave mínima) que usamos no min-heap consomem tempo O($\lg n)$ usando uma implementação tradicional de heap, como a descrita no Capítulo 6 de Thomas H. Cormen et al. \cite{clrs}. O resto dos métodos (consulta de um vértice de chave mínima, da quantidade de elementos na min-heap e se a min-heap está vazia) consomem tempo constante, e eles serão necessários para buscar uma aresta substituta de peso mínimo, como descreveremos mais à frente.
 
 Como o min-heap é uma estrutura de dados bastante conhecida, não iremos descrever a sua implementação em detalhes. O objetivo é ressaltar as diferenças entre as listas de adjacências utilizadas no algoritmo de conexidade em grafos dinâmicos e na MSF decremental, e como essa mudança afetará o comportamento do método \texttt{substituaArestaMSF} da MSF decremental.
 
@@ -73,7 +73,7 @@ Assim, com base na implementação clássica do min-heap, podemos definir a bibl
     
     \item \texttt{\textbf{removaLAMSF($R$, $u$, $v$)}}: remove o vértice $u$ da lista de adjacências de $v$ em $R$ e vice-versa;
     
-    \item \texttt{\textbf{consulteMinLAMSF($R$, $u$)}}: retorna um par ($v$, $w$), onde $v$ é um vértice do min-heap de $u$ em $R$ com chave mínima;
+    \item \texttt{\textbf{consulteMinLAMSF($R$, $u$)}}: retorna um par ($v$, $w$), onde $v$ é um vértice do min-heap de $u$ em $R$ com chave mínima $w$;
 
 \end{itemize} 
 
@@ -171,7 +171,7 @@ Para \texttt{adicioneMSF}, a invariante~\ref{invariant11} é preservada para o n
 A rotina \texttt{consultePesoMSF}, que devolve o peso de uma MSF do grafo $G$, está descrita abaixo.     
 
 \begin{programruledcaption}{\texttt{consultePesoMSF($G$)} \label{prog:extract-weight-MSF}}
-    \noindent\textbf{Entrada}: Recebe o grafo $G$. \\
+    \noindent\textbf{Entrada}: Recebe o grafo dinâmico $G$. \\
     \textbf{Saída}: Devolve o peso de uma MSF de $G$.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -196,7 +196,7 @@ A rotina \texttt{consultePesoMSF}, que devolve o peso de uma MSF do grafo $G$, e
 
 A remoção de arestas também é semelhante à do algoritmo de conexidade em grafos dinâmicos. A diferença é que a busca por alguma aresta substituta, feita na \texttt{substituaArestaMSF} agora, é dada por ordem crescente de peso das arestas reserva. 
 
-Quando removemos de $F_i$ uma aresta $uv$ de nível $i$, quebramos uma componente desta floresta em $T_u$ e $T_v$, com $|T_u| \leq |T_v|$, e rebaixamos todas as arestas de $T_u$, da mesma forma como fazíamos antes em \texttt{substituaAresta}. Porém, agora buscamos alguma aresta reserva de peso mínimo dentre todas as arestas reserva em $R_i$ incidente a $T_u$, e testamos se ela é uma substituta. Se não é, a rebaixamos para $R_{i-1}$ e buscamos a próxima de peso mínimo em $R_i$ incidente a $T_u$. Assim, quando achamos uma substituta, conseguimos manter o peso da MSF do grafo, reconectando as duas componentes separadas devido à remoção de $uv$. 
+Quando removemos de $F_i$ uma aresta $uv$ de nível $i$, quebramos uma componente desta floresta em $T_u$ e $T_v$, com $|T_u| \leq |T_v|$, e rebaixamos todas as arestas de $T_u$, da mesma forma que fazíamos antes em \texttt{substituaAresta}. Porém, agora buscamos alguma aresta reserva de peso mínimo dentre todas as arestas reserva em $R_i$ incidente a $T_u$, e testamos se ela é uma substituta. Se não é, a rebaixamos para $R_{i-1}$ e buscamos a próxima de peso mínimo em $R_i$ incidente a $T_u$. Assim, quando achamos uma substituta, conseguimos manter o peso da MSF do grafo, reconectando as duas componentes separadas devido à remoção de $uv$. 
 
 Para facilitar o entendimento da substituição de aresta na MSF decremental, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement-msf1}, temos um grafo ponderado $G$ e assumiremos que essa é a primeira remoção depois da criação do grafo.
 
@@ -296,7 +296,7 @@ No nosso exemplo, $G$ tem $n = 10$ vértices. Sabemos que $\left\lceil \lg 10 \r
     \label{fig:example-replacement-msf1}
 \end{figure}
 
-O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nível~$3$. Dessa forma, as arestas de $T_u$ passam a estar em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement-msf2}, pois agora elas passam a ser de nível $3$. Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos encontrar, se existir, uma aresta reserva que possa reconectá-las. Note que agora precisamos percorrer as arestas reserva em ordem de peso. Entretanto, percorrer todas as arestas reserva de $R_4$ incidentes a $T_u$ e selecionar a de menor peso é ineficiente. Isso porque, se a aresta de peso mínimo não é uma substituta, teremos que buscar a próxima de menor peso e fazer esse processo novamente, o que acaba comprometendo com a performance do algoritmo. Por isso, explicaremos como implementar essa busca eficiente por uma aresta substituta de menor peso na Seção~\ref{sec:forest-node-adjustments}.
+O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nível~$3$. Dessa forma, as arestas de $T_u$ passam a estar em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement-msf2}, pois agora elas passam a ser de nível $3$. Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos encontrar, se existir, uma aresta reserva que possa reconectá-las. Note que agora precisamos percorrer as arestas reserva em ordem de peso. Entretanto, percorrer todas as arestas reserva de $R_4$ incidentes a $T_u$ e selecionar a de menor peso é ineficiente. Isso porque, se a aresta de peso mínimo não é uma substituta, teremos que buscar a próxima de menor peso e fazer esse processo novamente, o que acaba comprometendo a performance do algoritmo. Por isso, explicaremos como implementar essa busca eficiente por uma aresta substituta de menor peso na Seção~\ref{sec:forest-node-adjustments}.
 
 \begin{figure}[H]
     \centering
@@ -487,7 +487,7 @@ Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em 
     \label{fig:example-replacement-msf3}
 \end{figure}
 
-Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$, de peso $14$. Como ela conecta $T_u$ a $T_v$, chamamos \texttt{adicioneFD($F_4$, $a$, $d$)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para os níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement-msf4} ilustra essa etapa do algoritmo. 
+Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$, de peso $14$. Como ela conecta $T_u$ a $T_v$, chamamos \texttt{adicioneFD($F_4$, $a$, $d$)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement-msf4} ilustra essa etapa do algoritmo. 
 
 \begin{figure}[H]
     \centering
@@ -688,7 +688,7 @@ Por isso, fica claro que precisamos de um método que atualize o campo \textit{p
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como se pode ver, o Programa~\ref{prog:updateMinWeight} consome tempo amortizado $\Oh(\lg n)$ por conta da operação \texttt{splay}. Além disso, ele não altera a floresta $F$, altera somente uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
+Como se pode ver, o Programa~\ref{prog:updateMinWeight} consome tempo amortizado $\Oh(\lg n)$ por conta da operação \texttt{splay}. Além disso, ele não altera a floresta $F$, altera somente a forma de uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
 
 Para entendermos como estes dois campos extras aparecem em cada nó da floresta, usaremos um exemplo de um grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas, como se pode ver na Figura~\ref{fig:generic-graph-example-1}. A Figura~\ref{fig:euler-tour-balanced-field-propagation-1} mostra estes campos nos nós da floresta $F_L$ de $G$.
 
@@ -806,7 +806,7 @@ A seguir, o Programa~\ref{prog:findMinWeightEdge} apresenta o método \texttt{pr
 
 % Na linha $3$ do Programa~\ref{prog:findMinWeightEdge}, estamos interessados em saber o tipo de nó da floresta comparando os valores das pontas deste nó. Se forem iguais, temos um nó de vértice e podemos verificar se a chave mínima do min-heap dele é igual ao valor do seu campo \textit{pesoMínimo}, como temos na linha $6$. Se for, simplesmente retornamos o nó $p$. Se não for, percorremos a subárvore esquerda ou a subárvore direita do nó dependendo de onde o valor do campo \textit{pesoMínimo} da raiz está vindo. 
 
-Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, então o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \texttt{splay} no nó devolvido). 
+Veja que o Programa~\ref{prog:findMinWeightEdge} não altera o grafo, e, portanto, as invariantes são preservadas. Como a Euler tour tree é balanceada, o consumo de tempo de cada percurso é $\Oh(\lg n)$ (amortizado em nossa implementação, onde sempre realizamos um \texttt{splay} no nó devolvido). 
 
 \subsection{Versão completa da rotina de adição de arestas}
 \label{sec:addMSF-finalVersion}
@@ -879,15 +879,15 @@ A versão completa do método \texttt{removaMSF} está descrita abaixo.
     \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Ao removermos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$, como se pode ver nas linhas $12$ e $13$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restantes, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso em $R_i$. Assim, a complexidade de tempo da versão final de \texttt{removaMSF} continua sendo $\Oh(\lg^2 n)$ mais o custo da rotina \texttt{substituaArestaMSF}, que será descrita na seção seguinte.
+Ao removermos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$, como se pode ver nas linhas $12$ e $13$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restantes, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso em $R_i$ incidente a $u$ ou $v$. Assim, a complexidade de tempo da versão final de \texttt{removaMSF} continua sendo $\Oh(\lg^2 n)$ mais o custo da rotina \texttt{substituaArestaMSF}, que será descrita na seção seguinte.
 
 \subsection{Rotina de substituição de aresta}
 \label{sec:replaceMSF}
 
-Para descrever a rotina \texttt{substituaArestaMSF} do Programa~\ref{prog:replaceMSF}, usaremos vários dos métodos auxiliares já apresentados, além de alguns métodos e campos novos adicionados aos nós das florestas, como vimos na Seção~\ref{sec:forest-node-adjustments}. Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que é uma versão ajustada da rotina \texttt{testeSubstituta} que vimos antes. 
+Para descrever a rotina \texttt{substituaArestaMSF} do Programa~\ref{prog:replaceMSF}, usaremos vários dos métodos auxiliares já apresentados, além de alguns métodos e campos novos adicionados aos nós das florestas, que vimos na Seção~\ref{sec:forest-node-adjustments}. Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que é uma versão ajustada da rotina \texttt{testeSubstituta} que vimos antes. 
 
 \begin{programruledcaption}{\texttt{substituaArestaMSF($G$, $i$, $u$, $v$)} \label{prog:replaceMSF}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta $uv$. \\
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta removida $uv$. \\
     \noindent\textbf{Efeito}: Adiciona uma aresta substituta de peso mínimo em $G$, se ela existir.
     \vspace{-0.5\baselineskip}
     \begin{lstlisting}[
@@ -921,7 +921,7 @@ Para descrever a rotina \texttt{substituaArestaMSF} do Programa~\ref{prog:replac
 
 Veja que já vimos as linhas $1$ a $10$ do Programa~\ref{prog:replaceMSF}, pois elas são exatamente iguais a esse mesmo trecho do código do Programa~\ref{prog:replaceGD}. Isso quer dizer que o rebaixamento de arestas da floresta acontece da mesma forma que no algoritmo de conexidade em grafos dinâmicos. O que muda é somente a forma como procuramos por alguma aresta substituta.
 
-Sendo assim, explicaremos o código da linha $11$ em diante. A linha $11$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
+Sendo assim, explicaremos o código da linha $11$ em diante. A linha $11$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ incidentes a $T_u$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
 
 A linha $12$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos um nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $15$, onde obtemos um par ($y$, $w$). 
 
@@ -940,11 +940,13 @@ Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta s
         escapeinside={(*@}{@*)},
     ]
     \texttt{removaLAMSF($G.R_j$, $x$, $y$)}
+    \texttt{decrementeArestasReservasDeNível($G.F_j$, $G.R_j$, $x$)}
+    \texttt{decrementeArestasReservasDeNível($G.F_j$, $G.R_j$, $y$)}
     \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $x$)}
     \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $y$)}
+    w := $\dotvarm{G}{peso}{x, y}$
     \textbf{se} \texttt{conectadosFD($G.F_j$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta $xy$ não é substituta@*)
         $\dotvarm{G}{nível}{x, y}$ := j - 1
-        w := $\dotvarm{G}{peso}{x, y}$
         \texttt{adicioneLAMSF($G.R_{j-1}$, $x$, $y$, $w$)}
         \texttt{atualizePesoMínimo($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
         \texttt{atualizePesoMínimo($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
@@ -979,6 +981,6 @@ Agora mostraremos que, se ocorreram $t$ operações de inserção e remoção de
 Para tanto, cada inserção será responsável não apenas pelo custo da inserção de uma aresta $e$, mas também pelo custo de todos os rebaixamentos sofridos por $e$ no decorrer de todas as remoções que ocorrerem após a inserção de $e$.
 Isso quer dizer que a inserção da aresta $e$ vai pagar por cada execução das linhas $7$ a $10$ do Programa~\ref{prog:replaceMSF} e das linhas $4$ a $12$ do Programa~\ref{prog:find-substitute-MSF} que processa a aresta $e$. Como a inserção custa $\Oh(\lg n)$ e essas linhas custam $\Oh(\lg n)$ e são executadas $\Oh(\lg n)$ vezes, pois $e$ pode ser rebaixada no máximo $\left\lceil \lg n \right\rceil$ vezes, o custo pago por uma inserção é $\Oh(\lg^2 n)$.
 
-Já uma remoção de aresta, executada pelo Programa~\ref{prog:removeGD-version-msf-final-version}, custa $\Oh(\lg^2 n)$ mais o custo do \texttt{substituaArestaMSF}. O custo do \texttt{substituaArestaMSF} é $\Oh(\lg^2 n)$ excluindo-se as execuções das linhas $7$ a $10$ do Programa~\ref{prog:replaceMSF}, como também as linhas $4$ a $12$ do Programa~\ref{prog:find-substitute-MSF}. Isso porque, desconsiderando estas linhas onde ocorrem rebaixamento de aresta, na linha $2$ do Programa~\ref{prog:replaceMSF} acaba tendo custo $\Oh(\lg n)$ nas linhas restantes. Apesar de as linhas $16$ e $17$ do Programa~\ref{prog:find-substitute-MSF} consumirem tempo $\Oh(\lg^2 n)$, este trecho do código será executado uma única vez quando encontrarmos a substituta e o algoritmo será finalizado. Assim, como a linha $2$ pode ser executada em no máximo $\Oh(\lg n)$ vezes, temos que \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação de remoção.
+Já uma remoção de aresta, executada pelo Programa~\ref{prog:removeGD-version-msf-final-version}, custa $\Oh(\lg^2 n)$ mais o custo do \texttt{substituaArestaMSF}. O custo do \texttt{substituaArestaMSF} é $\Oh(\lg^2 n)$ excluindo-se as execuções das linhas $7$ a $10$ do Programa~\ref{prog:replaceMSF}, assim como as linhas $4$ a $12$ do Programa~\ref{prog:find-substitute-MSF}. Isso porque, desconsiderando estas linhas onde ocorrem rebaixamentos de arestas, para cada execução da linha $2$ do Programa~\ref{prog:replaceMSF} acaba tendo custo $\Oh(\lg n)$ nas linhas restantes. Apesar das linhas $16$ e $17$ do Programa~\ref{prog:find-substitute-MSF} consumirem tempo $\Oh(\lg^2 n)$, este trecho do código será executado uma única vez quando encontrarmos uma substituta e o algoritmo finaliza. Assim, como a linha $2$ pode ser executada no máximo $\Oh(\lg n)$ vezes, temos que \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação de remoção.
 
-Com isso, concluímos que o custo total da sequência de $t$ inserções e remoções é $\Oh(t \lg^2 n)$, e assim cada inserção e remoção consome tempo amortizado $\Oh(\lg^2 n)$.
+Com isso, concluímos que o custo total de uma sequência de $t$ inserções e remoções é $\Oh(t \lg^2 n)$, e assim cada inserção e remoção consome tempo amortizado $\Oh(\lg^2 n)$.
