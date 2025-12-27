@@ -23,7 +23,7 @@ Já para outros cinco grafos, realizamos os mesmos experimentos de $G_0$, usando
 
 Para cada grafo, realizamos a remoção de arestas em lotes sucessivos. Após cada lote de remoções, imprimimos o peso de uma MST correspondente ao estado atual do grafo e, em seguida, dobramos o tamanho do lote. Assim, removemos $100, 200, 400, \ldots, 25.600$ arestas, registrando o tempo acumulado das remoções e o peso de uma MST após cada etapa.
 
-Todos os arquivos de teste mencionados neste capítulo, bem como o gerador desenvolvido, estão disponíveis no diretório \texttt{src/tests/} da nossa implementação~\cite{chung2025}. Os arquivos de teste gerados possuem o nome \texttt{graph\_i\_permutation\_j}, $0 \leq i \leq 5$ e $0 \leq j \leq 4$, e o nome do programa que gera os arquivos de teste é \texttt{randomGraphGenerator.cpp}. Neste programa, é possível configurar o valor de $n$ e de $p$ do modelo $G(n, p)$ de Erdős-Rényi, além do número de grafos e permutações a serem gerados.
+Todos os arquivos de teste mencionados neste capítulo, bem como o gerador desenvolvido, estão disponíveis no diretório \texttt{src/tests/} da nossa implementação~\cite{chung2025}. Os arquivos de teste gerados possuem um nome genérico \texttt{graph\_i\_permutation\_j}, $0 \leq i \leq 5$ e $0 \leq j \leq 4$, e o nome do programa que gera os arquivos de teste é \texttt{randomGraphGenerator.cpp}. Neste programa, é possível configurar o valor de $n$ e de $p$ do modelo $G(n, p)$ de Erdős-Rényi, além do número de grafos e permutações a serem gerados.
 
 \section{Algoritmo de Kruskal}
 
