@@ -255,7 +255,7 @@ No nosso exemplo, $G$ tem $n = 10$ vértices. Sabemos que $\left\lceil \lg 10 \r
         \draw[reserve] (b) -- (u) node[midway, above, xshift=15pt, yshift = -2pt, weight] {12};
         \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
         \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
-        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=0pt, weight] {11};
         \draw[reserve] (a) -- (c) node[midway, above, yshift=10pt, weight] {16};
 
         \end{tikzpicture}
@@ -348,7 +348,7 @@ O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nív
         \draw[reserve] (b) -- (u) node[midway, above, xshift=15pt, yshift = -2pt, weight] {12};
         \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
         \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
-        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=0pt, weight] {11};
         \draw[reserve] (a) -- (c) node[midway, above, yshift=10pt, weight] {16};
 
         \end{tikzpicture}
@@ -444,7 +444,7 @@ Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em 
         \draw[reserveremoved] (b) -- (u) node[midway, above, xshift=15pt, yshift = -2pt, weight] {12};
         \draw[reserveremoved] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
         \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
-        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=0pt, weight] {11};
 
         \end{tikzpicture}
     \end{minipage}
@@ -539,7 +539,7 @@ Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$,
         \draw[reserve] (c) -- (v) node[pos=0.6, below, yshift=-1pt, weight] {15}; % adjusted
         \draw[reserve] (a) -- (c) node[midway, above, yshift=0pt, weight] {16};
         \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
-        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=0pt, weight] {11};
 
         \end{tikzpicture}
     \end{minipage}
@@ -1032,7 +1032,7 @@ Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. P
         \draw[reserveremoved] (b) -- (u) node[midway, above, xshift=15pt, yshift = -2pt, weight] {12};
         \draw[reserveremoved] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
         \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
-        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=0pt, weight] {11};
 
         \end{tikzpicture}
     \end{minipage}
