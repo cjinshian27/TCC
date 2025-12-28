@@ -974,7 +974,7 @@ Veja que as linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF} possuem
 
 Agora, veremos em detalhes o motivo de não precisarmos procurar uma substituta de menor peso em níveis $> i$ quando removemos uma aresta $uv$ de nível $i$. 
 
-Primeiramente, é fácil perceber que, se removermos uma aresta de nível $i$ de $F_i$ e $F_{i+1}$ existe, então sabemos que alguma outra aresta da floresta de nível $i + 1$ já tinha sido removida antes, o que causou o rebaixamento de algumas arestas para o nível $i$. Apenas a remoção de arestas causam este rebaixamento, visto que a inserção de uma aresta só ocorre em $F_L$ e as florestas de níveis inferiores não são afetadas.
+Primeiramente, é fácil perceber que, se removermos uma aresta de nível $i$ de $F_i$ e $F_{i+1}$ existe, então sabemos que alguma aresta da floresta de nível $i + 1$ já tinha sido removida antes, o que causou o rebaixamento de algumas arestas para o nível $i$. Apenas a remoção de arestas causam este rebaixamento, visto que a inserção de uma aresta só ocorre em $F_L$ e as florestas de níveis inferiores não são afetadas.
 
 Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. Para facilitar o entendimento deste cenário, ilustraremos um grafo com as florestas $F_i$ e $F_{i+1}$, além de $R_i$ e $R_{i+1}$, como se pode ver na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-1}. Nela, 
 
