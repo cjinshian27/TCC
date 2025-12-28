@@ -970,8 +970,16 @@ Na rotina \texttt{testeSubstitutaMSF}, precisamos atualizar a variável \textit{
 
 Veja que as linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF} possuem custo amortizado $\Oh(\lg n)$. Isso quer dizer que, enquanto as arestas que estamos testando não forem substitutas, o método \texttt{testeSubstitutaMSF} será acionado várias vezes com esse custo de tempo. No momento em que encontrarmos uma substituta, \texttt{testeSubstitutaMSF} será acionado uma única vez e consumirá tempo amortizado $\Oh(\lg^2 n)$ por causa das linhas $18$ e $19$, e assim o algoritmo será finalizado. 
 
-Agora, veremos em detalhes o motivo de não precisarmos procurar uma substituta de menor peso em níveis maiores que $i$ quando removemos uma aresta $uv$ de nível $i$. 
+\subsection{Uma observação sobre a busca por uma aresta substituta}
 
+Agora, veremos em detalhes o motivo de não precisarmos procurar uma substituta de menor peso em níveis $> i$ quando removemos uma aresta $uv$ de nível $i$. 
+
+Primeiramente, é fácil perceber que, se removermos uma aresta de nível $i$ de $F_i$ e $F_{i+1}$ existe, então sabemos que alguma outra aresta da floresta de nível $i + 1$ já tinha sido removida antes, o que causou o rebaixamento de algumas arestas para o nível $i$. Apenas a remoção de arestas causam este rebaixamento, visto que a inserção de uma aresta só ocorre em $F_L$, e as florestas de níveis inferiores não são afetadas.
+
+Assim, sabemos que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. Para facilitar o entendimento deste cenário, ilustraremos um grafo com as florestas $F_i$ e $F_{i+1}$, além de $R_i$ e $R_{i+1}$.
+
+
+\subsection{Consumo de tempo de \texttt{substituaArestaMSF}}
 
 Agora, explicaremos o custo da rotina \texttt{substituaArestaMSF}. Usaremos o mesmo argumento da amortização da rotina \texttt{substituaAresta}, apresentado na Seção~\ref{sec:replace-edge}. 
 
