@@ -974,9 +974,118 @@ Veja que as linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF} possuem
 
 Agora, veremos em detalhes o motivo de não precisarmos procurar uma substituta de menor peso em níveis $> i$ quando removemos uma aresta $uv$ de nível $i$. 
 
-Primeiramente, é fácil perceber que, se removermos uma aresta de nível $i$ de $F_i$ e $F_{i+1}$ existe, então sabemos que alguma outra aresta da floresta de nível $i + 1$ já tinha sido removida antes, o que causou o rebaixamento de algumas arestas para o nível $i$. Apenas a remoção de arestas causam este rebaixamento, visto que a inserção de uma aresta só ocorre em $F_L$, e as florestas de níveis inferiores não são afetadas.
+Primeiramente, é fácil perceber que, se removermos uma aresta de nível $i$ de $F_i$ e $F_{i+1}$ existe, então sabemos que alguma outra aresta da floresta de nível $i + 1$ já tinha sido removida antes, o que causou o rebaixamento de algumas arestas para o nível $i$. Apenas a remoção de arestas causam este rebaixamento, visto que a inserção de uma aresta só ocorre em $F_L$ e as florestas de níveis inferiores não são afetadas.
 
-Assim, sabemos que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. Para facilitar o entendimento deste cenário, ilustraremos um grafo com as florestas $F_i$ e $F_{i+1}$, além de $R_i$ e $R_{i+1}$.
+Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. Para facilitar o entendimento deste cenário, ilustraremos um grafo com as florestas $F_i$ e $F_{i+1}$, além de $R_i$ e $R_{i+1}$, como se pode ver na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-1}. Nela, 
+
+
+\begin{figure}[H]
+    \centering
+
+    \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $i + 1$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+        [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+        edge/.style={thick, black},
+        reserve/.style={red, thick},
+        removed/.style={black, thick, dashed},
+        reserveremoved/.style={red, thick, dotted}]
+
+        \node[node] (u) at (-1,2) {$u$};
+        \node[node] (a) at (-3,4) {$a$};
+        \node[node] (b) at (-5,2) {$b$};
+        \node[node] (c) at (-3,0) {$c$};
+        \node[node] (v) at (2,2) {$v$};
+        \node[node] (d) at (3,3.7) {$d$};
+        \node[node] (e) at (3,0.3) {$e$};
+        \node[node] (f) at (5,0.3) {$f$};
+        \node[node] (g) at (6, 2) {$g$};
+        \node[node] (h) at (5, 3.7) {$h$};
+        
+         % Dotted circles for T_u and T_v
+        \draw[dotted, thick, gray] (-3,2) circle (2.7cm);
+        \draw[dotted, thick, gray] (4,2) circle (2.7cm);  
+        
+        % Labels for the circles
+        \node at (-3,-1.1) {$T_u$};
+        \node at (4,-1.1) {$T_v$};
+
+        \draw[edge] (a) -- (u) node[midway, above, weight] {1};
+        \draw[edge] (a) -- (b) node[midway, above, weight] {2};
+        \draw[edge] (b) -- (c) node[midway, above, weight] {3};
+        \draw[edge] (v) -- (d) node[pos=0.45, above, yshift=-2pt, weight] {4}; % adjusted
+        \draw[edge] (v) -- (f) node[midway, above, weight] {5};
+        \draw[edge] (v) -- (e) node[midway, above, yshift=-3pt, weight] {6}; % adjusted
+        \draw[edge] (f) -- (g) node[midway, above, yshift=-3pt, weight] {7}; % adjusted
+        \draw[edge] (g) -- (h) node[midway, below, yshift=3pt, weight] {8}; % adjusted
+
+        % reserve edges (normal red edges)
+        \draw[reserve] (a) -- (d) node[midway, above, yshift=0pt, weight] {14};
+        \draw[reserve] (c) -- (v) node[pos=0.6, below, yshift=-1pt, weight] {15}; % adjusted
+        \draw[reserve] (a) -- (c) node[midway, above, yshift=10pt, weight] {16};
+        
+        \draw[reserveremoved] (b) -- (u) node[midway, above, xshift=15pt, yshift = -2pt, weight] {12};
+        \draw[reserveremoved] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
+        \draw[reserve] (d) -- (f) node[midway, above, yshift=-1pt, weight] {10}; % adjusted
+        \draw[reserve] (d) -- (h) node[midway, above, yshift=-1pt, weight] {11};
+
+        \end{tikzpicture}
+    \end{minipage}
+    \vspace{1cm}
+        \noindent
+    \begin{minipage}[c]{2cm}
+        \raggedright
+        Nível $i$
+    \end{minipage}%
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \begin{tikzpicture}
+            [scale=0.6, node/.style={scale=0.7, circle,draw,minimum size=2em, thick, font=\large},
+            edge/.style={thick, black},
+            reserve/.style={red, thick},
+            removed/.style={black, thick, dashed}]
+
+            \node[node] (u) at (-1,2) {$u$};
+            \node[node] (a) at (-3,4) {$a$};
+            \node[node] (b) at (-5,2) {$b$};
+            \node[node] (c) at (-3,0) {$c$};
+            \node[node] (v) at (2,2) {$v$};
+            \node[node] (d) at (3,3.7) {$d$};
+            \node[node] (e) at (3,0.3) {$e$};
+            \node[node] (f) at (5,0.3) {$f$};
+            \node[node] (g) at (6, 2) {$g$};
+            \node[node] (h) at (5, 3.7) {$h$};
+            
+            \draw[edge] (a) -- (u) node[midway, above, weight] {1};
+            \draw[edge] (a) -- (b) node[midway, above, weight] {2};
+            \draw[edge] (b) -- (c) node[midway, above, weight] {3};
+                    \draw[reserve] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
+        \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
+
+
+        \end{tikzpicture}
+    \end{minipage}
+    \caption{Representação da busca por uma aresta substituta em $R_{i+1}$. As arestas reserva de nível $i+1$ que estão pontilhadas foram percorridas em ordem crescente de peso e estão prestes a serem removidas de $R_{i+1}$, pois foram rebaixadas para o nível $i$, como se pode ver em $R_{i}$.}
+    \vspace{-1cm}
+    \label{fig:why-not-get-replacement-in-higher-levels-1}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \subsection{Consumo de tempo de \texttt{substituaArestaMSF}}
