@@ -970,6 +970,47 @@ Na rotina \texttt{testeSubstitutaMSF}, precisamos atualizar a variável \textit{
 
 Veja que as linhas $4$ a $12$ do Programa~\ref{prog:find-substitute-MSF} possuem custo amortizado $\Oh(\lg n)$. Isso quer dizer que, enquanto as arestas que estamos testando não forem substitutas, o método \texttt{testeSubstitutaMSF} será acionado várias vezes com esse custo de tempo. No momento em que encontrarmos uma substituta, \texttt{testeSubstitutaMSF} será acionado uma única vez e consumirá tempo amortizado $\Oh(\lg^2 n)$ por causa das linhas $16$ e $17$, e assim o algoritmo será finalizado. 
 
+Agora, veremos em detalhes o motivo de não precisarmos procurar uma substituta de menor peso em níveis menores que $i$ quando removemos uma aresta $uv$ de nível $i$. Veja que, como a aresta $uv$ tem nível $i$, ela não pertence a $F_{i-1}$. Logo, pela invariante~\ref{invariant22}, $u$ e $v$ estão em componentes distintas de $F_{i-1}$. Como $F_{i-1}$ é uma MSF de $G_{i-1}$, não existe aresta reserva de nível $\leq i - 1$ de menor peso que conecte as componentes $T_u$ e $T_v$. Portanto, só procuramos uma substituta de menor peso em níveis $\geq i$. A Figura~\ref{fig:why-not-search-in-less-or-equal-than-i-in-msf} torna a explicação mais intuitiva.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=stealth, thick]
+
+    % Big green circles g1 and g2
+    \node[draw, thick, green, circle, minimum size=2.9cm] (g1) at (-3,0) {};
+    \node[draw, thick, green, circle, minimum size=2.9cm] (g2) at (3,0) {};
+
+    \draw[dotted, thick, gray] (-3,0) circle (1.6cm);
+    \draw[dotted, thick, gray] (3,0) circle (1.6cm);  
+    
+    % Labels for the circles
+    \node at (-3,2) {$T_u$};
+    \node at (3,2) {$T_v$};
+
+    % Straight green edge between g1 and g2
+    \draw[thick, green] (g1) -- node[above] {$i$} (g2);
+    \node[text=red] at (-0.5, 1.2) {$3$};
+    \node[text=green] at (0, -0.4) {$7$};
+
+    % Small red circles inside g1
+    \node[draw, thick, red, circle, minimum size=1.2cm] (r11) at (-3.4,0.6) {};
+    \node[draw, thick, red, circle, minimum size=1.2cm] (r12) at (-2.6,-0.5) {};
+
+    % Small red circles inside g2
+    \node[draw, thick, red, circle, minimum size=1.1cm] (r21) at (2.5, 0.6) {};
+    \node[draw, thick, red, circle, minimum size=1.1cm] (r22) at (3.7, 0.1) {};
+    \node[draw, thick, red, circle, minimum size=1.1cm] (r23) at (2.7,-0.6) {};
+
+    % Curved red edge connecting one red circle in g1 with one in g2
+    \draw[thick, red] (r11.north east) to[bend left=20] node[pos=0.5, above] {$i-1$} (r21.north west);
+
+    \end{tikzpicture}
+    \caption{Os círculos verdes representam as componentes $T_u$ e $T_v$ da floresta $F_i$ do grafo $G_i$, enquanto os círculos vermelhos representam as componentes da floresta $F_{i-1}$ do grafo $G_{i-1}$. Note que a aresta reserva de nível $i-1$ de peso $3$ mostrada não deveria existir, porque senão ela violaria a invariante~\ref{invariant11}, já que poderíamos simplesmente substituir a aresta verde pela vermelha e obter uma MSF de menor peso para $G_i$, mas a aresta vermelha é de nível $i-1$. Portanto, tais arestas de nível $i-1$ ligando componentes de $F_i$ (como a aresta vermelha de peso $3$) não existem e só é necessário procurar arestas substitutas a partir de nível $i$ (como a aresta verde de peso $7$) para conectar $T_u$ e $T_v$.}
+    \label{fig:why-not-search-in-less-or-equal-than-i-in-msf}
+\end{figure}
+
+\raggedbottom
+
 Agora, explicaremos o custo da rotina \texttt{substituaArestaMSF}. Usaremos o mesmo argumento da amortização da rotina \texttt{substituaAresta}, apresentado na Seção~\ref{sec:replace-edge}. 
 
 No pior caso, uma execução da rotina \texttt{substituaArestaMSF} pode consumir muito tempo. Por exemplo, se o grafo já está com $m = \Theta(n^2)$ arestas inseridas, todas de nível $L$, pode ocorrer uma remoção que aciona o \texttt{substituaArestaMSF} e que acarreta o rebaixamento de $\Theta(n^2)$ arestas, a um custo $\Omega(n^2 \lg n)$. 
