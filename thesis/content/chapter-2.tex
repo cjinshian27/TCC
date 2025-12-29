@@ -1074,7 +1074,7 @@ Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. P
     \label{fig:why-not-get-replacement-in-higher-levels-1}
 \end{figure}
 
-Logo na imagem abaixo, temos a aresta $ad$ escolhida para ser uma substituta de menor peso que reconecta $T_u$ e $T_v$, tornando-se uma aresta da floresta. Note que, em $R_i$, as arestas reserva com as duas pontas em $T_u$ de $F_i$ (neste caso, $ub$ e $uc$) possuem peso menor que as arestas reserva com duas pontas em $T_u$ de $F_{i+1}$ (meste caso, $ac$). Isso acontece porque rebaixamos as aresta reserva com as duas pontas em $T_u$ em ordem crescente de peso até encontrarmos uma que conecte $T_u$ e $T_v$.
+Logo na imagem abaixo, temos a aresta $ad$ escolhida para ser uma substituta de menor peso que reconecta $T_u$ e $T_v$, tornando-se uma aresta da floresta. Note que, em $R_i$, as arestas reserva com as duas pontas em $T_u$ de $F_i$ (neste caso, $ub$ e $uc$) possuem peso menor que as arestas reserva com duas pontas em $T_u$ de $F_{i+1}$ (meste caso, $ac$). Isso acontece porque, quando percorremos as arestas reserva em ordem crescente de peso, aproveitamos para rebaixar aquelas com as duas pontas em $T_u$ até encontrarmos uma que conecte $T_u$ e $T_v$.
 
 Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que acabaria quebrando uma componente da floresta $F_i$ em $T_u'$ e $T_v'$. Veja que, para reconectar $T_u'$ e $T_v'$, percorreríamos as seguintes arestas reserva, nesta ordem: $ub$,  $uc$ e $ac$. Veja que, embora $ac$ seja uma substituta que reconecte $T_u'$ e $T_v'$, a $uc$ seria escolhida em seu lugar por ser a de menor peso, e está em $R_i$. 
 
