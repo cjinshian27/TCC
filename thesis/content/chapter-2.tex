@@ -1200,13 +1200,13 @@ Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que 
 Até o momento, mostramos que arestas reserva de nível $i$ com as duas pontas em $T_u$ possuem peso menor ou igual ao peso das arestas reserva de nível $i+1$ com ambas as pontas em $T_u$.  
 No caso das arestas reserva com uma ponta incidente a $T_u$ e outra em $T_v$, nenhuma chega a ser rebaixada, visto que a de menor peso já se tornaria uma aresta da floresta e as outras nem seriam percorridas. Por fim, as arestas reserva com ambas as pontas em $T_v$ não são afetadas visto que nenhuma delas são percorridas durante a busca por uma substituta.
 
-Com isso, podemos estabelecer uma quarta invariante para o problema da MSF decremental:
+Com isso, cria-se uma certa intuição de que qualquer aresta reserva incidente a um vértice é mais leve que outra reserva de nível superior incidente ao mesmo vértice. Dessa forma, podemos estabelecer uma quarta invariante para o problema da MSF decremental:
 
 \begin{enumerate}[label=(\Roman*), start = 4]
     \item \label{invariant44} Toda arestas reserva de nível $i$ incidente a um vértice $u$ tem peso menor ou igual ao peso das arestas reserva de nível maior que $i$ incidentes a $u$. 
 \end{enumerate}
 
-Esta invariante, apesar de não ter sido utilizada junto com outras três invariantes, evidencia ainda mais a diferença  entre o algoritmo de conexidade dinâmica descrito no Capítulo~\ref{chapter:connectivity-chapter} e o algoritmo para MSF decremental, além de mostrar como as arestas reserva se comportam ao longo dos $L$ níveis do grafo de acordo com o peso delas.
+Esta invariante, apesar de não ter sido utilizada junto com outras três invariantes, evidencia ainda mais a diferença  entre o algoritmo de conexidade dinâmica descrito no Capítulo~\ref{chapter:connectivity-chapter} e o algoritmo para MSF decremental, além de mostrar como as arestas reserva se comportam ao longo dos $L$ níveis do grafo $R$ de acordo com o peso delas.
 
 \subsection{Consumo de tempo de \texttt{substituaArestaMSF}}
 
