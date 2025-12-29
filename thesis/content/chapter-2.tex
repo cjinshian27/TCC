@@ -1198,7 +1198,7 @@ Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que 
 \end{figure}
 
 Até o momento, mostramos que arestas reserva de nível $i$ com as duas pontas em $T_u$ possuem peso menor ou igual ao peso das arestas reserva de nível $i+1$ com ambas as pontas em $T_u$.  
-No caso das arestas reserva com uma ponta incidente a $T_u$ e outra em $T_v$, nenhuma chega a ser rebaixada, visto que a de menor peso já se tornaria uma aresta da floresta e as outras nem seriam percorridas. Por fim, as arestas reserva com ambas as pontas em $T_v$ não são afetadas visto que nenhuma delas são percorridas durante a busca por uma substituta.
+No caso das arestas reserva com uma ponta incidente a $T_u$ e outra em $T_v$, nenhuma chega a ser rebaixada, visto que a de menor peso já se tornaria uma aresta substituta e as outras nem seriam percorridas. Por fim, as arestas reserva com ambas as pontas em $T_v$ não são rebaixadas visto que nenhuma delas são percorridas durante a busca por uma substituta.
 
 Com isso, cria-se uma certa intuição de que qualquer aresta reserva incidente a um vértice é mais leve que outra reserva de nível superior incidente ao mesmo vértice. Dessa forma, podemos estabelecer uma quarta invariante para o problema da MSF decremental:
 
