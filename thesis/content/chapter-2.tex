@@ -972,7 +972,7 @@ Veja que as linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF} possuem
 
 \subsection{Uma observação sobre a busca por uma aresta substituta}
 
-Agora, veremos em detalhes o motivo de não precisarmos procurar uma substituta de menor peso em níveis $> i$ quando removemos uma aresta $uv$ de nível $i$. 
+Agora, veremos em detalhes o motivo de não precisarmos procurar primeiro uma substituta de menor peso em níveis $> i$ quando removemos uma aresta $uv$ de nível $i$. 
 
 Primeiramente, é fácil perceber que, se removermos uma aresta de nível $i$ de $F_i$ e $i \neq L$, sabemos que alguma aresta de nível $i + 1$ da floresta $F_{i + 1}$ já tinha sido removida antes, o que causou o rebaixamento de algumas arestas de nível $i + 1$ para o nível $i$. Veja que somente a remoção de arestas rebaixa arestas, visto que a inserção de uma aresta só ocorre em $F_L$ e as florestas de níveis inferiores não são afetadas.
 
@@ -993,7 +993,7 @@ Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. P
         edge/.style={thick, black},
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed},
-        reserveremoved/.style={red, thick, dotted}]
+        reserveremoved/.style={red, thick, dashed}]
 
         \node[node] (u) at (-1,2) {$u$};
         \node[node] (a) at (-3,4) {$a$};
@@ -1069,12 +1069,12 @@ Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. P
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Representação da busca por uma aresta substituta em $R_{i+1}$. As arestas reserva de nível $i+1$ que estão pontilhadas foram percorridas em ordem crescente de peso e estão prestes a serem removidas de $R_{i+1}$, pois foram rebaixadas para o nível $i$, como se pode ver em $R_{i}$.}
+    \caption{Representação da busca por uma aresta substituta em $R_{i+1}$. As arestas reserva de nível $i+1$ que estão tracejadas foram percorridas em ordem crescente de peso e estão prestes a serem removidas de $R_{i+1}$, pois foram rebaixadas para o nível $i$, como se pode ver em $R_{i}$.}
     \vspace{-1cm}
     \label{fig:why-not-get-replacement-in-higher-levels-1}
 \end{figure}
 
-Logo na imagem abaixo, temos a aresta $ad$ escolhida como uma substituta de menor peso que reconecta $T_u$ e $T_v$. Note que, em $R_i$, as arestas reserva com as duas pontas em $T_u$ de $F_i$ (neste caso, $ub$ e $uc$) possuem peso menor que as arestas reserva com duas pontas em $T_u$ de $F_{i+1}$. Isso acontece porque rebaixamos as aresta reserva com as duas pontas em $T_u$ em ordem crescente de peso até encontrarmos uma que conecte $T_u$ e $T_v$.
+Logo na imagem abaixo, temos a aresta $ad$ escolhida como uma substituta de menor peso que reconecta $T_u$ e $T_v$, tornando-se uma aresta da floresta. Note que, em $R_i$, as arestas reserva com as duas pontas em $T_u$ de $F_i$ (neste caso, $ub$ e $uc$) possuem peso menor que as arestas reserva com duas pontas em $T_u$ de $F_{i+1}$ ($ac$). Isso acontece porque rebaixamos as aresta reserva com as duas pontas em $T_u$ em ordem crescente de peso até encontrarmos uma que conecte $T_u$ e $T_v$.
 
 \begin{figure}[H]
     \centering
