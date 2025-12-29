@@ -972,7 +972,7 @@ Veja que as linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF} possuem
 
 \subsection{Uma observação sobre a busca por uma aresta substituta}
 
-Agora, veremos em detalhes o motivo de não começarmos a procurar primeiro uma aresta substituta nos níveis $> i$ quando removemos uma aresta $uv$ de nível $i$. Será que que não há uma aresta substituta no nível $i + 1$ que seja mais leve que uma substituta do nível $i$? 
+Agora, veremos em detalhes o motivo de não começarmos a procurar primeiro uma aresta substituta nos níveis $> i$ quando removemos uma aresta $uv$ de nível $i$. Será que não há uma aresta substituta no nível $i + 1$ que seja mais leve que uma substituta do nível $i$? 
 
 Primeiramente, é fácil perceber que, se removermos uma aresta de nível $i$ de $F_i$ e $i \neq L$, sabemos que alguma aresta de nível $i + 1$ da floresta $F_{i + 1}$ já tinha sido removida antes, o que causou o rebaixamento de algumas arestas de nível $i + 1$ para o nível $i$. Veja que somente a remoção de arestas rebaixa arestas, visto que a inserção de uma aresta só ocorre em $F_L$ e as florestas de níveis inferiores não são afetadas.
 
