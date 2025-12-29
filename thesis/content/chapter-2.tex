@@ -1206,6 +1206,8 @@ Com isso, podemos estabelecer uma quarta invariante para o problema da MSF decre
     \item \label{invariant44} Toda arestas reserva de nível $i$ incidente a um vértice $u$ tem peso menor ou igual ao peso das arestas reserva de nível maior que $i$ incidentes a $u$. 
 \end{enumerate}
 
+Esta invariante, apesar de não ter sido utilizada junto com outras três invariantes, evidencia ainda mais a diferença  entre o algoritmo de conexidade dinâmica descrito no Capítulo~\ref{chapter:connectivity-chapter} e o algoritmo para MSF decremental, além de mostrar como as arestas reserva se comportam ao longo dos $L$ níveis do grafo de acordo com o peso delas.
+
 \subsection{Consumo de tempo de \texttt{substituaArestaMSF}}
 
 Agora, explicaremos o custo da rotina \texttt{substituaArestaMSF}. Usaremos o mesmo argumento da amortização da rotina \texttt{substituaAresta}, apresentado na Seção~\ref{sec:replace-edge}. 
