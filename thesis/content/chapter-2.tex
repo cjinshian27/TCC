@@ -1076,7 +1076,7 @@ Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. P
 
 Logo na imagem abaixo, temos a aresta $ad$ escolhida para ser uma substituta de menor peso que reconecta $T_u$ e $T_v$, tornando-se uma aresta da floresta. Note que, em $R_i$, as arestas reserva com as duas pontas em $T_u$ de $F_i$ (neste caso, $ub$ e $uc$) possuem peso menor que as arestas reserva com duas pontas em $T_u$ de $F_{i+1}$ (meste caso, $ac$). Isso acontece porque, quando percorremos as arestas reserva em ordem crescente de peso, aproveitamos para rebaixar aquelas com as duas pontas em $T_u$ até encontrarmos uma que conecte $T_u$ e $T_v$.
 
-Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que acabaria quebrando uma componente da floresta $F_i$ em $T_u'$ e $T_v'$. Para reconectar $T_u'$ e $T_v'$, percorreríamos as seguintes arestas reserva, nesta ordem: $ub$,  $uc$ e $ac$. Veja que, embora $ac$ seja uma substituta que reconecte $T_u'$ e $T_v'$, a $uc$ seria escolhida em seu lugar por ser a de menor peso, e está em $R_i$. 
+Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que acabaria quebrando uma componente da floresta $F_i$ em $T_b$ e $T_c$. Para reconectar $T_b$ e $T_c$, percorreríamos as seguintes arestas reserva, nesta ordem: $ub$,  $uc$ e $ac$. Veja que, embora $ac$ seja uma substituta que reconecte $T_b$ e $T_c$, a $uc$ seria escolhida em seu lugar por ser a de menor peso, e está em $R_i$. 
 
 \begin{figure}[H]
     \centering
@@ -1157,7 +1157,7 @@ Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que 
             minimum height=2cm
             ] at (-3, 3) {};
             
-            \node[text=green] at (0.5,3) {$T_u'$};
+            \node[text=green] at (0.5,3) {$T_b$};
 
             \node[
             draw,
@@ -1169,7 +1169,7 @@ Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que 
             minimum height=1cm
             ] at (-3, 0) {};
             
-            \node[text=green] at (-1.4, 0) {$T_v'$};
+            \node[text=green] at (-1.4, 0) {$T_c$};
 
 
             \node[node] (u) at (-1,2) {$u$};
@@ -1192,7 +1192,7 @@ Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que 
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Representação do grafo com a aresta substituta $ad$ por ser a de menor peso em $R_4$ que conecta $T_u$ a $T_v$, tornando-se uma aresta da floresta $F_4$. A próxima aresta a ser removida é \textit{bc}, que está tracejada, acaba de quebrar uma componente de $F_i$ em $T_u'$ e $T_v'$.}
+    \caption{Representação do grafo com a aresta substituta $ad$ por ser a de menor peso em $R_4$ que conecta $T_u$ a $T_v$, tornando-se uma aresta da floresta $F_4$. A próxima aresta a ser removida é \textit{bc}, que está tracejada, acaba de quebrar uma componente de $F_i$ em $T_b$ e $T_c$.}
     \vspace{-1cm}
     \label{fig:why-not-get-replacement-in-higher-levels-2}
 \end{figure}
@@ -1221,8 +1221,8 @@ Agora mostraremos que, se ocorreram $t$ operações de inserção e remoção de
 Para tanto, cada inserção será responsável não apenas pelo custo da inserção de uma aresta $e$, mas também pelo custo de todos os rebaixamentos sofridos por $e$ no decorrer de todas as remoções que ocorrerem após a inserção de $e$.
 Isso quer dizer que a inserção da aresta $e$ vai pagar por cada execução das linhas $7$ a $10$ do Programa~\ref{prog:replaceMSF} e das linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF} que processa a aresta $e$. Como a inserção custa $\Oh(\lg n)$ e essas linhas custam $\Oh(\lg n)$ e são executadas $\Oh(\lg n)$ vezes, pois $e$ pode ser rebaixada no máximo $\left\lceil \lg n \right\rceil$ vezes, o custo pago por uma inserção é $\Oh(\lg^2 n)$.
 
-Já uma remoção de aresta, executada pelo Programa~\ref{prog:removeGD-version-msf-final-version}, custa $\Oh(\lg^2 n)$ mais o custo do \texttt{substituaArestaMSF}. O custo do \texttt{substituaArestaMSF} é $\Oh(\lg^2 n)$ excluindo-se as execuções das linhas $7$ a $10$ do Programa~\ref{prog:replaceMSF}, assim como as linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF}. Desconsiderando estas linhas onde ocorrem rebaixamentos de arestas, a finalização de cada execução da linha $2$ do Programa~\ref{prog:replaceMSF} possui custo $\Oh(\lg n)$ nas linhas restantes.
+Já uma remoção de aresta, executada pelo Programa~\ref{prog:removeGD-version-msf-final-version}, custa $\Oh(\lg^2 n)$ mais o custo do \texttt{substituaArestaMSF}. O custo do \texttt{substituaArestaMSF} é $\Oh(\lg^2 n)$ excluindo-se as execuções das linhas $7$ a $10$ do Programa~\ref{prog:replaceMSF}, assim como as linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF}. Desconsiderando estas linhas onde ocorrem rebaixamentos de arestas, a finalização de cada execução da linha $2$ do Programa~\ref{prog:replaceMSF} possui custo $\Oh(\lg n)$ enquanto uma aresta substituta não for encontrada, ou seja, as linhas $15$ a $23$ do Programa~\ref{prog:find-substitute-MSF} não são processadas. 
 
-Além disso, apesar das linhas $18$ e $19$ do Programa~\ref{prog:find-substitute-MSF} consumirem tempo $\Oh(\lg^2 n)$, tais linhas serão executadas uma única vez quando encontrarmos uma substituta e o algoritmo termina. Assim, como a linha $2$ do Programa~\ref{prog:replaceMSF} pode ser executada no máximo $\Oh(\lg n)$ vezes, temos que \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação de remoção.
+No momento em que encontrarmos uma substituta, as linhas $15$ a $23$ do Programa~\ref{prog:find-substitute-MSF} serão executadas uma única vez e consumirão tempo $\Oh(\lg^2 n)$ devido às linhas $18$ e $19$, terminando o algoritmo logo em seguida. Assim, como a linha $2$ do Programa~\ref{prog:replaceMSF} pode ser executada no máximo $\Oh(\lg n)$ vezes, temos que \texttt{substituaAresta} consome tempo amortizado $\Oh(\lg^2 n)$ por operação de remoção.
 
 Com isso, concluímos que o custo total de uma sequência de $t$ inserções e remoções é $\Oh(t \lg^2 n)$, e assim cada inserção e remoção consome tempo amortizado $\Oh(\lg^2 n)$.
