@@ -1197,8 +1197,8 @@ Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que 
     \label{fig:why-not-get-replacement-in-higher-levels-2}
 \end{figure}
 
-Até o momento, mostramos que arestas reserva de nível $i$ com as duas pontas em $T_u$ possuem peso menor ou igual ao peso das arestas reserva de nível $i+1$ com as duas pontas em $T_u$.  
-No caso das arestas reserva com uma ponta incidente a $T_u$ e outra em $T_v$, nenhuma chega a ser rebaixada, visto que a de menor peso já se tornaria uma aresta da floresta e as outras não seriam afetadas. Por fim, as arestas reserva de $T_v$ não são afetadas visto que nenhuma delas reconectam as componentes separadas.
+Até o momento, mostramos que arestas reserva de nível $i$ com as duas pontas em $T_u$ possuem peso menor ou igual ao peso das arestas reserva de nível $i+1$ com ambas as pontas em $T_u$.  
+No caso das arestas reserva com uma ponta incidente a $T_u$ e outra em $T_v$, nenhuma chega a ser rebaixada, visto que a de menor peso já se tornaria uma aresta da floresta e as outras nem seriam percorridas. Por fim, as arestas reserva com ambas as pontas em $T_v$ não são afetadas visto que nenhuma delas são percorridas durante a busca por uma substituta.
 
 Com isso, podemos estabelecer uma quarta invariante para o problema da MSF decremental:
 
