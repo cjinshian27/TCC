@@ -1144,6 +1144,32 @@ Logo na imagem abaixo, temos a aresta $ad$ escolhida como uma substituta de meno
             reserve/.style={red, thick},
             removed/.style={black, thick, dashed}]
 
+
+            \node[
+            draw,
+            dotted,
+            thick,
+            green,
+            rectangle,
+            minimum width=3.5cm,
+            minimum height=2cm
+            ] at (-3, 3) {};
+            
+            \node[text=green] at (0.5,3) {$T_u'$};
+
+            \node[
+            draw,
+            dotted,
+            thick,
+            green,
+            rectangle,
+            minimum width=1.2cm,
+            minimum height=1cm
+            ] at (-3, 0) {};
+            
+            \node[text=green] at (-1.4, 0) {$T_v'$};
+
+
             \node[node] (u) at (-1,2) {$u$};
             \node[node] (a) at (-3,4) {$a$};
             \node[node] (b) at (-5,2) {$b$};
@@ -1157,14 +1183,14 @@ Logo na imagem abaixo, temos a aresta $ad$ escolhida como uma substituta de meno
             
             \draw[edge] (a) -- (u) node[midway, above, weight] {1};
             \draw[edge] (a) -- (b) node[midway, above, weight] {2};
-            \draw[edge] (b) -- (c) node[midway, above, weight] {3};
+            \draw[removed] (b) -- (c) node[midway, above, weight] {3};
                     \draw[reserve] (b) -- (u) node[midway, above, yshift=-1pt, weight] {12};
         \draw[reserve] (c) -- (u) node[pos=0.4, above, yshift=-2pt, weight] {13}; % adjusted
 
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Representação do grafo com a aresta substituta $ad$ por ser a de menor peso em $R_4$ que conecta $T_u$ a $T_v$, tornando-se uma aresta da floresta $F_4$.}
+    \caption{Representação do grafo com a aresta substituta $ad$ por ser a de menor peso em $R_4$ que conecta $T_u$ a $T_v$, tornando-se uma aresta da floresta $F_4$. A próxima aresta a ser removida é \textit{bc}, que está tracejada, acaba de quebrar uma componente de $F_i$ em $T_u'$ e $T_v'$.}
     \vspace{-1cm}
     \label{fig:why-not-get-replacement-in-higher-levels-2}
 \end{figure}
