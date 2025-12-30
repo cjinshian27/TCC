@@ -399,7 +399,7 @@ O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nív
 
 \vspace{-0.5cm}
 
-Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em ordem de peso em $R_4$ que tenham uma das pontas em~$T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. No nosso exemplo, olhamos para as arestas reserva em $R_4$, antes de encontrarmos a substituta, nesta ordem: $bu$ (peso $12$) e $uc$ (peso~$13$). Veja  que as rebaixamos para $R_3$ por não serem substitutas.
+Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em ordem de peso em $R_4$ que tenham uma das pontas em~$T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. No nosso exemplo, olhamos para as arestas reserva em $R_4$, antes de encontrarmos a substituta, nesta ordem: \textit{bu} (peso $12$) e $uc$ (peso~$13$). Veja  que as rebaixamos para $R_3$ por não serem substitutas.
 
 \begin{figure}[H]
     \centering
@@ -668,7 +668,7 @@ Por isso, fica claro que precisamos de um método que atualize o campo \textit{p
 \vspace{-0.5\baselineskip}
 \end{programruledcaption}
 
-Como se pode ver, o Programa~\ref{prog:updateMinWeight} consome tempo amortizado $\Oh(\lg n)$ por conta da operação \texttt{splay}. Além disso, ele não altera a floresta $F$, altera somente a forma de uma das árvores binárias que a representam. Portanto, todas as três invariantes são preservadas.
+Como se pode ver, o Programa~\ref{prog:updateMinWeight} consome tempo amortizado $\Oh(\lg n)$ por conta da operação \texttt{splay}. Além disso, ele não altera a floresta $F$, altera somente a forma de uma das árvores binárias que a representam. Portanto, todas as quatro invariantes são preservadas.
 
 Para entendermos como estes dois campos extras aparecem em cada nó da floresta, usaremos um exemplo de um grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas, como se pode ver na Figura~\ref{fig:generic-graph-example-1}. A Figura~\ref{fig:euler-tour-balanced-field-propagation-1} mostra estes campos nos nós da floresta $F_L$ de $G$.
 
