@@ -182,7 +182,7 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        [scale=0.8, node/.style={circle,draw,minimum width=2em, minimum height=2em, thick, font=\large, inner sep=0pt, align=center},
         edge/.style={thick, black},
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed}]
@@ -220,6 +220,8 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
     \label{fig:graph_reserve_edge_uv_addition}
 \end{figure}
 
+\vspace{-0.5cm}
+
 \begin{itemize}
     \item  Se $u$ e $v$ não estão conectados em $G$, então inserimos $uv$ como aresta da floresta $F_L$ de nível $L$, chamando a função \texttt{adicioneFD($F_L$, $u$, $v$)}. A Figura~\ref{fig:graph_tree_edge_uv_addition} ilustra esse cenário.
 \end{itemize}
@@ -227,7 +229,8 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        [scale=0.8, node/.style={circle,draw,minimum width=2em,
+  minimum height=2em, thick, font=\large, inner sep=0pt, align=center},
         edge/.style={thick, black},
         added/.style={thick, green},
         reserve/.style={red, thick},
@@ -271,6 +274,8 @@ Como explicado na Seção~\ref{sec:dynamic-graph-edge-types}, inserimos uma ares
     \caption{As arestas pretas são da floresta maximal $F_L$ do grafo. Como os vértices $u$ e $v$ não estão conectados em $F_L$, então inserimos $uv$ como aresta da floresta (em verde), nesse caso conectando as componentes $T_u$ e $T_v$ de $F_L$.}
     \label{fig:graph_tree_edge_uv_addition}
 \end{figure}
+
+\vspace{-0.5cm}
 
 O Programa~\ref{prog:addGD} ilustra uma primeira versão da rotina \texttt{adicioneGD}. Posteriormente, faremos alguns ajustes nessa rotina por causa da rotina de remoção de arestas explicada na Seção~\ref{sec:dynamic-graph-edge-removal}.
 
@@ -368,7 +373,7 @@ Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente a
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        [scale=0.8, node/.style={circle,draw,minimum width=2em, minimum height=2em, thick, font=\large, inner sep=0pt, align=center},
         edge/.style={thick, black},
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed},
@@ -410,12 +415,14 @@ Quando queremos remover uma aresta $uv$ e ela é reserva, podemos simplesmente a
     \label{fig:graph_reserve_edge_removal}
 \end{figure}
 
+\vspace{-0.5cm}
+
 O caso da remoção de uma aresta $uv$ da floresta é mais complexo. Se a aresta $uv$ tem nível $i$, remover $uv$ sempre quebra uma componente de $F_i$ em duas árvores $T_u$ e $T_v$, de modo que a primeira contém o vértice $u$ e a segunda contém o vértice $v$. Neste caso, precisamos verificar se existe alguma aresta reserva que ligue $T_u$ a $T_v$, para que possamos garantir que a floresta $F_i$ continue maximal em $G_i$. Chamamos uma tal aresta de \textbf{aresta substituta}.
 
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        [scale=0.8, node/.style={circle,draw,minimum width=2em, minimum height=2em, thick, font=\large, inner sep=0pt, align=center},
         edge/.style={thick, black},
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed}]
@@ -464,6 +471,9 @@ O caso da remoção de uma aresta $uv$ da floresta é mais complexo. Se a aresta
     \label{fig:graph_with_Tu_and_Tv_with_reserve_edge}
 \end{figure}
 
+\vspace{-0.5cm}
+
+
 Para buscar uma aresta reserva de maneira o mais eficiente possível, o algoritmo percorre cada vértice $x$ de $T_u$ e verifica se existe algum vértice $y$ na lista de adjacências de $x$ de $R_i$ que esteja em $T_v$. Se $y \in V(T_v)$, então a aresta $xy$ é uma aresta substituta de nível $i$, bastando apenas acionar \texttt{adicioneFD($F_i$, $x$, $y$)} para reconectar $T_u$ e $T_v$, que virariam uma única componente da floresta $F_i$, e acionar \texttt{removaLA($R_i$, $x$, $y$)} já que $xy$ se tornará uma aresta da floresta.
 
 É para tornar essa busca mais eficiente que introduzimos o fatiamento em níveis na Seção~\ref{sec:level-slicing}. A intuição por trás deste fatiamento é que, quando uma aresta de nível $i$ da floresta é removida, não é necessário buscar por substitutas nos níveis menores que $i$. Isso quer dizer que começamos a busca no nível em questão, ou seja, em $R_i$, e caso não haja nenhuma substituta em $R_i$, passamos a procurar em $R_{i+1}, R_{i + 2}, \ldots, R_L$. Quando não encontramos uma substituta em um certo $R_i$, aproveitamos para rebaixar o nível de todas as arestas percorridas em $R_i$ para $i - 1$, de modo que não precisaremos mais percorrer essas arestas quando removermos uma outra aresta de nível $i$, visto que elas já estariam em $R_{i-1}$.
@@ -509,6 +519,8 @@ Agora, veremos em detalhes o motivo de não precisarmos procurar uma substituta 
     \caption{Os círculos verdes representam as componentes $T_u$ e $T_v$ da floresta $F_i$ do grafo $G_i$, enquanto os círculos vermelhos representam as componentes da floresta $F_{i-1}$ do grafo $G_{i-1}$. Note que a aresta reserva de nível $i-1$ mostrada não deveria existir, porque senão ela violaria a invariante~\ref{invariant1}. Portanto, tais arestas de nível $i-1$ ligando componentes de $F_i$ (como a aresta vermelha) não existem e só é necessário procurar arestas substitutas a partir de nível $i$ (como a aresta verde) para conectar $T_u$ e $T_v$.}
     \label{fig:why-not-search-in-less-or-equal-than-i}
 \end{figure}
+
+\vspace{-0.5cm}
 
 \raggedbottom
 A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma série de imagens. Na Figura~\ref{fig:example-replacement1}, temos um grafo $G$ de $n = 10$ vértices. Para facilitar, assumiremos que, até o momento, só houve inserções de arestas. 
@@ -604,6 +616,8 @@ A seguir, demonstraremos a remoção de uma aresta $uv$ da floresta em uma séri
     \vspace{-1cm}
     \label{fig:example-replacement1}
 \end{figure}
+
+\vspace{-0.5cm}
 
 \raggedbottom
 
@@ -704,6 +718,8 @@ Perceba que, devido à invariante~\ref{invariant2}, podemos ter arestas de difer
     \vspace{-1cm}
     \label{fig:example-replacement2}    
 \end{figure}
+
+\vspace{-0.5cm}
 
 \raggedbottom
 
@@ -813,6 +829,8 @@ Na Figura~\ref{fig:example-replacement3}, percorremos as arestas reserva em $R_4
     \vspace{-1cm}
     \label{fig:example-replacement3}
 \end{figure}
+\vspace{-0.5cm}
+
 
 
 Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, conectamos $T_u$ e $T_v$ chamando \texttt{adicioneFD($F_4$, a, d)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement4} ilustra essa etapa do algoritmo.
@@ -917,6 +935,8 @@ Supondo que achamos a aresta $ad$ como substituta de nível $4$ antes de $cv$, c
     \vspace{-1cm}
     \label{fig:example-replacement4}
 \end{figure}
+
+\vspace{-0.5cm}
 
 Quando removemos uma aresta da floresta de nível $i$ que quebra uma componente da floresta $F_i$ em duas, $T_u$ e $T_v$, com $|T_u| \leq |T_v|$, note que ao procurar por uma aresta substituta não necessariamente percorreremos todas as arestas reserva em $R_i$ incidentes a $T_u$. Então nem sempre todas as arestas reserva de $R_i$ incidentes a $T_u$ são rebaixadas, visto que o algoritmo será finalizado no momento em que encontrarmos uma substituta.
 
@@ -1058,6 +1078,8 @@ O digrafo resultante de $T$ é Euleriano, ou seja, é conexo e o grau de entrada
     \label{fig:euler-tour-trees}
 \end{figure}
 
+\vspace{-0.5cm}
+
 \raggedbottom
 
 A representação da árvore $T$ é basicamente a sequência de arcos que forma um ciclo Euleriano do digrafo correspondente a $T$. Denotamos cada arco pelo par de vértices que o compõe. Dessa forma, se o arco parte de $u$ para $v$, ele será denotado como $uv$. Para o caso do laço em um vértice $u$, o arco será escrito como $uu$. Assim, no exemplo da Figura~\ref{fig:euler-tour-trees}, um possível ciclo Euleriano poderia ser o seguinte: 
@@ -1122,6 +1144,8 @@ Henzinger e King \cite{henzinger_king} propuseram armazenar uma sequência Euler
     \caption{Uma árvore binária de busca balanceada para um ciclo Euleriano da árvore da Figura~\ref{fig:euler-tour-trees}. Note que se percorrermos os nós da árvore acima em \textit{inorder}, obtemos a sequência Euleriana de (\ref{eq:euler-sequence}).}
     \label{fig:euler-tour-balanced-tree}
 \end{figure}
+
+\vspace{-0.5cm}
 
 \raggedbottom
 
@@ -1247,6 +1271,8 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
     \caption{Árvore de uma das componentes da floresta $F_i$, onde nós pintados em vermelho indicam arestas de nível $i$, e logo possuem o atributo éNível verdadeiro. Embaixo de cada nó temos o valor do contador arestasDeNível.}
     \label{fig:euler-tour-balanced-tree-is-level-propagation}
 \end{figure}
+
+\vspace{-0.5cm}
 
 Na Figura~\ref{fig:euler-tour-balanced-tree-is-level-propagation}, note que os nós $\emph{ab}$ e $\emph{ba}$ representam a mesma aresta. Assim, para evitar a duplicação do atributo \textit{éNível}, optamos por colocar este atributo como verdadeiro somente nos nós de aresta cujos vértices estão em ordem lexicográfica. Então, no nosso exemplo, nós do tipo $\emph{ba}$, $\emph{da}$, $\emph{dc}$ e $\emph{ea}$ vão ter este atributo falso. 
 
@@ -1414,6 +1440,8 @@ Usando o mesmo exemplo da Figura~\ref{fig:euler-tour-balanced-tree} na Seção~\
     \caption{Árvore de uma das componentes da floresta $F_i$, onde nós pintados em verde indicam nós de vértices com o atributo incideArestaReservaDeNível verdadeiro. No nosso exemplo, todos os vértices são ponta de alguma aresta reserva de nível $i$. Embaixo de cada nó temos o contador arestasReservasDeNível.}
     \label{fig:euler-tour-balanced-tree-reserve-edges-propagation}
 \end{figure}
+\vspace{-0.5cm}
+
 
 \raggedbottom
  
@@ -1591,6 +1619,8 @@ Voltando ao Programa~\ref{prog:replaceGD}, nas linhas $11$ a $17$, procuramos po
 Na linha $12$, acionamos \texttt{procureNóIncideArestaReservaDeNível}, que retornará um nó de vértice $xx$ que incide em alguma aresta reserva de nível~$j$. Depois, acionamos \texttt{splay} em $xx$. Na linha $14$, obtemos o vértice $x$ do nó $xx$ e percorremos todos os vizinhos $y$ na lista de adjacências de $x$ na linha $15$, pois queremos testar se $xy$ é uma aresta substituta.
 
 Para isso, chamamos o método auxiliar \texttt{testeSubstituta} na linha $16$, descrito no Programa~\ref{prog:find-substitute}. Como o nome sugere, o método testa se $xy$ é uma aresta substituta, devolvendo verdadeiro se $xy$ for e falso caso contrário. Quando o método devolve verdadeiro, chegamos à linha $17$ do Programa~\ref{prog:replaceGD}, terminando o algoritmo. Caso contrário, continuamos percorrendo os vizinhos $y$ da lista de adjacências de $x$ e chamando o mesmo método várias vezes.
+
+\newpage
 
 \begin{programruledcaption}{\texttt{testeSubstituta($G$, $x$, $y$, $j$)} \label{prog:find-substitute}}
     \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ do nó $xy$ e o nível $j$.\\
