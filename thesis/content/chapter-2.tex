@@ -89,7 +89,16 @@ Como agora estamos tratando de florestas geradoras maximais de custo mínimo (MS
     \item \label{invariant22} $F_i \subseteq F_{i+1}$ para todo $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$;
     
     \item \label{invariant33} Cada componente da floresta $F_i$ possui no máximo $2^i$ vértices.
+    
 \end{enumerate}
+
+Além disso, uma invariante extra, que envolve o peso das arestas reserva, será usada para garantir a correção do novo algoritmo:
+
+
+\begin{enumerate}[label=(\Roman*), start=4]
+    \item \label{invariant44} Toda aresta reserva de nível $i$ incidente a um vértice $u$ tem peso menor ou igual ao peso das arestas reserva de nível maior que $i$ incidentes a $u$, para todo $1 \leq i \leq \left\lceil \lg n \right\rceil - 1$.
+\end{enumerate}
+
 
 A partir deste momento, usaremos estas três invariantes e mostraremos como elas são preservadas no decorrer das modificações no grafo.
 
