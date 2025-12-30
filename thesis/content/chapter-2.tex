@@ -171,7 +171,7 @@ Podemos notar algumas diferenças quando comparamos o construtor \texttt{MSFDecr
 Como citado antes, a rotina \texttt{adicioneMSF} é acionada apenas em \texttt{MSFDecremental}. Ademais, a única diferença entre a \texttt{adicioneMSF} e a \texttt{adicioneGD} que vimos na Seção~\ref{sec:code-edge-addition-second-version} é que, na primeira, estamos guardando o peso das arestas quando as inserimos no grafo. Portanto, \texttt{adicioneMSF} também consome tempo amortizado $\Oh(\lg n)$.
 
 
-Para \texttt{adicioneMSF}, a invariante~\ref{invariant11} é preservada para o nível $i = \left\lceil \lg n \right\rceil$, já que estamos inserindo as arestas do grafo em ordem crescente de peso. Essa construção basicamente simula o algoritmo de Kruskal. Como estamos inserindo arestas de nível $\left\lceil \lg n \right\rceil$ em $F_{\left\lceil \lg n \right\rceil}$, então as florestas de níveis inferiores não são afetadas, mantendo-se, assim, as invariantes~\ref{invariant22} e \ref{invariant33} também.
+Para \texttt{adicioneMSF}, a invariante~\ref{invariant11} é preservada para o nível $i = \left\lceil \lg n \right\rceil$, já que estamos inserindo as arestas do grafo em ordem crescente de peso. Essa construção basicamente simula o algoritmo de Kruskal. Como estamos inserindo arestas de nível $\left\lceil \lg n \right\rceil$ em $F_{\left\lceil \lg n \right\rceil}$, então as florestas de níveis inferiores não são afetadas, mantendo-se, assim, as invariantes~\ref{invariant22}, \ref{invariant33} e \ref{invariant44} também.
 
 \subsection{Consulta de peso da MSF}
 \label{sec:connectivity-test-MSF}
@@ -197,7 +197,7 @@ A rotina \texttt{consultePesoMSF}, que devolve o peso de uma MSF do grafo $G$, e
 
 \raggedbottom
 
-É fácil ver que \texttt{consultePesoMSF} consome tempo $\Oh(1)$. Além disso, como não estamos alterando nem o grafo nem as florestas do grafo $G$, então as três invariantes são preservadas.
+É fácil ver que \texttt{consultePesoMSF} consome tempo $\Oh(1)$. Além disso, como não estamos alterando nem o grafo nem as florestas do grafo $G$, então as quatro invariantes são preservadas.
 
 \subsection{Remoção de arestas}
 \label{sec:decremental-MSF-edge-removal}
