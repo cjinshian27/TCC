@@ -881,7 +881,7 @@ A versão completa do método \texttt{removaMSF} está descrita abaixo.
 
 Ao removermos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$, como se pode ver nas linhas $12$ e $13$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restantes, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso em $R_i$ incidente a $u$ ou $v$. Assim, a complexidade de tempo da versão final de \texttt{removaMSF} continua sendo $\Oh(\lg^2 n)$ mais o custo da rotina \texttt{substituaArestaMSF}, que será descrita na seção seguinte.
 
-\subsection{Uma observação sobre a busca por uma aresta substituta}
+\subsection{Busca por uma aresta substituta}
 
 Agora, veremos em detalhes porque, ao removermos uma aresta $uv$ de nível $i$, uma aresta substituta de menor peso está em um $R_j$ com $j \geq i$ menor possível. Será que não há uma aresta substituta no nível $j + 1$ que seja mais leve que uma substituta do nível $j$? 
 
