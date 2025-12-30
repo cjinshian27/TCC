@@ -881,95 +881,6 @@ A versão completa do método \texttt{removaMSF} está descrita abaixo.
 
 Ao removermos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice $u$ e $v$ de $F_i$, como se pode ver nas linhas $12$ e $13$. Isso porque se o peso de $uv$ era o menor dentre todas as arestas reserva restantes, então o atributo \texttt{pesoMínimo} de $u$ e de $v$ passa a ser o peso da aresta reserva de segundo menor peso em $R_i$ incidente a $u$ ou $v$. Assim, a complexidade de tempo da versão final de \texttt{removaMSF} continua sendo $\Oh(\lg^2 n)$ mais o custo da rotina \texttt{substituaArestaMSF}, que será descrita na seção seguinte.
 
-\subsection{Rotina de substituição de aresta}
-\label{sec:replaceMSF}
-
-Para descrever a rotina \texttt{substituaArestaMSF} do Programa~\ref{prog:replaceMSF}, usaremos vários dos métodos auxiliares já apresentados, além de alguns métodos e campos novos adicionados aos nós das florestas, que vimos na Seção~\ref{sec:forest-node-adjustments}. Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que é uma versão ajustada da rotina \texttt{testeSubstituta} que vimos antes. 
-
-\begin{programruledcaption}{\texttt{substituaArestaMSF($G$, $i$, $u$, $v$)} \label{prog:replaceMSF}}
-    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta removida $uv$. \\
-    \noindent\textbf{Efeito}: Adiciona uma aresta substituta de peso mínimo em $G$, se ela existir.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    L := $\dotvar{G}{nívelMax}$
-    \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
-        $T_u$ := \texttt{splay($G.F_j.\emph{nó}[u, u]$)}  (*@\hfill $\triangleright$ torna o nó $uu$ raiz de $T_u$@*)
-        $T_v$ := \texttt{splay($G.F_j.\emph{nó}[v, v]$)}  (*@\hfill $\triangleright$ torna o nó $vv$ raiz de $T_v$@*)    
-        \textbf{se} $T_u$.tam > $T_v$.tam \textbf{então}
-            $T_u \leftrightarrow T_v$
-        \textbf{enquanto} $T_u$.arestasDeNível > 0 \textbf{faça} 
-            nóXY := \texttt{procureArestaDeNível($T_u$)}
-            $T_u$ := \texttt{splay($\emph{nóXY}$)}
-            \texttt{rebaixeNívelDaAresta($G$, $\emph{nóXY}$, j)}
-        \textbf{enquanto} $T_u$.arestasReservasDeNível > 0     \textbf{faça}
-            nóXX := \texttt{procureNóIncideArestaDePesoMínimo($R_j$, $T_u$)}
-            $T_u$ := \texttt{splay($\emph{nóXX}$)}
-            ($x$, $x$) := nóXX.vértices
-            ($y$, $w$) := \texttt{consulteMinLAMSF($R_j$, $x$)} 
-            se \texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \textbf{então} 
-                \textbf{retorne}
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
-
-Veja que já vimos as linhas $1$ a $10$ do Programa~\ref{prog:replaceMSF}, pois elas são exatamente iguais a esse mesmo trecho do código do Programa~\ref{prog:replaceGD}. Isso quer dizer que o rebaixamento de arestas da floresta acontece da mesma forma que no algoritmo de conexidade em grafos dinâmicos. O que muda é somente a forma como procuramos por alguma aresta substituta.
-
-Sendo assim, explicaremos o código da linha $11$ em diante. A linha $11$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ incidentes a $T_u$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
-
-A linha $12$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos um nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $15$, onde obtemos um par ($y$, $w$). 
-
-Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta substituta que reconecta $T_u$ a $T_v$. Para isso, na linha $16$ chamamos \texttt{testeSubstitutaMSF}, descrita no Programa~\ref{prog:find-substitute-MSF}.
-
-\begin{programruledcaption}{\texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \label{prog:find-substitute-MSF}}
-    \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ da aresta $xy$ e o nível $j$.\\
-    \textbf{Saída}: Remove $xy$ de $R_j$ e, caso $xy$ seja substituta, adiciona $xy$ a $R_j$ e devolve verdadeiro. Caso contrário, adiciona $xy$ a $R_{j-1}$ e devolve falso.
-    \vspace{-0.5\baselineskip}
-    \begin{lstlisting}[
-        language={[brazilian]pseudocode},
-        style=pseudocode,
-        style=wider,
-        functions={},
-        specialidentifiers={},
-        escapeinside={(*@}{@*)},
-    ]
-    \texttt{removaLAMSF($G.R_j$, $x$, $y$)}
-    \texttt{decrementeArestasReservasDeNível($G.F_j$, $G.R_j$, $x$)}
-    \texttt{decrementeArestasReservasDeNível($G.F_j$, $G.R_j$, $y$)}
-    \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $x$)}
-    \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $y$)}
-    w := $\dotvarm{G}{peso}{x, y}$
-    \textbf{se} \texttt{conectadosFD($G.F_j$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta $xy$ não é substituta@*)
-        $\dotvarm{G}{nível}{x, y}$ := j - 1
-        \texttt{adicioneLAMSF($G.R_{j-1}$, $x$, $y$, $w$)}
-        \texttt{atualizePesoMínimo($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
-        \texttt{atualizePesoMínimo($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
-        \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
-        \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
-        \textbf{retorne falso}
-    \textbf{senão} (*@\hfill $\triangleright$ a aresta $xy$ é substituta@*)
-        L := $\dotvar{G}{nívelMax}$
-        $\dotvar{G}{pesoMSF}$ := $\dotvar{G}{pesoMSF}$ + $w$ 
-        \textbf{para} k := j \textbf{até} $L$ \textbf{faça}
-            \texttt{adicioneFD($G.F_k$, $x$, $y$)}
-        \textbf{se} x > y \textbf{então}
-            x $\leftrightarrow$ y
-        \texttt{atualizeÉNível($G.F_j$, $x$, $y$, $\textbf{verdadeiro}$)}
-        \textbf{retorne verdadeiro}
-    \end{lstlisting}
-    \vspace{-0.5\baselineskip}
-\end{programruledcaption}
-
-Na rotina \texttt{testeSubstitutaMSF}, precisamos atualizar a variável \textit{pesoMSF} de $G$ quando encontramos uma aresta substituta, além de chamar os devidos métodos auxiliares (acionamos \texttt{removaLAMSF} e \texttt{adicioneLAMSF} em vez de \texttt{removaLA} e \texttt{adicioneLA}). Além disso, como estamos rebaixando arestas reserva, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice afetados, acionando a rotina \texttt{atualizePesoMínimo} nas linhas $4$, $5$, $10$ e $11$ do Programa~\ref{prog:find-substitute-MSF}.
-
-Veja que o trecho que compreende as linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF} possui custo amortizado $\Oh(\lg n)$. Isso quer dizer que, enquanto as arestas que estamos testando não forem substitutas, o método \texttt{testeSubstitutaMSF} será acionado várias vezes com esse custo de tempo. No momento em que encontrarmos uma substituta, \texttt{testeSubstitutaMSF} será acionado uma única vez e consumirá tempo amortizado $\Oh(\lg^2 n)$ por causa das linhas $18$ e $19$, e assim o algoritmo será finalizado. 
-
 \subsection{Uma observação sobre a busca por uma aresta substituta}
 
 Agora, veremos em detalhes o motivo de não começarmos a procurar primeiro uma aresta substituta nos níveis $> i$ quando removemos uma aresta $uv$ de nível $i$. Será que não há uma aresta substituta no nível $i + 1$ que seja mais leve que uma substituta do nível $i$? 
@@ -1197,18 +1108,94 @@ Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que 
     \label{fig:why-not-get-replacement-in-higher-levels-2}
 \end{figure}
 
-Até o momento, mostramos que arestas reserva de nível $i$ com as duas pontas em $T_u$ possuem peso menor ou igual ao peso das arestas reserva de nível $i+1$ com ambas as pontas em $T_u$.  
-No caso das arestas reserva com uma ponta incidente a $T_u$ e outra em $T_v$, nenhuma chega a ser rebaixada, visto que a de menor peso já se tornaria uma aresta substituta e as outras nem seriam percorridas. Por fim, as arestas reserva com ambas as pontas em $T_v$ não são rebaixadas visto que nenhuma delas são percorridas durante a busca por uma substituta.
+\subsection{Rotina de substituição de aresta}
+\label{sec:replaceMSF}
 
-Com isso, cria-se uma certa intuição de que qualquer aresta reserva incidente a um vértice é mais leve que outra reserva de nível superior incidente ao mesmo vértice. Dessa forma, podemos estabelecer uma quarta invariante para o problema da MSF decremental:
+Para descrever a rotina \texttt{substituaArestaMSF} do Programa~\ref{prog:replaceMSF}, usaremos vários dos métodos auxiliares já apresentados, além de alguns métodos e campos novos adicionados aos nós das florestas, que vimos na Seção~\ref{sec:forest-node-adjustments}. Mostraremos também a rotina \texttt{testeSubstitutaMSF}, que é uma versão ajustada da rotina \texttt{testeSubstituta} que vimos antes. 
 
-\begin{enumerate}[label=(\Roman*), start = 4]
-    \item \label{invariant44} Toda arestas reserva de nível $i$ incidente a um vértice $u$ tem peso menor ou igual ao peso das arestas reserva de nível maior que $i$ incidentes a $u$. 
-\end{enumerate}
+\begin{programruledcaption}{\texttt{substituaArestaMSF($G$, $i$, $u$, $v$)} \label{prog:replaceMSF}}
+    \noindent\textbf{Entrada}: Recebe dois vértices $u$ e $v$ do grafo $G$, e o nível $i$ da aresta removida $uv$. \\
+    \noindent\textbf{Efeito}: Adiciona uma aresta substituta de peso mínimo em $G$, se ela existir.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    L := $\dotvar{G}{nívelMax}$
+    \textbf{para} j := i \textbf{até} $L$ \textbf{faça}
+        $T_u$ := \texttt{splay($G.F_j.\emph{nó}[u, u]$)}  (*@\hfill $\triangleright$ torna o nó $uu$ raiz de $T_u$@*)
+        $T_v$ := \texttt{splay($G.F_j.\emph{nó}[v, v]$)}  (*@\hfill $\triangleright$ torna o nó $vv$ raiz de $T_v$@*)    
+        \textbf{se} $T_u$.tam > $T_v$.tam \textbf{então}
+            $T_u \leftrightarrow T_v$
+        \textbf{enquanto} $T_u$.arestasDeNível > 0 \textbf{faça} 
+            nóXY := \texttt{procureArestaDeNível($T_u$)}
+            $T_u$ := \texttt{splay($\emph{nóXY}$)}
+            \texttt{rebaixeNívelDaAresta($G$, $\emph{nóXY}$, j)}
+        \textbf{enquanto} $T_u$.arestasReservasDeNível > 0     \textbf{faça}
+            nóXX := \texttt{procureNóIncideArestaDePesoMínimo($R_j$, $T_u$)}
+            $T_u$ := \texttt{splay($\emph{nóXX}$)}
+            ($x$, $x$) := nóXX.vértices
+            ($y$, $w$) := \texttt{consulteMinLAMSF($R_j$, $x$)} 
+            se \texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \textbf{então} 
+                \textbf{retorne}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
 
-Esta quarta invariante, apesar de não ter sido utilizada junto com outras três invariantes, evidencia ainda mais a diferença  entre o algoritmo de conexidade dinâmica descrito no Capítulo~\ref{chapter:connectivity-chapter} e o algoritmo para MSF decremental, além de mostrar como as arestas reserva se comportam ao longo dos $L$ níveis do grafo $R$ de acordo com o peso delas.
+Veja que já vimos as linhas $1$ a $10$ do Programa~\ref{prog:replaceMSF}, pois elas são exatamente iguais a esse mesmo trecho do código do Programa~\ref{prog:replaceGD}. Isso quer dizer que o rebaixamento de arestas da floresta acontece da mesma forma que no algoritmo de conexidade em grafos dinâmicos. O que muda é somente a forma como procuramos por alguma aresta substituta.
 
-\subsection{Consumo de tempo de \texttt{substituaArestaMSF}}
+Sendo assim, explicaremos o código da linha $11$ em diante. A linha $11$, como também já visto, é um laço que terminará quando não existirem mais arestas reserva de nível $j$ incidentes a $T_u$ (ou seja, quando o contador \textit{arestasReservasDeNível} do nó raiz de $T_u$ estiver nulo) ou quando achamos uma aresta substituta. 
+
+A linha $12$ é onde acionamos o método \texttt{procureNóIncideArestaDePesoMínimo}, para obtermos um nó de vértice incidente a uma aresta reserva de peso mínimo. Assim, obtemos esta aresta chamando \texttt{consulteMinLAMSF} na linha $15$, onde obtemos um par ($y$, $w$). 
+
+Em seguida, basta testarmos se a aresta $xy$ de peso mínimo $w$ é uma aresta substituta que reconecta $T_u$ a $T_v$. Para isso, na linha $16$ chamamos \texttt{testeSubstitutaMSF}, descrita no Programa~\ref{prog:find-substitute-MSF}.
+
+\begin{programruledcaption}{\texttt{testeSubstitutaMSF($G$, $x$, $y$, $j$)} \label{prog:find-substitute-MSF}}
+    \noindent\textbf{Entrada}: Recebe o grafo $G$, as pontas $x$ e $y$ da aresta $xy$ e o nível $j$.\\
+    \textbf{Saída}: Remove $xy$ de $R_j$ e, caso $xy$ seja substituta, adiciona $xy$ a $R_j$ e devolve verdadeiro. Caso contrário, adiciona $xy$ a $R_{j-1}$ e devolve falso.
+    \vspace{-0.5\baselineskip}
+    \begin{lstlisting}[
+        language={[brazilian]pseudocode},
+        style=pseudocode,
+        style=wider,
+        functions={},
+        specialidentifiers={},
+        escapeinside={(*@}{@*)},
+    ]
+    \texttt{removaLAMSF($G.R_j$, $x$, $y$)}
+    \texttt{decrementeArestasReservasDeNível($G.F_j$, $G.R_j$, $x$)}
+    \texttt{decrementeArestasReservasDeNível($G.F_j$, $G.R_j$, $y$)}
+    \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $x$)}
+    \texttt{atualizePesoMínimo($G.F_j$, $G.R_j$, $y$)}
+    w := $\dotvarm{G}{peso}{x, y}$
+    \textbf{se} \texttt{conectadosFD($G.F_j$, $x$, $y$)} \textbf{então} (*@\hfill $\triangleright$ a aresta $xy$ não é substituta@*)
+        $\dotvarm{G}{nível}{x, y}$ := j - 1
+        \texttt{adicioneLAMSF($G.R_{j-1}$, $x$, $y$, $w$)}
+        \texttt{atualizePesoMínimo($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
+        \texttt{atualizePesoMínimo($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $x$)}
+        \texttt{incrementeArestasReservasDeNível($G.F_{j-1}$, $G.R_{j-1}$, $y$)}
+        \textbf{retorne falso}
+    \textbf{senão} (*@\hfill $\triangleright$ a aresta $xy$ é substituta@*)
+        L := $\dotvar{G}{nívelMax}$
+        $\dotvar{G}{pesoMSF}$ := $\dotvar{G}{pesoMSF}$ + $w$ 
+        \textbf{para} k := j \textbf{até} $L$ \textbf{faça}
+            \texttt{adicioneFD($G.F_k$, $x$, $y$)}
+        \textbf{se} x > y \textbf{então}
+            x $\leftrightarrow$ y
+        \texttt{atualizeÉNível($G.F_j$, $x$, $y$, $\textbf{verdadeiro}$)}
+        \textbf{retorne verdadeiro}
+    \end{lstlisting}
+    \vspace{-0.5\baselineskip}
+\end{programruledcaption}
+
+Na rotina \texttt{testeSubstitutaMSF}, precisamos atualizar a variável \textit{pesoMSF} de $G$ quando encontramos uma aresta substituta, além de chamar os devidos métodos auxiliares (acionamos \texttt{removaLAMSF} e \texttt{adicioneLAMSF} em vez de \texttt{removaLA} e \texttt{adicioneLA}). Além disso, como estamos rebaixando arestas reserva, precisamos atualizar o atributo \textit{pesoMínimo} dos nós de vértice afetados, acionando a rotina \texttt{atualizePesoMínimo} nas linhas $4$, $5$, $10$ e $11$ do Programa~\ref{prog:find-substitute-MSF}.
+
+Veja que o trecho que compreende as linhas $7$ a $14$ do Programa~\ref{prog:find-substitute-MSF} possui custo amortizado $\Oh(\lg n)$. Isso quer dizer que, enquanto as arestas que estamos testando não forem substitutas, o método \texttt{testeSubstitutaMSF} será acionado várias vezes com esse custo de tempo. No momento em que encontrarmos uma substituta, \texttt{testeSubstitutaMSF} será acionado uma única vez e consumirá tempo amortizado $\Oh(\lg^2 n)$ por causa das linhas $18$ e $19$, e assim o algoritmo será finalizado. 
 
 Agora, explicaremos o custo da rotina \texttt{substituaArestaMSF}. Usaremos o mesmo argumento da amortização da rotina \texttt{substituaAresta}, apresentado na Seção~\ref{sec:replace-edge}. 
 
