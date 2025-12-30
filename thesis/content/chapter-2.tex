@@ -302,6 +302,8 @@ Para facilitar o entendimento da substituição de aresta na MSF decremental, de
     \label{fig:example-replacement-msf1}
 \end{figure}
 
+\vspace{-0.5cm}
+
 O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nível~$3$. Dessa forma, as arestas de $T_u$ passam a estar em $F_3$, como se pode ver na Figura~\ref{fig:example-replacement-msf2}, pois agora elas passam a ser de nível $3$. Como $T_u$ e $T_v$ em $F_4$ ficaram separadas após a remoção de $uv$, precisamos encontrar, se existir, uma aresta reserva que possa reconectá-las. Note que agora precisamos percorrer as arestas reserva em ordem de peso. Entretanto, percorrer todas as arestas reserva de $R_4$ incidentes a $T_u$ e selecionar a de menor peso é ineficiente. Isso porque, se a aresta de peso mínimo não é uma substituta, teremos que buscar a próxima de menor peso e fazer esse processo novamente, o que acaba comprometendo a performance do algoritmo. Por isso, explicaremos como implementar essa busca eficiente por uma aresta substituta de menor peso na Seção~\ref{sec:forest-node-adjustments}.
 
 \begin{figure}[H]
@@ -394,6 +396,8 @@ O próximo passo é rebaixar todas as arestas de nível~$4$ em $T_u$ para o nív
     \vspace{-1cm}
     \label{fig:example-replacement-msf2}
 \end{figure}
+
+\vspace{-0.5cm}
 
 Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em ordem de peso em $R_4$ que tenham uma das pontas em~$T_u$. Para cada aresta percorrida, verificamos se a outra ponta dela incide em algum vértice de $T_v$. No nosso exemplo, olhamos para as arestas reserva em $R_4$, antes de encontrarmos a substituta, nesta ordem: $bu$ (peso $12$) e $uc$ (peso~$13$). Veja  que as rebaixamos para $R_3$ por não serem substitutas.
 
@@ -493,6 +497,8 @@ Na Figura~\ref{fig:example-replacement-msf3}, percorremos as arestas reserva em 
     \label{fig:example-replacement-msf3}
 \end{figure}
 
+\vspace{-0.5cm}
+
 Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$, de peso $14$. Como ela conecta $T_u$ a $T_v$, chamamos \texttt{adicioneFD($F_4$, $a$, $d$)} e $ad$ passa a ser uma aresta da floresta, ou seja, é removida de $R_4$. Como $i = 4$ é o nível máximo do grafo nesse exemplo, não precisamos chamar esta rotina para níveis superiores e então terminamos a execução do algoritmo. A Figura~\ref{fig:example-replacement-msf4} ilustra essa etapa do algoritmo. 
 
 \begin{figure}[H]
@@ -588,39 +594,7 @@ Assim, a próxima aresta reserva de menor peso em $R_4$ que olharemos é a $ad$,
     \label{fig:example-replacement-msf4}
 \end{figure}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\vspace{-0.5cm}
 
 A partir dessas imagens, percebe-se que o método \texttt{removaMSF}, descrito abaixo, é bem semelhante ao método \texttt{removaGD}, exceto que no primeiro precisamos recalcular o peso da MSF de $G$ quando removemos uma aresta da floresta. Note que o \texttt{removaMSF} descrito abaixo é a primeira versão deste método. Descreveremos a sua versão completa na Seção~\ref{sec:removeMSF-finalVersion}
 
@@ -701,7 +675,7 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
-        [scale=0.8, node/.style={circle,draw,minimum size=2em, thick, font=\large},
+        [scale=0.7, node/.style={circle,draw,minimum size=2em, thick, font=\large},
         edge/.style={thick, black},
         reserve/.style={red, thick},
         removed/.style={black, thick, dashed}, 
@@ -719,7 +693,7 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
         \draw[edge] (a) -- (e) node[midway, above, weight] {4};;
 
         \draw[reserve] (e) -- (d) node[midway, above, weight] {5};
-        \draw[reserve] (b) -- (c) node[midway, above, weight] {6};
+        \draw[reserve] (b) -- (c) node[midway, right, weight] {6};
         \draw[reserve] (a) -- (c) node[midway, above, weight] {7};
 
 
@@ -727,6 +701,8 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
     \caption{Grafo ponderado $G$ de $5$ vértices e $7$ arestas ponderadas. Arestas pretas são da floresta e formam a MSF de $G$, enquanto as vermelhas são arestas reserva.}
     \label{fig:generic-graph-example-1}
 \end{figure}
+
+\vspace{-0.5cm}
 
 \begin{figure}[H]
     \centering
@@ -779,6 +755,8 @@ Para entendermos como estes dois campos extras aparecem em cada nó da floresta,
     \caption{Árvore da única componente da floresta $F_L$ do grafo $G$ da Figura~\ref{fig:generic-graph-example-1}, onde embaixo de cada nó há um par de números. O primeiro número indica o atributo \textit{peso} do nó, enquanto o segundo número indica o atributo \textit{pesoMínimo}, calculado através dos nós em sua subárvore.}
     \label{fig:euler-tour-balanced-field-propagation-1}
 \end{figure}
+
+\vspace{-0.5cm}
 
 A seguir, o Programa~\ref{prog:findMinWeightEdge} apresenta o método \texttt{procureNóIncideArestaDePesoMínimo}, que procura e retorna o nó de vértice que incide em uma aresta reserva de peso mínimo. Ele será usado no método \texttt{substituaArestaMSF}, que descreveremos na Seção~\ref{sec:replaceMSF}.
 
@@ -991,6 +969,9 @@ Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. P
     \label{fig:why-not-get-replacement-in-higher-levels-1}
 \end{figure}
 
+\vspace{-0.5cm}
+
+
 Logo na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-2}, temos a aresta $ad$ escolhida para ser uma substituta de menor peso que reconecta $T_u$ e $T_v$, tornando-se uma aresta da floresta. Note que, em $R_i$, as arestas reserva com as duas pontas em $T_u$ de $F_i$ (neste caso, $ub$ e $uc$) possuem peso menor que as arestas reserva com duas pontas em $T_u$ de $F_{i+1}$ (neste caso, $ac$). Isso acontece porque, quando percorremos as arestas reserva em ordem crescente de peso, aproveitamos para rebaixar aquelas com as duas pontas em $T_u$ até encontrarmos uma que conecte $T_u$ e $T_v$.
 
 Ainda na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-2}, a aresta \textit{bc}, de nível $i$, está prestes a ser removida, o que acabaria quebrando uma componente da floresta $F_i$ em $T_b$ e $T_c$. Para reconectar $T_b$ e $T_c$, observe que apenas $uc$ seria percorrida e já é substituta, como se pode ver na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-3}. Embora $ac$ e $cv$ também sejam substitutas incidentes a $T_c$, pelo fato de elas estarem em $R_{i+1}$ e pela invariante~\ref{invariant44}, elas são mais pesadas que $uc$, que está em $R_i$.
@@ -1114,6 +1095,8 @@ Ainda na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-2}, a aresta \
     \label{fig:why-not-get-replacement-in-higher-levels-2}
 \end{figure}
 
+\vspace{-0.5cm}
+
 \begin{figure}[H]
     \centering
 
@@ -1233,7 +1216,7 @@ Ainda na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-2}, a aresta \
     \label{fig:why-not-get-replacement-in-higher-levels-3}
 \end{figure}
 
-
+\vspace{-0.5cm}
 
 \subsection{Rotina de substituição de aresta}
 \label{sec:replaceMSF}
