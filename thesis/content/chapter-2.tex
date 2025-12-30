@@ -883,9 +883,9 @@ Ao removermos uma aresta reserva $uv$ de $R_i$, precisamos atualizar o atributo 
 
 \subsection{Uma observação sobre a busca por uma aresta substituta}
 
-Agora, veremos em detalhes o motivo de não começarmos a procurar primeiro uma aresta substituta nos níveis $> i$ quando removemos uma aresta $uv$ de nível $i$. Será que não há uma aresta substituta no nível $i + 1$ que seja mais leve que uma substituta do nível $i$? 
+Agora, veremos em detalhes porque, ao removermos uma aresta $uv$ de nível $i$, uma aresta substituta de menor peso está em um $R_j$ com $j \geq i$ menor possível. Será que não há uma aresta substituta no nível $j + 1$ que seja mais leve que uma substituta do nível $j$? 
 
-Primeiramente, é fácil perceber que, se removermos uma aresta de nível $i$ de $F_i$ e $i \neq L$, sabemos que alguma aresta de nível $i + 1$ da floresta $F_{i + 1}$ já tinha sido removida antes, o que causou o rebaixamento de algumas arestas de nível $i + 1$ para o nível $i$. Lembre-se que somente a remoção de arestas rebaixa arestas, visto que a inserção de uma aresta só ocorre em $F_L$ e as florestas de níveis inferiores não são afetadas.
+Primeiramente, é fácil perceber que, se removermos uma aresta de nível $i$ de $F_i$ e $i \neq L$, sabemos que alguma aresta de nível $i + 1$ da floresta $F_{i + 1}$ já tinha sido removida antes, o que causou o rebaixamento de algumas arestas de nível $i + 1$ para o nível $i$. Lembre-se não há inserção depois que as remoções (e rebaixamentos) começam a ocorrer.
 
 Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. Para facilitar o entendimento deste cenário, ilustraremos um grafo com as florestas $F_i$ e $F_{i+1}$, além de $R_i$ e $R_{i+1}$, como se pode ver na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-1}. Nela, podemos supor que a aresta $uv$ já foi removida, quebrando a componente de $F_{i+1}$ em $T_u$ e $T_v$. Além disso, todas as arestas de $T_u$ foram rebaixadas para $F_i$. As arestas reserva $ub$ e $uc$ foram rebaixadas de $R_{i+1}$ para $R_i$, já que estamos percorrendo em ordem crescente de peso das arestas reserva de $R_{i+1}$ para buscar uma aresta substituta.   
 
@@ -985,9 +985,9 @@ Sabemos, então, que algumas arestas de $F_{i+1}$ foram rebaixadas para $F_i$. P
     \label{fig:why-not-get-replacement-in-higher-levels-1}
 \end{figure}
 
-Logo na imagem abaixo, temos a aresta $ad$ escolhida para ser uma substituta de menor peso que reconecta $T_u$ e $T_v$, tornando-se uma aresta da floresta. Note que, em $R_i$, as arestas reserva com as duas pontas em $T_u$ de $F_i$ (neste caso, $ub$ e $uc$) possuem peso menor que as arestas reserva com duas pontas em $T_u$ de $F_{i+1}$ (meste caso, $ac$). Isso acontece porque, quando percorremos as arestas reserva em ordem crescente de peso, aproveitamos para rebaixar aquelas com as duas pontas em $T_u$ até encontrarmos uma que conecte $T_u$ e $T_v$.
+Logo na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-2}, temos a aresta $ad$ escolhida para ser uma substituta de menor peso que reconecta $T_u$ e $T_v$, tornando-se uma aresta da floresta. Note que, em $R_i$, as arestas reserva com as duas pontas em $T_u$ de $F_i$ (neste caso, $ub$ e $uc$) possuem peso menor que as arestas reserva com duas pontas em $T_u$ de $F_{i+1}$ (neste caso, $ac$). Isso acontece porque, quando percorremos as arestas reserva em ordem crescente de peso, aproveitamos para rebaixar aquelas com as duas pontas em $T_u$ até encontrarmos uma que conecte $T_u$ e $T_v$.
 
-Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que acabaria quebrando uma componente da floresta $F_i$ em $T_b$ e $T_c$. Para reconectar $T_b$ e $T_c$, percorreríamos as seguintes arestas reserva, nesta ordem: $ub$,  $uc$ e $ac$. Veja que, embora $ac$ seja uma substituta que reconecte $T_b$ e $T_c$, a $uc$ seria escolhida em seu lugar por ser a de menor peso, e está em $R_i$. 
+Ainda na Figura~\ref{fig:why-not-get-replacement-in-higher-levels-2}, a aresta \textit{bc}, de nível $i$, está prestes a ser removida, o que acabaria quebrando uma componente da floresta $F_i$ em $T_b$ e $T_c$. Para reconectar $T_b$ e $T_c$, observe que apenas $uc$ seria percorrida e já é substituta. Embora $ac$ e $cv$ também sejam substitutas incidentes a $T_c$, pelo fato de elas estarem em $R_{i+1}$ e pela invariante~\ref{invariant44}, são mais pesadas que $uc$, que está em $R_i$. 
 
 \begin{figure}[H]
     \centering
@@ -1103,7 +1103,7 @@ Ainda na mesma imagem, a aresta \textit{bc} está prestes a ser removida, o que 
 
         \end{tikzpicture}
     \end{minipage}
-    \caption{Representação do grafo com a aresta substituta $ad$ por ser a de menor peso em $R_4$ que conecta $T_u$ a $T_v$, tornando-se uma aresta da floresta $F_4$. A próxima aresta a ser removida é \textit{bc}, que está tracejada, acaba de quebrar uma componente de $F_i$ em $T_b$ e $T_c$.}
+    \caption{Representação do grafo com a aresta substituta $ad$ por ser a de menor peso em $R_4$ que conecta $T_u$ a $T_v$, tornando-se uma aresta da floresta $F_4$. A próxima aresta a ser removida é \textit{bc}, que está tracejada, e quebra uma componente de $F_i$ em $T_b$ e $T_c$.}
     \vspace{-1cm}
     \label{fig:why-not-get-replacement-in-higher-levels-2}
 \end{figure}
