@@ -25,7 +25,7 @@ Para inserir uma aresta $uv$, temos dois casos a considerar:
     \item se $u$ e $v$ não estão conectados, então basta inserir a aresta $uv$ em $F$;
     \item caso contrário, temos dois casos:
     \begin{itemize}
-        \item se o caminho entre $u$ e $v$ contiver uma aresta $w$ cujo peso é maior que o de $uv$, então substituímos $w$ por $uv$, e atualizamos $\mathcal{G}$ com $w$;
+        \item se o caminho entre $u$ e $v$ onde contiver uma aresta $w$ cujo peso é maior que o de $uv$, então substituímos $w$ por $uv$, e atualizamos $\mathcal{G}$ com $w$;
         \item caso contrário, atualizamos $\mathcal{G}$ com $uv$.
     \end{itemize}
 \end{itemize}
